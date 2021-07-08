@@ -4,18 +4,18 @@
         <name>Neuroglia.Core</name>
     </assembly>
     <members>
-        <member name="T:Neuroglia.Attributes.DataTransferObjectTypeAttribute">
+        <member name="T:Neuroglia.DataTransferObjectTypeAttribute">
             <summary>
             Represents an <see cref="T:System.Attribute"/> used to specify the Data Transfer Object of an entity
             </summary>
         </member>
-        <member name="M:Neuroglia.Attributes.DataTransferObjectTypeAttribute.#ctor(System.Type)">
+        <member name="M:Neuroglia.DataTransferObjectTypeAttribute.#ctor(System.Type)">
             <summary>
-            Initializes a new <see cref="T:Neuroglia.Attributes.DataTransferObjectTypeAttribute"/>
+            Initializes a new <see cref="T:Neuroglia.DataTransferObjectTypeAttribute"/>
             </summary>
             <param name="type">The type of the object's DTO</param>
         </member>
-        <member name="P:Neuroglia.Attributes.DataTransferObjectTypeAttribute.Type">
+        <member name="P:Neuroglia.DataTransferObjectTypeAttribute.Type">
             <summary>
             Gets the type of the object's DTO
             </summary>
@@ -50,6 +50,32 @@
         <member name="P:Neuroglia.DiscriminatorValueAttribute.Value">
             <summary>
             Gets the value used to discriminate the derived type marked by the <see cref="T:Neuroglia.DiscriminatorValueAttribute"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.CommandDto">
+            <summary>
+            Represents the base class for all command DTOs
+            </summary>
+        </member>
+        <member name="T:Neuroglia.DataTransferObject">
+            <summary>
+            Represents the base class for all Data Transfer Objects (DTOs)
+            </summary>
+        </member>
+        <member name="T:Neuroglia.EntityDto`1">
+            <summary>
+            Describes an entity Data Transfer Object (DTO)
+            </summary>
+            <typeparam name="TKey">The type of key the descibed entity is uniquely identified by</typeparam>
+        </member>
+        <member name="P:Neuroglia.EntityDto`1.Id">
+            <summary>
+            Gets/sets the entity's id
+            </summary>
+        </member>
+        <member name="P:Neuroglia.EntityDto`1.CreatedAt">
+            <summary>
+            Gets/sets the UTC date and time the entity has been created at
             </summary>
         </member>
         <member name="T:Neuroglia.Enumeration">
@@ -410,6 +436,11 @@
             <param name="attribute">The resulting custom attribute</param>
             <returns>A boolean indicating whether or not the custom attribute of the specified type could be found</returns>
         </member>
+        <member name="T:Neuroglia.IDataTransferObject">
+            <summary>
+            Defines the fundamentals of all Data Transfer Objects (DTOs)
+            </summary>
+        </member>
         <member name="T:Neuroglia.IIdentifiable">
             <summary>
             Defines the fundamentals of an object that is uniquely identifiable
@@ -430,6 +461,22 @@
             <summary>
             Gets the object's unique identifier
             </summary>
+        </member>
+        <member name="T:Neuroglia.IIntegrationEvent">
+            <summary>
+            Defines the fundamentals of an integration event, which is an event used to exchange information across domain boundaries
+            </summary>
+        </member>
+        <member name="T:Neuroglia.IntegrationEvent">
+            <summary>
+            Represents the default implementation of an <see cref="T:Neuroglia.IIntegrationEvent"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.IntegrationEvent.AggregateId">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.IntegrationEvent.CreatedAt">
+            <inheritdoc/>
         </member>
         <member name="T:Neuroglia.IOperationResult">
             <summary>

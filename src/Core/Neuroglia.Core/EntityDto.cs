@@ -18,27 +18,33 @@ using System;
 
 namespace Neuroglia
 {
+
     /// <summary>
-    /// Represents an <see cref="Attribute"/> used to specify the Data Transfer Object of an entity
+    /// Describes an entity Data Transfer Object (DTO)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class DataTransferObjectTypeAttribute
-        : Attribute
+    /// <typeparam name="TKey">The type of key the descibed entity is uniquely identified by</typeparam>
+    public abstract class EntityDto<TKey>
+        : DataTransferObject, IIdentifiable<TKey>
+        where TKey : IEquatable<TKey>
     {
 
         /// <summary>
-        /// Initializes a new <see cref="DataTransferObjectTypeAttribute"/>
+        /// Gets/sets the entity's id
         /// </summary>
-        /// <param name="type">The type of the object's DTO</param>
-        public DataTransferObjectTypeAttribute(Type type)
+        public virtual TKey Id { get; set; }
+
+        object IIdentifiable.Id
         {
-            this.Type = type;
+            get
+            {
+                return this.Id;
+            }
         }
 
         /// <summary>
-        /// Gets the type of the object's DTO
+        /// Gets/sets the UTC date and time the entity has been created at
         /// </summary>
-        public Type Type { get; }
+        public virtual DateTime CreatedAt { get; set; }
 
     }
 
