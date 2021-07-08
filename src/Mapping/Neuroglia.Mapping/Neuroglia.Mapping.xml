@@ -4,6 +4,19 @@
         <name>Neuroglia.Mapping</name>
     </assembly>
     <members>
+        <member name="T:Neuroglia.Mapping.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Mapping.IServiceCollectionExtensions.AddMapper(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Reflection.Assembly[])">
+            <summary>
+            Adds and configures a <see cref="T:Neuroglia.Mapping.Mapper"/> service
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="assemblies">An array containing the <see cref="T:System.Reflection.Assembly"/> instances to scan for mapping configuration</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
         <member name="T:Neuroglia.Mapping.ProfileExtensions">
             <summary>
             Defines extensions for <see cref="T:AutoMapper.Profile"/>s
