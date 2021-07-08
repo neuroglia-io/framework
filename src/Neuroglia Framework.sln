@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.MongoDB", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Kubernetes", "Data\Neuroglia.Data.Kubernetes\Neuroglia.Data.Kubernetes.csproj", "{B58A2162-3332-42D5-A34A-3A3547D97DA7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Xunit", "Testing\Neuroglia.XUnit\Neuroglia.Xunit.csproj", "{81FBD1DA-5877-4D22-B923-6D664026D947}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Xunit", "Testing\Neuroglia.Xunit\Neuroglia.Xunit.csproj", "{81FBD1DA-5877-4D22-B923-6D664026D947}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.UnitTests", "..\test\Neuroglia.UnitTests\Neuroglia.UnitTests.csproj", "{0F79EC55-333A-4CD6-85CE-7B26D2BD622D}"
 EndProject
