@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNet.Testcontainers" Version="1.4.0" />
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="3.0.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Neuroglia.Core\Neuroglia.Core.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.EntityFrameworkCore\Neuroglia.Data.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Kubernetes\Neuroglia.Data.Kubernetes.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.MongoDB\Neuroglia.Data.MongoDB.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data\Neuroglia.Data.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Serialization.Json\Neuroglia.Serialization.Json.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Serialization.Protobuf\Neuroglia.Serialization.Protobuf.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Serialization.YamlDotNet\Neuroglia.Serialization.YamlDotNet.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.XUnit\Neuroglia.Xunit.csproj" />
+  </ItemGroup>
+
+</Project>

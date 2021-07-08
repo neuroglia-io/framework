@@ -1,0 +1,379 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Serialization.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Serialization.BinarySerializerBase">
+            <summary>
+            Represents the base class for all <see cref="T:Neuroglia.Serialization.IBinarySerializer"/> implementations
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.BinarySerializerBase.SupportedContentTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.Deserialize(System.IO.Stream,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.DeserializeAsync(System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.Deserialize``1(System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.DeserializeAsync``1(System.IO.Stream,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.Deserialize(System.Byte[],System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.DeserializeAsync(System.Byte[],System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.Deserialize``1(System.Byte[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.DeserializeAsync``1(System.Byte[],System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.Serialize(System.Object,System.IO.Stream,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.SerializeAsync(System.Object,System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.Serialize(System.Object,System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.SerializeAsync(System.Object,System.IO.Stream,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.Serialize(System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.SerializeAsync(System.Object,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.Serialize(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.BinarySerializerBase.SerializeAsync(System.Object,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Serialization.IBinarySerializer">
+            <summary>
+            Defines the fundamentals of a service used to serialize and deserialize binary
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Serialization.IJsonSerializer">
+            <summary>
+            Defines the fundamentals of a service used to serialize and deserialize YAML
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Serialization.ISerializer">
+            <summary>
+            Defines the fundamentals of a service used to serialize/deserialize objects
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.ISerializer.SupportedContentTypes">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all content types that can be serialized and deserialized by the <see cref="T:Neuroglia.Serialization.ISerializer"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.Serialize(System.Object,System.IO.Stream)">
+            <summary>
+            Serializes a value to an output <see cref="T:System.IO.Stream"/>
+            </summary>
+            <param name="value">The value to serialize</param>
+            <param name="output">The output <see cref="T:System.IO.Stream"/> to serialize the specified value to</param>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.SerializeAsync(System.Object,System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Serializes a value to an output <see cref="T:System.IO.Stream"/>
+            </summary>
+            <param name="value">The value to serialize</param>
+            <param name="output">The output <see cref="T:System.IO.Stream"/> to serialize the specified value to</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.Serialize(System.Object,System.IO.Stream,System.Type)">
+            <summary>
+            Serializes a value to an output <see cref="T:System.IO.Stream"/>
+            </summary>
+            <param name="value">The value to serialize</param>
+            <param name="output">The output <see cref="T:System.IO.Stream"/> to serialize the specified value to</param>
+            <param name="type">The type of the value to serialize</param>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.SerializeAsync(System.Object,System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <summary>
+            Serializes a value to an output <see cref="T:System.IO.Stream"/>
+            </summary>
+            <param name="value">The value to serialize</param>
+            <param name="output">The output <see cref="T:System.IO.Stream"/> to serialize the specified value to</param>
+            <param name="type">The type of the value to serialize</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.Serialize(System.Object)">
+            <summary>
+            Serializes a value to a byte array
+            </summary>
+            <param name="value">The value to serialize</param>
+            <returns>A new byte array representing the serialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.SerializeAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Serializes a value to a byte array
+            </summary>
+            <param name="value">The value to serialize</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new byte array representing the serialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.Serialize(System.Object,System.Type)">
+            <summary>
+            Serializes a value to a byte array
+            </summary>
+            <param name="value">The value to serialize</param>
+            <param name="type">The type of the value to serialize</param>
+            <returns>A new byte array representing the serialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.SerializeAsync(System.Object,System.Type,System.Threading.CancellationToken)">
+            <summary>
+            Serializes a value to a byte array
+            </summary>
+            <param name="value">The value to serialize</param>
+            <param name="type">The type of the value to serialize</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new byte array representing the serialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.Deserialize``1(System.IO.Stream)">
+            <summary>
+            Deserialize a value from an input <see cref="T:System.IO.Stream"/>
+            </summary>
+            <typeparam name="T">The type of the value to deserialize</typeparam>
+            <param name="input">The input <see cref="T:System.IO.Stream"/> to deserialize the value from</param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.DeserializeAsync``1(System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Deserialize a value from an input <see cref="T:System.IO.Stream"/>
+            </summary>
+            <typeparam name="T">The type of the value to deserialize</typeparam>
+            <param name="input">The input <see cref="T:System.IO.Stream"/> to deserialize the value from</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.Deserialize``1(System.Byte[])">
+            <summary>
+            Deserialize a value from an input byte array
+            </summary>
+            <typeparam name="T">The type of the value to deserialize</typeparam>
+            <param name="input">The input byte array to deserialize the value from</param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.DeserializeAsync``1(System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            Deserialize a value from an input byte array
+            </summary>
+            <typeparam name="T">The type of the value to deserialize</typeparam>
+            <param name="input">The input byte array to deserialize the value from</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.Deserialize(System.IO.Stream,System.Type)">
+            <summary>
+            Deserialize a value from an input <see cref="T:System.IO.Stream"/>
+            </summary>
+            <param name="input">The input <see cref="T:System.IO.Stream"/> to deserialize the value from</param>
+            <param name="returnType">The type of the value to deserialize</param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.DeserializeAsync(System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <summary>
+            Deserialize a value from an input <see cref="T:System.IO.Stream"/>
+            </summary>
+            <param name="input">The input <see cref="T:System.IO.Stream"/> to deserialize the value from</param>
+            <param name="returnType">The type of the value to deserialize</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.Deserialize(System.Byte[],System.Type)">
+            <summary>
+            Deserialize a value from an input byte array
+            </summary>
+            <param name="input">The input byte array to deserialize the value from</param>
+            <param name="returnType">The type of the value to deserialize</param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializer.DeserializeAsync(System.Byte[],System.Type,System.Threading.CancellationToken)">
+            <summary>
+            Deserialize a value from an input byte array
+            </summary>
+            <param name="input">The input byte array to deserialize the value from</param>
+            <param name="returnType">The type of the value to deserialize</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="T:Neuroglia.Serialization.ITextSerializer">
+            <summary>
+            Defines the fundamentals of a service used to serialize/deserialize text
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.ITextSerializer.Serialize(System.Object)">
+            <summary>
+            Serializes the specified value
+            </summary>
+            <param name="value">The value to serialize</param>
+            <returns>The resulting text</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ITextSerializer.SerializeAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Serializes the specified value
+            </summary>
+            <param name="value">The value to serialize</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The resulting text</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ITextSerializer.Serialize(System.Object,System.Type)">
+            <summary>
+            Serializes the specified value
+            </summary>
+            <param name="value">The value to serialize</param>
+            <param name="type">The type of the value to serialize</param>
+            <returns>The resulting text</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ITextSerializer.SerializeAsync(System.Object,System.Type,System.Threading.CancellationToken)">
+            <summary>
+            Serializes the specified value
+            </summary>
+            <param name="value">The value to serialize</param>
+            <param name="type">The type of the value to serialize</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The resulting text</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ITextSerializer.Deserialize(System.String,System.Type)">
+            <summary>
+            Deserializes the specified text
+            </summary>
+            <param name="input">The text to deserialize</param>
+            <param name="returnType">The expected return type</param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ITextSerializer.DeserializeAsync(System.String,System.Type,System.Threading.CancellationToken)">
+            <summary>
+            Deserializes the specified text
+            </summary>
+            <param name="input">The text to deserialize</param>
+            <param name="returnType">The expected return type</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ITextSerializer.Deserialize``1(System.String)">
+            <summary>
+            Deserializes the specified text
+            </summary>
+            <typeparam name="T">The expected return type</typeparam>
+            <param name="input">The text to deserialize</param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ITextSerializer.DeserializeAsync``1(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Deserializes the specified text
+            </summary>
+            <typeparam name="T">The expected return type</typeparam>
+            <param name="input">The text to deserialize</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The deserialized value</returns>
+        </member>
+        <member name="T:Neuroglia.Serialization.IXmlSerializer">
+            <summary>
+            Defines the fundamentals of a service used to serialize and deserialize XML
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Serialization.IYamlSerializer">
+            <summary>
+            Defines the fundamentals of a service used to serialize and deserialize YAML
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Serialization.TextSerializerBase">
+            <summary>
+            Represents the base class for all <see cref="T:Neuroglia.Serialization.ITextSerializer"/> implementations
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.TextSerializerBase.SupportedContentTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Serialize(System.Object,System.IO.Stream,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.SerializeAsync(System.Object,System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Serialize(System.Object,System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.SerializeAsync(System.Object,System.IO.Stream,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Neuroglia#Serialization#ISerializer#Serialize(System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Neuroglia#Serialization#ISerializer#SerializeAsync(System.Object,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Neuroglia#Serialization#ISerializer#Serialize(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Neuroglia#Serialization#ISerializer#SerializeAsync(System.Object,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Deserialize(System.IO.Stream,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.DeserializeAsync(System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Deserialize``1(System.IO.Stream)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.DeserializeAsync``1(System.IO.Stream,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Deserialize(System.Byte[],System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.DeserializeAsync(System.Byte[],System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Deserialize``1(System.Byte[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.DeserializeAsync``1(System.Byte[],System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Serialize(System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.SerializeAsync(System.Object,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Serialize(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.SerializeAsync(System.Object,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Deserialize(System.String,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.DeserializeAsync(System.String,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.Deserialize``1(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.TextSerializerBase.DeserializeAsync``1(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

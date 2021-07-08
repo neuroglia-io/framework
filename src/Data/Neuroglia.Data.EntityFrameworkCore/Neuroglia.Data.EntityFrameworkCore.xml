@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Data.EntityFrameworkCore</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Data.EFCoreRepository`3">
+            <summary>
+            Represents the default EntityFrameworkCore implementation of the <see cref="T:Neuroglia.Data.IRepository`2"/> interface
+            </summary>
+            <typeparam name="TEntity">The type of entity to store</typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify stored entities</typeparam>
+            <typeparam name="TContext">The type of <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> the <see cref="T:Neuroglia.Data.EFCoreRepository`3"/> belongs to</typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.#ctor(Microsoft.Extensions.Logging.ILogger{Neuroglia.Data.EFCoreRepository{`0,`1,`2}},`2)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EFCoreRepository`3"/>
+            </summary>
+            <param name="logger">The service used to perform logging</param>
+            <param name="dbContext">The <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> the <see cref="T:Neuroglia.Data.EFCoreRepository`3"/> belongs to</param>
+        </member>
+        <member name="P:Neuroglia.Data.EFCoreRepository`3.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EFCoreRepository`3.DbContext">
+            <summary>
+            Gets the <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> the <see cref="T:Neuroglia.Data.EFCoreRepository`3"/> belongs to
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EFCoreRepository`3.DbSet">
+            <summary>
+            Gets the underlying <see cref="T:Microsoft.EntityFrameworkCore.DbSet`1"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.ContainsAsync(`1,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.FindAsync(`1,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.FindAsync(System.Object[],System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.AddAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.UpdateAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.RemoveAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.RemoveAsync(`1,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.SaveChangesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.ToListAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EFCoreRepository`3.AsQueryable">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddEFCoreRepositories``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures an <see cref="T:Neuroglia.Data.EFCoreRepository`3"/> for each <see cref="T:Microsoft.EntityFrameworkCore.DbSet`1"/> property in the specified <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> type
+            </summary>
+            <typeparam name="TContext">The <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> type to register repositories for</typeparam>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="lifetime">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> of repositories to add</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddEFCoreRepository``3(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:Neuroglia.Data.EFCoreRepository`3"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="lifetime">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> of the <see cref="T:Neuroglia.Data.EFCoreRepository`3"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <typeparam name="TEntity">The type of entity to store</typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify entities to store</typeparam>
+            <typeparam name="TDbContext">The type of <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> the <see cref="T:Neuroglia.Data.EFCoreRepository`3"/> to add belongs to</typeparam>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddEFCoreRepository(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Type,System.Type,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:Neuroglia.Data.EFCoreRepository`3"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="lifetime">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> of the <see cref="T:Neuroglia.Data.EFCoreRepository`3"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <param name="entityType">The type of entity to store</param>
+            <param name="keyType">The type of key used to uniquely identify entities to store</param>
+            <param name="contextType">The type of <see cref="T:Microsoft.EntityFrameworkCore.DbContext"/> the <see cref="T:Neuroglia.Data.EFCoreRepository`3"/> to add belongs to</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+    </members>
+</doc>

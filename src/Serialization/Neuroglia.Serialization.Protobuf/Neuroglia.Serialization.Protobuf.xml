@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Serialization.Protobuf</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Serialization.FieldDescriptorProtoExtensions">
+            <summary>
+            Defines extensions for the protobuf-net library
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.FieldDescriptorProtoExtensions.ToRuntimeType(Google.Protobuf.Reflection.FieldDescriptorProto.Type)">
+            <summary>
+            Gets the <see cref="T:Google.Protobuf.Reflection.FieldDescriptorProto.Type"/>'s runtime <see cref="T:System.Type"/>
+            </summary>
+            <param name="type">The <see cref="T:Google.Protobuf.Reflection.FieldDescriptorProto.Type"/> to get the runtime type for</param>
+            <returns>The <see cref="T:Google.Protobuf.Reflection.FieldDescriptorProto.Type"/>'s runtime <see cref="T:System.Type"/></returns>
+        </member>
+        <member name="T:Neuroglia.Serialization.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.IServiceCollectionExtensions.AddProtobufSerializer(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds and configures a <see cref="T:Neuroglia.Serialization.ProtobufSerializer"/> service
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Serialization.IProtobufSerializer">
+            <summary>
+            Defines the fundamentals of a service used to serialize and deserialize Protobuf
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Serialization.ProtobufSerializer">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Serialization.IProtobufSerializer"/> interface
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.ProtobufSerializer.SupportedContentTypes">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtobufSerializer.Deserialize(System.IO.Stream,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtobufSerializer.DeserializeAsync(System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtobufSerializer.Serialize(System.Object,System.IO.Stream,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtobufSerializer.SerializeAsync(System.Object,System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Serialization.ProtoField">
+            <summary>
+            Represents an object used to describe a <see cref="T:Neuroglia.Serialization.ProtoObject"/> field
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoField.#ctor(System.String,System.Int32,Google.Protobuf.Reflection.FieldDescriptorProto.Type,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.ProtoField"/>
+            </summary>
+            <param name="name">The <see cref="T:Neuroglia.Serialization.ProtoField"/>'s name</param>
+            <param name="tag">The <see cref="T:Neuroglia.Serialization.ProtoField"/>'s tag</param>
+            <param name="protobufType">The <see cref="T:Neuroglia.Serialization.ProtoField"/>'s protobuf type</param>
+            <param name="value">The <see cref="T:Neuroglia.Serialization.ProtoField"/>'s value</param>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoField.#ctor(System.String,System.Int32,System.Type,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.ProtoField"/>
+            </summary>
+            <param name="name">The <see cref="T:Neuroglia.Serialization.ProtoField"/>'s name</param>
+            <param name="tag">The <see cref="T:Neuroglia.Serialization.ProtoField"/>'s tag</param>
+            <param name="runtimeType">The <see cref="T:Neuroglia.Serialization.ProtoField"/>'s runtime type</param>
+            <param name="value">The <see cref="T:Neuroglia.Serialization.ProtoField"/>'s value</param>
+        </member>
+        <member name="P:Neuroglia.Serialization.ProtoField.Name">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ProtoField"/>'s name
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.ProtoField.Tag">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ProtoField"/>'s tag
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.ProtoField.ProtobufType">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ProtoField"/>'s protobuf type
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.ProtoField.RuntimeType">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ProtoField"/>'s runtime type
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.ProtoField.Value">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ProtoField"/>'s value
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoField.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Serialization.ProtoObject">
+            <summary>
+            Represents a <see cref="T:ProtoBuf.IExtensible"/> object used to deserialize and deserialize dynamic types with ProtoBuf
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.ProtoObject"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.ProtoObject.Fields">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> containing the <see cref="T:Neuroglia.Serialization.ProtoObject"/>'s fields
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.AddField(System.String,System.Int32,System.Type,System.Object)">
+            <summary>
+            Adds a new <see cref="T:Neuroglia.Serialization.ProtoField"/> to the <see cref="T:Neuroglia.Serialization.ProtoObject"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:Neuroglia.Serialization.ProtoField"/> to add</param>
+            <param name="tag">The tag of the <see cref="T:Neuroglia.Serialization.ProtoField"/> to add</param>
+            <param name="type">The type of the <see cref="T:Neuroglia.Serialization.ProtoField"/> to add</param>
+            <param name="value">The value of the <see cref="T:Neuroglia.Serialization.ProtoField"/> to add</param>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.GetField(System.String)">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ProtoField"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:Neuroglia.Serialization.ProtoField"/> to get</param>
+            <returns>The <see cref="T:Neuroglia.Serialization.ProtoField"/> with the specified name, if any</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.GetField(System.Int32)">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ProtoField"/> with the specified tag
+            </summary>
+            <param name="tag">The tag of the <see cref="T:Neuroglia.Serialization.ProtoField"/> to get</param>
+            <returns>The <see cref="T:Neuroglia.Serialization.ProtoField"/> with the specified tag, if any</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.SetField(System.String,System.Object)">
+            <summary>
+            Sets the value of the specified <see cref="T:Neuroglia.Serialization.ProtoField"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:Neuroglia.Serialization.ProtoField"/> to set</param>
+            <param name="value">The value to set</param>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.SetField(System.Int32,System.Object)">
+            <summary>
+            Sets the value of the specified <see cref="T:Neuroglia.Serialization.ProtoField"/>
+            </summary>
+            <param name="tag">The tag of the <see cref="T:Neuroglia.Serialization.ProtoField"/> to set</param>
+            <param name="value">The value to set</param>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.WriteTo(System.IO.Stream)">
+            <summary>
+            Serializes and writes the <see cref="T:Neuroglia.Serialization.ProtoObject"/> to the specified <see cref="T:System.IO.Stream"/>
+            </summary>
+            <param name="stream">The <see cref="T:System.IO.Stream"/> to write the <see cref="T:Neuroglia.Serialization.ProtoObject"/> to</param>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.ToObject(System.Type)">
+            <summary>
+            Converts the <see cref="T:Neuroglia.Serialization.ProtoObject"/> to an object of the specified type
+            </summary>
+            <param name="type">The type to convert the <see cref="T:Neuroglia.Serialization.ProtoObject"/> to</param>
+            <returns>A new object of the specified type</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.ToObject``1">
+            <summary>
+            Converts the <see cref="T:Neuroglia.Serialization.ProtoObject"/> to an object of the specified type
+            </summary>
+            <typeparam name="T">The type to convert the <see cref="T:Neuroglia.Serialization.ProtoObject"/> to</typeparam>
+            <returns>A new object of the specified type</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.FromDescriptor(Google.Protobuf.Reflection.DescriptorProto,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Serialization.ProtoObject"/> based on the specified <see cref="T:Google.Protobuf.Reflection.DescriptorProto"/>
+            </summary>
+            <param name="descriptor">The <see cref="T:Google.Protobuf.Reflection.DescriptorProto"/> based on which to create a new <see cref="T:Neuroglia.Serialization.ProtoObject"/></param>
+            <param name="fields">An <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the fields name/value pairs of the <see cref="T:Neuroglia.Serialization.ProtoObject"/> to create</param>
+            <returns>A new <see cref="T:Neuroglia.Serialization.ProtoObject"/></returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.FromObject(System.Object)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Serialization.ProtoObject"/> based on the specified object
+            </summary>
+            <param name="obj">The object based on which to create a new <see cref="T:Neuroglia.Serialization.ProtoObject"/></param>
+            <returns>A new <see cref="T:Neuroglia.Serialization.ProtoObject"/></returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.ReadFrom(System.IO.Stream,Google.Protobuf.Reflection.DescriptorProto)">
+            <summary>
+            Reads a new <see cref="T:Neuroglia.Serialization.ProtoObject"/> from the specified <see cref="T:System.IO.Stream"/>
+            </summary>
+            <param name="stream">The <see cref="T:System.IO.Stream"/> to read a <see cref="T:Neuroglia.Serialization.ProtoObject"/> from</param>
+            <param name="descriptor">The <see cref="T:Google.Protobuf.Reflection.DescriptorProto"/> that describes the type of the expected <see cref="T:Neuroglia.Serialization.ProtoObject"/></param>
+            <returns>A new <see cref="T:Neuroglia.Serialization.ProtoObject"/></returns>
+        </member>
+    </members>
+</doc>

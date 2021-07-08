@@ -1,0 +1,389 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Data</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Data.AggregateRoot`1">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> interface
+            </summary>
+            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IAggregateRoot"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.AggregateRoot`1.#ctor(`0)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.AggregateRoot`1"/>
+            </summary>
+            <param name="id">The <see cref="T:Neuroglia.Data.AggregateRoot`1"/>'s unique identifier</param>
+        </member>
+        <member name="P:Neuroglia.Data.AggregateRoot`1.PendingEvents">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.AggregateRoot`1.RegisterEvent``1(``0)">
+            <summary>
+            Registers the specified <see cref="T:Neuroglia.Data.IDomainEvent"/>
+            </summary>
+            <typeparam name="TEvent">The type of <see cref="T:Neuroglia.Data.IDomainEvent"/> to register</typeparam>
+            <param name="e">The <see cref="T:Neuroglia.Data.IDomainEvent"/> to register</param>
+            <returns>The registered <see cref="T:Neuroglia.Data.IDomainEvent"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.AggregateRoot`1.ClearPendingEvents">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.DomainEvent`2">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.IDomainEvent`2"/> interface
+            </summary>
+            <typeparam name="TAggregate">The type of <see cref="T:Neuroglia.Data.IAggregateRoot"/> that has produced the <see cref="T:Neuroglia.Data.IDomainEvent"/></typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IAggregateRoot"/> that has produced the <see cref="T:Neuroglia.Data.IDomainEvent"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.DomainEvent`2.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.DomainEvent`2"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.DomainEvent`2.#ctor(`1)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.DomainEvent`2"/>
+            </summary>
+            <param name="aggregateId">The id of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> that has produced the <see cref="T:Neuroglia.Data.IDomainEvent"/></param>
+        </member>
+        <member name="P:Neuroglia.Data.DomainEvent`2.AggregateId">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.DomainEvent`2.AggregateType">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.DomainEvent`2.CreatedAt">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.Entity`1">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.IEntity"/> interface
+            </summary>
+            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IEntity"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.Entity`1.#ctor(`0)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.Entity`1"/>
+            </summary>
+            <param name="id">The <see cref="T:Neuroglia.Data.IEntity"/>'s unique key</param>
+        </member>
+        <member name="P:Neuroglia.Data.Entity`1.Id">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.Entity`1.CreatedAt">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.Entity`1.LastModified">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.Entity`1.Version">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddPluralizer(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds and configures a new <see cref="T:Neuroglia.Data.Pluralizer"/> service
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.IAggregateRoot">
+            <summary>
+            Defines the fundamentals of an aggregate root
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.IAggregateRoot.PendingEvents">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> containing the <see cref="T:Neuroglia.Data.IAggregateRoot"/>'s pending <see cref="T:Neuroglia.Data.IDomainEvent"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.IAggregateRoot.ClearPendingEvents">
+            <summary>
+            Clears all pending <see cref="T:Neuroglia.Data.IDomainEvent"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.IAggregateRoot`1">
+            <summary>
+            Defines the fundamentals of an aggregate root
+            </summary>
+            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IAggregateRoot"/></typeparam>
+        </member>
+        <member name="T:Neuroglia.Data.IDomainEvent">
+            <summary>
+            Defines the fundamentals of a domain event, that is an event bounded to a specific domain context
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.IDomainEvent.AggregateType">
+            <summary>
+            Gets the type of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> that has produced the <see cref="T:Neuroglia.Data.IDomainEvent"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.IDomainEvent.AggregateId">
+            <summary>
+            Gets the id of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> that has produced the <see cref="T:Neuroglia.Data.IDomainEvent"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.IDomainEvent.CreatedAt">
+            <summary>
+            Gets the date and time the <see cref="T:Neuroglia.Data.IDomainEvent"/> has been created at
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.IDomainEvent`1">
+            <summary>
+            Defines the fundamentals of a domain event, that is an event bounded to a specific domain context
+            </summary>
+            <typeparam name="TAggregate">The type of <see cref="T:Neuroglia.Data.IAggregateRoot"/> that has produced the <see cref="T:Neuroglia.Data.IDomainEvent"/></typeparam>
+        </member>
+        <member name="T:Neuroglia.Data.IDomainEvent`2">
+            <summary>
+            Defines the fundamentals of a domain event, that is an event bounded to a specific domain context
+            </summary>
+            <typeparam name="TAggregate">The type of <see cref="T:Neuroglia.Data.IAggregateRoot"/> that has produced the <see cref="T:Neuroglia.Data.IDomainEvent"/></typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IAggregateRoot"/> that has produced the <see cref="T:Neuroglia.Data.IDomainEvent"/></typeparam>
+        </member>
+        <member name="P:Neuroglia.Data.IDomainEvent`2.AggregateId">
+            <summary>
+            Gets the key of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> that has produced the <see cref="T:Neuroglia.Data.IDomainEvent"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.IEntity">
+            <summary>
+            Defines the fundamentals of an entity
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.IEntity.CreatedAt">
+            <summary>
+            Gets the date and time at which the <see cref="T:Neuroglia.Data.IEntity"/> has been created
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.IEntity.LastModified">
+            <summary>
+            Gets the date and time at which the <see cref="T:Neuroglia.Data.IEntity"/> has last been modified
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.IEntity.Version">
+            <summary>
+            Gets the entity's version
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.IEntity`1">
+            <summary>
+            Defines the fundamentals of an entity
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.IPatchable">
+            <summary>
+            Defines the fundamentals of an object that can be patched
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.IPatchable.TryGetPatch(Microsoft.AspNetCore.JsonPatch.JsonPatchDocument@)">
+            <summary>
+            Attempts to get the current <see cref="T:Microsoft.AspNetCore.JsonPatch.JsonPatchDocument"/>
+            </summary>
+            <param name="patch">The current <see cref="T:Microsoft.AspNetCore.JsonPatch.JsonPatchDocument"/>, if any</param>
+            <returns>A boolean indicating whether or not the <see cref="T:Neuroglia.Data.IPatchable"/> has a pending patch</returns>
+        </member>
+        <member name="T:Neuroglia.Data.IRepository`1">
+            <summary>
+            Defines the fundamentals of a service used to manage data
+            </summary>
+            <typeparam name="TEntity">The type of data managed by the <see cref="T:Neuroglia.Data.IRepository`1"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`1.FindAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Finds the entity with the specified key
+            </summary>
+            <param name="key">The key of the entity to find</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The entity with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`1.FindAsync(System.Object[],System.Threading.CancellationToken)">
+            <summary>
+            Finds the entity with the specified key values
+            </summary>
+            <param name="keyValues">The key values of the entity to find</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The entity with the specified key values</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`1.AddAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Adds the specified entity to the <see cref="T:Neuroglia.Data.IRepository`1"/>
+            </summary>
+            <param name="entity">The entity to add</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The newly added entity</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`1.UpdateAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Updates the specified entity
+            </summary>
+            <param name="entity">The entity to update</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The updated entity</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`1.RemoveAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Removes the specified entity from the <see cref="T:Neuroglia.Data.IRepository`1"/>
+            </summary>
+            <param name="entity">The entity to remove</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The removed entity</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`1.RemoveAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Removes the specified entity from the <see cref="T:Neuroglia.Data.IRepository`1"/>
+            </summary>
+            <param name="key">The key of the entity to remove</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`1.ContainsAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Determines whether or not the <see cref="T:Neuroglia.Data.IRepository`1"/> contains an entity with the specified key
+            </summary>
+            <param name="key">The key to check</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A boolean indicating whether or not the <see cref="T:Neuroglia.Data.IRepository`1"/> contains an entity with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`1.ToListAsync(System.Threading.CancellationToken)">
+            <summary>
+            Lists all entities contained in the <see cref="T:Neuroglia.Data.IRepository`1"/>
+            </summary>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.List`1"/> containing all the entities contained in the <see cref="T:Neuroglia.Data.IRepository`1"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`1.AsQueryable">
+            <summary>
+            Queries the <see cref="T:Neuroglia.Data.IRepository`1"/>
+            </summary>
+            <returns>A new <see cref="T:System.Linq.IQueryable"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`1.SaveChangesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Saves all pending changes
+            </summary>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.IRepository`2">
+            <summary>
+            Defines the fundamentals of a service used to manage data
+            </summary>
+            <typeparam name="TEntity">The type of data managed by the <see cref="T:Neuroglia.Data.IRepository`2"/></typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify entities managed by the <see cref="T:Neuroglia.Data.IRepository`2"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`2.FindAsync(`1,System.Threading.CancellationToken)">
+            <summary>
+            Finds the entity with the specified key
+            </summary>
+            <param name="key">The key of the entity to find</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The entity with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`2.ContainsAsync(`1,System.Threading.CancellationToken)">
+            <summary>
+            Determines whether or not the <see cref="T:Neuroglia.Data.IRepository`1"/> contains an entity with the specified key
+            </summary>
+            <param name="key">The key to check</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A boolean indicating whether or not the <see cref="T:Neuroglia.Data.IRepository`1"/> contains an entity with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository`2.RemoveAsync(`1,System.Threading.CancellationToken)">
+            <summary>
+            Removes the specified entity from the <see cref="T:Neuroglia.Data.IRepository`1"/>
+            </summary>
+            <param name="key">The key of the entity to remove</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.RepositoryBase`2">
+            <summary>
+            Represents an abstract implementation of the <see cref="T:Neuroglia.Data.IRepository`2"/> interface
+            </summary>
+            <typeparam name="TEntity">The type of data managed by the <see cref="T:Neuroglia.Data.IRepository`2"/></typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify entities managed by the <see cref="T:Neuroglia.Data.IRepository`2"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.AddAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.FindAsync(`1,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.Neuroglia#Data#IRepository{TEntity}#FindAsync(System.Object,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.FindAsync(System.Object[],System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.ContainsAsync(`1,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.Neuroglia#Data#IRepository{TEntity}#ContainsAsync(System.Object,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.RemoveAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.RemoveAsync(`1,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.UpdateAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.AsQueryable">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.ToListAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.RepositoryBase`2.SaveChangesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.IPluralizer">
+            <summary>
+            Defines the fundamentals of a service used to pluralize words
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.IPluralizer.Pluralize(System.String)">
+            <summary>
+            Pluralizes the specified word
+            </summary>
+            <param name="word">The word to pluralize</param>
+            <returns>The pluralized word</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IPluralizer.Singularize(System.String)">
+            <summary>
+            Singularizes the specified word
+            </summary>
+            <param name="word">The word to singularize</param>
+            <returns>The singularized word</returns>
+        </member>
+        <member name="T:Neuroglia.Data.Pluralizer">
+            <summary>
+            Represents an implementation of the <see cref="T:Neuroglia.Data.IPluralizer"/> interface based on a <see cref="T:Pluralize.NET.Core.Pluralizer"/> service
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Pluralizer.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.Pluralizer"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Pluralizer.PluralizationService">
+            <summary>
+            Gets the underlying <see cref="T:Pluralize.NET.Core.Pluralizer"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Pluralizer.Pluralize(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Pluralizer.Singularize(System.String)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

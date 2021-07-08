@@ -1,0 +1,217 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.AspNetCore</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.AspNetCore.B3TracingHeaders">
+            <summary>
+            Exposes constants about B3 tracing headers
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNetCore.B3TracingHeaders.REQUEST_ID">
+            <summary>
+            Gets the 'x-request-id' header
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNetCore.B3TracingHeaders.B3_TRACE_ID">
+            <summary>
+            Gets the 'x-b3-traceid' header
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNetCore.B3TracingHeaders.B3_SPAN_ID">
+            <summary>
+            Gets the 'x-b3-spanid' header
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNetCore.B3TracingHeaders.B3_PARENT_SPAN_ID">
+            <summary>
+            Gets the 'x-b3-parentspanid' header
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNetCore.B3TracingHeaders.B3_SAMPLED">
+            <summary>
+            Gets the 'x-b3-sampled' header
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNetCore.B3TracingHeaders.B3_FLAGS">
+            <summary>
+            Gets the 'x-b3-flags' header
+            </summary>
+        </member>
+        <member name="F:Microsoft.AspNetCore.B3TracingHeaders.OT_SPAN_CONTEXT">
+            <summary>
+            Gets the 'x-ot-span-context' header
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNetCore.IApplicationBuilderExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/>s
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.IApplicationBuilderExtensions.UseRequestBuffering(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Adds a middleware that enables request buffering
+            </summary>
+            <param name="app">The <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/> to configure</param>
+            <returns>The configured <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/></returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.IServiceCollectionExtensions.AddHeadersPropagation(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Neuroglia.AspNetCore.Configuration.IHeaderPropagationOptionsBuilder})">
+            <summary>
+            Adds and configures services to enable the propagation of headers
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> used to configure the headers to propagate</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.IServiceCollectionExtensions.AddHeadersPropagation(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds and configures services to enable the propagation of headers
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.IServiceCollectionExtensions.AddB3TracingHeadersPropagation(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds and configures services to enable the propagation of B3 Tracing headers
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.HeadersAccessor">
+            <summary>
+            Represents the default implementation of the <see cref="T:Microsoft.AspNetCore.IHeadersAccessor"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.HeadersAccessor.#ctor(Microsoft.AspNetCore.Http.IHttpContextAccessor)">
+            <summary>
+            Initializes a new <see cref="T:Microsoft.AspNetCore.HeadersAccessor"/>
+            </summary>
+            <param name="httpContextAccessor">The service used to access the current <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/></param>
+        </member>
+        <member name="P:Microsoft.AspNetCore.HeadersAccessor.HttpContextAccessor">
+            <summary>
+            Gets the service used to access the current <see cref="T:Microsoft.AspNetCore.Http.HttpContext"/>
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.HeadersAccessor.Headers">
+            <inheritdoc/>
+        </member>
+        <member name="T:Microsoft.AspNetCore.HeadersPropagationDelegatingHandler">
+            <summary>
+            Represents a <see cref="T:System.Net.Http.DelegatingHandler"/> used to propagate headers
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.HeadersPropagationDelegatingHandler.#ctor(Microsoft.Extensions.Options.IOptions{Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions},Microsoft.AspNetCore.IHeadersAccessor)">
+            <summary>
+            Initializes a new <see cref="T:Microsoft.AspNetCore.HeadersPropagationDelegatingHandler"/>
+            </summary>
+            <param name="options">The service used to access the current <see cref="T:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions"/></param>
+            <param name="headersAccessor">The service used to access current headers</param>
+        </member>
+        <member name="P:Microsoft.AspNetCore.HeadersPropagationDelegatingHandler.Options">
+            <summary>
+            Gets the current <see cref="T:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions"/>
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.HeadersPropagationDelegatingHandler.HeadersAccessor">
+            <summary>
+            Gets the service used to access current headers
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.HeadersPropagationDelegatingHandler.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Microsoft.AspNetCore.HeadersPropagationMessageHandlerBuilderFilter">
+            <summary>
+            Represents the <see cref="T:Microsoft.Extensions.Http.IHttpMessageHandlerBuilderFilter"/> used to apply the <see cref="P:Microsoft.AspNetCore.HeadersPropagationMessageHandlerBuilderFilter.HeadersPropagationDelegatingHandler"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.HeadersPropagationMessageHandlerBuilderFilter.#ctor(Microsoft.AspNetCore.HeadersPropagationDelegatingHandler)">
+            <summary>
+            Initializes a new <see cref="T:Microsoft.AspNetCore.HeadersPropagationMessageHandlerBuilderFilter"/>
+            </summary>
+            <param name="headersPropagationDelegatingHandler">The <see cref="T:System.Net.Http.DelegatingHandler"/> used to propagate headers</param>
+        </member>
+        <member name="P:Microsoft.AspNetCore.HeadersPropagationMessageHandlerBuilderFilter.HeadersPropagationDelegatingHandler">
+            <summary>
+            Gets the <see cref="T:System.Net.Http.DelegatingHandler"/> used to propagate headers
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.HeadersPropagationMessageHandlerBuilderFilter.Configure(System.Action{Microsoft.Extensions.Http.HttpMessageHandlerBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Microsoft.AspNetCore.IHeadersAccessor">
+            <summary>
+            Defines the fundamentals of a service used to access headers
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.IHeadersAccessor.Headers">
+            <summary>
+            Gets an <see cref="T:Microsoft.AspNetCore.Http.IHeaderDictionary"/> containing all current headers
+            </summary>
+        </member>
+        <member name="T:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions">
+            <summary>
+            Represents the options used to configure header propagation
+            </summary>
+        </member>
+        <member name="P:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions.PropagateAll">
+            <summary>
+            Gets/sets a boolean indicating whether or not to propagate all headers
+            </summary>
+        </member>
+        <member name="P:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions.Headers">
+            <summary>
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the names of the headers to propagate
+            </summary>
+        </member>
+        <member name="T:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptionsBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.AspNetCore.Configuration.IHeaderPropagationOptionsBuilder"/> interface
+            </summary>
+        </member>
+        <member name="P:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptionsBuilder.Options">
+            <summary>
+            Gets the <see cref="T:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions"/> to configure
+            </summary>
+        </member>
+        <member name="M:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptionsBuilder.PropagateAll">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptionsBuilder.Propagate(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptionsBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.AspNetCore.Configuration.IHeaderPropagationOptionsBuilder">
+            <summary>
+            Represents the service used to build <see cref="T:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.AspNetCore.Configuration.IHeaderPropagationOptionsBuilder.PropagateAll">
+            <summary>
+            Propagates all headers
+            </summary>
+        </member>
+        <member name="M:Neuroglia.AspNetCore.Configuration.IHeaderPropagationOptionsBuilder.Propagate(System.String)">
+            <summary>
+            Propagates the specified header
+            </summary>
+            <param name="name">The name of the header to propagate</param>
+            <returns>The configured <see cref="T:Neuroglia.AspNetCore.Configuration.IHeaderPropagationOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.AspNetCore.Configuration.IHeaderPropagationOptionsBuilder.Build">
+            <summary>
+            Builds the <see cref="T:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions"/>
+            </summary>
+            <returns>New <see cref="T:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions"/></returns>
+        </member>
+    </members>
+</doc>

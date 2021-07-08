@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Xunit</name>
+    </assembly>
+    <members>
+        <member name="T:Xunit.PriorityAttribute">
+            <summary>
+            Represents an <see cref="T:System.Attribute"/> used to set the priority of a test case
+            </summary>
+        </member>
+        <member name="M:Xunit.PriorityAttribute.#ctor(System.Int32)">
+            <summary>
+            Initializes a new <see cref="T:Xunit.PriorityAttribute"/>
+            </summary>
+            <param name="priority">The test case's priority</param>
+        </member>
+        <member name="P:Xunit.PriorityAttribute.Priority">
+            <summary>
+            Gets the test case's priority
+            </summary>
+        </member>
+        <member name="T:Xunit.PriorityTestCaseOrderer">
+            <summary>
+            Represents an <see cref="T:Xunit.Sdk.ITestCaseOrderer"/> use to order test cases thanks to the <see cref="T:Xunit.PriorityAttribute"/> they are marked with
+            </summary>
+        </member>
+        <member name="M:Xunit.PriorityTestCaseOrderer.OrderTestCases``1(System.Collections.Generic.IEnumerable{``0})">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Neuroglia.Mediation</RootNamespace>
+    <Company>Neuroglia SPRL</Company>
+    <Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
+    <Authors>Neuroglia SPRL</Authors>
+    <RepositoryUrl />
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>neuroglia framework mediation asp core</PackageTags>
+    <NeutralLanguage>English</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>Neuroglia.Mediation.AspNetCore.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Core\Neuroglia.Core.csproj" />
+  </ItemGroup>
+
+</Project>

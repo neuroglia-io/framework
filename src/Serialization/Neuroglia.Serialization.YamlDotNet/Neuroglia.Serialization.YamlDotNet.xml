@@ -1,0 +1,202 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Serialization.YamlDotNet</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Serialization.YamlDotNet.AbstractTypeDeserializer">
+            <summary>
+            Represents the <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize abstract classes
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.AbstractTypeDeserializer.#ctor(YamlDotNet.Serialization.INodeDeserializer)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.YamlDotNet.AbstractTypeDeserializer"/>
+            </summary>
+            <param name="inner">The inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/></param>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNet.AbstractTypeDeserializer.Inner">
+            <summary>
+            Gets the inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNet.AbstractTypeDeserializer.Resolvers">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing all known <see cref="T:Neuroglia.Serialization.YamlDotNet.AbstractTypeResolver"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.AbstractTypeDeserializer.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Serialization.YamlDotNet.AbstractTypeResolver">
+            <summary>
+            Represents the service used to resolve abstract type implementations
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.AbstractTypeResolver.#ctor(System.Type)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.YamlDotNet.AbstractTypeResolver"/>
+            </summary>
+            <param name="abstractType">The abstract type to resolve the implementation type for</param>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNet.AbstractTypeResolver.AbstractType">
+            <summary>
+            Gets the abstract type to resolve the implementation type for
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNet.AbstractTypeResolver.DiscriminatorProperty">
+            <summary>
+            Gets the discriminator <see cref="T:System.Reflection.PropertyInfo"/> of the abstract type to convert
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNet.AbstractTypeResolver.TypeMappings">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the mappings of the converted type's derived types
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.AbstractTypeResolver.TryResolve(Neuroglia.Serialization.YamlDotNet.ParsingEventStream,System.Type@)">
+            <summary>
+            Attempts to resolve the abstract type's implementation based on the specified <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/>
+            </summary>
+            <param name="stream">The <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/> to use to resolve the implementation type</param>
+            <param name="implementationType">The resulting implementation type</param>
+            <returns>A boolean indicating whether or not the implementation type could be resolved thanks to the specified <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/></returns>
+        </member>
+        <member name="T:Neuroglia.Serialization.YamlDotNet.JTokenDeserializer">
+            <summary>
+            Represents an <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize <see cref="T:Newtonsoft.Json.Linq.JToken"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JTokenDeserializer.#ctor(YamlDotNet.Serialization.INodeDeserializer)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.YamlDotNet.JTokenDeserializer"/>
+            </summary>
+            <param name="inner">The inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/></param>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNet.JTokenDeserializer.Inner">
+            <summary>
+            Gets the inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JTokenDeserializer.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Serialization.YamlDotNet.IParserExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.IParserExtensions.TryFindMappingEntry(Neuroglia.Serialization.YamlDotNet.ParsingEventStream,System.Func{YamlDotNet.Core.Events.Scalar,System.Boolean},YamlDotNet.Core.Events.Scalar@,YamlDotNet.Core.Events.ParsingEvent@)">
+            <summary>
+            Attempts to find the specified mapping entry
+            </summary>
+            <param name="parser">The <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/> to search</param>
+            <param name="selector">A predicate <see cref="T:System.Func`2"/> used to search the <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/> for a specific <see cref="T:YamlDotNet.Core.Events.ParsingEvent"/></param>
+            <param name="key">The key of the matching <see cref="T:YamlDotNet.Core.Events.Scalar"/></param>
+            <param name="value">The matching <see cref="T:YamlDotNet.Core.Events.Scalar"/>'s <see cref="T:YamlDotNet.Core.Events.ParsingEvent"/> </param>
+            <returns>A boolean indicating whether or not the specified mapping entry could be found</returns>
+        </member>
+        <member name="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream">
+            <summary>
+            Represents a replayable stream of <see cref="T:YamlDotNet.Core.Events.ParsingEvent"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.ParsingEventStream.#ctor(System.Collections.Generic.LinkedList{YamlDotNet.Core.Events.ParsingEvent})">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/>
+            </summary>
+            <param name="events">A <see cref="T:System.Collections.Generic.LinkedList`1"/> containing the <see cref="T:YamlDotNet.Core.Events.ParsingEvent"/>s to stream</param>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNet.ParsingEventStream.Events">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.LinkedList`1"/> containing the <see cref="T:YamlDotNet.Core.Events.ParsingEvent"/>s to stream
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNet.ParsingEventStream.Current">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.ParsingEventStream.MoveNext">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.ParsingEventStream.Reset">
+            <summary>
+            Resets the <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.ParsingEventStream.Create(YamlDotNet.Core.IParser)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/> based on the specified <see cref="T:YamlDotNet.Core.IParser"/>
+            </summary>
+            <param name="parser">The <see cref="T:YamlDotNet.Core.IParser"/> based on which to create a new <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/></param>
+            <returns>A new <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/></returns>
+        </member>
+        <member name="T:Neuroglia.Serialization.NonPublicConstructorObjectFactory">
+            <summary>
+            Represents an <see cref="T:YamlDotNet.Serialization.IObjectFactory"/> implementation that can create instance of objects with non-public parameterless constructors
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.NonPublicConstructorObjectFactory.Create(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Serialization.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.IServiceCollectionExtensions.AddYamlDotNet(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{YamlDotNet.Serialization.SerializerBuilder},System.Action{YamlDotNet.Serialization.DeserializerBuilder})">
+            <summary>
+            Adds and configures an YamlDotNet <see cref="T:Neuroglia.Serialization.ISerializer"/> and <see cref="T:YamlDotNet.Serialization.IDeserializer"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="serializerConfiguration">The <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Serialization.ISerializer"/> to add</param>
+            <param name="deserializerConfiguration">The <see cref="T:System.Action`1"/> used to configure the <see cref="T:YamlDotNet.Serialization.IDeserializer"/> to add</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.IServiceCollectionExtensions.AddYamlDotNetSerializer(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{YamlDotNet.Serialization.SerializerBuilder},System.Action{YamlDotNet.Serialization.DeserializerBuilder})">
+            <summary>
+            Adds and configures a <see cref="T:Neuroglia.Serialization.YamlDotNetSerializer"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="serializerConfiguration">The <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Serialization.ISerializer"/> to add</param>
+            <param name="deserializerConfiguration">The <see cref="T:System.Action`1"/> used to configure the <see cref="T:YamlDotNet.Serialization.IDeserializer"/> to add</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Serialization.YamlDotNetSerializer">
+            <summary>
+            Represents the default <see href="https://github.com/aaubry/YamlDotNet">YamlDotNet</see> implementation of the <see cref="T:Neuroglia.Serialization.ISerializer"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNetSerializer.#ctor(YamlDotNet.Serialization.ISerializer,YamlDotNet.Serialization.IDeserializer)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.YamlDotNetSerializer"/>
+            </summary>
+            <param name="serializer">The underlying <see cref="T:YamlDotNet.Serialization.ISerializer"/></param>
+            <param name="deserializer">The underlying <see cref="T:YamlDotNet.Serialization.IDeserializer"/></param>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNetSerializer.SupportedContentTypes">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNetSerializer.Serializer">
+            <summary>
+            Gets the underlying <see cref="T:YamlDotNet.Serialization.ISerializer"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNetSerializer.Deserializer">
+            <summary>
+            Gets the underlying <see cref="T:YamlDotNet.Serialization.IDeserializer"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNetSerializer.Serialize(System.Object,System.IO.Stream,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNetSerializer.SerializeAsync(System.Object,System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNetSerializer.Deserialize(System.IO.Stream,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNetSerializer.DeserializeAsync(System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

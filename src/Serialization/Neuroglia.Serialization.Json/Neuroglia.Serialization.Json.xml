@@ -1,0 +1,254 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Serialization.Json</name>
+    </assembly>
+    <members>
+        <member name="T:System.Text.Json.Serialization.AbstractClassConverter`1">
+            <summary>
+            Represents the <see cref="T:System.Text.Json.Serialization.JsonConverter"/> used to convert to/from an abstract class
+            </summary>
+            <typeparam name="T">The type of the abstract class to convert to/from</typeparam>
+        </member>
+        <member name="M:System.Text.Json.Serialization.AbstractClassConverter`1.#ctor(System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Initializes a new <see cref="T:System.Text.Json.Serialization.AbstractClassConverter`1"/>
+            </summary>
+            <param name="jsonSerializerOptions">The current <see cref="P:System.Text.Json.Serialization.AbstractClassConverter`1.JsonSerializerOptions"/></param>
+        </member>
+        <member name="P:System.Text.Json.Serialization.AbstractClassConverter`1.JsonSerializerOptions">
+            <summary>
+            Gets the current <see cref="P:System.Text.Json.Serialization.AbstractClassConverter`1.JsonSerializerOptions"/>
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.AbstractClassConverter`1.DiscriminatorProperty">
+            <summary>
+            Gets the discriminator <see cref="T:System.Reflection.PropertyInfo"/> of the abstract type to convert
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.AbstractClassConverter`1.TypeMappings">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the mappings of the converted type's derived types
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.AbstractClassConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Text.Json.Serialization.AbstractClassConverter`1.Write(System.Text.Json.Utf8JsonWriter,`0,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Text.Json.Serialization.AbstractClassConverterFactory">
+            <summary>
+            Represents the <see cref="T:System.Text.Json.Serialization.JsonConverterFactory"/> used to create <see cref="T:System.Text.Json.Serialization.AbstractClassConverter`1"/>
+            </summary>
+        </member>
+        <member name="F:System.Text.Json.Serialization.AbstractClassConverterFactory.Converters">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the mappings of types to their respective <see cref="T:System.Text.Json.Serialization.JsonConverter"/>
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.AbstractClassConverterFactory.#ctor(System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Initializes a new <see cref="T:System.Text.Json.Serialization.AbstractClassConverterFactory"/>
+            </summary>
+            <param name="jsonSerializerOptions">The current <see cref="T:System.Text.Json.JsonSerializerOptions"/></param>
+        </member>
+        <member name="P:System.Text.Json.Serialization.AbstractClassConverterFactory.JsonSerializerOptions">
+            <summary>
+            Gets the current <see cref="P:System.Text.Json.Serialization.AbstractClassConverterFactory.JsonSerializerOptions"/>
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.AbstractClassConverterFactory.CanConvert(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Text.Json.Serialization.AbstractClassConverterFactory.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Text.Json.Serialization.StringEnumConverter`1">
+            <summary>
+            Represents the <see cref="T:System.Text.Json.Serialization.JsonConverter`1"/> used to convert from and to <see cref="T:System.Enum"/>s
+            </summary>
+            <typeparam name="T">The type to convert</typeparam>
+        </member>
+        <member name="M:System.Text.Json.Serialization.StringEnumConverter`1.#ctor(System.Type,System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Initializes a new <see cref="T:System.Text.Json.Serialization.StringEnumConverter`1"/>
+            </summary>
+            <param name="underlyingType">The underlying <see cref="T:System.Enum"/>'s type</param>
+            <param name="jsonSerializerOptions">The current <see cref="T:System.Text.Json.JsonSerializerOptions"/></param>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverter`1.UnderlyingType">
+            <summary>
+            Gets the underlying <see cref="T:System.Enum"/>'s type
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverter`1.JsonSerializerOptions">
+            <summary>
+            Gets the current <see cref="T:System.Text.Json.JsonSerializerOptions"/>
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverter`1.TypeCode">
+            <summary>
+            Gets the <see cref="T:System.Enum"/>'s <see cref="T:System.TypeCode"/>
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverter`1.IsFlags">
+            <summary>
+            Gets a boolean indicating whether or not the specified <see cref="T:System.Enum"/> is flags
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverter`1.ValueMappings">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing mappings of raw values to field metadata
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverter`1.NameMappings">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing mappings of names to field metadata
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.StringEnumConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Text.Json.Serialization.StringEnumConverter`1.Write(System.Text.Json.Utf8JsonWriter,`0,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Text.Json.Serialization.StringEnumConverter`1.EnumFieldMetadata">
+            <summary>
+            Holds information about an <see cref="T:System.Enum"/>'s field
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.StringEnumConverter`1.EnumFieldMetadata.#ctor(System.String,System.String,System.Enum,System.UInt64)">
+            <summary>
+            Initializes a new <see cref="T:System.Text.Json.Serialization.StringEnumConverter`1.EnumFieldMetadata"/>
+            </summary>
+            <param name="name">The <see cref="T:System.Enum"/> field's name</param>
+            <param name="transformedName">The <see cref="T:System.Enum"/> field's transformed name</param>
+            <param name="value">The <see cref="T:System.Enum"/> field's value</param>
+            <param name="rawValue">The <see cref="T:System.Enum"/> field's raw value</param>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverter`1.EnumFieldMetadata.Name">
+            <summary>
+            Gets the <see cref="T:System.Enum"/>'s field name
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverter`1.EnumFieldMetadata.TransformedName">
+            <summary>
+            Gets the <see cref="T:System.Enum"/> field's transformed name
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverter`1.EnumFieldMetadata.Value">
+            <summary>
+            Gets the <see cref="T:System.Enum"/> field's value
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverter`1.EnumFieldMetadata.RawValue">
+            <summary>
+            Gets the <see cref="T:System.Enum"/> field's raw value
+            </summary>
+        </member>
+        <member name="T:System.Text.Json.Serialization.StringEnumConverterFactory">
+            <summary>
+            Represents the <see cref="T:System.Text.Json.Serialization.JsonConverterFactory"/> used to create <see cref="T:System.Text.Json.Serialization.StringEnumConverter`1"/>
+            </summary>
+        </member>
+        <member name="F:System.Text.Json.Serialization.StringEnumConverterFactory.Converters">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the mappings of types to their respective <see cref="T:System.Text.Json.Serialization.JsonConverter"/>
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.StringEnumConverterFactory.#ctor(System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Initializes a new <see cref="T:System.Text.Json.Serialization.StringEnumConverterFactory"/>
+            </summary>
+            <param name="jsonSerializerOptions">The <see cref="T:System.Text.Json.JsonSerializerOptions"/> for writing enum values</param>
+        </member>
+        <member name="M:System.Text.Json.Serialization.StringEnumConverterFactory.#ctor">
+            <summary>
+            Initializes a new <see cref="T:System.Text.Json.Serialization.StringEnumConverterFactory"/>
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.StringEnumConverterFactory.JsonSerializerOptions">
+            <summary>
+            Gets the <see cref="T:System.Text.Json.JsonSerializerOptions"/> for writing enum values
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.StringEnumConverterFactory.CanConvert(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Text.Json.Serialization.StringEnumConverterFactory.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Text.Json.Serialization.TimeSpanConverter">
+            <summary>
+            Represents the <see cref="T:System.Text.Json.Serialization.JsonConverter`1"/> used to convert from and to <see cref="T:System.TimeSpan"/>s
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.TimeSpanConverter.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Text.Json.Serialization.TimeSpanConverter.Write(System.Text.Json.Utf8JsonWriter,System.TimeSpan,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Serialization.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.IServiceCollectionExtensions.AddJsonSerializer(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{System.Text.Json.JsonSerializerOptions})">
+            <summary>
+            Adds and configures a <see cref="T:Neuroglia.Serialization.JsonSerializer"/> service
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="configurationAction">The <see cref="T:System.Action`1"/> used to configure the <see cref="T:System.Text.Json.JsonSerializerOptions"/> used by the <see cref="T:Neuroglia.Serialization.JsonSerializer"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.IServiceCollectionExtensions.AddJsonSerializer(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds and configures a <see cref="T:Neuroglia.Serialization.JsonSerializer"/> service
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Serialization.JsonSerializer">
+            <summary>
+            Represents the service used to serialize and deserialize JSON
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.JsonSerializer.#ctor(Microsoft.Extensions.Options.IOptions{System.Text.Json.JsonSerializerOptions})">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.JsonSerializer"/>
+            </summary>
+            <param name="options">The <see cref="T:System.Text.Json.JsonSerializerOptions"/> used to configure the underlying <see cref="T:System.Text.Json.JsonSerializer"/></param>
+        </member>
+        <member name="P:Neuroglia.Serialization.JsonSerializer.SupportedContentTypes">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Serialization.JsonSerializer.Options">
+            <summary>
+            Gets the <see cref="T:System.Text.Json.JsonSerializerOptions"/> used to configure the underlying <see cref="T:System.Text.Json.JsonSerializer"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.JsonSerializer.Serialize(System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.JsonSerializer.SerializeAsync(System.Object,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.JsonSerializer.Serialize(System.Object,System.IO.Stream,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.JsonSerializer.SerializeAsync(System.Object,System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.JsonSerializer.Deserialize(System.IO.Stream,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.JsonSerializer.DeserializeAsync(System.IO.Stream,System.Type,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.JsonSerializer.Deserialize(System.String,System.Type)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

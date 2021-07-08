@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Company>Neuroglia SPRL</Company>
+    <Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
+    <Authors>Neuroglia SPRL</Authors>
+    <RepositoryUrl />
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>neuroglia framework xunit testing</PackageTags>
+    <NeutralLanguage>English</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>Neuroglia.Xunit.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,808 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Attributes.DataTransferObjectTypeAttribute">
+            <summary>
+            Represents an <see cref="T:System.Attribute"/> used to specify the Data Transfer Object of an entity
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Attributes.DataTransferObjectTypeAttribute.#ctor(System.Type)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Attributes.DataTransferObjectTypeAttribute"/>
+            </summary>
+            <param name="type">The type of the object's DTO</param>
+        </member>
+        <member name="P:Neuroglia.Attributes.DataTransferObjectTypeAttribute.Type">
+            <summary>
+            Gets the type of the object's DTO
+            </summary>
+        </member>
+        <member name="T:Neuroglia.DiscriminatorAttribute">
+            <summary>
+            Represents the <see cref="T:System.Attribute"/> used to indicate the property used to discriminate derived types of the marked class
+            </summary>
+        </member>
+        <member name="M:Neuroglia.DiscriminatorAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.DiscriminatorAttribute"/>
+            </summary>
+            <param name="property">The name of the property used to discriminate derived types of the class marked by the <see cref="T:Neuroglia.DiscriminatorAttribute"/></param>
+        </member>
+        <member name="P:Neuroglia.DiscriminatorAttribute.Property">
+            <summary>
+            Gets the name of the property used to discriminate derived types of the class marked by the <see cref="T:Neuroglia.DiscriminatorAttribute"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.DiscriminatorValueAttribute">
+            <summary>
+            Represents the <see cref="T:System.Attribute"/> used to indicate the discriminator value of a derived type
+            </summary>
+        </member>
+        <member name="M:Neuroglia.DiscriminatorValueAttribute.#ctor(System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.DiscriminatorValueAttribute"/>
+            </summary>
+            <param name="value">The value used to discriminate the derived type marked by the <see cref="T:Neuroglia.DiscriminatorValueAttribute"/></param>
+        </member>
+        <member name="P:Neuroglia.DiscriminatorValueAttribute.Value">
+            <summary>
+            Gets the value used to discriminate the derived type marked by the <see cref="T:Neuroglia.DiscriminatorValueAttribute"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Enumeration">
+            <summary>
+            Represents the base class for all enumeration classes
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Enumeration.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Enumeration"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Enumeration.#ctor(System.Int32,System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Enumeration"/>
+            </summary>
+            <param name="value">The <see cref="T:Neuroglia.Enumeration"/>'s value</param>
+            <param name="name">The <see cref="T:Neuroglia.Enumeration"/>'s name</param>
+        </member>
+        <member name="P:Neuroglia.Enumeration.Value">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Enumeration"/>'s value
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Enumeration.Name">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Enumeration"/>'s name
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Enumeration.Equals(System.Object)">
+            <summary>
+            Determines whether or not the <see cref="T:Neuroglia.Enumeration"/> equals another object
+            </summary>
+            <param name="obj">The object to compare</param>
+            <returns>A boolean indicating whether or not the <see cref="T:Neuroglia.Enumeration"/> equals another object</returns>
+        </member>
+        <member name="M:Neuroglia.Enumeration.CompareTo(System.Object)">
+            <summary>
+            Compares the <see cref="T:Neuroglia.Enumeration"/> to another object
+            </summary>
+            <param name="other">The object to compare</param>
+            <returns>The comparison result</returns>
+        </member>
+        <member name="M:Neuroglia.Enumeration.GetHashCode">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Enumeration"/>'s hashcode
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neuroglia.Enumeration.ToString">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Enumeration"/>'s string representation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Neuroglia.Enumeration.GetAll``1">
+            <summary>
+            Gets all the values of the <see cref="T:Neuroglia.Enumeration"/> of the specified type
+            </summary>
+            <typeparam name="T">The type of the <see cref="T:Neuroglia.Enumeration"/> to list all values of</typeparam>
+            <returns>All the values of the <see cref="T:Neuroglia.Enumeration"/> of the specified type</returns>
+        </member>
+        <member name="M:Neuroglia.Enumeration.FromValue``1(System.Int32)">
+            <summary>
+            Parses the specified value into an <see cref="T:Neuroglia.Enumeration"/> class
+            </summary>
+            <typeparam name="T">The type of <see cref="T:Neuroglia.Enumeration"/> to parse the value into</typeparam>
+            <param name="value">The value to parse</param>
+            <returns>A new <see cref="T:Neuroglia.Enumeration"/> parsed from the specified value</returns>
+        </member>
+        <member name="M:Neuroglia.Enumeration.FromName``1(System.String)">
+            <summary>
+            Parses the specified name into an <see cref="T:Neuroglia.Enumeration"/> class
+            </summary>
+            <typeparam name="T">The type of <see cref="T:Neuroglia.Enumeration"/> to parse the name into</typeparam>
+            <param name="name">The value to parse</param>
+            <returns>A new <see cref="T:Neuroglia.Enumeration"/> parsed from the specified name</returns>
+        </member>
+        <member name="M:Neuroglia.Enumeration.op_Implicit(Neuroglia.Enumeration)~System.String">
+            <summary>
+            Converts the specified <see cref="T:Neuroglia.Enumeration"/> into a string
+            </summary>
+            <param name="value">The <see cref="T:Neuroglia.Enumeration"/> class to convert to its string representation</param>
+        </member>
+        <member name="M:Neuroglia.Enumeration.op_Implicit(Neuroglia.Enumeration)~System.Int32">
+            <summary>
+            Converts the specified <see cref="T:Neuroglia.Enumeration"/> into an integer
+            </summary>
+            <param name="value">The <see cref="T:Neuroglia.Enumeration"/> class to convert to its integer representation</param>
+        </member>
+        <member name="T:Neuroglia.Error">
+            <summary>
+            Represents an error
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Error.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Error"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Error.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Error"/>
+            </summary>
+            <param name="code">The <see cref="T:Neuroglia.Error"/>'s code</param>
+            <param name="message">The <see cref="T:Neuroglia.Error"/>'s message</param>
+        </member>
+        <member name="M:Neuroglia.Error.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Error"/>
+            </summary>
+            <param name="code">The <see cref="T:Neuroglia.Error"/>'s code</param>
+        </member>
+        <member name="P:Neuroglia.Error.Code">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Error"/>'s code
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Error.Message">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Error"/>'s message
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Error.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.StringExtensions">
+            <summary>
+            Defines extensions for <see cref="T:System.String"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.GenerateRandomAlphabeticString(System.Int32,Neuroglia.StringCase)">
+            <summary>
+            Generates a random alphabetic string of the specified length
+            </summary>
+            <param name="length">The length of the string to generate</param>
+            <param name="stringCase">The case of the resulting string</param>
+            <returns>A new random string of the specified length</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.GenerateRandomAlphanumericString(System.Int32,Neuroglia.StringCase)">
+            <summary>
+            Generates a random alphanumeric string of the specified length
+            </summary>
+            <param name="length">The length of the string to generate</param>
+            <param name="stringCase">The case of the resulting string</param>
+            <returns>A new random string of the specified length</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.GenerateRandomNumericString(System.Int32)">
+            <summary>
+            Generates a random numeric string of the specified length
+            </summary>
+            <param name="length">The length of the string to generate</param>
+            <returns>A new random string of the specified length</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.IsAlphabetic(System.String)">
+            <summary>
+            Checks that the string is alphabetic
+            </summary>
+            <param name="text">The string to check</param>
+            <returns>A boolean indicating whether or not the string is alphabetic</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.IsNumeric(System.String)">
+            <summary>
+            Checks that the string is numeric
+            </summary>
+            <param name="text">The string to check</param>
+            <returns>A boolean indicating whether or not the string is numeric</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.IsAlphanumeric(System.String)">
+            <summary>
+            Checks that the string is alphanumeric
+            </summary>
+            <param name="text">The string to check</param>
+            <returns>A boolean indicating whether or not the string is alphanumeric</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.IsNumericalValue(System.String)">
+            <summary>
+            Checks that the string represents a numerical value
+            </summary>
+            <param name="text">The string to check</param>
+            <returns>A boolean indicating whether or not the string represents a numerical value</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.IsValidEmail(System.String)">
+            <summary>
+            Determines whether or not the string is a valid email address
+            </summary>
+            <param name="text">The string to check</param>
+            <returns>A boolean indicating whether or not the string is a valid email address</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.IsValidCountryCode(System.String)">
+            <summary>
+            Determines whether or not the string is a valid two-letter ISO 3166 country code
+            </summary>
+            <param name="text">The string to check</param>
+            <returns>A boolean indicating whether or not the string is a valid two-letter ISO 3166 country code</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.IsValidLanguageCode(System.String)">
+            <summary>
+            Determines whether or not the string is a valid two-letter ISO 6391 language code
+            </summary>
+            <param name="text">The string to check</param>
+            <returns>A boolean indicating whether or not the string is a valid two-letter ISO 6391 language code</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.IsValidCurrencyCode(System.String)">
+            <summary>
+            Determines whether or not the string is a valid three-letter ISO 4217 currency code
+            </summary>
+            <param name="text">The text to check</param>
+            <returns>A boolean indicating whether or not the string is a valid three-letter ISO 4217 currency code</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.IsValidTimeZoneId(System.String)">
+            <summary>
+            Determines whether or not the string is a valid time zone id
+            </summary>
+            <param name="text">The text to check</param>
+            <returns>A boolean indicating whether or not the string is a valid time zone id</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.IsValidUri(System.String)">
+            <summary>
+            Determines whether or not the string is a valid uri
+            </summary>
+            <param name="text">The string to check</param>
+            <returns>A boolean indicating whether or not the string is a valid uri</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.SplitCamelCase(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Replaces the upper case characters by their lowercase counterpart and prepend them with a whitespace character
+            </summary>
+            <param name="text">The string to split</param>
+            <param name="toLowerCase">A boolean indicating whether or not to lowercase the first character of each resulting word</param>
+            <param name="keepFirstLetterInUpercase">A boolean indicating whether or not to keep the first letter in upper case</param>
+            <returns>The resulting string</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.RemoveDiacritics(System.String)">
+            <summary>
+            Removes diacritics from the string
+            </summary>
+            <param name="text">The string to remove diacritics from</param>
+            <returns>The resulting string</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.Slugify(System.String,System.String,System.Boolean,System.Nullable{System.Int32})">
+            <summary>
+            Slugifies the string by replacing whitespace by the specified delimiter character, removing diacritics, making it lowercase and restricting it to the specified max length, if any
+            </summary>
+            <param name="text">The string to slugify</param>
+            <param name="delimiter">The delimiter character. Defaults to '_'</param>
+            <param name="splitCamelCase">A boolean indicating whether or not to split camel cases</param>
+            <param name="maxLength">The resulting string's maximum length</param>
+            <returns>The resulting string</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.Format(System.String,System.Object[])">
+            <summary>
+            Formats the string
+            </summary>
+            <param name="text">The string to format</param>
+            <param name="args">The arguments to format the string with</param>
+            <remarks>Accepts named arguments, which will be replaced in sequence by the specified values</remarks>
+            <returns>The resulting string</returns>
+        </member>
+        <member name="M:Neuroglia.StringExtensions.ToCamelCase(System.String)">
+            <summary>
+            Converts the specified text to a camel-cased string
+            </summary>
+            <param name="text">The text to convert</param>
+            <returns>The camel-cased text</returns>
+        </member>
+        <member name="T:Neuroglia.TypeExtensions">
+            <summary>
+            Defines extension methods for <see cref="T:System.Type"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.GetEnumerableElementType(System.Type)">
+            <summary>
+            Gets the type's <see cref="T:System.Collections.Generic.IEnumerable`1"/> element type
+            </summary>
+            <param name="extended">The extended type</param>
+            <returns>The element type</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.GetEnumerableType(System.Type)">
+            <summary>
+            Gets the generic type that derives from the <see cref="T:System.Collections.IEnumerable"/> type
+            </summary>
+            <param name="extended">The extended type</param>
+            <returns>The generic type that derives from the <see cref="T:System.Collections.IEnumerable"/> type</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.IsValueType(System.Type)">
+            <summary>
+            Gets a boolean indicating whether or not the type is a system value-type (includes <see cref="T:System.Guid"/>, <see cref="T:System.String"/>, <see cref="T:System.DateTime"/> and array types)
+            </summary>
+            <param name="extended"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.IsEnumerable(System.Type)">
+            <summary>
+            Gets a boolean indicating whether or not the type is an <see cref="T:System.Collections.IEnumerable"/> type
+            </summary>
+            <param name="extended">The extended type</param>
+            <returns>A boolean indicating whether or not the type is an <see cref="T:System.Collections.IEnumerable"/> type</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.IsNullable(System.Type)">
+            <summary>
+            Gets a boolean indicating whether or not the type is a nullable type
+            </summary>
+            <param name="extended">The extended type</param>
+            <returns>A boolean indicating whether or not the type is a nullable type</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.IsAnonymousType(System.Type)">
+            <summary>
+            Determines whether or not the type is an anonymous type
+            </summary>
+            <param name="type">The extended type</param>
+            <returns>A boolean indicating whether or not the type is an anonymous type</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.GetNullableType(System.Type)">
+            <summary>
+            Gets the nullable type the type inherits from, if any
+            </summary>
+            <param name="extended">The extended type</param>
+            <returns>The nullable type the type inherits from, if any</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.GetDefaultValue(System.Type)">
+            <summary>
+            Gets the type's default value
+            </summary>
+            <param name="extended">The extended type</param>
+            <returns>The type's default value</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.GetGenericType(System.Type,System.Type)">
+            <summary>
+            Gets the type's generic type of the specified generic type definition
+            </summary>
+            <param name="extended">The extended type</param>
+            <param name="genericTypeDefinition">The generic type definition to get the generic type of</param>
+            <returns>The type's generic type of the specified generic type definition</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.GetGenericTypes(System.Type,System.Type)">
+            <summary>
+            Gets the type's generic types of the specified generic type definition
+            </summary>
+            <param name="extended">The extended type</param>
+            <param name="genericTypeDefinition">The generic type definition to get the generic types of</param>
+            <returns>A new <see cref="T:System.Collections.IEnumerable"/> containing the type's generic types of the specified generic type definition</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.IsGenericImplementationOf(System.Type,System.Type)">
+            <summary>
+            Gets a boolean indicating whether or not the type is a generic implementation of the specified generic type definition
+            </summary>
+            <param name="extended">The extended type</param>
+            <param name="genericTypeDefinition">The generic type definition to check</param>
+            <returns>A boolean indicating whether or not the type is a generic implementation of the specified generic type definition</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.TryGetCustomAttribute``1(System.Type,``0@)">
+            <summary>
+            Attempts to get a custom attribute of the specified type
+            </summary>
+            <typeparam name="TAttribute">The type of the custom attribute to get</typeparam>
+            <param name="extended">The extended type</param>
+            <param name="attribute">The resulting custom attribute</param>
+            <returns>A boolean indicating whether or not the custom attribute of the specified type could be found</returns>
+        </member>
+        <member name="T:Neuroglia.IIdentifiable">
+            <summary>
+            Defines the fundamentals of an object that is uniquely identifiable
+            </summary>
+        </member>
+        <member name="P:Neuroglia.IIdentifiable.Id">
+            <summary>
+            Gets the object's unique identifier
+            </summary>
+        </member>
+        <member name="T:Neuroglia.IIdentifiable`1">
+            <summary>
+            Defines the fundamentals of an object that is uniquely identifiable
+            </summary>
+            <typeparam name="TKey">The type of key used to uniquely identify the object</typeparam>
+        </member>
+        <member name="P:Neuroglia.IIdentifiable`1.Id">
+            <summary>
+            Gets the object's unique identifier
+            </summary>
+        </member>
+        <member name="T:Neuroglia.IOperationResult">
+            <summary>
+            Defines the fundamentals of an object used to describe the result of an operation
+            </summary>
+        </member>
+        <member name="P:Neuroglia.IOperationResult.Code">
+            <summary>
+            Gets the <see cref="T:Neuroglia.IOperationResult"/>'s code
+            </summary>
+        </member>
+        <member name="P:Neuroglia.IOperationResult.Errors">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Error"/>s that have occured during the operation's execution
+            </summary>
+        </member>
+        <member name="P:Neuroglia.IOperationResult.Returned">
+            <summary>
+            Gets a boolean indicating whether or not the operation has returned data
+            </summary>
+        </member>
+        <member name="P:Neuroglia.IOperationResult.Data">
+            <summary>
+            Gets the data returned by the operation
+            </summary>
+        </member>
+        <member name="M:Neuroglia.IOperationResult.AddError(System.String,System.String)">
+            <summary>
+            Adds an error to the <see cref="T:Neuroglia.IOperationResult"/>
+            </summary>
+            <param name="code">The error code</param>
+            <param name="message">The error message</param>
+            <returns>A new <see cref="T:Neuroglia.IOperationResult"/></returns>
+        </member>
+        <member name="T:Neuroglia.IOperationResult`1">
+            <summary>
+            Defines the fundamentals of an object used to describe the result of an operation
+            </summary>
+            <typeparam name="T">The type of data returned by the operation</typeparam>
+        </member>
+        <member name="P:Neuroglia.IOperationResult`1.Data">
+            <summary>
+            Gets the data returned by the operation
+            </summary>
+        </member>
+        <member name="M:Neuroglia.IOperationResult`1.AddError(System.String,System.String)">
+            <summary>
+            Adds an error to the <see cref="T:Neuroglia.IOperationResult"/>
+            </summary>
+            <param name="code">The error code</param>
+            <param name="message">The error message</param>
+            <returns>A new <see cref="T:Neuroglia.IOperationResult"/></returns>
+        </member>
+        <member name="T:Neuroglia.IRequest">
+            <summary>
+            Defines the fundamentals of an operational request
+            </summary>
+        </member>
+        <member name="T:Neuroglia.IRequest`1">
+            <summary>
+            Defines the fundamentals of an operational request
+            </summary>
+            <typeparam name="TResult">The expected <see cref="T:Neuroglia.IOperationResult"/> type</typeparam>
+        </member>
+        <member name="T:Neuroglia.IRequest`2">
+            <summary>
+            Defines the fundamentals of an operational request
+            </summary>
+            <typeparam name="TResult">The expected <see cref="T:Neuroglia.IOperationResult"/> type</typeparam>
+            <typeparam name="T">The type of data returned by the operation</typeparam>
+        </member>
+        <member name="T:Neuroglia.OperationResult">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.IOperationResult"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.OperationResult.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OperationResult"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.OperationResult.#ctor(System.String,Neuroglia.Error[])">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OperationResult"/>
+            </summary>
+            <param name="code">The <see cref="T:Neuroglia.OperationResult"/>'s code</param>
+            <param name="errors">An array of <see cref="T:Neuroglia.Error"/>s that have occured during the operation's execution</param>
+        </member>
+        <member name="M:Neuroglia.OperationResult.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OperationResult"/>
+            </summary>
+            <param name="code">The <see cref="T:Neuroglia.OperationResult"/>'s code</param>
+        </member>
+        <member name="P:Neuroglia.OperationResult.Code">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.OperationResult.Errors">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.OperationResult.Returned">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.OperationResult.AddError(System.String,System.String)">
+            <summary>
+            Adds an error to the <see cref="T:Neuroglia.OperationResult"/>
+            </summary>
+            <param name="code">The error code</param>
+            <param name="message">The error message</param>
+            <returns>The <see cref="T:Neuroglia.OperationResult"/></returns>
+        </member>
+        <member name="M:Neuroglia.OperationResult.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.OperationResult`1">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.IOperationResult"/> interface
+            </summary>
+            <typeparam name="T">The type of data returned by the operation</typeparam>
+        </member>
+        <member name="M:Neuroglia.OperationResult`1.#ctor(System.String,Neuroglia.Error[])">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OperationResult"/>
+            </summary>
+            <param name="code">The <see cref="T:Neuroglia.OperationResult"/>'s code</param>
+            <param name="errors">An array of <see cref="T:Neuroglia.Error"/>s that have occured during the operation's execution</param>
+        </member>
+        <member name="M:Neuroglia.OperationResult`1.#ctor(System.String,`0)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OperationResult"/>
+            </summary>
+            <param name="code">The <see cref="T:Neuroglia.OperationResult"/>'s code</param>
+            <param name="data">The data returned by the operation</param>
+        </member>
+        <member name="M:Neuroglia.OperationResult`1.#ctor(`0)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OperationResult"/>
+            </summary>
+            <param name="data">The data returned by the operation</param>
+        </member>
+        <member name="P:Neuroglia.OperationResult`1.Returned">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.OperationResult`1.Data">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.OperationResult`1.AddError(System.String,System.String)">
+            <summary>
+            Adds an error to the <see cref="T:Neuroglia.OperationResult`1"/>
+            </summary>
+            <param name="code">The error code</param>
+            <param name="message">The error message</param>
+            <returns>The <see cref="T:Neuroglia.OperationResult`1"/></returns>
+        </member>
+        <member name="T:Neuroglia.OperationResultCode">
+            <summary>
+            Enumerates all types of response codes
+            </summary>
+        </member>
+        <member name="M:Neuroglia.OperationResultCode.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OperationResultCode"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.OperationResultCode.#ctor(System.Int32,System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OperationResultCode"/>
+            </summary>
+            <param name="value">The <see cref="T:Neuroglia.OperationResultCode"/>'s value</param>
+            <param name="name">The <see cref="T:Neuroglia.OperationResultCode"/>'s name</param>
+        </member>
+        <member name="F:Neuroglia.OperationResultCode.Ok">
+            <summary>
+            Indicates a succesfull result
+            </summary>
+        </member>
+        <member name="F:Neuroglia.OperationResultCode.Invalid">
+            <summary>
+            Indicates an invalid request
+            </summary>
+        </member>
+        <member name="F:Neuroglia.OperationResultCode.NotFound">
+            <summary>
+            Indicates that an object could not be found
+            </summary>
+        </member>
+        <member name="F:Neuroglia.OperationResultCode.NotModified">
+            <summary>
+            Indicates that an object was unexpectedly not modified
+            </summary>
+        </member>
+        <member name="F:Neuroglia.OperationResultCode.Forbidden">
+            <summary>
+            Indicates that an object was unexpectedly not modified
+            </summary>
+        </member>
+        <member name="F:Neuroglia.OperationResultCode.InternalError">
+            <summary>
+            Indicates an internal error
+            </summary>
+        </member>
+        <member name="T:Neuroglia.StringCase">
+            <summary>
+            Enumerates all string cases
+            </summary>
+        </member>
+        <member name="F:Neuroglia.StringCase.Lower">
+            <summary>
+            Indicates lowercase
+            </summary>
+        </member>
+        <member name="F:Neuroglia.StringCase.Upper">
+            <summary>
+            Indicates uppercase
+            </summary>
+        </member>
+        <member name="T:Neuroglia.UnixTimeStamp">
+            <summary>
+            Defines helpers for UNIX time stamps
+            </summary>
+        </member>
+        <member name="M:Neuroglia.UnixTimeStamp.ToDateTime(System.Int64)">
+            <summary>
+            Converts a UNIX time stamp to a <see cref="T:System.DateTime"/>
+            </summary>
+            <param name="unixTimestamp">The UNIX time stamp to convert</param>
+            <returns>The resulting <see cref="T:System.DateTime"/></returns>
+        </member>
+        <member name="M:Neuroglia.UnixTimeStamp.ToDateTimeOffset(System.Int64)">
+            <summary>
+            Converts a UNIX time stamp to a <see cref="T:System.DateTimeOffset"/>
+            </summary>
+            <param name="unixTimestamp">The UNIX time stamp to convert</param>
+            <returns>The resulting <see cref="T:System.DateTime"/></returns>
+        </member>
+        <member name="M:Neuroglia.UnixTimeStamp.Parse(System.DateTime)">
+            <summary>
+            Converts a <see cref="T:System.DateTime"/> to a UNIX time stamp
+            </summary>
+            <param name="dateTime">The <see cref="T:System.DateTime"/> to convert</param>
+            <returns>The resulting UNIX time stamp</returns>
+        </member>
+        <member name="M:Neuroglia.UnixTimeStamp.Parse(System.DateTimeOffset)">
+            <summary>
+            Converts a <see cref="T:System.DateTimeOffset"/> to a UNIX time stamp
+            </summary>
+            <param name="dateTime">The <see cref="T:System.DateTimeOffset"/> to convert</param>
+            <returns>The resulting UNIX time stamp</returns>
+        </member>
+        <member name="T:Neuroglia.AssemblyLocator">
+            <summary>
+            Acts as a helper class for locating <see cref="T:System.Reflection.Assembly"/> instances
+            </summary>
+        </member>
+        <member name="M:Neuroglia.AssemblyLocator.GetAssemblies">
+            <summary>
+            Get all loaded assemlies
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> of all loaded assemblies</returns>
+        </member>
+        <member name="T:Neuroglia.EnumHelper">
+            <summary>
+            Defines helper methods to handle <see cref="T:System.Enum"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.EnumHelper.Parse(System.String,System.Type)">
+            <summary>
+            Parses the specified input into the desired <see cref="T:System.Enum"/>
+            </summary>
+            <param name="value">The value to parse</param>
+            <param name="enumType">The type of the enum to parse</param>
+            <returns>The parsed value</returns>
+        </member>
+        <member name="M:Neuroglia.EnumHelper.Parse``1(System.String)">
+            <summary>
+            Parses the specified input into the desired enum
+            </summary>
+            <typeparam name="TEnum">The type of the enum to parse</typeparam>
+            <param name="value">The value to parse</param>
+            <returns>The parsed value</returns>
+        </member>
+        <member name="M:Neuroglia.EnumHelper.Stringify(System.Enum,System.Type)">
+            <summary>
+            Gets the string representation for the specified enum value
+            </summary>
+            <param name="value">The value to stringify</param>
+            <param name="enumType">The type of the enum to stringify</param>
+            <returns>The string representation for the specified enum value</returns>
+        </member>
+        <member name="M:Neuroglia.EnumHelper.Stringify``1(``0)">
+            <summary>
+            Gets the string representation for the specified enum value
+            </summary>
+            <param name="value">The value to stringify</param>
+            <typeparam name="TEnum">The type of the enum to stringify</typeparam>
+            <returns>The string representation for the specified enum value</returns>
+        </member>
+        <member name="M:Neuroglia.EnumHelper.GetFlags(System.Enum,System.Type)">
+            <summary>
+            Gets all the enum values contained by the specified flags value
+            </summary>
+            <param name="flags">The flags to get the values of</param>
+            <param name="enumType">The type of the enumeration to get the flags of</param>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all the enum values contained by the specifed flags value</returns>
+        </member>
+        <member name="M:Neuroglia.EnumHelper.GetFlags``1(``0)">
+            <summary>
+            Gets all the enum values contained by the specified flags value
+            </summary>
+            <typeparam name="TEnum">The type of the enumeration to get the flags of</typeparam>
+            <param name="flags">The flags to get the values of</param>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all the enum values contained by the specifed flags value</returns>
+        </member>
+        <member name="T:Neuroglia.Parser">
+            <summary>
+            Exposes helper methods to parse data into value types and other .NET types (TimeSpan, DateTime, ...)
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Parser.Parse(System.String,System.Type)">
+            <summary>
+            Parses a string into the specified type
+            </summary>
+            <param name="input">The input to parse</param>
+            <param name="expectedType">The type to parse the input to</param>
+            <returns>The parsed input</returns>
+        </member>
+        <member name="M:Neuroglia.Parser.TryParse(System.String,System.Type,System.Object@)">
+            <summary>
+            Attempts to parses a string into the specified type
+            </summary>
+            <param name="input">The input to parse</param>
+            <param name="expectedType">The type to parse the input to</param>
+            <param name="value">The parsed input</param>
+            <returns>A boolean indicating whether or not the specified input could be parsed</returns>
+        </member>
+        <member name="M:Neuroglia.Parser.Parse``1(System.String)">
+            <summary>
+            Parses a string into the specified type
+            </summary>
+            <typeparam name="T">The type to parse the input to</typeparam>
+            <param name="input">The input to parse</param>
+            <returns>The parsed input</returns>
+        </member>
+        <member name="M:Neuroglia.Parser.TryParse``1(System.String,System.Object@)">
+            <summary>
+            Attempts to parses a string into the specified type
+            </summary>
+            <typeparam name="T">The type to parse the input to</typeparam>
+            <param name="input">The input to parse</param>
+            <param name="value">The parsed input</param>
+            <returns>A boolean indicating whether or not the specified input could be parsed</returns>
+        </member>
+        <member name="T:Neuroglia.TypeCacheUtil">
+            <summary>
+            Acts as an helper to find a filter types
+            </summary>
+        </member>
+        <member name="M:Neuroglia.TypeCacheUtil.FindFilteredTypes(System.String,System.Func{System.Type,System.Boolean},System.Reflection.Assembly[])">
+            <summary>
+            Find types filtered by a given predicate
+            </summary>
+            <param name="cacheKey">The cache key used to store the results</param>
+            <param name="predicate">The predicate that filters the types</param>
+            <param name="assemblies">An array containing the assemblies to scan</param>
+            <returns>The filtered types</returns>
+        </member>
+        <member name="M:Neuroglia.TypeCacheUtil.FindFilteredTypes(System.String,System.Func{System.Type,System.Boolean})">
+            <summary>
+            Find types filtered by a given predicate
+            </summary>
+            <param name="cacheKey">The cache key used to store the results</param>
+            <param name="predicate">The predicate that filters the types</param>
+            <returns>The filtered types</returns>
+        </member>
+    </members>
+</doc>

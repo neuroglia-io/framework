@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Neuroglia.Serialization</RootNamespace>
+    <Company>Neuroglia SPRL</Company>
+    <Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
+    <Authors>Neuroglia SPRL</Authors>
+    <RepositoryUrl />
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>neuroglia framework serialization abstraction</PackageTags>
+    <NeutralLanguage>English</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>Neuroglia.Serialization.Abstractions.xml</DocumentationFile>
+  </PropertyGroup>
+
+</Project>

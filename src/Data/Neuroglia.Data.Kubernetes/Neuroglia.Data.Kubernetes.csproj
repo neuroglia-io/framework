@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>Neuroglia.Data</RootNamespace>
+    <Company>Neuroglia SPRL</Company>
+    <Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
+    <Authors>Neuroglia SPRL</Authors>
+    <RepositoryUrl />
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>neuroglia framework data kubernetes k8s</PackageTags>
+    <NeutralLanguage>English</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DocumentationFile>Neuroglia.Data.Kubernetes.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Neuroglia.K8s" Version="1.0.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Data\Neuroglia.Data.csproj" />
+  </ItemGroup>
+
+</Project>
