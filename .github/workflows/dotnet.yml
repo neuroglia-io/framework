@@ -18,10 +18,10 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore "./src/Neuroglia.Framework.sln"
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build "./src/Neuroglia.Framework.sln" --configuration Release --no-restore 
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Push
-      run: dotnet nuget push "./src/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://nuget.pkg.github.com/neuroglia-io/index.json --skip-duplicate
+      run: dotnet nuget push "./src/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org --skip-duplicate
