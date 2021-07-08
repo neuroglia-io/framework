@@ -37,7 +37,7 @@
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.Protobuf\Neuroglia.Serialization.Protobuf.csproj" />
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.YamlDotNet\Neuroglia.Serialization.YamlDotNet.csproj" />
-    <ProjectReference Include="..\..\src\Testing\Neuroglia.XUnit\Neuroglia.Xunit.csproj" />
+    <ProjectReference Include="..\..\src\Testing\Neuroglia.Xunit\Neuroglia.Xunit.csproj" />
   </ItemGroup>
 
 </Project>
