@@ -34,6 +34,7 @@ namespace Neuroglia.Mapping
         public static IServiceCollection AddMapper(this IServiceCollection services, params Assembly[] assemblies)
         {
             services.AddAutoMapper(assemblies);
+            services.AddSingleton<IMapper, Mapper>();
             return services;
         }
 
