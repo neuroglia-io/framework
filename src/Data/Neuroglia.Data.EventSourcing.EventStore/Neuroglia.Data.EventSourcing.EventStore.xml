@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Data.EventSourcing.EventStore</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Data.EventStoreRepository`1">
+            <summary>
+            Represents the <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="T:Neuroglia.Data.IEventSourcingRepository`2"/>
+            </summary>
+            <typeparam name="TAggregate">The type of <see cref="T:Neuroglia.Data.IAggregateRoot"/> managed by the <see cref="T:Neuroglia.Data.EventStoreRepository`1"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,Neuroglia.Serialization.ISerializer,Neuroglia.Data.EventSourcing.IAggregatorFactory,EventStore.ClientAPI.IEventStoreConnection,EventStore.ClientAPI.Projections.ProjectionsManager)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventStoreRepository`1"/>
+            </summary>
+            <param name="loggerFactory">The service used to create <see cref="T:Microsoft.Extensions.Logging.ILogger"/>s</param>
+            <param name="serializer">The service used to serialize/deserialize events to/from managed streams</param>
+            <param name="aggregatorFactory">The service used to create <see cref="T:Neuroglia.Data.EventSourcing.IAggregator"/>s</param>
+            <param name="connection">The underlying connection to the EventStore remote server</param>
+            <param name="projectionsManager">The service used to manage EventStore projections</param>
+        </member>
+        <member name="P:Neuroglia.Data.EventStoreRepository`1.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventStoreRepository`1.Serializer">
+            <summary>
+            Gets the service used to serialize/deserialize events to/from managed streams
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventStoreRepository`1.AggregatorFactory">
+            <summary>
+            Gets the service used to create <see cref="T:Neuroglia.Data.EventSourcing.IAggregator"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventStoreRepository`1.Connection">
+            <summary>
+            Gets the underlying connection to the EventStore remote server
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventStoreRepository`1.ProjectionsManager">
+            <summary>
+            Gets the service used to manage EventStore projections
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventStoreRepository`1.PendingTransactions">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing all pending <see cref="T:EventStore.ClientAPI.EventStoreTransaction"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventStoreRepository`1.StreamPrefix">
+            <summary>
+            Gets the prefix for all streams managed by the <see cref="T:Neuroglia.Data.EventStoreRepository`1"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.GetStreamAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.ContainsAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.FindAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.FindAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.FindAsync(System.Object[],System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.AddAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.UpdateAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.RemoveAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.ToListAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.AsQueryable">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.SaveChangesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.GetStreamNameFor(System.String)">
+            <summary>
+            Gets the stream name for the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/>'s key
+            </summary>
+            <param name="aggregateId">The <see cref="T:Neuroglia.Data.IAggregateRoot"/>'s key to get the stream name for</param>
+            <returns>The stream name for the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/>'s key</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventStoreRepository`1.ProcessEventsDataAsync(System.Collections.Generic.IEnumerable{Neuroglia.Data.IDomainEvent},System.Threading.CancellationToken)">
+            <summary>
+            Processes the specified <see cref="T:Neuroglia.Data.IDomainEvent"/>s
+            </summary>
+            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.IDomainEvent"/>s to process</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the processed <see cref="T:EventStore.ClientAPI.EventData"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.EventStream`1">
+            <summary>
+            Represents the <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream`1"/> interface
+            </summary>
+            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStream`1"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.#ctor(EventStore.ClientAPI.IEventStoreConnection,`0,System.Int64,System.DateTime,System.DateTime)">
+            <summary>
+            Initializes a new <see cref="!:EventStream"/>
+            </summary>
+            <param name="connection">The service used to interact with the <see href="https://www.eventstore.com/">Event Store</see> API</param>
+            <param name="streamId">The id of the described stream</param>
+            <param name="length">The length of the stream</param>
+            <param name="firstEventAt">The date and time at which the first event of the stream has been created</param>
+            <param name="lastEventAt">The date and time at which the last event of the stream has been created</param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.Connection">
+            <summary>
+            Gets the service used to interact with the <see href="https://www.eventstore.com/">Event Store</see> API
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.Id">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.Length">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.FirstEventAt">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.LastEventAt">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.Position">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.GetAsyncEnumerator(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.ToListAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.IEventStoreConnectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStoreConnectionExtensions.ReadStreamEventsForwardAsync(EventStore.ClientAPI.IEventStoreConnection,System.String,System.Int64,System.Int64,System.Boolean)">
+            <summary>
+            Reads events from the specified stream
+            </summary>
+            <param name="connection">The extended <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/></param>
+            <param name="streamId">The id of the stream to read</param>
+            <param name="position">The position starting from which to read events</param>
+            <param name="maxSliceLength">The maximum length of the <see cref="T:EventStore.ClientAPI.StreamEventsSlice"/>s used to page events</param>
+            <param name="resolveLinkTos">Whether to resolve LinkTo events automatically</param>
+            <returns>A new <see cref="T:System.Collections.Generic.List`1"/> containing the events read from the specified stream</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStoreConnectionExtensions.ReadAndAbstractStreamEventsForwardAsync(EventStore.ClientAPI.IEventStoreConnection,System.String,System.Int64,System.Int64,System.Boolean)">
+            <summary>
+            Reads and abstracts events from the specified stream
+            </summary>
+            <param name="connection">The extended <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/></param>
+            <param name="streamId">The id of the stream to read</param>
+            <param name="position">The position starting from which to read events</param>
+            <param name="maxSliceLength">The maximum length of the <see cref="T:EventStore.ClientAPI.StreamEventsSlice"/>s used to page events</param>
+            <param name="resolveLinkTos">Whether to resolve LinkTo events automatically</param>
+            <returns>A new <see cref="T:System.Collections.Generic.List`1"/> containing the events read from the specified stream</returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.ResolvedEventExtensions">
+            <summary>
+            Defines extensions for <see cref="T:EventStore.ClientAPI.ResolvedEvent"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ResolvedEventExtensions.AsAbstraction``1(EventStore.ClientAPI.ResolvedEvent)">
+            <summary>
+            Abstracts the <see cref="T:EventStore.ClientAPI.ResolvedEvent"/>
+            </summary>
+            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:EventStore.ClientAPI.ResolvedEvent"/>'s abstraction</typeparam>
+            <param name="e">The <see cref="T:EventStore.ClientAPI.ResolvedEvent"/> to abstract</param>
+            <returns>A new <see cref="T:Neuroglia.Data.EventSourcing.IEvent`1"/> used to abstract the specified <see cref="T:EventStore.ClientAPI.ResolvedEvent"/></returns>
+        </member>
+    </members>
+</doc>

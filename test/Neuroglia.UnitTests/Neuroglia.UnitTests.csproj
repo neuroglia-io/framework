@@ -24,18 +24,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Neuroglia.Core\Neuroglia.Core.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.Data.EntityFrameworkCore\Neuroglia.Data.EntityFrameworkCore.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.Data.Kubernetes\Neuroglia.Data.Kubernetes.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.Data.MongoDB\Neuroglia.Data.MongoDB.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.Data\Neuroglia.Data.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.Serialization.Json\Neuroglia.Serialization.Json.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.Serialization.Protobuf\Neuroglia.Serialization.Protobuf.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.Serialization.YamlDotNet\Neuroglia.Serialization.YamlDotNet.csproj" />
-    <ProjectReference Include="..\..\src\Neuroglia.XUnit\Neuroglia.Xunit.csproj" />
+    <ProjectReference Include="..\..\src\AspNetCore\Neuroglia.AspNetCore\Neuroglia.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\Data\Neuroglia.Data.EntityFrameworkCore\Neuroglia.Data.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Data\Neuroglia.Data.EventSourcing.EventStore\Neuroglia.Data.EventSourcing.EventStore.csproj" />
+    <ProjectReference Include="..\..\src\Data\Neuroglia.Data.EventSourcing\Neuroglia.Data.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\src\Data\Neuroglia.Data.Kubernetes\Neuroglia.Data.Kubernetes.csproj" />
+    <ProjectReference Include="..\..\src\Data\Neuroglia.Data.MongoDB\Neuroglia.Data.MongoDB.csproj" />
+    <ProjectReference Include="..\..\src\Mapping\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
+    <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation.AspNetCore\Neuroglia.Mediation.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
+    <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.Json\Neuroglia.Serialization.Json.csproj" />
+    <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
+    <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.Protobuf\Neuroglia.Serialization.Protobuf.csproj" />
+    <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.YamlDotNet\Neuroglia.Serialization.YamlDotNet.csproj" />
+    <ProjectReference Include="..\..\src\Testing\Neuroglia.XUnit\Neuroglia.Xunit.csproj" />
   </ItemGroup>
 
 </Project>
