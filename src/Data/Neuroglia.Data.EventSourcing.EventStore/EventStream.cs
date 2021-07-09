@@ -34,7 +34,7 @@ namespace Neuroglia.Data.EventSourcing.EventStore
     {
 
         /// <summary>
-        /// Initializes a new <see cref="EventStream"/>
+        /// Initializes a new <see cref="EventStream{TKey}"/>
         /// </summary>
         /// <param name="connection">The service used to interact with the <see href="https://www.eventstore.com/">Event Store</see> API</param>
         /// <param name="streamId">The id of the described stream</param>

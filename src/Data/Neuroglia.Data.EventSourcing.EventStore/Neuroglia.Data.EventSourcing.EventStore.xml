@@ -111,7 +111,7 @@
         </member>
         <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.#ctor(EventStore.ClientAPI.IEventStoreConnection,`0,System.Int64,System.DateTime,System.DateTime)">
             <summary>
-            Initializes a new <see cref="!:EventStream"/>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStream`1"/>
             </summary>
             <param name="connection">The service used to interact with the <see href="https://www.eventstore.com/">Event Store</see> API</param>
             <param name="streamId">The id of the described stream</param>

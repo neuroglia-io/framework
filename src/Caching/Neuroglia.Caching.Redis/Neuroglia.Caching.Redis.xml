@@ -1,0 +1,632 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Caching.Redis</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Caching.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Caching.IServiceCollectionExtensions.AddRedisDistributedCache(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Neuroglia.Caching.RedisCacheOptions})">
+            <summary>
+            Adds and configures a <see cref="T:Neuroglia.Caching.RedisCache"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="configurationAction">The <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Caching.RedisCacheOptions"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Caching.RedisCacheOptions">
+            <summary>
+            Represents the options used to configure a <see cref="T:Neuroglia.Caching.RedisCache"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCacheOptions.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Caching.RedisCacheOptions"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCacheOptions.Configuration">
+            <summary>
+            Gets/sets the cache's configuration string
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCacheOptions.InstanceName">
+            <summary>
+            Gets/sets the cache's instance name
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCacheOptions.ServerEnumerationStrategy">
+            <summary>
+            Gets/sets the cache's <see cref="T:StackExchange.Redis.Extensions.Core.Configuration.ServerEnumerationStrategy"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCacheOptions.EntrySerializerType">
+            <summary>
+            Gets the type of <see cref="T:Neuroglia.Serialization.ISerializer"/> used to serialize and deserialize cache entries
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Caching.RedisCache">
+            <summary>
+            Represents the StackExchange.Redis implementation of the <see cref="T:Neuroglia.Caching.IDistributedCache"/> interface
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Caching.RedisCache.ValueField">
+            <summary>
+            Gets the name of the hash field used to store a cache entry's value
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Caching.RedisCache.ConcurrencyTokenField">
+            <summary>
+            Gets the name of the hash field used to store a cache entry's concurrency token
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Caching.RedisCache.AbsoluteExpirationField">
+            <summary>
+            Gets the name of the hash field used to store a cache entry's absolute expiration
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Caching.RedisCache.SlidingExpirationField">
+            <summary>
+            Gets the name of the hash field used to store a cache entry's sliding expiration
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.#ctor(Microsoft.Extensions.Options.IOptions{Neuroglia.Caching.RedisCacheOptions},StackExchange.Redis.IConnectionMultiplexer,Neuroglia.Serialization.ISerializer)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Caching.RedisCache"/>
+            </summary>
+            <param name="options">The service used to access the current <see cref="T:Neuroglia.Caching.RedisCacheOptions"/></param>
+            <param name="connection">The connection used to connect to the Redis cache</param>
+            <param name="serializer">The service used to serialize and deserialize cache entries</param>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCache.Options">
+            <summary>
+            Gets the options used to configure the <see cref="T:Neuroglia.Caching.RedisCache"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCache.Connection">
+            <summary>
+            Gets the connection used to connect to the Redis cache
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCache.Serializer">
+            <summary>
+            Gets the service used to serialize and deserialize cache entries
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCache.Cache">
+            <summary>
+            Gets the Redis cache database
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCache.KeyPrefix">
+            <summary>
+            Gets the key prefix used by the <see cref="T:StackExchange.Redis.IConnectionMultiplexer"/> to isolate the cache
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.ContainsKey(System.String)">
+            <summary>
+            Gets a boolean indicating whether or not the cache contains the specified key
+            </summary>
+            <param name="key">The key to check</param>
+            <returns>A boolean indicating whether or not the cache contains the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.ContainsKeyAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets a boolean indicating whether or not the cache contains the specified key
+            </summary>
+            <param name="key">The key to check</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A boolean indicating whether or not the cache contains the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.ContainsListElement(System.String,System.String)">
+            <summary>
+            Determines whether the specified list contains an element with the specified key
+            </summary>
+            <param name="key">The key of the list to check</param>
+            <param name="elemKey">The key of the element to check for existence</param>
+            <returns>A boolean indicating whether or not the specified list contains an element with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.ContainsListElementAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Determines whether the specified list contains an element with the specified key
+            </summary>
+            <param name="key">The key of the list to check</param>
+            <param name="elemKey">The key of the element to check for existence</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A boolean indicating whether or not the specified list contains an element with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.FindKeys(System.String)">
+            <summary>
+            Finds all keys that match the specified pattern
+            </summary>
+            <param name="pattern">The pattern to match</param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all the keys that match the specified pattern</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.FindKeysAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Finds all keys that match the specified pattern
+            </summary>
+            <param name="pattern">The pattern to match</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all the keys that match the specified pattern</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.GetListKeys(System.String)">
+            <summary>
+            Retrieves all the element keys of the list with the specified key
+            </summary>
+            <param name="key">The key of the list for which to retrieve all the element keys</param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all the element keys of the list with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.GetListKeysAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves all the element keys of the list with the specified key
+            </summary>
+            <param name="key">The key of the list for which to retrieve all the element keys</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all the element keys of the list with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Lock(System.String,System.String,System.TimeSpan)">
+            <summary>
+            Locks access to the specified key
+            </summary>
+            <param name="key">The key to lock</param>
+            <param name="token">The lock's token</param>
+            <param name="expiresIn">The time in which the lock expires</param>
+            <returns></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.ReleaseLock(System.String,System.String)">
+            <summary>
+            Releases the lock on the specified key
+            </summary>
+            <param name="key">The key to release the lock of</param>
+            <param name="token">The token of the lock to release</param>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.GetEntry``1(System.String)">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Caching.ICacheEntry`1"/> that matches the specified key
+            </summary>
+            <typeparam name="T">The type of data cached by the entry</typeparam>
+            <param name="key">The key of the <see cref="T:Neuroglia.Caching.ICacheEntry`1"/> to retrieve</param>
+            <returns>The <see cref="T:Neuroglia.Caching.ICacheEntry`1"/> that matches the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.GetEntryAsync``1(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Caching.ICacheEntry`1"/> that matches the specified key
+            </summary>
+            <typeparam name="T">The type of data cached by the entry</typeparam>
+            <param name="key">The key of the <see cref="T:Neuroglia.Caching.ICacheEntry`1"/> to retrieve</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The <see cref="T:Neuroglia.Caching.ICacheEntry`1"/> that matches the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Get``1(System.String)">
+            <summary>
+            Gets the value cached with the specified key
+            </summary>
+            <typeparam name="T">The type of the cached value</typeparam>
+            <param name="key">The key of the value to retrieve</param>
+            <returns>The value cached with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.GetAsync``1(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the value cached with the specified key
+            </summary>
+            <typeparam name="T">The type of the cached value</typeparam>
+            <param name="key">The key of the value to retrieve</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The value cached with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Set``1(System.String,``0)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.SetAsync``1(System.String,``0,System.Threading.CancellationToken)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Set``1(System.String,``0,Neuroglia.Caching.CacheEntryOptions)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="options">The options configuring how to cache the value</param>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.SetAsync``1(System.String,``0,Neuroglia.Caching.CacheEntryOptions,System.Threading.CancellationToken)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="options">The options configuring how to cache the value</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Set``1(System.String,``0,System.Byte[])">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="concurrencyToken">The concurrency token used for optimistic persistency</param>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.SetAsync``1(System.String,``0,System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="concurrencyToken">The concurrency token used for optimistic persistency</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Set``1(System.String,``0,System.Byte[],Neuroglia.Caching.CacheEntryOptions)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="concurrencyToken">The concurrency token used for optimistic persistency</param>
+            <param name="options">The options configuring how to cache the value</param>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.SetAsync``1(System.String,``0,System.Byte[],Neuroglia.Caching.CacheEntryOptions,System.Threading.CancellationToken)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="concurrencyToken">The concurrency token used for optimistic persistency</param>
+            <param name="options">The options configuring how to cache the value</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Set``1(System.String,``0,System.DateTimeOffset)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="expiresAt">The date and time at which the entry expires</param>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.SetAsync``1(System.String,``0,System.DateTimeOffset,System.Threading.CancellationToken)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="expiresAt">The date and time at which the entry expires</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Set``1(System.String,``0,System.DateTimeOffset,System.Byte[])">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="expiresAt">The date and time at which the entry expires</param>
+            <param name="concurrencyToken">The concurrency token used for optimistic persistency</param>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.SetAsync``1(System.String,``0,System.DateTimeOffset,System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="expiresAt">The date and time at which the entry expires</param>
+            <param name="concurrencyToken">The concurrency token used for optimistic persistency</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Set``1(System.String,``0,System.TimeSpan)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="expiresIn">The time in which the entry expires</param>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.SetAsync``1(System.String,``0,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="expiresIn">The time in which the entry expires</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Set``1(System.String,``0,System.TimeSpan,System.Byte[])">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="expiresIn">The time in which the entry expires</param>
+            <param name="concurrencyToken">The concurrency token used for optimistic persistency</param>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.SetAsync``1(System.String,``0,System.TimeSpan,System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            Sets the value of the specified key
+            </summary>
+            <typeparam name="T">The type of value to cache</typeparam>
+            <param name="key">The key of the value to cache</param>
+            <param name="value">The value to cache</param>
+            <param name="expiresIn">The time in which the entry expires</param>
+            <param name="concurrencyToken">The concurrency token used for optimistic persistency</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Remove(System.String)">
+            <summary>
+            Removes the specified key
+            </summary>
+            <param name="key">The key to remove</param>
+            <returns>A boolean indicating whether or not the key could be removed</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.RemoveAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Removes the specified key
+            </summary>
+            <param name="key">The key to remove</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A boolean indicating whether or not the key could be removed</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.GetList``1(System.String)">
+            <summary>
+            Gets the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to retrieve</param>
+            <returns>The list store at the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.GetListAsync``1(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to retrieve</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The list store at the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.GetListElement``1(System.String,System.String)">
+            <summary>
+            Gets the specified element from the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to retrieve an element from</param>
+            <param name="elemKey">The key of the element to retrieve</param>
+            <returns>The element with the specified key, from the list stored at the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.GetListElementAsync``1(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the specified element from the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to retrieve an element from</param>
+            <param name="elemKey">The key of the element to retrieve</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The element with the specified key, from the list stored at the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.AddToList``1(System.String,System.String,``0)">
+            <summary>
+            Adds a new element to the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to add a new element to</param>
+            <param name="elemKey">The key of the element to add</param>
+            <param name="elem">The element to add</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.AddToListAsync``1(System.String,System.String,``0,System.Threading.CancellationToken)">
+            <summary>
+            Adds a new element to the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to add a new element to</param>
+            <param name="elemKey">The key of the element to add</param>
+            <param name="elem">The element to add</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.AddToList``1(System.String,System.String,``0,System.DateTime)">
+            <summary>
+            Adds a new element to the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to add a new element to</param>
+            <param name="elemKey">The key of the element to add</param>
+            <param name="elem">The element to add</param>
+            <param name="expiresAt">The UTC date and time at which the cached list should expire at</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.AddToListAsync``1(System.String,System.String,``0,System.DateTime,System.Threading.CancellationToken)">
+            <summary>
+            Adds a new element to the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to add a new element to</param>
+            <param name="elemKey">The key of the element to add</param>
+            <param name="elem">The element to add</param>
+            <param name="expiresAt">The UTC date and time at which the cached list should expire at</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.AddToList``1(System.String,System.String,``0,System.TimeSpan)">
+            <summary>
+            Adds a new element to the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to add a new element to</param>
+            <param name="elemKey">The key of the element to add</param>
+            <param name="elem">The element to add</param>
+            <param name="expiresIn">A <see cref="T:System.TimeSpan"/> that represents the time in which the list should expire</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.AddToListAsync``1(System.String,System.String,``0,System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Adds a new element to the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to add a new element to</param>
+            <param name="elemKey">The key of the element to add</param>
+            <param name="elem">The element to add</param>
+            <param name="expiresIn">A <see cref="T:System.TimeSpan"/> that represents the time in which the list should expire</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.UpdateList``1(System.String,System.String,``0)">
+            <summary>
+            Updates an element of the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to update an element of</param>
+            <param name="elemKey">The key of the element to update</param>
+            <param name="elem">The updated element</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.UpdateListAsync``1(System.String,System.String,``0,System.Threading.CancellationToken)">
+            <summary>
+            Updates an element of the list stored at the specified key
+            </summary>
+            <typeparam name="T">The type of elements held in the list</typeparam>
+            <param name="key">The key of the list to update an element of</param>
+            <param name="elemKey">The key of the element to update</param>
+            <param name="elem">The updated element</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.RemoveFromList(System.String,System.String)">
+            <summary>
+            Removes an element from the list stored at the specified key
+            </summary>
+            <param name="key">The key of the list to remove an element from</param>
+            <param name="elemKey">The key of the element to remove</param>
+            <returns>A boolean indicating whether or not the element could be removed from the list</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.RemoveFromListAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Removes an element from the list stored at the specified key
+            </summary>
+            <param name="key">The key of the list to remove an element from</param>
+            <param name="elemKey">The key of the element to remove</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A boolean indicating whether or not the element could be removed from the list</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.TryGet``1(System.String,``0@)">
+            <summary>
+            Attempts to retrieve the value with the specified key
+            </summary>
+            <typeparam name="T">The type of the value to retrieve</typeparam>
+            <param name="key">The key of the value to retrieve</param>
+            <param name="value">The resulting value, of any</param>
+            <returns>A boolean indicating whether or not the value with the specified key exists and could be retrieved</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.TryGetListElement``1(System.String,System.String,``0@)">
+            <summary>
+            Attempts to retrieve a list value with the specified key
+            </summary>
+            <typeparam name="T">The type of the value to retrieve</typeparam>
+            <param name="key">The key of the list to retrieve the value from</param>
+            <param name="elemKey">The key of the list element to retrieve</param>
+            <param name="value">The resulting value, of any</param>
+            <returns>A boolean indicating whether or not the value with the specified key exists and could be retrieved</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.Clear">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.ClearAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.GetConcurrencyToken(System.String)">
+            <summary>
+            Gets the concurrency token for the specified value
+            </summary>
+            <param name="value">The value to get the concurrency token for</param>
+            <returns>An array of byte that represents the concurrency token for the specified value</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.MapToCacheEntry``1(System.String)">
+            <summary>
+            Maps the hash fields for the specified hash key to an <see cref="T:Neuroglia.Caching.ICacheEntry"/>
+            </summary>
+            <typeparam name="T">The type of value held by the key</typeparam>
+            <param name="key">The hash key of the fields to map to an <see cref="T:Neuroglia.Caching.ICacheEntry"/></param>
+            <returns>A new <see cref="T:Neuroglia.Caching.ICacheEntry"/> based on the hash fields located at the specified hash key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.MapToCacheEntryAsync``1(System.String)">
+            <summary>
+            Maps the hash fields for the specified hash key to an <see cref="T:Neuroglia.Caching.ICacheEntry"/>
+            </summary>
+            <typeparam name="T">The type of value held by the key</typeparam>
+            <param name="key">The hash key of the fields to map to an <see cref="T:Neuroglia.Caching.ICacheEntry"/></param>
+            <returns>A new <see cref="T:Neuroglia.Caching.ICacheEntry"/> based on the hash fields located at the specified hash key</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.SerializeEntry(System.Object)">
+            <summary>
+            Serializes the specified cache entry value
+            </summary>
+            <param name="value">The value of the cache entry to serialize</param>
+            <returns>The serialized cache entry value</returns>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCache.DeserializeEntry``1(System.String)">
+            <summary>
+            Deserializes the specified cache entry
+            </summary>
+            <typeparam name="T">The expected type of the cache entry value to deserialize</typeparam>
+            <param name="value">The cache entry value to deserialize</param>
+            <returns>The deserialize cache entry value</returns>
+        </member>
+        <member name="T:Neuroglia.Caching.RedisCacheFactory">
+            <summary>
+            Represents the service used to create <see cref="T:Neuroglia.Caching.RedisCache"/> instances
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCacheFactory.#ctor(System.IServiceProvider,Microsoft.Extensions.Options.IOptions{Neuroglia.Caching.RedisCacheOptions})">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Caching.RedisCacheFactory"/>
+            </summary>
+            <param name="serviceProvider">The current <see cref="T:System.IServiceProvider"/></param>
+            <param name="options">The service used to access the current <see cref="T:Neuroglia.Caching.RedisCacheOptions"/></param>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCacheFactory.ServiceProvider">
+            <summary>
+            Gets the current <see cref="T:System.IServiceProvider"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Caching.RedisCacheFactory.Options">
+            <summary>
+            Gets the current <see cref="T:Neuroglia.Caching.RedisCacheOptions"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Caching.RedisCacheFactory.Create">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Caching.RedisCache"/> instance
+            </summary>
+            <returns>A new <see cref="T:Neuroglia.Caching.RedisCache"/> instance</returns>
+        </member>
+    </members>
+</doc>
