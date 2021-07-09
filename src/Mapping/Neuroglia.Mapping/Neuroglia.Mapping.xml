@@ -4,6 +4,19 @@
         <name>Neuroglia.Mapping</name>
     </assembly>
     <members>
+        <member name="T:Neuroglia.Mapping.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Mapping.IServiceCollectionExtensions.AddMapper(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Reflection.Assembly[])">
+            <summary>
+            Adds and configures a <see cref="T:Neuroglia.Mapping.Mapper"/> service
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="assemblies">An array containing the <see cref="T:System.Reflection.Assembly"/> instances to scan for mapping configuration</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
         <member name="T:Neuroglia.Mapping.ProfileExtensions">
             <summary>
             Defines extensions for <see cref="T:AutoMapper.Profile"/>s
@@ -215,6 +228,80 @@
             <param name="destinationType">The type to map to</param>
             <param name="configuration">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Mapping.IMappingOperationOptions`2"/></param>
             <returns>A new <see cref="T:System.Collections.IEnumerable"/> containing the mapped elements</returns>
+        </member>
+        <member name="T:Neuroglia.Mapping.Mapper">
+            <summary>
+            Represents the default AutoMapper implementation of the <see cref="T:Neuroglia.Mapping.IMapper"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.#ctor(AutoMapper.IMapper)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Mapping.Mapper"/>
+            </summary>
+            <param name="innerMapper">The underlying <see cref="T:AutoMapper.IMapper"/></param>
+        </member>
+        <member name="P:Neuroglia.Mapping.Mapper.InnerMapper">
+            <summary>
+            Gets the underlying <see cref="T:AutoMapper.IMapper"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.Map``1(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.Map``1(System.Object,System.Action{Neuroglia.Mapping.IMappingOperationOptions})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.Map``2(``0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.Map``2(``0,System.Action{Neuroglia.Mapping.IMappingOperationOptions{``0,``1}})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.Map``2(``0,``1)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.Map``2(``0,``1,System.Action{Neuroglia.Mapping.IMappingOperationOptions{``0,``1}})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.Map(System.Object,System.Type,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.Map(System.Object,System.Type,System.Type,System.Action{Neuroglia.Mapping.IMappingOperationOptions})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.ProjectTo``1(System.Collections.IEnumerable)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.ProjectTo``1(System.Collections.IEnumerable,System.Action{Neuroglia.Mapping.IMappingOperationOptions})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.ProjectTo``2(System.Collections.Generic.IEnumerable{``0})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.ProjectTo``2(System.Collections.Generic.IEnumerable{``0},System.Action{Neuroglia.Mapping.IMappingOperationOptions{``0,``1}})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.ProjectTo(System.Collections.IEnumerable,System.Type,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.ProjectTo(System.Collections.IEnumerable,System.Type,System.Type,System.Action{Neuroglia.Mapping.IMappingOperationOptions})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.BuildMappingOperationOptions(System.Action{Neuroglia.Mapping.IMappingOperationOptions})">
+            <summary>
+            Gets the <see cref="T:AutoMapper.IMappingOperationOptions"/> from the specified <see cref="T:Neuroglia.Mapping.IMappingOperationOptions"/>
+            </summary>
+            <param name="configuration">The <see cref="T:Neuroglia.Mapping.IMappingOperationOptions"/> to build the <see cref="T:AutoMapper.IMappingOperationOptions"/> for</param>
+            <returns>A new <see cref="T:AutoMapper.IMappingOperationOptions"/></returns>
+        </member>
+        <member name="M:Neuroglia.Mapping.Mapper.BuildMappingOperationOptions``2(System.Action{Neuroglia.Mapping.IMappingOperationOptions{``0,``1}})">
+            <summary>
+            Gets the <see cref="T:AutoMapper.IMappingOperationOptions`2"/> from the specified <see cref="T:Neuroglia.Mapping.IMappingOperationOptions`2"/>
+            </summary>
+            <typeparam name="TSource">The type to map from</typeparam>
+            <typeparam name="TDestination">The type to map to</typeparam>
+            <param name="configuration">The <see cref="T:Neuroglia.Mapping.IMappingOperationOptions`2"/> to build the <see cref="T:AutoMapper.IMappingOperationOptions`2"/> for</param>
+            <returns>A new <see cref="T:AutoMapper.IMappingOperationOptions`2"/></returns>
         </member>
     </members>
 </doc>

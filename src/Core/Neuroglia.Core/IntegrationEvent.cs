@@ -19,26 +19,17 @@ using System;
 namespace Neuroglia
 {
     /// <summary>
-    /// Represents an <see cref="Attribute"/> used to specify the Data Transfer Object of an entity
+    /// Represents the default implementation of an <see cref="IIntegrationEvent"/>
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class DataTransferObjectTypeAttribute
-        : Attribute
+    public abstract class IntegrationEvent
+        : IIntegrationEvent, IDataTransferObject
     {
 
-        /// <summary>
-        /// Initializes a new <see cref="DataTransferObjectTypeAttribute"/>
-        /// </summary>
-        /// <param name="type">The type of the object's DTO</param>
-        public DataTransferObjectTypeAttribute(Type type)
-        {
-            this.Type = type;
-        }
+        /// <inheritdoc/>
+        public virtual Guid AggregateId { get; set; }
 
-        /// <summary>
-        /// Gets the type of the object's DTO
-        /// </summary>
-        public Type Type { get; }
+        /// <inheritdoc/>
+        public virtual DateTime CreatedAt { get; set; }
 
     }
 

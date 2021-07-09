@@ -14,31 +14,16 @@
  * limitations under the License.
  *
  */
-using System;
 
 namespace Neuroglia
 {
     /// <summary>
-    /// Represents an <see cref="Attribute"/> used to specify the Data Transfer Object of an entity
+    /// Defines the fundamentals of all Data Transfer Objects (DTOs)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class DataTransferObjectTypeAttribute
-        : Attribute
+    public interface IDataTransferObject
     {
 
-        /// <summary>
-        /// Initializes a new <see cref="DataTransferObjectTypeAttribute"/>
-        /// </summary>
-        /// <param name="type">The type of the object's DTO</param>
-        public DataTransferObjectTypeAttribute(Type type)
-        {
-            this.Type = type;
-        }
 
-        /// <summary>
-        /// Gets the type of the object's DTO
-        /// </summary>
-        public Type Type { get; }
 
     }
 
