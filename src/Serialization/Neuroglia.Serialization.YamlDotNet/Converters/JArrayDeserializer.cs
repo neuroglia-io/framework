@@ -17,10 +17,10 @@
 using Newtonsoft.Json.Linq;
 using System;
 using YamlDotNet.Core;
-using YamlDotNet.Serialization;
 
-namespace Neuroglia.Serialization.YamlDotNet
+namespace YamlDotNet.Serialization
 {
+
     /// <summary>
     /// Represents an <see cref="INodeDeserializer"/> used to deserialize <see cref="JArray"/>s
     /// </summary>

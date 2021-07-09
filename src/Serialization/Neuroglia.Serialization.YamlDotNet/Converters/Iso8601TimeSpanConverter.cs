@@ -14,11 +14,11 @@
  * limitations under the License.
  *
  */
+using Neuroglia;
 using System;
 using YamlDotNet.Core;
-using YamlDotNet.Serialization;
 
-namespace Neuroglia.Serialization.YamlDotNet
+namespace YamlDotNet.Serialization
 {
     /// <summary>
     /// Represents an <see cref="INodeDeserializer"/> used to deserialize ISO8601 <see cref="TimeSpan"/>s

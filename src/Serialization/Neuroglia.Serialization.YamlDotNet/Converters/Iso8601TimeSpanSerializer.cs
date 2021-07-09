@@ -18,10 +18,10 @@ using System;
 using System.Xml;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
-using YamlDotNet.Serialization;
 
-namespace Neuroglia.Serialization.YamlDotNet
+namespace YamlDotNet.Serialization
 {
+
     /// <summary>
     /// Represents the <see cref="IYamlTypeConverter"/> used to serialize ISO 8601 <see cref="TimeSpan"/>s
     /// </summary>

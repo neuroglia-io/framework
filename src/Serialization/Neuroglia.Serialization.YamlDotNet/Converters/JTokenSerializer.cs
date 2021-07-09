@@ -14,14 +14,15 @@
  * limitations under the License.
  *
  */
+using Neuroglia;
 using Newtonsoft.Json.Linq;
 using System;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
-using YamlDotNet.Serialization;
 
-namespace Neuroglia.Serialization.YamlDotNet
+namespace YamlDotNet.Serialization
 {
+
     /// <summary>
     /// Represents the <see cref="IYamlTypeConverter"/> used to serialize <see cref="JToken"/>s
     /// </summary>

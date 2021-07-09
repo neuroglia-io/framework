@@ -16,9 +16,8 @@
  */
 using System;
 using System.Reflection;
-using YamlDotNet.Serialization;
 
-namespace Neuroglia.Serialization
+namespace YamlDotNet.Serialization
 {
 
     /// <summary>

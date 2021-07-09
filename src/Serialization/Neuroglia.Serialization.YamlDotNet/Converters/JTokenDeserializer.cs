@@ -18,9 +18,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using YamlDotNet.Core;
-using YamlDotNet.Serialization;
 
-namespace Neuroglia.Serialization.YamlDotNet
+namespace YamlDotNet.Serialization
 {
 
     /// <summary>

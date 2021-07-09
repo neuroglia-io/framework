@@ -14,13 +14,14 @@
  * limitations under the License.
  *
  */
+using Neuroglia;
 using System;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
-using YamlDotNet.Serialization;
 
-namespace Neuroglia.Serialization.YamlDotNet
+namespace YamlDotNet.Serialization
 {
+
     /// <summary>
     /// Represents the <see cref="IYamlTypeConverter"/> used to serialize ISO 8601 <see cref="Enum"/>s
     /// </summary>

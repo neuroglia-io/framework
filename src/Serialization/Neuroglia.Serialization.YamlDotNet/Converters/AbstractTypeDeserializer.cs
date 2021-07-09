@@ -14,13 +14,15 @@
  * limitations under the License.
  *
  */
+using Neuroglia;
+using Neuroglia.Serialization.YamlDotNet;
 using System;
 using System.Collections.Generic;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace Neuroglia.Serialization.YamlDotNet
+namespace YamlDotNet.Serialization
 {
 
     /// <summary>
