@@ -4,12 +4,12 @@
         <name>Neuroglia.Caching.InMemory</name>
     </assembly>
     <members>
-        <member name="T:Neuroglia.Caching.InMemory.Extensions.IServiceCollectionExtensions">
+        <member name="T:Neuroglia.Caching.IServiceCollectionExtensions">
             <summary>
             Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
             </summary>
         </member>
-        <member name="M:Neuroglia.Caching.InMemory.Extensions.IServiceCollectionExtensions.AddMemoryDistributedCache(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Neuroglia.Caching.IServiceCollectionExtensions.AddMemoryDistributedCache(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Adds and registers an <see cref="T:Neuroglia.Caching.IDistributedCache"/> of type <see cref="T:Neuroglia.Caching.MemoryDistributedCache"/>
             </summary>

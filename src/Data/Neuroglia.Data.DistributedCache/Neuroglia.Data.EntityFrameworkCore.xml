@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Data.DistributedCache</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Data.DistributedCacheRepository`2">
+            <summary>
+            Represents an <see cref="T:Neuroglia.Data.IRepository`2"/> implementation that uses an <see cref="T:Neuroglia.Caching.IDistributedCache"/> to persist data
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.#ctor(Microsoft.Extensions.Logging.ILogger{Neuroglia.Data.DistributedCacheRepository{`0,`1}},Neuroglia.Caching.IDistributedCache,Neuroglia.Mediation.IMediator)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.DistributedCacheRepository`2"/>
+            </summary>
+            <param name="logger">The service used to perform logging</param>
+            <param name="cache">The <see cref="T:Neuroglia.Caching.IDistributedCache"/> used to persist data managed by the <see cref="T:Neuroglia.Data.DistributedCacheRepository`2"/></param>
+            <param name="mediator">The service used to mediate calls</param>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.#ctor(Microsoft.Extensions.Logging.ILogger{Neuroglia.Data.DistributedCacheRepository{`0,`1}},Neuroglia.Caching.IDistributedCache)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.DistributedCacheRepository`2"/>
+            </summary>
+            <param name="logger">The service used to perform logging</param>
+            <param name="cache">The <see cref="T:Neuroglia.Caching.IDistributedCache"/> used to persist data managed by the <see cref="T:Neuroglia.Data.DistributedCacheRepository`2"/></param>
+        </member>
+        <member name="P:Neuroglia.Data.DistributedCacheRepository`2.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.DistributedCacheRepository`2.Cache">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Caching.IDistributedCache"/> used to persist data managed by the <see cref="T:Neuroglia.Data.DistributedCacheRepository`2"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.DistributedCacheRepository`2.Mediator">
+            <summary>
+            Gets the service used to mediate calls
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.DistributedCacheRepository`2.CacheKey">
+            <summary>
+            Gets a string that represents the key used to store entities in the cache
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.DistributedCacheRepository`2.PendingAggregates">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.List`1"/> containing all <see cref="T:Neuroglia.Data.IAggregateRoot"/>s pending the publication of their <see cref="T:Neuroglia.Data.IDomainEvent"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.ContainsAsync(`1,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.FindAsync(`1,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.FindAsync(System.Object[],System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.AddAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.UpdateAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.RemoveAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.ToListAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.AsQueryable">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.DistributedCacheRepository`2.SaveChangesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddDistributedCacheRepository``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:Neuroglia.Data.DistributedCacheRepository`2"/>
+            </summary>
+            <typeparam name="TEntity">The type of entity to add a <see cref="T:Neuroglia.Data.DistributedCacheRepository`2"/> for</typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify entities to manage</typeparam>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="lifetime">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> of the <see cref="T:Neuroglia.Data.DistributedCacheRepository`2"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+    </members>
+</doc>

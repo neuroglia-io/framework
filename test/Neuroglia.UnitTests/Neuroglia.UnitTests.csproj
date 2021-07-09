@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AspNetCore\Neuroglia.AspNetCore\Neuroglia.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\Caching\Neuroglia.Caching.InMemory\Neuroglia.Caching.InMemory.csproj" />
+    <ProjectReference Include="..\..\src\Data\Neuroglia.Data.DistributedCache\Neuroglia.Data.DistributedCache.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.EntityFrameworkCore\Neuroglia.Data.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.EventSourcing.EventStore\Neuroglia.Data.EventSourcing.EventStore.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.EventSourcing\Neuroglia.Data.EventSourcing.csproj" />

@@ -17,7 +17,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Neuroglia.Caching.InMemory.Extensions
+namespace Neuroglia.Caching
 {
 
     /// <summary>

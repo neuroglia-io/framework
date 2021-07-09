@@ -41,7 +41,7 @@
             Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
             </summary>
         </member>
-        <member name="M:Neuroglia.Serialization.IServiceCollectionExtensions.AddJsonSerializer(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+        <member name="M:Neuroglia.Serialization.IServiceCollectionExtensions.AddAvroSerializer(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             Adds and configures a <see cref="T:Neuroglia.Serialization.AvroSerializer"/> service
             </summary>
