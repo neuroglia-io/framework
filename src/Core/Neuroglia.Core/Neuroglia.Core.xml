@@ -202,6 +202,18 @@
         <member name="M:Neuroglia.Error.ToString">
             <inheritdoc/>
         </member>
+        <member name="T:Neuroglia.DurationExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Iso8601DurationHelper.Duration"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.DurationExtensions.ToTimeSpan(Iso8601DurationHelper.Duration)">
+            <summary>
+            Converts the <see cref="T:Iso8601DurationHelper.Duration"/> into a <see cref="T:System.TimeSpan"/>
+            </summary>
+            <param name="duration">The <see cref="T:Iso8601DurationHelper.Duration"/> to convert</param>
+            <returns>The converted <see cref="T:System.TimeSpan"/></returns>
+        </member>
         <member name="T:Neuroglia.StringExtensions">
             <summary>
             Defines extensions for <see cref="T:System.String"/>s
@@ -547,6 +559,25 @@
             </summary>
             <typeparam name="TResult">The expected <see cref="T:Neuroglia.IOperationResult"/> type</typeparam>
             <typeparam name="T">The type of data returned by the operation</typeparam>
+        </member>
+        <member name="T:Neuroglia.Iso8601TimeSpan">
+            <summary>
+            Represents an helper class for handling ISO 8601 timespans
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Iso8601TimeSpan.Parse(System.String)">
+            <summary>
+            Parses the specified input
+            </summary>
+            <param name="input">The input string to parse</param>
+            <returns>The parsed <see cref="T:System.TimeSpan"/></returns>
+        </member>
+        <member name="M:Neuroglia.Iso8601TimeSpan.Format(System.TimeSpan)">
+            <summary>
+            Formats the specified <see cref="T:System.TimeSpan"/>
+            </summary>
+            <param name="timeSpan">The <see cref="T:System.TimeSpan"/> to format</param>
+            <returns>The parsed <see cref="T:System.TimeSpan"/></returns>
         </member>
         <member name="T:Neuroglia.OperationResult">
             <summary>

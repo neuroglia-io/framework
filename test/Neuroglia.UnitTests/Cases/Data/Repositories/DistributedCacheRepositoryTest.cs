@@ -29,7 +29,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             this.Repository = this.ServiceScope.ServiceProvider.GetRequiredService<DistributedCacheRepository<TestPerson, Guid>>();
         }
 
-        static IDistributedCache Cache = new MemoryDistributedCache(new MemoryCache(Options.Create(new MemoryCacheOptions())));
+        static readonly IDistributedCache Cache = new MemoryDistributedCache(new MemoryCache(Options.Create(new MemoryCacheOptions())));
 
         IServiceScope ServiceScope { get; }
 

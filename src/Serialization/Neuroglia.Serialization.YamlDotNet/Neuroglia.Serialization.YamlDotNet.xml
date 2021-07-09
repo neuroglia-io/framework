@@ -62,6 +62,58 @@
             <param name="implementationType">The resulting implementation type</param>
             <returns>A boolean indicating whether or not the implementation type could be resolved thanks to the specified <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/></returns>
         </member>
+        <member name="T:Neuroglia.Serialization.YamlDotNet.Iso8601TimeSpanConverter">
+            <summary>
+            Represents an <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize ISO8601 <see cref="T:System.TimeSpan"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.Iso8601TimeSpanConverter.#ctor(YamlDotNet.Serialization.INodeDeserializer)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.YamlDotNet.Iso8601TimeSpanConverter"/>
+            </summary>
+            <param name="inner">The inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/></param>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNet.Iso8601TimeSpanConverter.Inner">
+            <summary>
+            Gets the inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.Iso8601TimeSpanConverter.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Serialization.YamlDotNet.Iso8601TimeSpanSerializer">
+            <summary>
+            Represents the <see cref="T:YamlDotNet.Serialization.IYamlTypeConverter"/> used to serialize ISO 8601 <see cref="T:System.TimeSpan"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.Iso8601TimeSpanSerializer.Accepts(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.Iso8601TimeSpanSerializer.ReadYaml(YamlDotNet.Core.IParser,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.Iso8601TimeSpanSerializer.WriteYaml(YamlDotNet.Core.IEmitter,System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Serialization.YamlDotNet.JArrayDeserializer">
+            <summary>
+            Represents an <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize <see cref="T:Newtonsoft.Json.Linq.JArray"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JArrayDeserializer.#ctor(YamlDotNet.Serialization.INodeDeserializer)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.YamlDotNet.JArrayDeserializer"/>
+            </summary>
+            <param name="inner">The inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/></param>
+        </member>
+        <member name="P:Neuroglia.Serialization.YamlDotNet.JArrayDeserializer.Inner">
+            <summary>
+            Gets the inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JArrayDeserializer.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
+            <inheritdoc/>
+        </member>
         <member name="T:Neuroglia.Serialization.YamlDotNet.JTokenDeserializer">
             <summary>
             Represents an <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize <see cref="T:Newtonsoft.Json.Linq.JToken"/>s
@@ -79,6 +131,62 @@
             </summary>
         </member>
         <member name="M:Neuroglia.Serialization.YamlDotNet.JTokenDeserializer.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Serialization.YamlDotNet.JTokenSerializer">
+            <summary>
+            Represents the <see cref="T:YamlDotNet.Serialization.IYamlTypeConverter"/> used to serialize <see cref="T:Newtonsoft.Json.Linq.JToken"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JTokenSerializer.Accepts(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JTokenSerializer.ReadYaml(YamlDotNet.Core.IParser,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JTokenSerializer.WriteYaml(YamlDotNet.Core.IEmitter,System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JTokenSerializer.WriteJToken(YamlDotNet.Core.IEmitter,Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Serializes the specified <see cref="T:Newtonsoft.Json.Linq.JToken"/>
+            </summary>
+            <param name="emitter">The current <see cref="T:YamlDotNet.Core.IEmitter"/></param>
+            <param name="token">The <see cref="T:Newtonsoft.Json.Linq.JToken"/> to serialize</param>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JTokenSerializer.WriteJArray(YamlDotNet.Core.IEmitter,Newtonsoft.Json.Linq.JArray)">
+            <summary>
+            Serializes the specified <see cref="T:Newtonsoft.Json.Linq.JArray"/>
+            </summary>
+            <param name="emitter">The current <see cref="T:YamlDotNet.Core.IEmitter"/></param>
+            <param name="array">The <see cref="T:Newtonsoft.Json.Linq.JArray"/> to serialize</param>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JTokenSerializer.WriteJObject(YamlDotNet.Core.IEmitter,Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            Serializes the specified <see cref="T:Newtonsoft.Json.Linq.JObject"/>
+            </summary>
+            <param name="emitter">The current <see cref="T:YamlDotNet.Core.IEmitter"/></param>
+            <param name="jobject">The <see cref="T:Newtonsoft.Json.Linq.JObject"/> to serialize</param>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.JTokenSerializer.WriteJProperty(YamlDotNet.Core.IEmitter,Newtonsoft.Json.Linq.JProperty)">
+            <summary>
+            Serializes the specified <see cref="T:Newtonsoft.Json.Linq.JProperty"/>
+            </summary>
+            <param name="emitter">The current <see cref="T:YamlDotNet.Core.IEmitter"/></param>
+            <param name="jproperty">The <see cref="T:Newtonsoft.Json.Linq.JProperty"/> to serialize</param>
+        </member>
+        <member name="T:Neuroglia.Serialization.YamlDotNet.StringEnumSerializer">
+            <summary>
+            Represents the <see cref="T:YamlDotNet.Serialization.IYamlTypeConverter"/> used to serialize ISO 8601 <see cref="T:System.Enum"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.StringEnumSerializer.Accepts(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.StringEnumSerializer.ReadYaml(YamlDotNet.Core.IParser,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.YamlDotNet.StringEnumSerializer.WriteYaml(YamlDotNet.Core.IEmitter,System.Object,System.Type)">
             <inheritdoc/>
         </member>
         <member name="T:Neuroglia.Serialization.YamlDotNet.IParserExtensions">
