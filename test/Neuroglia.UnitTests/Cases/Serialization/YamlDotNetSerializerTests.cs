@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Data;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,14 +15,14 @@ namespace Neuroglia.UnitTests.Cases.Serialization
         public YamlDotNetSerializerTests()
         {
             ServiceCollection services = new ServiceCollection();
-            services.AddYamlDotNetSerializer();
+            services.AddYamlDotNetSerializer(serializer => serializer.WithTypeConverter(new YamlDotNet.Serialization.UriTypeConverter()), deserializer => deserializer.WithTypeConverter(new YamlDotNet.Serialization.UriTypeConverter()));
             this.Serializer = services.BuildServiceProvider().GetRequiredService<YamlDotNetSerializer>();
         }
 
         protected YamlDotNetSerializer Serializer { get; }
 
         [Fact]
-        public async Task SerializeAndDeserialize_ShouldWork()
+        public async Task SerializeAndDeserialize_ComplexObject_ShouldWork()
         {
             //arrange
             var toSerialize = new TestAddress()
@@ -42,6 +43,21 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             deserialized.PostalCode.Should().Be(toSerialize.PostalCode);
             deserialized.City.Should().Be(toSerialize.City);
             deserialized.Country.Should().Be(toSerialize.Country);
+        }
+
+        [Fact]
+        public async Task SerializeAndDeserialize_Uri_ShouldWork()
+        {
+            //arrange
+            var toSerialize = new Uri("http://fake.com");
+
+            //act
+            var buffer = await this.Serializer.SerializeAsync(toSerialize);
+            var deserialized = await this.Serializer.DeserializeAsync<Uri>(buffer);
+
+            //assert
+            deserialized.Should().NotBeNull();
+            deserialized.Should().Be(toSerialize);
         }
 
     }

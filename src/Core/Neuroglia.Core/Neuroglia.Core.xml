@@ -354,6 +354,13 @@
             <param name="text">The text to convert</param>
             <returns>The camel-cased text</returns>
         </member>
+        <member name="M:Neuroglia.StringExtensions.IsJson(System.String)">
+            <summary>
+            Determines whether or not the specified text is JSON format
+            </summary>
+            <param name="text">The text to check</param>
+            <returns>A boolean indicating whether or not the specified text is JSON format</returns>
+        </member>
         <member name="T:Neuroglia.TypeExtensions">
             <summary>
             Defines extension methods for <see cref="T:System.Type"/>s

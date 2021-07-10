@@ -222,6 +222,20 @@
         <member name="M:YamlDotNet.Serialization.StringEnumSerializer.WriteYaml(YamlDotNet.Core.IEmitter,System.Object,System.Type)">
             <inheritdoc/>
         </member>
+        <member name="T:YamlDotNet.Serialization.UriTypeConverter">
+            <summary>
+            Represents the <see cref="T:YamlDotNet.Serialization.IYamlTypeConverter"/> used to serialize and deserialize <see cref="T:System.Uri"/>s
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.UriTypeConverter.Accepts(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:YamlDotNet.Serialization.UriTypeConverter.ReadYaml(YamlDotNet.Core.IParser,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:YamlDotNet.Serialization.UriTypeConverter.WriteYaml(YamlDotNet.Core.IEmitter,System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
         <member name="T:Neuroglia.Serialization.YamlDotNet.IParserExtensions">
             <summary>
             Defines extensions for <see cref="T:Neuroglia.Serialization.YamlDotNet.ParsingEventStream"/>
