@@ -407,6 +407,20 @@ namespace Neuroglia
             return string.IsNullOrEmpty(text) || text.Length < 2 ? text.ToLowerInvariant() : char.ToLowerInvariant(text[0]) + text[1..];
         }
 
+        /// <summary>
+        /// Determines whether or not the specified text is JSON format
+        /// </summary>
+        /// <param name="text">The text to check</param>
+        /// <returns>A boolean indicating whether or not the specified text is JSON format</returns>
+        public static bool IsJson(this string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                throw new ArgumentNullException(nameof(text));
+            string trimmed = text.Trim();
+            return (trimmed.StartsWith("[") && trimmed.EndsWith("]"))
+                || (trimmed.StartsWith("{") && trimmed.EndsWith("}"));
+        }
+
         private static string MapEmailDomain(Match match)
         {
             IdnMapping idn = new();
