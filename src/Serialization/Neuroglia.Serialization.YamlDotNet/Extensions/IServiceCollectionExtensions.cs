@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Neuroglia.Serialization.YamlDotNet;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
@@ -75,10 +74,7 @@ namespace Neuroglia.Serialization
         public static IServiceCollection AddYamlDotNetSerializer(this IServiceCollection services, Action<SerializerBuilder> serializerConfiguration = null, Action<DeserializerBuilder> deserializerConfiguration = null)
         {
             services.AddYamlDotNet(serializerConfiguration, deserializerConfiguration);
-            services.TryAddSingleton<YamlDotNetSerializer>();
-            services.AddSingleton<ISerializer>(provider => provider.GetRequiredService<YamlDotNetSerializer>());
-            services.AddSingleton<IYamlSerializer>(provider => provider.GetRequiredService<YamlDotNetSerializer>());
-            return services;
+            return services.AddSerializer<YamlDotNetSerializer>();
         }
 
     }                   

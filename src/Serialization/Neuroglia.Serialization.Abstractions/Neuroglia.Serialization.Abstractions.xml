@@ -4,6 +4,20 @@
         <name>Neuroglia.Serialization.Abstractions</name>
     </assembly>
     <members>
+        <member name="T:Neuroglia.Serialization.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.IServiceCollectionExtensions.AddSerializer``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures the specified <see cref="T:Neuroglia.Serialization.ISerializer"/>
+            </summary>
+            <typeparam name="TSerializer">The type of <see cref="T:Neuroglia.Serialization.ISerializer"/> to register</typeparam>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="lifetime">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> of the <see cref="T:Neuroglia.Serialization.ISerializer"/> to add</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
         <member name="T:Neuroglia.Serialization.BinarySerializerBase">
             <summary>
             Represents the base class for all <see cref="T:Neuroglia.Serialization.IBinarySerializer"/> implementations
@@ -214,6 +228,69 @@
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>The deserialized value</returns>
         </member>
+        <member name="T:Neuroglia.Serialization.ISerializerProvider">
+            <summary>
+            Defines the fundamentals of a service used to provide <see cref="T:Neuroglia.Serialization.ISerializer"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializerProvider.GetBinarySerializers">
+            <summary>
+            Gets all registered <see cref="T:Neuroglia.Serialization.IBinarySerializer"/>s
+            </summary>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all registered <see cref="T:Neuroglia.Serialization.IBinarySerializer"/>s</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializerProvider.GetTextSerializers">
+            <summary>
+            Gets all registered <see cref="T:Neuroglia.Serialization.ITextSerializer"/>s
+            </summary>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all registered <see cref="T:Neuroglia.Serialization.ITextSerializer"/>s</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializerProvider.GetJsonSerializers">
+            <summary>
+            Gets all registered <see cref="T:Neuroglia.Serialization.IJsonSerializer"/>s
+            </summary>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all registered <see cref="T:Neuroglia.Serialization.IJsonSerializer"/>s</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializerProvider.GetYamlSerializers">
+            <summary>
+            Gets all registered <see cref="T:Neuroglia.Serialization.IYamlSerializer"/>s
+            </summary>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all registered <see cref="T:Neuroglia.Serialization.IYamlSerializer"/>s</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializerProvider.GetXmlSerializers">
+            <summary>
+            Gets all registered <see cref="T:Neuroglia.Serialization.IXmlSerializer"/>s
+            </summary>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all registered <see cref="T:Neuroglia.Serialization.IXmlSerializer"/>s</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializerProvider.GetSerializersFor(System.String)">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ISerializer"/>s that support the specified content type
+            </summary>
+            <param name="contentType">The content type to serialize/deserialize</param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Serialization.ISerializer"/>s that support the specified content type, if any</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializerProvider.GetSerializerFor(System.String)">
+            <summary>
+            Gets the first registered <see cref="T:Neuroglia.Serialization.ISerializer"/> that support the specified content type
+            </summary>
+            <param name="contentType">The content type to serialize/deserialize</param>
+            <returns>The first registered <see cref="T:Neuroglia.Serialization.ISerializer"/> that support the specified content type, if any</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializerProvider.GetSerializer(System.Type)">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ISerializer"/> of the specified type
+            </summary>
+            <param name="serializerType">The type of <see cref="T:Neuroglia.Serialization.ISerializer"/> to get</param>
+            <returns>The <see cref="T:Neuroglia.Serialization.ISerializer"/> of the specified type</returns>
+        </member>
+        <member name="M:Neuroglia.Serialization.ISerializerProvider.GetSerializer``1">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ISerializer"/> of the specified type
+            </summary>
+            <typeparam name="TSerializer">The type of <see cref="T:Neuroglia.Serialization.ISerializer"/> to get</typeparam>
+            <returns>The <see cref="T:Neuroglia.Serialization.ISerializer"/> of the specified type</returns>
+        </member>
         <member name="T:Neuroglia.Serialization.ITextSerializer">
             <summary>
             Defines the fundamentals of a service used to serialize/deserialize text
@@ -294,6 +371,49 @@
             <summary>
             Defines the fundamentals of a service used to serialize and deserialize YAML
             </summary>
+        </member>
+        <member name="T:Neuroglia.Serialization.SerializerProvider">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Serialization.ISerializerProvider"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.SerializerProvider.#ctor(System.Collections.Generic.IEnumerable{Neuroglia.Serialization.ISerializer})">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.SerializerProvider"/>
+            </summary>
+            <param name="serializers">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all registered <see cref="T:Neuroglia.Serialization.ISerializer"/>s</param>
+        </member>
+        <member name="P:Neuroglia.Serialization.SerializerProvider.Serializers">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all registered <see cref="T:Neuroglia.Serialization.ISerializer"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.SerializerProvider.GetBinarySerializers">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.SerializerProvider.GetJsonSerializers">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.SerializerProvider.GetSerializer(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.SerializerProvider.GetSerializer``1">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.SerializerProvider.GetSerializerFor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.SerializerProvider.GetSerializersFor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.SerializerProvider.GetTextSerializers">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.SerializerProvider.GetXmlSerializers">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Serialization.SerializerProvider.GetYamlSerializers">
+            <inheritdoc/>
         </member>
         <member name="T:Neuroglia.Serialization.TextSerializerBase">
             <summary>

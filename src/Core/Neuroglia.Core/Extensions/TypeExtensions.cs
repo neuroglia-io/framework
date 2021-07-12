@@ -263,6 +263,84 @@ namespace Neuroglia
             return attribute != null;
         }
 
+        /// <summary>
+        /// Gets the <see cref="Type"/>'s XML documentation
+        /// </summary>
+        /// <param name="extended">The extended <see cref="Type"/></param>
+        /// <returns>The <see cref="Type"/>'s XML documentation</returns>
+        public static string GetDocumentation(this Type extended)
+        {
+            if (extended == null)
+                throw new ArgumentNullException(nameof(extended));
+            return XmlDocumentationHelper.DocumentationOf(extended);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="Type"/>'s XML documentation summary
+        /// </summary>
+        /// <param name="extended">The extended <see cref="Type"/></param>
+        /// <returns>The <see cref="Type"/>'s XML documentation summary</returns>
+        public static string GetDocumentationSummary(this Type extended)
+        {
+            if (extended == null)
+                throw new ArgumentNullException(nameof(extended));
+            return XmlDocumentationHelper.SummaryOf(extended);
+        }
+
+        /// <summary>
+        /// Determines whether or not the type declares the specified <see cref="MemberInfo"/>
+        /// </summary>
+        /// <param name="extended">The extended type</param>
+        /// <param name="member">The <see cref="MemberInfo"/> to check</param>
+        /// <returns>A boolean indicating whether or not the type declares the specified <see cref="MemberInfo"/></returns>
+        public static bool DeclaresMember(this Type extended, MemberInfo member)
+        {
+            if (extended == null)
+                throw new ArgumentNullException(nameof(extended));
+            if (member == null)
+                throw new ArgumentNullException(nameof(member));
+            switch (member)
+            {
+                case FieldInfo field:
+                    return extended.GetField(field.Name) != null;
+                case PropertyInfo property:
+                    return extended.GetProperty(property.Name) != null;
+                case MethodInfo method:
+                    return extended.GetMethod(method.Name, method.GetParameters().Select(p => p.ParameterType).ToArray()) != null;
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Gets the declaring type of the specified <see cref="MemberInfo"/>
+        /// </summary>
+        /// <param name="extended">The extended <see cref="Type"/></param>
+        /// <param name="member">The <see cref="MemberInfo"/> to get the declaring type of</param>
+        /// <returns>The declaring type of the specified <see cref="MemberInfo"/></returns>
+        public static Type GetDeclaringTypeOf(this Type extended, MemberInfo member)
+        {
+            if (extended == null)
+                throw new ArgumentNullException(nameof(extended));
+            if(member == null)
+                throw new ArgumentNullException(nameof(member));
+            IEnumerable<Type> interfaces = extended.GetInterfaces();
+            Type declaringType = interfaces.FirstOrDefault(t => t.DeclaresMember(member));
+            if (declaringType != null)
+                return declaringType;
+            Type baseType = extended.BaseType;
+            do
+            {
+                if (baseType.DeclaresMember(member))
+                    return baseType;
+                baseType = baseType.BaseType;
+            }
+            while (baseType != null);
+            if (baseType == null)
+                baseType = extended;
+            return declaringType;
+        }
+
     }
 
 }

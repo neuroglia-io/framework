@@ -15,7 +15,6 @@
  *
  */
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Neuroglia.Serialization
 {
@@ -33,10 +32,7 @@ namespace Neuroglia.Serialization
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddAvroSerializer(this IServiceCollection services)
         {
-            services.TryAddSingleton<AvroSerializer>();
-            services.AddSingleton<ISerializer>(provider => provider.GetRequiredService<AvroSerializer>());
-            services.AddSingleton<IBinarySerializer>(provider => provider.GetRequiredService<AvroSerializer>());
-            return services;
+            return services.AddSerializer<AvroSerializer>();
         }
 
     }

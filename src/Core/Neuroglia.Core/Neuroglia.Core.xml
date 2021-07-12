@@ -214,6 +214,69 @@
             <param name="duration">The <see cref="T:Iso8601DurationHelper.Duration"/> to convert</param>
             <returns>The converted <see cref="T:System.TimeSpan"/></returns>
         </member>
+        <member name="T:Neuroglia.MemberInfoExtensions">
+            <summary>
+            Defines extension methods for <see cref="T:System.Reflection.MemberInfo"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.MemberInfoExtensions.TryGetCustomAttribute``1(System.Reflection.MemberInfo,``0@)">
+            <summary>
+            Attempts to get a custom attribute of the specified <see cref="T:System.Reflection.MemberInfo"/>
+            </summary>
+            <typeparam name="TAttribute">The type of the custom attribute to get</typeparam>
+            <param name="extended">The extended <see cref="T:System.Reflection.MemberInfo"/></param>
+            <param name="attribute">The resulting custom attribute</param>
+            <returns>A boolean indicating whether or not the custom attribute of the specified <see cref="T:System.Reflection.MemberInfo"/> could be found</returns>
+        </member>
+        <member name="M:Neuroglia.MemberInfoExtensions.GetDocumentation(System.Reflection.MemberInfo)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.MemberInfo"/>'s XML documentation
+            </summary>
+            <param name="extended">The extended <see cref="T:System.Reflection.MemberInfo"/></param>
+            <returns>The <see cref="T:System.Reflection.MemberInfo"/>'s XML documentation</returns>
+        </member>
+        <member name="M:Neuroglia.MemberInfoExtensions.GetDocumentationSummary(System.Reflection.MemberInfo)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.MemberInfo"/>'s XML documentation summary
+            </summary>
+            <param name="extended">The extended <see cref="T:System.Reflection.MemberInfo"/></param>
+            <returns>The <see cref="T:System.Reflection.MemberInfo"/>'s XML documentation summary</returns>
+        </member>
+        <member name="M:Neuroglia.MemberInfoExtensions.GetOverridenMember(System.Reflection.MemberInfo)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.MemberInfo"/> overriden by the <see cref="T:System.Reflection.MemberInfo"/>
+            </summary>
+            <param name="extended">The <see cref="T:System.Reflection.MemberInfo"/> to get the overriden <see cref="T:System.Reflection.MemberInfo"/> for</param>
+            <returns>The <see cref="T:System.Reflection.MemberInfo"/> overriden by the <see cref="T:System.Reflection.MemberInfo"/>, if any</returns>
+        </member>
+        <member name="T:Neuroglia.ParameterInfoExtensions">
+            <summary>
+            Defines extension methods for <see cref="T:System.Reflection.MemberInfo"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.ParameterInfoExtensions.TryGetCustomAttribute``1(System.Reflection.MemberInfo,``0@)">
+            <summary>
+            Attempts to get a custom attribute of the specified <see cref="T:System.Reflection.ParameterInfo"/>
+            </summary>
+            <typeparam name="TAttribute">The type of the custom attribute to get</typeparam>
+            <param name="extended">The extended <see cref="T:System.Reflection.ParameterInfo"/></param>
+            <param name="attribute">The resulting custom attribute</param>
+            <returns>A boolean indicating whether or not the custom attribute of the specified <see cref="T:System.Reflection.ParameterInfo"/> could be found</returns>
+        </member>
+        <member name="M:Neuroglia.ParameterInfoExtensions.GetDocumentation(System.Reflection.ParameterInfo)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.ParameterInfo"/>'s XML documentation
+            </summary>
+            <param name="extended">The extended <see cref="T:System.Reflection.ParameterInfo"/></param>
+            <returns>The <see cref="T:System.Reflection.ParameterInfo"/>'s XML documentation</returns>
+        </member>
+        <member name="M:Neuroglia.ParameterInfoExtensions.GetDocumentationSummary(System.Reflection.ParameterInfo)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.ParameterInfo"/>'s XML documentation summary
+            </summary>
+            <param name="extended">The extended <see cref="T:System.Reflection.ParameterInfo"/></param>
+            <returns>The <see cref="T:System.Reflection.ParameterInfo"/>'s XML documentation summary</returns>
+        </member>
         <member name="T:Neuroglia.StringExtensions">
             <summary>
             Defines extensions for <see cref="T:System.String"/>s
@@ -454,6 +517,36 @@
             <param name="extended">The extended type</param>
             <param name="attribute">The resulting custom attribute</param>
             <returns>A boolean indicating whether or not the custom attribute of the specified type could be found</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.GetDocumentation(System.Type)">
+            <summary>
+            Gets the <see cref="T:System.Type"/>'s XML documentation
+            </summary>
+            <param name="extended">The extended <see cref="T:System.Type"/></param>
+            <returns>The <see cref="T:System.Type"/>'s XML documentation</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.GetDocumentationSummary(System.Type)">
+            <summary>
+            Gets the <see cref="T:System.Type"/>'s XML documentation summary
+            </summary>
+            <param name="extended">The extended <see cref="T:System.Type"/></param>
+            <returns>The <see cref="T:System.Type"/>'s XML documentation summary</returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.DeclaresMember(System.Type,System.Reflection.MemberInfo)">
+            <summary>
+            Determines whether or not the type declares the specified <see cref="T:System.Reflection.MemberInfo"/>
+            </summary>
+            <param name="extended">The extended type</param>
+            <param name="member">The <see cref="T:System.Reflection.MemberInfo"/> to check</param>
+            <returns>A boolean indicating whether or not the type declares the specified <see cref="T:System.Reflection.MemberInfo"/></returns>
+        </member>
+        <member name="M:Neuroglia.TypeExtensions.GetDeclaringTypeOf(System.Type,System.Reflection.MemberInfo)">
+            <summary>
+            Gets the declaring type of the specified <see cref="T:System.Reflection.MemberInfo"/>
+            </summary>
+            <param name="extended">The extended <see cref="T:System.Type"/></param>
+            <param name="member">The <see cref="T:System.Reflection.MemberInfo"/> to get the declaring type of</param>
+            <returns>The declaring type of the specified <see cref="T:System.Reflection.MemberInfo"/></returns>
         </member>
         <member name="T:Neuroglia.IDataTransferObject">
             <summary>
@@ -888,6 +981,68 @@
             <param name="cacheKey">The cache key used to store the results</param>
             <param name="predicate">The predicate that filters the types</param>
             <returns>The filtered types</returns>
+        </member>
+        <member name="T:Neuroglia.XmlDocumentationHelper">
+            <summary>
+            Defines helper members to handle Xml code documentation
+            </summary>
+            <remarks>Code adapted from https://docs.microsoft.com/en-us/archive/msdn-magazine/2019/october/csharp-accessing-xml-documentation-via-reflection</remarks>
+        </member>
+        <member name="M:Neuroglia.XmlDocumentationHelper.DocumentationOf(System.Type)">
+            <summary>
+            Gets the specified type's XML code documentation
+            </summary>
+            <param name="type">The type to get the XML code documentation for</param>
+            <returns>The XML code documentation of the specified type</returns>
+        </member>
+        <member name="M:Neuroglia.XmlDocumentationHelper.DocumentationXElementOf(System.Type)">
+            <summary>
+            Gets the specified type's XML code documentation
+            </summary>
+            <param name="type">The type to get the XML code documentation for</param>
+            <returns>The XML code documentation of the specified type</returns>
+        </member>
+        <member name="M:Neuroglia.XmlDocumentationHelper.SummaryOf(System.Type)">
+            <summary>
+            Gets the specified type's XML code documentation summary
+            </summary>
+            <param name="type">The type to get the XML code documentation summary for</param>
+            <returns>The XML code documentation summary of the specified type</returns>
+        </member>
+        <member name="M:Neuroglia.XmlDocumentationHelper.DocumentationOf(System.Reflection.MemberInfo)">
+            <summary>
+            Gets the specified member's XML code documentation
+            </summary>
+            <param name="member">The member to get the XML code documentation for</param>
+            <returns>The XML code documentation of the specified member</returns>
+        </member>
+        <member name="M:Neuroglia.XmlDocumentationHelper.DocumentationXElementOf(System.Reflection.MemberInfo)">
+            <summary>
+            Gets the specified member's XML code documentation
+            </summary>
+            <param name="member">The member to get the XML code documentation for</param>
+            <returns>The XML code documentation of the specified member</returns>
+        </member>
+        <member name="M:Neuroglia.XmlDocumentationHelper.SummaryOf(System.Reflection.MemberInfo)">
+            <summary>
+            Gets the specified member's XML code documentation summary
+            </summary>
+            <param name="member">The member to get the XML code documentation summary for</param>
+            <returns>The XML code documentation summary of the specified member</returns>
+        </member>
+        <member name="M:Neuroglia.XmlDocumentationHelper.DocumentationOf(System.Reflection.ParameterInfo)">
+            <summary>
+            Gets the specified parameter's XML code documentation
+            </summary>
+            <param name="parameter">The parameter to get the XML code documentation for</param>
+            <returns>The XML code documentation of the specified parameter</returns>
+        </member>
+        <member name="M:Neuroglia.XmlDocumentationHelper.SummaryOf(System.Reflection.ParameterInfo)">
+            <summary>
+            Gets the specified parameter's XML code documentation summary
+            </summary>
+            <param name="parameter">The parameter to get the XML code documentation summary for</param>
+            <returns>The XML code documentation summary of the specified parameter</returns>
         </member>
     </members>
 </doc>

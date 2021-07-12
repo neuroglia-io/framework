@@ -15,7 +15,6 @@
  *
  */
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Text.Json;
 
@@ -37,11 +36,7 @@ namespace Neuroglia.Serialization
         public static IServiceCollection AddJsonSerializer(this IServiceCollection services, Action<JsonSerializerOptions> configurationAction)
         {
             services.Configure(configurationAction);
-            services.TryAddSingleton<JsonSerializer>();
-            services.AddSingleton<ISerializer>(provider => provider.GetRequiredService<JsonSerializer>());
-            services.AddSingleton<ITextSerializer>(provider => provider.GetRequiredService<JsonSerializer>());
-            services.AddSingleton<IJsonSerializer>(provider => provider.GetRequiredService<JsonSerializer>());
-            return services;
+            return services.AddSerializer<JsonSerializer>();
         }
 
         /// <summary>

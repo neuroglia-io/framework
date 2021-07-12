@@ -15,7 +15,6 @@
  *
  */
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Neuroglia.Serialization
 {
@@ -33,10 +32,7 @@ namespace Neuroglia.Serialization
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddProtobufSerializer(this IServiceCollection services)
         {
-            services.TryAddSingleton<ProtobufSerializer>();
-            services.AddSingleton<ISerializer>(provider => provider.GetRequiredService<ProtobufSerializer>());
-            services.AddSingleton<IBinarySerializer>(provider => provider.GetRequiredService<ProtobufSerializer>());
-            return services;
+            return services.AddSerializer<ProtobufSerializer>();
         }
 
     }

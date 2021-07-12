@@ -15,7 +15,6 @@
  *
  */
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json;
 using System;
 
@@ -37,11 +36,7 @@ namespace Neuroglia.Serialization
         public static IServiceCollection AddNewtonsoftJsonSerializer(this IServiceCollection services, Action<JsonSerializerSettings> configurationAction)
         {
             services.Configure(configurationAction);
-            services.TryAddSingleton<NewtonsoftJsonSerializer>();
-            services.AddSingleton<ISerializer>(provider => provider.GetRequiredService<NewtonsoftJsonSerializer>());
-            services.AddSingleton<ITextSerializer>(provider => provider.GetRequiredService<NewtonsoftJsonSerializer>());
-            services.AddSingleton<IJsonSerializer>(provider => provider.GetRequiredService<NewtonsoftJsonSerializer>());
-            return services;
+            return services.AddSerializer<NewtonsoftJsonSerializer>();
         }
 
         /// <summary>
