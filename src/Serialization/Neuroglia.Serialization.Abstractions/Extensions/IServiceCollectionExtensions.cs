@@ -36,18 +36,19 @@ namespace Neuroglia.Serialization
         public static IServiceCollection AddSerializer<TSerializer>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
             where TSerializer : class, ISerializer
         {
-            services.TryAdd(new ServiceDescriptor(typeof(ISerializerProvider), typeof(SerializerProvider)));
+            services.TryAdd(new ServiceDescriptor(typeof(ISerializerProvider), typeof(SerializerProvider), lifetime));
             services.TryAdd(new ServiceDescriptor(typeof(TSerializer), typeof(TSerializer), lifetime));
+            services.Add(new ServiceDescriptor(typeof(ISerializer), typeof(TSerializer), lifetime));
             if (typeof(IBinarySerializer).IsAssignableFrom(typeof(TSerializer)))
-                services.TryAdd(new ServiceDescriptor(typeof(IBinarySerializer), provider => (IBinarySerializer)provider.GetRequiredService(typeof(TSerializer)), lifetime));
+                services.Add(new ServiceDescriptor(typeof(IBinarySerializer), provider => (IBinarySerializer)provider.GetRequiredService(typeof(TSerializer)), lifetime));
             if (typeof(ITextSerializer).IsAssignableFrom(typeof(TSerializer)))
-                services.TryAdd(new ServiceDescriptor(typeof(ITextSerializer), provider => (ITextSerializer)provider.GetRequiredService(typeof(TSerializer)), lifetime));
+                services.Add(new ServiceDescriptor(typeof(ITextSerializer), provider => (ITextSerializer)provider.GetRequiredService(typeof(TSerializer)), lifetime));
             if (typeof(IJsonSerializer).IsAssignableFrom(typeof(TSerializer)))
-                services.TryAdd(new ServiceDescriptor(typeof(IJsonSerializer), provider => (IJsonSerializer)provider.GetRequiredService(typeof(TSerializer)), lifetime));
+                services.Add(new ServiceDescriptor(typeof(IJsonSerializer), provider => (IJsonSerializer)provider.GetRequiredService(typeof(TSerializer)), lifetime));
             if (typeof(IXmlSerializer).IsAssignableFrom(typeof(TSerializer)))
-                services.TryAdd(new ServiceDescriptor(typeof(IXmlSerializer), provider => (IXmlSerializer)provider.GetRequiredService(typeof(TSerializer)), lifetime));
+                services.Add(new ServiceDescriptor(typeof(IXmlSerializer), provider => (IXmlSerializer)provider.GetRequiredService(typeof(TSerializer)), lifetime));
             if (typeof(IYamlSerializer).IsAssignableFrom(typeof(IYamlSerializer)))
-                services.TryAdd(new ServiceDescriptor(typeof(IYamlSerializer), provider => (IXmlSerializer)provider.GetRequiredService(typeof(TSerializer)), lifetime));
+                services.Add(new ServiceDescriptor(typeof(IYamlSerializer), provider => (IYamlSerializer)provider.GetRequiredService(typeof(TSerializer)), lifetime));
             return services;
         }
 
