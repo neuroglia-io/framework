@@ -19,8 +19,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Neuroglia
+namespace Neuroglia.Data.Models
 {
+
     /// <summary>
     /// Represents an address
     /// </summary>

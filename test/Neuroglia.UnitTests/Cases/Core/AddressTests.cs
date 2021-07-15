@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Neuroglia.Data.Models;
 using Xunit;
 
 namespace Neuroglia.UnitTests.Cases.Core

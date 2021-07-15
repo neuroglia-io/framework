@@ -17,8 +17,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Neuroglia
+namespace Neuroglia.Data.Models
 {
+
     /// <summary>
     /// Represents a currency
     /// </summary>
