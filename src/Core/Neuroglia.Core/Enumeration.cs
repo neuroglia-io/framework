@@ -21,11 +21,12 @@ using System.Reflection;
 
 namespace Neuroglia
 {
+
     /// <summary>
     /// Represents the base class for all enumeration classes
     /// </summary>
     public abstract class Enumeration
-        : IComparable
+        : IEnumeration
     {
 
         /// <summary>
