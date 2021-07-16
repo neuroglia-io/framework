@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="error_account_invalidcredentials" xml:space="preserve">
+    <value>Nom d'utilisateur et/ou mot de passe invalide(s)</value>
+  </data>
+  <data name="error_identity_concurrencyfailure" xml:space="preserve">
+    <value>Échec de concurrence optimiste, l'objet a été modifié</value>
+  </data>
+  <data name="error_identity_defaulterror" xml:space="preserve">
+    <value>Une erreur inconnue s'est produite</value>
+  </data>
+  <data name="error_identity_duplicateemail" xml:space="preserve">
+    <value>L'adresse email '{email}' est déjà utilisée</value>
+  </data>
+  <data name="error_identity_duplicaterolename" xml:space="preserve">
+    <value>Le rôle '{role}' existe déjà</value>
+  </data>
+  <data name="error_identity_duplicateusername" xml:space="preserve">
+    <value>Le nom d'utilisateur '{userName}' est déjà utilisé</value>
+  </data>
+  <data name="error_identity_invalidemail" xml:space="preserve">
+    <value>L'adresse email '{email}' est invalide</value>
+  </data>
+  <data name="error_identity_invalidrolename" xml:space="preserve">
+    <value>Nom de rôle '{role}' invalide</value>
+  </data>
+  <data name="error_identity_invalidtoken" xml:space="preserve">
+    <value>Jeton invalide</value>
+  </data>
+  <data name="error_identity_invalidusername" xml:space="preserve">
+    <value>Le nom d'utilisateur '{username}' n'est pas valide, il ne peut contenir que des lettres ou des chiffres</value>
+  </data>
+  <data name="error_identity_loginalreadyassociated" xml:space="preserve">
+    <value>Un utilisateur avec ces informations de connexion existe déjà</value>
+  </data>
+  <data name="error_identity_passwordmismatch" xml:space="preserve">
+    <value>Mot de passe incorrect</value>
+  </data>
+  <data name="error_identity_passwordrequiresdigit" xml:space="preserve">
+    <value>Les mots de passe doivent contenir au moins un chiffre ('0' - '9')</value>
+  </data>
+  <data name="error_identity_passwordrequireslower" xml:space="preserve">
+    <value>Les mots de passe doivent contenir au moins une minuscule ('a' - 'z')</value>
+  </data>
+  <data name="error_identity_passwordrequiresnonalphanumeric" xml:space="preserve">
+    <value>Les mots de passe doivent contenir au moins un caractère spécial</value>
+  </data>
+  <data name="error_identity_passwordrequiresuniquechars" xml:space="preserve">
+    <value>Les mots de passe doivent utiliser au moins {amount} caractères différents</value>
+  </data>
+  <data name="error_identity_passwordrequiresupper" xml:space="preserve">
+    <value>Les mots de passe doivent avoir au moins une majuscule ('A' - 'Z')</value>
+  </data>
+  <data name="error_identity_passwordtooshort" xml:space="preserve">
+    <value>Les mots de passe doivent contenir au moins {length} caractères</value>
+  </data>
+  <data name="error_identity_recoverycoderedemptionfailed" xml:space="preserve">
+    <value>Échec de la confirmation du code de récupération</value>
+  </data>
+  <data name="error_identity_useralreadyhaspassword" xml:space="preserve">
+    <value>L'utilisateur a déjà un mot de passe défini</value>
+  </data>
+  <data name="error_identity_useralreadyinrole" xml:space="preserve">
+    <value>L'utilisateur possède déjà le rôle '{role}'</value>
+  </data>
+  <data name="error_identity_userlockoutnotenabled" xml:space="preserve">
+    <value>Le verrouillage n'est pas activé pour cet utilisateur</value>
+  </data>
+  <data name="error_identity_usernotinrole" xml:space="preserve">
+    <value>L'utilisateur possède pas le rôle '{role}'</value>
+  </data>
+  <data name="exception_domain_argumentcannotbeadateinthefuture" xml:space="preserve">
+    <value>L'argument '{argument}' ne peut pas être une date future</value>
+  </data>
+  <data name="exception_domain_argumentisinvalidaddress" xml:space="preserve">
+    <value>L'argument  '{argument}' spécifié '{value}' n'est pas une adresse valide</value>
+  </data>
+  <data name="exception_domain_argumentisinvalidcountrycode" xml:space="preserve">
+    <value>L'argument '{argument}' spécifié '{value}' n'est pas un code de pays à deux lettres ISO 3166 valide</value>
+  </data>
+  <data name="exception_domain_argumentisinvalidemail" xml:space="preserve">
+    <value>L'argument '{argument}' spécifié {valeur} n'est pas une adresse e-mail valide</value>
+  </data>
+  <data name="exception_domain_argumentisinvalidiso4217code" xml:space="preserve">
+    <value>L'argument '{argument}' spécifié '{valeur}' n'est pas un code de devise ISO 4217 valide</value>
+  </data>
+  <data name="exception_domain_argumentisinvalidiso6391code" xml:space="preserve">
+    <value>L'argument  '{argument}' spécifié '{value}' n'est pas un code de langue ISO 639-1 valide</value>
+  </data>
+  <data name="exception_domain_argumentisinvalidphonenumber" xml:space="preserve">
+    <value>L'argument  '{argument}' spécifié '{value}' n'est pas un numéro de téléphone valide</value>
+  </data>
+  <data name="exception_domain_argumentisinvalidphonenumberprefix" xml:space="preserve">
+    <value>L'argument '{argument}' spécifié '{valeur}' n'est pas un préfixe de numéro de téléphone international valide</value>
+  </data>
+  <data name="exception_domain_argumentisinvalidtimezoneid" xml:space="preserve">
+    <value>L'argument '{argument}' spécifié '{valeur}' n'est pas un identifiant de fuseau horaire valide.</value>
+  </data>
+  <data name="exception_domain_argumentisinvaliduri" xml:space="preserve">
+    <value>L'argument '{argument}' spécifié '{valeur}' n'est pas un uri valide</value>
+  </data>
+  <data name="exception_domain_argumentisunsupportedvalue" xml:space="preserve">
+    <value>L'argument {argument} spécifié '{value}' n'est pas supporté. Valeurs supportées: {values}</value>
+  </data>
+  <data name="exception_domain_argumentmustbecomprisedbetweenincluding" xml:space="preserve">
+    <value>L'argument '{argument}' doit être supérieur ou égal à {min} et inférieur ou égal à {max}</value>
+  </data>
+  <data name="exception_domain_argumentmustbeearlierthan" xml:space="preserve">
+    <value>L'argument {argument} doit être une heure égale à ou moins avancée que '{time}'</value>
+  </data>
+  <data name="exception_domain_argumentmustbehigherorequalto" xml:space="preserve">
+    <value>L'argument '{argument}' doit être supérieur ou égal à {quantité}</value>
+  </data>
+  <data name="exception_domain_argumentmustbehigherorlowerthan" xml:space="preserve">
+    <value>L'argument '{argument}' doit être supérieur ou inférieur à {quantité}</value>
+  </data>
+  <data name="exception_domain_argumentmustbehigherthan" xml:space="preserve">
+    <value>L'argument '{argument}' doit être supérieur à {min}</value>
+  </data>
+  <data name="exception_domain_argumentmustbelaterthan" xml:space="preserve">
+    <value>L'argument {argument} doit être une heure égale à ou plus avancée que '{time}'</value>
+  </data>
+  <data name="exception_domain_argumentmustbelowerorequalto" xml:space="preserve">
+    <value>L'argument '{argument}' doit être inférieur ou égal à {max}</value>
+  </data>
+  <data name="exception_domain_argumentmustbelowerorhigherthan" xml:space="preserve">
+    <value>L'argument '{argument}' doit être supérieur ou égal à {min}</value>
+  </data>
+  <data name="exception_domain_argumentmustbenumeric" xml:space="preserve">
+    <value>L'argument '{argument}' ne peut contenir que des chiffres</value>
+  </data>
+  <data name="exception_domain_argumentmusthavemaximumlengthof" xml:space="preserve">
+    <value>L'argument '{argument}' doit avoir une taille maximum de {length}</value>
+  </data>
+  <data name="exception_domain_argumentmusthaveminimumlengthof" xml:space="preserve">
+    <value>L'argument '{argument}' doit avoir une taille minimum de {length}</value>
+  </data>
+  <data name="exception_domain_argumentnull" xml:space="preserve">
+    <value>L'argument '{argument}' ne peut être nul</value>
+  </data>
+  <data name="exception_domain_argumentnullorwhitespace" xml:space="preserve">
+    <value>L'argument '{argument}' ne peut être nul ou vide</value>
+  </data>
+  <data name="exception_domain_argumentoutofrange" xml:space="preserve">
+    <value>L'argument '{argument}' spécifié '{valeur}' est hors limites</value>
+  </data>
+  <data name="exception_domain_deletionnotsupported" xml:space="preserve">
+    <value>La suppression d'entités de type '{type}' n'est pas prise en charge</value>
+  </data>
+  <data name="exception_domain_entityalreadyexists" xml:space="preserve">
+    <value>Une entité de type {entityType} avec la clé {keyProperty} spécifiée '{key}' existe déjà</value>
+  </data>
+  <data name="exception_domain_entityalreadyexists_many" xml:space="preserve">
+    <value>Une entité de type {entityType} avec les valeurs spécifiées pour {keyProperties} existe déjà</value>
+  </data>
+  <data name="exception_domain_filteringnotallowed" xml:space="preserve">
+    <value>Le filtrage n'est pas autorisé pour le type spécifié '{type}'</value>
+  </data>
+  <data name="exception_domain_invalidcast" xml:space="preserve">
+    <value>Échec de la conversion du type '{from}' en type '{to}'</value>
+  </data>
+  <data name="exception_domain_missingproperty" xml:space="preserve">
+    <value>Impossible de trouver la propriété '{propriété}' dans le type spécifié '{type}'</value>
+  </data>
+  <data name="exception_domain_notsupported" xml:space="preserve">
+    <value>La valeur de type {type} fournie '{valeur}' n'est pas prise en charge</value>
+  </data>
+  <data name="exception_domain_nullreference" xml:space="preserve">
+    <value>Impossible de trouver un '{type}' avec la clé '{keyProperty}' spécifiée '{key}'</value>
+  </data>
+  <data name="exception_domain_nullreference_many" xml:space="preserve">
+    <value>Impossible de trouver un '{type}' avec les clés spécifiées: {keys}</value>
+  </data>
+  <data name="exception_domain_unexpectedstate" xml:space="preserve">
+    <value>Le type {entityType} avec la clé '{keyProperty}' spécifiée '{key}' est dans un état inattendu '{state}'</value>
+  </data>
+  <data name="exception_domain_unexpectedvalue" xml:space="preserve">
+    <value>L'entité de type '{type}' avec {keyProperty} '{id}' a une propriété '{propriété}' avec une valeur inattendue '{valeur}'</value>
+  </data>
+</root>
