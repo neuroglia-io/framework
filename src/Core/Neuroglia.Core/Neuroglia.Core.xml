@@ -610,6 +610,11 @@
             Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Error"/>s that have occured during the operation's execution
             </summary>
         </member>
+        <member name="P:Neuroglia.IOperationResult.Succeeded">
+            <summary>
+            Gets a boolean indicating whether or not the operation has been successfully executed
+            </summary>
+        </member>
         <member name="P:Neuroglia.IOperationResult.Returned">
             <summary>
             Gets a boolean indicating whether or not the operation has returned data
@@ -719,6 +724,9 @@
             <inheritdoc/>
         </member>
         <member name="P:Neuroglia.OperationResult.Returned">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.OperationResult.Succeeded">
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.OperationResult.AddError(System.String,System.String)">

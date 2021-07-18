@@ -36,6 +36,11 @@ namespace Neuroglia
         IReadOnlyCollection<Error> Errors { get; }
 
         /// <summary>
+        /// Gets a boolean indicating whether or not the operation has been successfully executed
+        /// </summary>
+        bool Succeeded { get; }
+
+        /// <summary>
         /// Gets a boolean indicating whether or not the operation has returned data
         /// </summary>
         bool Returned { get; }

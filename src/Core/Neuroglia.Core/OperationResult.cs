@@ -70,6 +70,9 @@ namespace Neuroglia
 
         object IOperationResult.Data => default;
 
+        /// <inheritdoc/>
+        public virtual bool Succeeded => !this.Errors.Any();
+
         /// <summary>
         /// Adds an error to the <see cref="OperationResult"/>
         /// </summary>
