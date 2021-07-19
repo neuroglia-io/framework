@@ -75,7 +75,7 @@
         </member>
         <member name="P:Neuroglia.EntityDto`1.CreatedAt">
             <summary>
-            Gets/sets the UTC date and time the entity has been created at
+            Gets/sets the date and time the entity has been created at
             </summary>
         </member>
         <member name="T:Neuroglia.Enumeration">
@@ -248,6 +248,20 @@
             </summary>
             <param name="extended">The <see cref="T:System.Reflection.MemberInfo"/> to get the overriden <see cref="T:System.Reflection.MemberInfo"/> for</param>
             <returns>The <see cref="T:System.Reflection.MemberInfo"/> overriden by the <see cref="T:System.Reflection.MemberInfo"/>, if any</returns>
+        </member>
+        <member name="T:Neuroglia.MethodInfoExtensions">
+            <summary>
+            Defines extensions for <see cref="T:System.Reflection.MethodInfo"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.MethodInfoExtensions.InvokeAsync(System.Reflection.MethodInfo,System.Object,System.Object[])">
+            <summary>
+            Invokes the <see cref="T:System.Reflection.MethodInfo"/> asynchronously
+            </summary>
+            <param name="method">The <see cref="T:System.Reflection.MethodInfo"/> to invoke</param>
+            <param name="obj">The object on which to invoke the <see cref="T:System.Reflection.MethodInfo"/></param>
+            <param name="parameters">An array containing the <see cref="T:System.Reflection.MethodInfo"/>'s parameters</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
         </member>
         <member name="T:Neuroglia.ParameterInfoExtensions">
             <summary>

@@ -21,6 +21,7 @@ using System.Collections.ObjectModel;
 
 namespace Microsoft.AspNetCore
 {
+
     /// <summary>
     /// Represents the default implementation of the <see cref="IHeadersAccessor"/>
     /// </summary>

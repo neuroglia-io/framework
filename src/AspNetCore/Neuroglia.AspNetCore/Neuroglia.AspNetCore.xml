@@ -56,6 +56,18 @@
             <param name="app">The <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/> to configure</param>
             <returns>The configured <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/></returns>
         </member>
+        <member name="T:Microsoft.AspNetCore.IMvcBuilderExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IMvcBuilder"/>s
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.IMvcBuilderExtensions.AddAbstractModelBinder(Microsoft.Extensions.DependencyInjection.IMvcBuilder)">
+            <summary>
+            Adds the <see cref="T:Microsoft.AspNetCore.AbstractModelBinderProvider"/>
+            </summary>
+            <param name="mvc">The <see cref="T:Microsoft.Extensions.DependencyInjection.IMvcBuilder"/> to configure</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IMvcBuilder"/></returns>
+        </member>
         <member name="T:Microsoft.AspNetCore.IServiceCollectionExtensions">
             <summary>
             Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
@@ -82,6 +94,68 @@
             </summary>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
             <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.ModelDescriptor">
+            <summary>
+            Describes a model
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.ModelDescriptor.#ctor(System.Type,Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinder)">
+            <summary>
+            Initializes a new <see cref="T:Microsoft.AspNetCore.ModelDescriptor"/>
+            </summary>
+            <param name="type">The type of the described model</param>
+            <param name="binder">The service used to bind the described model</param>
+        </member>
+        <member name="P:Microsoft.AspNetCore.ModelDescriptor.Type">
+            <summary>
+            Gets the type of the described model
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.ModelDescriptor.Binder">
+            <summary>
+            Gets the service used to bind the described model
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNetCore.AbstractModelBinder">
+            <summary>
+            Represents an <see cref="T:Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinder"/> implementation used to bind abstract classes
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.AbstractModelBinder.#ctor(Microsoft.AspNetCore.Mvc.ModelBinding.IModelMetadataProvider,System.Collections.Generic.IDictionary{System.String,Microsoft.AspNetCore.ModelDescriptor},System.String)">
+            <summary>
+            Initializes a new <see cref="T:Microsoft.AspNetCore.AbstractModelBinder"/>
+            </summary>
+            <param name="metadataProvider">The service used to provide <see cref="T:Microsoft.AspNetCore.Mvc.ModelBinding.ModelMetadata"/></param>
+            <param name="descriptors">An <see cref="T:System.Collections.Generic.IDictionary`2"/> containing all resolved <see cref="T:Microsoft.AspNetCore.ModelDescriptor"/>s</param>
+            <param name="discriminatorPropertyName">The name of the discriminator property to use</param>
+        </member>
+        <member name="P:Microsoft.AspNetCore.AbstractModelBinder.MetadataProvider">
+            <summary>
+            Gets the service used to provide <see cref="T:Microsoft.AspNetCore.Mvc.ModelBinding.ModelMetadata"/>
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.AbstractModelBinder.Descriptors">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IDictionary`2"/> containing all resolved <see cref="T:Microsoft.AspNetCore.ModelDescriptor"/>s
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.AbstractModelBinder.DiscriminatorPropertyName">
+            <summary>
+            Gets the name of the discriminator property to use
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.AbstractModelBinder.BindModelAsync(Microsoft.AspNetCore.Mvc.ModelBinding.ModelBindingContext)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Microsoft.AspNetCore.AbstractModelBinderProvider">
+            <summary>
+            Represents an <see cref="T:Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinderProvider"/> implementation used to provide <see cref="T:Microsoft.AspNetCore.AbstractModelBinder"/>s instances
+            </summary>
+            <typeparam name="T">The type of the abstract class to bind</typeparam>
+        </member>
+        <member name="M:Microsoft.AspNetCore.AbstractModelBinderProvider.GetBinder(Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderProviderContext)">
+            <inheritdoc/>
         </member>
         <member name="T:Microsoft.AspNetCore.HeadersAccessor">
             <summary>
@@ -155,6 +229,18 @@
             <summary>
             Gets an <see cref="T:Microsoft.AspNetCore.Http.IHeaderDictionary"/> containing all current headers
             </summary>
+        </member>
+        <member name="T:Microsoft.AspNetCore.MvcHelper">
+            <summary>
+            Defines helpers for MVC
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.MvcHelper.NameOf``1">
+            <summary>
+            Gets the name of the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">The type of <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to get the name for</typeparam>
+            <returns>The name of the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/></returns>
         </member>
         <member name="T:Neuroglia.AspNetCore.Configuration.HeaderPropagationOptions">
             <summary>
