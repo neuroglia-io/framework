@@ -42,9 +42,9 @@ namespace Neuroglia
         }
 
         /// <summary>
-        /// Gets/sets the UTC date and time the entity has been created at
+        /// Gets/sets the date and time the entity has been created at
         /// </summary>
-        public virtual DateTime CreatedAt { get; set; }
+        public virtual DateTimeOffset CreatedAt { get; set; }
 
     }
 
