@@ -9,11 +9,10 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework data kubernetes k8s</PackageTags>
-    <NeutralLanguage>English</NeutralLanguage>
-    <Version>2.0.0.11</Version>
-    <AssemblyVersion>2.0.0.11</AssemblyVersion>
-    <FileVersion>2.0.0.11</FileVersion>
-    <NeutralLanguage>English</NeutralLanguage>
+    <NeutralLanguage>en</NeutralLanguage>
+    <Version>2.0.0.12</Version>
+    <AssemblyVersion>2.0.0.12</AssemblyVersion>
+    <FileVersion>2.0.0.12</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
