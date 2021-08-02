@@ -68,7 +68,7 @@ namespace Neuroglia
         /// <inheritdoc/>
         public virtual bool Returned => false;
 
-        object IOperationResult.Data => default;
+        object IOperationResult.GetData() => default;
 
         /// <inheritdoc/>
         public virtual bool Succeeded => !this.Errors.Any();
@@ -143,6 +143,11 @@ namespace Neuroglia
 
         /// <inheritdoc/>
         public virtual T Data { get; }
+
+        object IOperationResult.GetData()
+        {
+            return this.Data;
+        }
 
         /// <summary>
         /// Adds an error to the <see cref="OperationResult{T}"/>

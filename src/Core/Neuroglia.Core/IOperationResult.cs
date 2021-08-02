@@ -48,7 +48,7 @@ namespace Neuroglia
         /// <summary>
         /// Gets the data returned by the operation
         /// </summary>
-        object Data { get; }
+        object GetData();
 
         /// <summary>
         /// Adds an error to the <see cref="IOperationResult"/>
@@ -71,7 +71,7 @@ namespace Neuroglia
         /// <summary>
         /// Gets the data returned by the operation
         /// </summary>
-        new T Data { get; }
+        T Data { get; }
 
         /// <summary>
         /// Adds an error to the <see cref="IOperationResult"/>
