@@ -53,7 +53,7 @@ namespace Neuroglia.Mediation
                 return controller.StatusCode((int)HttpStatusCode.InternalServerError);
             }
             if (result.Returned)
-                return new ObjectResult(result.Data);
+                return new ObjectResult(result.Data) { StatusCode = successStatusCode };
             else
                 return controller.StatusCode(successStatusCode);
         }
