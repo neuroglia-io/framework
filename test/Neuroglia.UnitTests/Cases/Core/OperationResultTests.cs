@@ -15,7 +15,7 @@ namespace Neuroglia.UnitTests.Cases.Core
             var result = (IOperationResult)new OperationResult<string>(OperationResultCode.Ok, originalData);
 
             //act
-            var returnedData = result.GetData();
+            var returnedData = result.Data;
 
             //assert
             returnedData.Should().NotBeNull();

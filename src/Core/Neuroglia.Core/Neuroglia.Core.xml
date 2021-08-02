@@ -634,7 +634,7 @@
             Gets a boolean indicating whether or not the operation has returned data
             </summary>
         </member>
-        <member name="M:Neuroglia.IOperationResult.GetData">
+        <member name="P:Neuroglia.IOperationResult.Data">
             <summary>
             Gets the data returned by the operation
             </summary>
