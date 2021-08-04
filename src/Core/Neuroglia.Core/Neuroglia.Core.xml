@@ -268,7 +268,7 @@
             Defines extension methods for <see cref="T:System.Reflection.MemberInfo"/>s
             </summary>
         </member>
-        <member name="M:Neuroglia.ParameterInfoExtensions.TryGetCustomAttribute``1(System.Reflection.MemberInfo,``0@)">
+        <member name="M:Neuroglia.ParameterInfoExtensions.TryGetCustomAttribute``1(System.Reflection.ParameterInfo,``0@)">
             <summary>
             Attempts to get a custom attribute of the specified <see cref="T:System.Reflection.ParameterInfo"/>
             </summary>

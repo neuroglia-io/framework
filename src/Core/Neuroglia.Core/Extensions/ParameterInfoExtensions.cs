@@ -32,7 +32,7 @@ namespace Neuroglia
         /// <param name="extended">The extended <see cref="ParameterInfo"/></param>
         /// <param name="attribute">The resulting custom attribute</param>
         /// <returns>A boolean indicating whether or not the custom attribute of the specified <see cref="ParameterInfo"/> could be found</returns>
-        public static bool TryGetCustomAttribute<TAttribute>(this MemberInfo extended, out TAttribute attribute)
+        public static bool TryGetCustomAttribute<TAttribute>(this ParameterInfo extended, out TAttribute attribute)
             where TAttribute : Attribute
         {
             attribute = extended.GetCustomAttribute<TAttribute>();
