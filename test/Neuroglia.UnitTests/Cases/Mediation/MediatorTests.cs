@@ -129,7 +129,7 @@ namespace Neuroglia.UnitTests.Cases.Mediation
 
             //arrange
             result.Should().NotBeNull();
-            result.Code.Should().BeEquivalentTo(OperationResultCode.Invalid);
+            result.Code.Should().BeEquivalentTo(OperationResultCode.NotFound);
         }
 
         [Fact]

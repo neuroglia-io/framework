@@ -40,8 +40,6 @@ namespace Neuroglia
         /// <param name="message">The <see cref="Error"/>'s message</param>
         public Error(string code, string message)
         {
-            if (string.IsNullOrWhiteSpace(code))
-                throw new ArgumentNullException(nameof(code));
             this.Code = code;
             this.Message = message;
         }

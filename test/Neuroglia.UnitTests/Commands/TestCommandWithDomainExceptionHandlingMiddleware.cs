@@ -1,6 +1,7 @@
 ﻿using Neuroglia.Data;
 using Neuroglia.Mediation;
 using Neuroglia.UnitTests.Data;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace Neuroglia.UnitTests.Commands
 
         public Task<IOperationResult> HandleAsync(TestCommandWithDomainExceptionHandlingMiddleware request, CancellationToken cancellationToken = default)
         {
-            throw DomainException.ArgumentNull("fake");
+            throw DomainException.NullReference(typeof(object), Guid.NewGuid().ToString());
         }
 
     }
