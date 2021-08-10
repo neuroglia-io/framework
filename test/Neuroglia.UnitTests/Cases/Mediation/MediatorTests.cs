@@ -116,6 +116,23 @@ namespace Neuroglia.UnitTests.Cases.Mediation
         }
 
         [Fact]
+        public async Task Command_WithDomainExceptionHandlingMiddleware_ShouldWork()
+        {
+            //arrange
+            var firstName = "Fake First Name";
+            var lastName = "Fake Last Name";
+            var person = new TestPerson(firstName, lastName);
+            var command = new TestCommandWithDomainExceptionHandlingMiddleware(person);
+
+            //act
+            var result = await this.Mediator.ExecuteAsync(command);
+
+            //arrange
+            result.Should().NotBeNull();
+            result.Code.Should().BeEquivalentTo(OperationResultCode.Invalid);
+        }
+
+        [Fact]
         public async Task Query_NoHandler_ShouldFail()
         {
             //arrange

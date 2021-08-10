@@ -421,6 +421,25 @@
             <typeparam name="TResult">The type of expected <see cref="T:Neuroglia.IOperationResult"/></typeparam>
             <returns>The resulting <see cref="T:Neuroglia.IOperationResult"/></returns>
         </member>
+        <member name="T:Neuroglia.Mediation.DomainExceptionHandlingMiddleware`2">
+            <summary>
+            Represents an <see cref="T:Neuroglia.Mediation.IMiddleware`2"/> used to handle <see cref="T:Neuroglia.Data.DomainException"/>s during the execution of an <see cref="T:Neuroglia.IRequest"/>
+            </summary>
+            <typeparam name="TRequest">The type of <see cref="T:Neuroglia.IRequest"/> to handle</typeparam>
+            <typeparam name="TResult">The type of expected <see cref="T:Neuroglia.IOperationResult"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Mediation.DomainExceptionHandlingMiddleware`2.HandleAsync(`0,Neuroglia.Mediation.RequestHandlerDelegate{`1},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Mediation.DomainExceptionHandlingMiddleware`2.TryCreateErrorResponse(System.String,`1@,Neuroglia.Error[])">
+            <summary>
+            Creates a new error <see cref="T:Neuroglia.IOperationResult"/>
+            </summary>
+            <param name="resultCode">The <see cref="T:Neuroglia.OperationResultCode"/> of the <see cref="T:Neuroglia.IOperationResult"/> to create</param>
+            <param name="result">The newly created <see cref="T:Neuroglia.IOperationResult"/></param>
+            <param name="errors">An array containing the <see cref="T:Neuroglia.Error"/>s that have occured during the processing of the <see cref="T:Neuroglia.Mediation.ICommand"/></param>
+            <returns>A new error <see cref="T:Neuroglia.IOperationResult"/></returns>
+        </member>
         <member name="T:Neuroglia.Mediation.ICommandHandler">
             <summary>
             Defines the fundamentals of a service used to handle <see cref="T:Neuroglia.Mediation.ICommand"/>s of the specified type

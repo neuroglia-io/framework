@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Serialization.Jso
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{9851D970-720A-4AEF-850A-068B8C4911B7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9851D970-720A-4AEF-850A-068B8C4911B7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.EntityFrameworkCore", "Data\Neuroglia.Data.EntityFrameworkCore\Neuroglia.Data.EntityFrameworkCore.csproj", "{232F89CA-1162-4673-AB6E-D231B954260C}"
 EndProject
@@ -69,7 +69,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Caching.Redis", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.DistributedCache", "Data\Neuroglia.Data.DistributedCache\Neuroglia.Data.DistributedCache.csproj", "{69ADEB9B-63D8-4525-B9F7-FD0583C9044C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.AspNetCore.Mvc.Testing", "Testing\Neuroglia.AspNetCore.Mvc.Testing\Neuroglia.AspNetCore.Mvc.Testing.csproj", "{296D2855-6F34-4BD0-AD3B-8C806CD550BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.AspNetCore.Mvc.Testing", "Testing\Neuroglia.AspNetCore.Mvc.Testing\Neuroglia.AspNetCore.Mvc.Testing.csproj", "{296D2855-6F34-4BD0-AD3B-8C806CD550BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

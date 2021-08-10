@@ -263,6 +263,26 @@
             <param name="parameters">An array containing the <see cref="T:System.Reflection.MethodInfo"/>'s parameters</param>
             <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
         </member>
+        <member name="T:Neuroglia.ObjectExtensions">
+            <summary>
+            Defines extensions for <see cref="T:System.Object"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.ObjectExtensions.ToDictionary(System.Object)">
+            <summary>
+            Transforms the object into an <see cref="T:System.Collections.Generic.IDictionary`2"/>
+            </summary>
+            <param name="source">The object to transform</param>
+            <returns>A <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the specified object's property name/value pairs</returns>
+        </member>
+        <member name="M:Neuroglia.ObjectExtensions.ToDictionary``1(System.Object)">
+            <summary>
+            Transforms the object into an <see cref="T:System.Collections.Generic.IDictionary`2"/>
+            </summary>
+            <typeparam name="T">The type of values wrapped by the <see cref="T:System.Collections.Generic.IDictionary`2"/> to create</typeparam>
+            <param name="source">The object to transform</param>
+            <returns>A <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the specified object's property name/value pairs</returns>
+        </member>
         <member name="T:Neuroglia.ParameterInfoExtensions">
             <summary>
             Defines extension methods for <see cref="T:System.Reflection.MemberInfo"/>s
