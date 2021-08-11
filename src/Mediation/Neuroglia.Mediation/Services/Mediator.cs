@@ -58,15 +58,14 @@ namespace Neuroglia.Mediation
         }
 
         /// <inheritdoc/>
-        public virtual Task PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
+        public virtual async Task PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
         {
             if (notification == null)
                 throw new ArgumentNullException(nameof(notification));
             foreach (INotificationHandler<TNotification> handler in this.ServiceProvider.GetServices<INotificationHandler<TNotification>>())
             {
-                _ = Task.Run(async () => await handler.HandleAsync(notification, cancellationToken).ConfigureAwait(false), cancellationToken);
+                await handler.HandleAsync(notification, cancellationToken).ConfigureAwait(false);
             }
-            return Task.CompletedTask;
         }
 
     }

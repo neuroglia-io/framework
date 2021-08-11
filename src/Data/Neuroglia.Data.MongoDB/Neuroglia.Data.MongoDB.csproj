@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework data mongo mongodb</PackageTags>
-    <Version>2.0.0.21</Version>
-    <AssemblyVersion>2.0.0.21</AssemblyVersion>
-    <FileVersion>2.0.0.21</FileVersion>
+    <Version>2.0.0.22</Version>
+    <AssemblyVersion>2.0.0.22</AssemblyVersion>
+    <FileVersion>2.0.0.22</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
