@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Templating.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Templating.Services.ITemplateRenderer">
+            <summary>
+            Defines the fundamentals of a service used to render templates
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Templating.Services.ITemplateRenderer.RenderTemplateAsync``1(System.String,``0,System.Collections.Generic.IDictionary{System.String,System.Object},System.Threading.CancellationToken)">
+            <summary>
+            Renders the specified template
+            </summary>
+            <typeparam name="TModel">The type of the template model</typeparam>
+            <param name="template">The template to render</param>
+            <param name="model">The template's model</param>
+            <param name="data">An <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the template's data</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The rendered template</returns>
+        </member>
+        <member name="M:Neuroglia.Templating.Services.ITemplateRenderer.RenderTemplateAsync``1(System.String,``0,System.Threading.CancellationToken)">
+            <summary>
+            Renders the specified template
+            </summary>
+            <typeparam name="TModel">The type of the template model</typeparam>
+            <param name="template">The template to render</param>
+            <param name="model">The template's model</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The rendered template</returns>
+        </member>
+        <member name="M:Neuroglia.Templating.Services.ITemplateRenderer.RenderTemplateAsync(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Threading.CancellationToken)">
+            <summary>
+            Renders the specified template
+            </summary>
+            <param name="template">The template to render</param>
+            <param name="data">An <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the template's data</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The rendered template</returns>
+        </member>
+    </members>
+</doc>

@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Neuroglia.Serialization</RootNamespace>
+    <RootNamespace>Neuroglia.Templating</RootNamespace>
+    <OutputType>Library</OutputType>
     <Company>Neuroglia SPRL</Company>
     <Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
     <Authors>Neuroglia SPRL</Authors>
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>neuroglia framework serialization newtonsoft json</PackageTags>
+    <PackageTags>neuroglia framework templating razor</PackageTags>
     <Version>2.0.0.21</Version>
     <AssemblyVersion>2.0.0.21</AssemblyVersion>
     <FileVersion>2.0.0.21</FileVersion>
@@ -21,27 +22,27 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>Neuroglia.Serialization.NewtonsoftJson.xml</DocumentationFile>
+    <DocumentationFile>Neuroglia.Templating.RazorLight.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <None Include="..\..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Include="..\..\..\LICENSE" Link="LICENSE">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj" />
+    <PackageReference Include="RazorLight" Version="2.0.0-rc.3" />
   </ItemGroup>
-  
+
   <ItemGroup>
-    <None Include="..\..\..\assets\img\logo_white_on_blue_256.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <ProjectReference Include="..\..\Core\Neuroglia.Core\Neuroglia.Core.csproj" />
+    <ProjectReference Include="..\Neuroglia.Templating.Abstractions\Neuroglia.Templating.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

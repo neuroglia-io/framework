@@ -8,9 +8,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework asp mvc testing</PackageTags>
-    <Version>2.0.0.20</Version>
-    <AssemblyVersion>2.0.0.20</AssemblyVersion>
-    <FileVersion>2.0.0.20</FileVersion>
+    <Version>2.0.0.21</Version>
+    <AssemblyVersion>2.0.0.21</AssemblyVersion>
+    <FileVersion>2.0.0.21</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

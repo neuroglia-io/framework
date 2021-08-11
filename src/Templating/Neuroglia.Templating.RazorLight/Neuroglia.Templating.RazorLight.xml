@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Templating.RazorLight</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Templating.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Templating.IServiceCollectionExtensions.AddRazorLightTemplateRenderer(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{RazorLight.RazorLightEngineBuilder},Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a <see cref="T:Neuroglia.Templating.Services.RazorLightTemplateRenderer"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="setup">An <see cref="T:System.Action`1"/> used to setup the underlying <see cref="T:RazorLight.RazorLightEngine"/></param>
+            <param name="lifetime">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> of all configured services</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Templating.Services.RazorLightTemplateRenderer">
+            <summary>
+            Represents the <see href="https://github.com/toddams/RazorLight">RazorLight</see>-based implementation of the <see cref="T:Neuroglia.Templating.Services.ITemplateRenderer"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Templating.Services.RazorLightTemplateRenderer.#ctor(RazorLight.IRazorLightEngine)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Templating.Services.RazorLightTemplateRenderer"/>
+            </summary>
+            <param name="razorLigthEngine">The current <see cref="T:RazorLight.IRazorLightEngine"/></param>
+        </member>
+        <member name="P:Neuroglia.Templating.Services.RazorLightTemplateRenderer.RazorLightEngine">
+            <summary>
+            Gets the current <see cref="T:RazorLight.IRazorLightEngine"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Templating.Services.RazorLightTemplateRenderer.MD5">
+            <summary>
+            Gets the <see cref="T:System.Security.Cryptography.MD5"/> used to hash templates
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Templating.Services.RazorLightTemplateRenderer.RenderTemplateAsync``1(System.String,``0,System.Collections.Generic.IDictionary{System.String,System.Object},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Templating.Services.RazorLightTemplateRenderer.RenderTemplateAsync``1(System.String,``0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Templating.Services.RazorLightTemplateRenderer.RenderTemplateAsync(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

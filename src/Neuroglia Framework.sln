@@ -71,6 +71,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.DistributedC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.AspNetCore.Mvc.Testing", "Testing\Neuroglia.AspNetCore.Mvc.Testing\Neuroglia.AspNetCore.Mvc.Testing.csproj", "{296D2855-6F34-4BD0-AD3B-8C806CD550BE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templating", "Templating", "{92E5DB9B-7802-472D-82BF-B81AEB365DE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Templating.Abstractions", "Templating\Neuroglia.Templating.Abstractions\Neuroglia.Templating.Abstractions.csproj", "{911672D6-92EE-4CFE-88FE-DB392B363017}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Templating.RazorLight", "Templating\Neuroglia.Templating.RazorLight\Neuroglia.Templating.RazorLight.csproj", "{4FF6ECA4-24CB-41F4-B4A4-A0DB24313CF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +179,14 @@ Global
 		{296D2855-6F34-4BD0-AD3B-8C806CD550BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{296D2855-6F34-4BD0-AD3B-8C806CD550BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{296D2855-6F34-4BD0-AD3B-8C806CD550BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{911672D6-92EE-4CFE-88FE-DB392B363017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{911672D6-92EE-4CFE-88FE-DB392B363017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{911672D6-92EE-4CFE-88FE-DB392B363017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{911672D6-92EE-4CFE-88FE-DB392B363017}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FF6ECA4-24CB-41F4-B4A4-A0DB24313CF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FF6ECA4-24CB-41F4-B4A4-A0DB24313CF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FF6ECA4-24CB-41F4-B4A4-A0DB24313CF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FF6ECA4-24CB-41F4-B4A4-A0DB24313CF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -210,6 +224,9 @@ Global
 		{63E04636-37BB-415A-96BC-73AF9E848EFD} = {38EDC1B8-C06D-4FE8-A109-9D5F6F5EAF0D}
 		{69ADEB9B-63D8-4525-B9F7-FD0583C9044C} = {673DB177-2599-4F86-894C-0C90E6925C36}
 		{296D2855-6F34-4BD0-AD3B-8C806CD550BE} = {2CE33209-D170-4082-BEE3-5FBEC2E197EA}
+		{92E5DB9B-7802-472D-82BF-B81AEB365DE3} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{911672D6-92EE-4CFE-88FE-DB392B363017} = {92E5DB9B-7802-472D-82BF-B81AEB365DE3}
+		{4FF6ECA4-24CB-41F4-B4A4-A0DB24313CF4} = {92E5DB9B-7802-472D-82BF-B81AEB365DE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}

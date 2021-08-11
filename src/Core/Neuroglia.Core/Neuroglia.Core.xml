@@ -214,6 +214,18 @@
             <param name="duration">The <see cref="T:Iso8601DurationHelper.Duration"/> to convert</param>
             <returns>The converted <see cref="T:System.TimeSpan"/></returns>
         </member>
+        <member name="T:Neuroglia.IDictionaryExtensions">
+            <summary>
+            Exposes extensions for <see cref="T:System.Collections.Generic.IDictionary`2"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.IDictionaryExtensions.ToExpandoObject``1(System.Collections.Generic.IDictionary{System.String,``0})">
+            <summary>
+            Converts the <see cref="T:System.Collections.Generic.IDictionary`2"/> into a new <see cref="T:System.Dynamic.ExpandoObject"/>
+            </summary>
+            <param name="dictionary">The extended <see cref="T:System.Collections.Generic.IDictionary`2"/></param>
+            <returns>A new <see cref="T:System.Dynamic.ExpandoObject"/></returns>
+        </member>
         <member name="T:Neuroglia.MemberInfoExtensions">
             <summary>
             Defines extension methods for <see cref="T:System.Reflection.MemberInfo"/>s

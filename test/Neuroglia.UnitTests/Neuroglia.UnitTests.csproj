@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-
+    <PreserveCompilationContext>true</PreserveCompilationContext>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -40,6 +40,7 @@
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.Protobuf\Neuroglia.Serialization.Protobuf.csproj" />
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.YamlDotNet\Neuroglia.Serialization.YamlDotNet.csproj" />
+    <ProjectReference Include="..\..\src\Templating\Neuroglia.Templating.RazorLight\Neuroglia.Templating.RazorLight.csproj" />
     <ProjectReference Include="..\..\src\Testing\Neuroglia.Xunit\Neuroglia.Xunit.csproj" />
   </ItemGroup>
 
