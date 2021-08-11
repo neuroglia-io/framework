@@ -1,0 +1,770 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.AspNetCore.Mvc.Testing</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest">
+            <summary>
+            Represents the base class for all API tests
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.#ctor(Microsoft.AspNetCore.Mvc.Testing.IApiFactory)">
+            <summary>
+            Initializes a new <see cref="T:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest"/>
+            </summary>
+            <param name="apiFactory">The <see cref="T:Microsoft.AspNetCore.Mvc.Testing.IApiFactory"/> used to create test <see cref="T:System.Net.Http.HttpClient"/>s</param>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.ApiFactory">
+            <summary>
+            Gets the <see cref="T:Microsoft.AspNetCore.Mvc.Testing.IApiFactory"/> used to create test <see cref="T:System.Net.Http.HttpClient"/>s
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.LinkGenerator">
+            <summary>
+            Gets the service used to generate links
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.SerializerSettings">
+            <summary>
+            Gets the <see cref="T:Newtonsoft.Json.JsonSerializerSettings"/> to use
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.Services">
+            <summary>
+            Gets the current <see cref="T:System.IServiceProvider"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.GetAsync``1(System.String,System.Object)">
+            <summary>
+            Executes a GET request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.GetAsync``2(System.String,System.Object)">
+            <summary>
+            Executes a GET request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PostAsync``1(System.String,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PostAsync``2(System.String,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PostAsJsonAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PostAsJsonAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PostAsFormAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-encoded content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PostAsFormAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PostAsMultipartAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PostAsMultipartAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PatchAsync``1(System.String,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PatchAsync``2(System.String,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PatchAsJsonAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PatchAsJsonAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PatchAsFormAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PatchAsFormAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PatchAsMultipartAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PatchAsMultipartAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PutAsync``1(System.String,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PutAsync``2(System.String,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PutAsJsonAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PutAsJsonAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PutAsFormAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PutAsFormAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PutAsMultipartAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.PutAsMultipartAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.DeleteAsync``1(System.String,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.DeleteAsync``2(System.String,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.DeleteAsJsonAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.DeleteAsJsonAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.DeleteAsFormAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-encoded content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.DeleteAsFormAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.DeleteAsMultipartAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.DeleteAsMultipartAsync``2(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TController">°The type of the <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest.BuildUrl``1(System.String,System.Object)">
+            <summary>
+            Builds a request url based on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>, action and route values
+            </summary>
+            <typeparam name="TController">The type of <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to request</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>The resulting request url</returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1">
+            <summary>
+            Represents the base class for all API controller tests
+            </summary>
+            <typeparam name="TController">The type of <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/> to test</typeparam>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.#ctor(Microsoft.AspNetCore.Mvc.Testing.IApiFactory)">
+            <summary>
+            Initializes a new <see cref="T:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1"/>
+            </summary>
+            <param name="apiFactory">The service used to create test <see cref="T:System.Net.Http.HttpClient"/>s</param>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.GetAsync(System.String,System.Object)">
+            <summary>
+            Executes a GET request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.GetAsync``1(System.String,System.Object)">
+            <summary>
+            Executes a GET request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PostAsync(System.String,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PostAsync``1(System.String,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PostAsJsonAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PostAsJsonAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PostAsFormAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-encoded content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PostAsFormAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PostAsMultipartAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PostAsMultipartAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a POST request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PatchAsync(System.String,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PatchAsync``1(System.String,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PatchAsJsonAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PatchAsJsonAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PatchAsFormAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PatchAsFormAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PatchAsMultipartAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PatchAsMultipartAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PATCH request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PutAsync(System.String,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PutAsync``1(System.String,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PutAsJsonAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PutAsJsonAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PutAsFormAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PutAsFormAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PutAsMultipartAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.PutAsMultipartAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a PUT request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.DeleteAsync(System.String,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.DeleteAsync``1(System.String,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.DeleteAsJsonAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.DeleteAsJsonAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a JSON content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.DeleteAsFormAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-encoded content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.DeleteAsFormAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form URL-content content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.DeleteAsMultipartAsync(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest`1.DeleteAsMultipartAsync``1(System.String,System.Object,System.Object)">
+            <summary>
+            Executes a DELETE request on the specified <see cref="T:Microsoft.AspNetCore.Mvc.ControllerBase"/>
+            </summary>
+            <typeparam name="TResult">The type of expected result</typeparam>
+            <param name="action">The action to request</param>
+            <param name="payload">The payload to send as a form multipart content</param>
+            <param name="routeValues">An object representing the route values of the action to request</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.Testing.ApiFactory`1">
+            <summary>
+            Represents the default implementation of the <see cref="T:Microsoft.AspNetCore.Mvc.Testing.IApiFactory"/>
+            </summary>
+            <typeparam name="TStartup">The type of the startup class to use to configure the <see cref="T:Microsoft.AspNetCore.Mvc.Testing.WebApplicationFactory`1"/></typeparam>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.Testing.ApiFactory`1.Services">
+            <summary>
+            Gets the current <see cref="T:System.IServiceProvider"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiFactory`1.CreateWebHostBuilder">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiFactory`1.CreateServer(Microsoft.AspNetCore.Hosting.IWebHostBuilder)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.Testing.ApiRequestException">
+            <summary>
+            Represents an <see cref="T:System.Net.Http.HttpRequestException"/> thrown by an <see cref="T:Microsoft.AspNetCore.Mvc.Testing.ApiControllerTest"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.ApiRequestException.#ctor(System.Net.Http.HttpRequestException,System.String)">
+            <summary>
+            Initializes a new <see cref="T:Microsoft.AspNetCore.Mvc.Testing.ApiRequestException"/>
+            </summary>
+            <param name="inner">The inner <see cref="T:System.Net.Http.HttpRequestException"/></param>
+            <param name="responseContent">The response content, if any</param>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.Testing.ApiRequestException.ResponseContent">
+            <summary>
+            Gets the response content, if any
+            </summary>
+        </member>
+        <member name="T:Microsoft.AspNetCore.Mvc.Testing.IApiFactory">
+            <summary>
+            Defines the fundamentals of a service used to create test <see cref="T:System.Net.Http.HttpClient"/>s
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Mvc.Testing.IApiFactory.Services">
+            <summary>
+            Gets the current <see cref="T:System.IServiceProvider"/>
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Mvc.Testing.IApiFactory.CreateClient">
+            <summary>
+            Creates a new test <see cref="T:System.Net.Http.HttpClient"/>
+            </summary>
+            <returns>A new test <see cref="T:System.Net.Http.HttpClient"/></returns>
+        </member>
+    </members>
+</doc>

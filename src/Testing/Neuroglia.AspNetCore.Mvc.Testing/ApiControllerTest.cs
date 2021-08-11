@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -715,6 +716,141 @@ namespace Microsoft.AspNetCore.Mvc.Testing
         }
 
         /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <typeparam name="TController">°The type of the <see cref="ControllerBase"/> to request</typeparam>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a JSON content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public async Task DeleteAsJsonAsync<TController>(string action, object payload = default, object routeValues = null)
+             where TController : ControllerBase
+        {
+            using HttpClient httpClient = this.ApiFactory.CreateClient();
+            using HttpRequestMessage request = new(HttpMethod.Delete, this.BuildUrl<TController>(action, routeValues));
+            if (payload != null)
+                request.Content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, MediaTypeNames.Application.Json);
+            using HttpResponseMessage response = await httpClient.SendAsync(request);
+            string json = await response.Content?.ReadAsStringAsync();
+            await EnsureSuccessStatusCodeForAsync(response);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <typeparam name="TController">°The type of the <see cref="ControllerBase"/> to request</typeparam>
+        /// <typeparam name="TResult">The type of expected result</typeparam>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a JSON content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public async Task<TResult> DeleteAsJsonAsync<TController, TResult>(string action, object payload = default, object routeValues = null)
+             where TController : ControllerBase
+        {
+            using HttpClient httpClient = this.ApiFactory.CreateClient();
+            using HttpRequestMessage request = new(HttpMethod.Delete, this.BuildUrl<TController>(action, routeValues));
+            if (payload != null)
+                request.Content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, MediaTypeNames.Application.Json);
+            using HttpResponseMessage response = await httpClient.SendAsync(request);
+            string json = await response.Content?.ReadAsStringAsync();
+            await EnsureSuccessStatusCodeForAsync(response);
+            if (string.IsNullOrWhiteSpace(json))
+                return default;
+            else
+                return this.Deserialize<TResult>(json);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <typeparam name="TController">°The type of the <see cref="ControllerBase"/> to request</typeparam>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a form URL-encoded content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public async Task DeleteAsFormAsync<TController>(string action, object payload = default, object routeValues = null)
+            where TController : ControllerBase
+        {
+            using HttpClient httpClient = this.ApiFactory.CreateClient();
+            using HttpRequestMessage request = new(HttpMethod.Delete, this.BuildUrl<TController>(action, routeValues));
+            if (payload != null)
+                request.Content = GetFormContent(payload);
+            using HttpResponseMessage response = await httpClient.SendAsync(request);
+            string json = await response.Content?.ReadAsStringAsync();
+            await EnsureSuccessStatusCodeForAsync(response);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <typeparam name="TController">°The type of the <see cref="ControllerBase"/> to request</typeparam>
+        /// <typeparam name="TResult">The type of expected result</typeparam>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a form URL-content content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public async Task<TResult> DeleteAsFormAsync<TController, TResult>(string action, object payload = default, object routeValues = null)
+            where TController : ControllerBase
+        {
+            using HttpClient httpClient = this.ApiFactory.CreateClient();
+            using HttpRequestMessage request = new(HttpMethod.Delete, this.BuildUrl<TController>(action, routeValues));
+            if (payload != null)
+                request.Content = GetFormContent(payload);
+            using HttpResponseMessage response = await httpClient.SendAsync(request);
+            string json = await response.Content?.ReadAsStringAsync();
+            await EnsureSuccessStatusCodeForAsync(response);
+            if (string.IsNullOrWhiteSpace(json))
+                return default;
+            else
+                return this.Deserialize<TResult>(json);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <typeparam name="TController">°The type of the <see cref="ControllerBase"/> to request</typeparam>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a form multipart content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public async Task DeleteAsMultipartAsync<TController>(string action, object payload = default, object routeValues = null)
+           where TController : ControllerBase
+        {
+            using HttpClient httpClient = this.ApiFactory.CreateClient();
+            using HttpRequestMessage request = new(HttpMethod.Delete, this.BuildUrl<TController>(action, routeValues));
+            if (payload != null)
+                request.Content = GetMultipartContent(payload);
+            using HttpResponseMessage response = await httpClient.SendAsync(request);
+            string json = await response.Content?.ReadAsStringAsync();
+            await EnsureSuccessStatusCodeForAsync(response);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <typeparam name="TController">°The type of the <see cref="ControllerBase"/> to request</typeparam>
+        /// <typeparam name="TResult">The type of expected result</typeparam>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a form multipart content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public async Task<TResult> DeleteAsMultipartAsync<TController, TResult>(string action, object payload = default, object routeValues = null)
+            where TController : ControllerBase
+        {
+            using HttpClient httpClient = this.ApiFactory.CreateClient();
+            using HttpRequestMessage request = new(HttpMethod.Delete, this.BuildUrl<TController>(action, routeValues));
+            if (payload != null)
+                request.Content = GetMultipartContent(payload);
+            using HttpResponseMessage response = await httpClient.SendAsync(request);
+            string json = await response.Content?.ReadAsStringAsync();
+            await EnsureSuccessStatusCodeForAsync(response);
+            if (string.IsNullOrWhiteSpace(json))
+                return default;
+            else
+                return this.Deserialize<TResult>(json);
+        }
+
+        /// <summary>
         /// Builds a request url based on the specified <see cref="ControllerBase"/>, action and route values
         /// </summary>
         /// <typeparam name="TController">The type of <see cref="ControllerBase"/> to request</typeparam>
@@ -1160,6 +1296,81 @@ namespace Microsoft.AspNetCore.Mvc.Testing
         public new async Task<TResult> DeleteAsync<TResult>(string action, object routeValues = null)
         {
             return await base.DeleteAsync<TController, TResult>(action, routeValues);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a JSON content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public async Task DeleteAsJsonAsync(string action, object payload = default, object routeValues = null)
+        {
+            await base.DeleteAsJsonAsync<TController>(action, payload, routeValues);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <typeparam name="TResult">The type of expected result</typeparam>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a JSON content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public new async Task<TResult> DeleteAsJsonAsync<TResult>(string action, object payload = default, object routeValues = null)
+        {
+            return await base.DeleteAsJsonAsync<TController, TResult>(action, payload, routeValues);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a form URL-encoded content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public async Task DeleteAsFormAsync(string action, object payload = default, object routeValues = null)
+        {
+            await base.DeleteAsFormAsync<TController>(action, payload, routeValues);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <typeparam name="TResult">The type of expected result</typeparam>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a form URL-content content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public new async Task<TResult> DeleteAsFormAsync<TResult>(string action, object payload = default, object routeValues = null)
+        {
+            return await base.DeleteAsFormAsync<TController, TResult>(action, payload, routeValues);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a form multipart content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public async Task DeleteAsMultipartAsync(string action, object payload = default, object routeValues = null)
+        {
+            await base.DeleteAsMultipartAsync<TController>(action, payload, routeValues);
+        }
+
+        /// <summary>
+        /// Executes a DELETE request on the specified <see cref="ControllerBase"/>
+        /// </summary>
+        /// <typeparam name="TResult">The type of expected result</typeparam>
+        /// <param name="action">The action to request</param>
+        /// <param name="payload">The payload to send as a form multipart content</param>
+        /// <param name="routeValues">An object representing the route values of the action to request</param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        public new async Task<TResult> DeleteAsMultipartAsync<TResult>(string action, object payload = default, object routeValues = null)
+        {
+            return await base.DeleteAsMultipartAsync<TController, TResult>(action, payload, routeValues);
         }
 
     }
