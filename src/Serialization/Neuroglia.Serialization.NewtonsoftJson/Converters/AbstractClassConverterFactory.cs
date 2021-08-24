@@ -17,7 +17,7 @@
 using Neuroglia;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Newtonsoft.Json
 {
@@ -29,9 +29,9 @@ namespace Newtonsoft.Json
     {
 
         /// <summary>
-        /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing the mappings of types to their respective <see cref="JsonConverter"/>
+        /// Gets a <see cref="ConcurrentDictionary{TKey, TValue}"/> containing the mappings of types to their respective <see cref="JsonConverter"/>
         /// </summary>
-        private static readonly Dictionary<Type, JsonConverter> Converters = new();
+        private static readonly ConcurrentDictionary<Type, JsonConverter> Converters = new();
 
         /// <inheritdoc/>
         public override bool CanConvert(Type objectType)
@@ -64,7 +64,7 @@ namespace Newtonsoft.Json
             {
                 Type converterType = typeof(AbstractClassConverter<>).MakeGenericType(objectType);
                 converter = (JsonConverter)Activator.CreateInstance(converterType);
-                Converters.Add(objectType, converter);
+                Converters.TryAdd(objectType, converter);
             }
             return converter.ReadJson(reader, objectType, existingValue, serializer);
         }

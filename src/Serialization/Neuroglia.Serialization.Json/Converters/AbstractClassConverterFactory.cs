@@ -15,7 +15,7 @@
  *
  */
 using Neuroglia;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Reflection;
 
 namespace System.Text.Json.Serialization
@@ -28,9 +28,9 @@ namespace System.Text.Json.Serialization
     {
 
         /// <summary>
-        /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing the mappings of types to their respective <see cref="JsonConverter"/>
+        /// Gets a <see cref="ConcurrentDictionary{TKey, TValue}"/> containing the mappings of types to their respective <see cref="JsonConverter"/>
         /// </summary>
-        private static readonly Dictionary<Type, JsonConverter> Converters = new();
+        private static readonly ConcurrentDictionary<Type, JsonConverter> Converters = new();
 
         /// <summary>
         /// Initializes a new <see cref="AbstractClassConverterFactory"/>
@@ -59,7 +59,7 @@ namespace System.Text.Json.Serialization
             {
                 Type converterType = typeof(AbstractClassConverter<>).MakeGenericType(typeToConvert);
                 converter = (JsonConverter)Activator.CreateInstance(converterType, this.JsonSerializerOptions);
-                Converters.Add(typeToConvert, converter);
+                Converters.TryAdd(typeToConvert, converter);
             }
             return converter;
         }
