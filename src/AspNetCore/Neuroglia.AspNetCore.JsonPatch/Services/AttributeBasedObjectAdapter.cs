@@ -22,22 +22,22 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.AspNetCore.JsonPatch.Providers
+namespace Microsoft.AspNetCore.JsonPatch
 {
 
     /// <summary>
     /// Represents a reflection-based implementation of the <see cref="IObjectAdapter"/> interface, which allows patching using methods instead of properties
     /// </summary>
-    public class MethodBasedObjectAdapter
+    public class AttributeBasedObjectAdapter
         : IObjectAdapter
     {
 
         /// <summary>
-        /// Initializes a new <see cref="MethodBasedObjectAdapter"/>
+        /// Initializes a new <see cref="AttributeBasedObjectAdapter"/>
         /// </summary>
         /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
         /// <param name="metadataProvider">The service used to provide <see cref="JsonPatchTypeMetadata"/></param>
-        public MethodBasedObjectAdapter(IServiceProvider serviceProvider, IJsonPatchMetadataProvider metadataProvider)
+        public AttributeBasedObjectAdapter(IServiceProvider serviceProvider, IJsonPatchMetadataProvider metadataProvider)
         {
             this.ServiceProvider = serviceProvider;
             this.MetadataProvider = metadataProvider;
@@ -53,6 +53,13 @@ namespace Microsoft.AspNetCore.JsonPatch.Providers
         /// </summary>
         protected IJsonPatchMetadataProvider MetadataProvider { get; }
 
+        /// <summary>
+        /// Applies a given <see cref="JsonPatchDocument"/> to the specified object
+        /// </summary>
+        /// <param name="patch"></param>
+        /// <param name="target">The object to apply the <see cref="JsonPatchDocument"/> to</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
         public virtual async Task ApplyPatchToAsync(JsonPatchDocument patch, object target, CancellationToken cancellationToken = default)
         {
             if (patch == null)
@@ -65,6 +72,13 @@ namespace Microsoft.AspNetCore.JsonPatch.Providers
             }
         }
 
+        /// <summary>
+        /// Applies a given <see cref="Operation"/> to the specified object
+        /// </summary>
+        /// <param name="operation">The <see cref="Operation"/> to apply</param>
+        /// <param name="target">The object to apply the <see cref="Operation"/> to</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
         protected virtual async Task ApplyToAsync(Operation operation, object target, CancellationToken cancellationToken = default)
         {
             if (operation == null)
@@ -72,15 +86,15 @@ namespace Microsoft.AspNetCore.JsonPatch.Providers
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
             IJsonPatchTypeMetadata typeMetadata = this.MetadataProvider.GetTypeMetadata(target.GetType());
-            if (typeMetadata.TryGetOperationMetadata(operation, out IJsonPatchOperationMetadata operationMetadata))
-                throw new InvalidOperationException(); //todo: throw more meaningfull exception
+            if (!typeMetadata.TryGetOperationMetadata(operation, out IJsonPatchOperationMetadata operationMetadata))
+                throw new InvalidOperationException($"Failed to find a Patch Operation of type '{operation.op}' at path '{operation.path}' for type '{target.GetType().Name}'");
             object value = operation.value;
             if (operationMetadata.ReferencedType != null)
             {
                 IRepository repository = (IRepository)this.ServiceProvider.GetRequiredService(typeof(IRepository<>).MakeGenericType(operationMetadata.ReferencedType));
                 value = await repository.FindAsync(value, cancellationToken);
             }
-            operationMetadata.Invoke(target, value);
+            operationMetadata.ApplyTo(target, value);
         }
 
         /// <inheritdoc/>
@@ -90,6 +104,7 @@ namespace Microsoft.AspNetCore.JsonPatch.Providers
                 throw new ArgumentNullException(nameof(operation));
             if (objectToApplyTo == null)
                 throw new ArgumentNullException(nameof(objectToApplyTo));
+            this.ApplyToAsync(operation, objectToApplyTo).RunSynchronously();
         }
 
         /// <inheritdoc/>
@@ -99,7 +114,7 @@ namespace Microsoft.AspNetCore.JsonPatch.Providers
                 throw new ArgumentNullException(nameof(operation));
             if (objectToApplyTo == null)
                 throw new ArgumentNullException(nameof(objectToApplyTo));
-
+            this.ApplyToAsync(operation, objectToApplyTo).RunSynchronously();
         }
 
         /// <inheritdoc/>
@@ -109,7 +124,7 @@ namespace Microsoft.AspNetCore.JsonPatch.Providers
                 throw new ArgumentNullException(nameof(operation));
             if (objectToApplyTo == null)
                 throw new ArgumentNullException(nameof(objectToApplyTo));
-
+            this.ApplyToAsync(operation, objectToApplyTo).RunSynchronously();
         }
 
         /// <inheritdoc/>
@@ -119,7 +134,7 @@ namespace Microsoft.AspNetCore.JsonPatch.Providers
                 throw new ArgumentNullException(nameof(operation));
             if (objectToApplyTo == null)
                 throw new ArgumentNullException(nameof(objectToApplyTo));
-
+            this.ApplyToAsync(operation, objectToApplyTo).RunSynchronously();
         }
 
         /// <inheritdoc/>
@@ -129,28 +144,9 @@ namespace Microsoft.AspNetCore.JsonPatch.Providers
                 throw new ArgumentNullException(nameof(operation));
             if (objectToApplyTo == null)
                 throw new ArgumentNullException(nameof(objectToApplyTo));
-
-        }
-
-    }
-
-    public interface IJsonPatchMetadataProvider
-    {
-
-        IJsonPatchTypeMetadata GetTypeMetadata(Type typeToPatch);
-
-    }
-
-    public class JsonPatchMetadataProvider
-        : IJsonPatchMetadataProvider
-    {
-
-        /// <inheritdoc/>
-        public virtual IJsonPatchTypeMetadata GetTypeMetadata(Type typeToPatch)
-        {
-            if (typeToPatch == null)
-                throw new ArgumentNullException(nameof(typeToPatch));
-
+            Task task  = this.ApplyToAsync(operation, objectToApplyTo);
+            if (!task.IsCompleted)
+                task.RunSynchronously();
         }
 
     }

@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia aspnet core json patch</PackageTags>
-    <Version>2.0.0.22</Version>
-    <AssemblyVersion>2.0.0.22</AssemblyVersion>
-    <FileVersion>2.0.0.22</FileVersion>
+    <Version>2.0.0.23</Version>
+    <AssemblyVersion>2.0.0.23</AssemblyVersion>
+    <FileVersion>2.0.0.23</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -25,7 +25,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Include="..\..\..\LICENSE" Link="LICENSE">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="5.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Neuroglia.Data\Neuroglia.Data.csproj" />
   </ItemGroup>
 
 </Project>

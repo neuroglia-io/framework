@@ -37,26 +37,45 @@ namespace Neuroglia.Data
         /// <inheritdoc/>
         public abstract Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
 
+        async Task<object> IRepository.AddAsync(object entity, CancellationToken cancellationToken)
+        {
+            return await this.AddAsync((TEntity)entity, cancellationToken);
+        }
+
         /// <inheritdoc/>
         public abstract Task<TEntity> FindAsync(TKey key, CancellationToken cancellationToken = default);
 
-        /// <inheritdoc/>
         Task<TEntity> IRepository<TEntity>.FindAsync(object key, CancellationToken cancellationToken)
         {
             return this.FindAsync((TKey)key, cancellationToken);
         }
 
+        async Task<object> IRepository.FindAsync(object key, CancellationToken cancellationToken)
+        {
+            return await this.FindAsync((TKey)key, cancellationToken);
+        }
+
         /// <inheritdoc/>
         public abstract Task<TEntity> FindAsync(object[] keyValues, CancellationToken cancellationToken = default);
+
+        async Task<object> IRepository.FindAsync(object[] keyValues, CancellationToken cancellationToken)
+        {
+            return await this.FindAsync(keyValues, cancellationToken);
+        }
 
         /// <inheritdoc/>
         public abstract Task<bool> ContainsAsync(TKey key, CancellationToken cancellationToken = default);
 
         /// <inheritdoc/>
-        Task<bool> IRepository<TEntity>.ContainsAsync(object key, CancellationToken cancellationToken) => this.ContainsAsync((TKey)key, cancellationToken);
+        Task<bool> IRepository.ContainsAsync(object key, CancellationToken cancellationToken) => this.ContainsAsync((TKey)key, cancellationToken);
 
         /// <inheritdoc/>
         public abstract Task<TEntity> RemoveAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+        async Task<object> IRepository.RemoveAsync(object entity, CancellationToken cancellationToken)
+        {
+            return await this.RemoveAsync((TEntity)entity, cancellationToken);
+        }
 
         /// <inheritdoc/>
         public virtual async Task RemoveAsync(TKey key, CancellationToken cancellationToken = default)
@@ -70,16 +89,31 @@ namespace Neuroglia.Data
         /// <inheritdoc/>
         public abstract Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
+        async Task<object> IRepository.UpdateAsync(object entity, CancellationToken cancellationToken)
+        {
+            return await this.UpdateAsync((TEntity)entity, cancellationToken);
+        }
+
         /// <inheritdoc/>
         public abstract IQueryable<TEntity> AsQueryable();
+
+        IQueryable IRepository.AsQueryable()
+        {
+            return this.AsQueryable();
+        }
 
         /// <inheritdoc/>
         public abstract Task<List<TEntity>> ToListAsync(CancellationToken cancellationToken = default);
 
+        async Task<List<object>> IRepository.ToListAsync(CancellationToken cancellationToken)
+        {
+            return (await this.ToListAsync(cancellationToken))
+                .OfType<object>()
+                .ToList();
+        }
+
         /// <inheritdoc/>
         public abstract Task SaveChangesAsync(CancellationToken cancellationToken = default);
-
-        Task IRepository<TEntity>.RemoveAsync(object key, CancellationToken cancellationToken) => this.RemoveAsync((TKey)key, cancellationToken);
 
     }
 

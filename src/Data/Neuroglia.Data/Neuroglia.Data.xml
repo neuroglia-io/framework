@@ -675,6 +675,79 @@
             <param name="patch">The current <see cref="T:Microsoft.AspNetCore.JsonPatch.JsonPatchDocument"/>, if any</param>
             <returns>A boolean indicating whether or not the <see cref="T:Neuroglia.Data.IPatchable"/> has a pending patch</returns>
         </member>
+        <member name="T:Neuroglia.Data.IRepository">
+            <summary>
+            Defines the fundamentals of a service used to manage data
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository.FindAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Finds the entity with the specified key
+            </summary>
+            <param name="key">The key of the entity to find</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The entity with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository.FindAsync(System.Object[],System.Threading.CancellationToken)">
+            <summary>
+            Finds the entity with the specified key values
+            </summary>
+            <param name="keyValues">The key values of the entity to find</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The entity with the specified key values</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository.AddAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Adds the specified entity to the <see cref="T:Neuroglia.Data.IRepository"/>
+            </summary>
+            <param name="entity">The entity to add</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The newly added entity</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository.UpdateAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Updates the specified entity
+            </summary>
+            <param name="entity">The entity to update</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The updated entity</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository.RemoveAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Removes the specified entity from the <see cref="T:Neuroglia.Data.IRepository"/>
+            </summary>
+            <param name="entity">The entity to remove</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The removed entity</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository.ContainsAsync(System.Object,System.Threading.CancellationToken)">
+            <summary>
+            Determines whether or not the <see cref="T:Neuroglia.Data.IRepository"/> contains an entity with the specified key
+            </summary>
+            <param name="key">The key to check</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A boolean indicating whether or not the <see cref="T:Neuroglia.Data.IRepository`1"/> contains an entity with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository.ToListAsync(System.Threading.CancellationToken)">
+            <summary>
+            Lists all entities contained in the <see cref="T:Neuroglia.Data.IRepository"/>
+            </summary>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.List`1"/> containing all the entities contained in the <see cref="T:Neuroglia.Data.IRepository`1"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository.AsQueryable">
+            <summary>
+            Queries the <see cref="T:Neuroglia.Data.IRepository"/>
+            </summary>
+            <returns>A new <see cref="T:System.Linq.IQueryable"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.IRepository.SaveChangesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Saves all pending changes
+            </summary>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
         <member name="T:Neuroglia.Data.IRepository`1">
             <summary>
             Defines the fundamentals of a service used to manage data
@@ -721,22 +794,6 @@
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>The removed entity</returns>
         </member>
-        <member name="M:Neuroglia.Data.IRepository`1.RemoveAsync(System.Object,System.Threading.CancellationToken)">
-            <summary>
-            Removes the specified entity from the <see cref="T:Neuroglia.Data.IRepository`1"/>
-            </summary>
-            <param name="key">The key of the entity to remove</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
-        </member>
-        <member name="M:Neuroglia.Data.IRepository`1.ContainsAsync(System.Object,System.Threading.CancellationToken)">
-            <summary>
-            Determines whether or not the <see cref="T:Neuroglia.Data.IRepository`1"/> contains an entity with the specified key
-            </summary>
-            <param name="key">The key to check</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A boolean indicating whether or not the <see cref="T:Neuroglia.Data.IRepository`1"/> contains an entity with the specified key</returns>
-        </member>
         <member name="M:Neuroglia.Data.IRepository`1.ToListAsync(System.Threading.CancellationToken)">
             <summary>
             Lists all entities contained in the <see cref="T:Neuroglia.Data.IRepository`1"/>
@@ -749,13 +806,6 @@
             Queries the <see cref="T:Neuroglia.Data.IRepository`1"/>
             </summary>
             <returns>A new <see cref="T:System.Linq.IQueryable"/></returns>
-        </member>
-        <member name="M:Neuroglia.Data.IRepository`1.SaveChangesAsync(System.Threading.CancellationToken)">
-            <summary>
-            Saves all pending changes
-            </summary>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
         </member>
         <member name="T:Neuroglia.Data.IRepository`2">
             <summary>
@@ -1122,16 +1172,13 @@
         <member name="M:Neuroglia.Data.RepositoryBase`2.FindAsync(`1,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.RepositoryBase`2.Neuroglia#Data#IRepository{TEntity}#FindAsync(System.Object,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
         <member name="M:Neuroglia.Data.RepositoryBase`2.FindAsync(System.Object[],System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Data.RepositoryBase`2.ContainsAsync(`1,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.RepositoryBase`2.Neuroglia#Data#IRepository{TEntity}#ContainsAsync(System.Object,System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.RepositoryBase`2.Neuroglia#Data#IRepository#ContainsAsync(System.Object,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Data.RepositoryBase`2.RemoveAsync(`0,System.Threading.CancellationToken)">

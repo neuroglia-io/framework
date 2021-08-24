@@ -14,46 +14,42 @@
  * limitations under the License.
  *
  */
-using Microsoft.AspNetCore.JsonPatch.Operations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Microsoft.AspNetCore.JsonPatch
 {
 
-    public interface IJsonPatchTypeMetadata
-    {
-
-        Type Type { get; }
-
-        bool TryGetOperationMetadata(string type, string path, out IJsonPatchOperationMetadata operationMetadata);
-
-    }
-
-    public static class JsonPatchTypeMetadataExtensions
-    {
-
-        public static bool TryGetOperationMetadata(this IJsonPatchTypeMetadata typeMetadata, Operation operation, out IJsonPatchOperationMetadata operationMetadata)
-        {
-            if(typeMetadata == null)
-                throw new ArgumentNullException(nameof(typeMetadata));
-            if (operation == null)
-                throw new ArgumentNullException(nameof(operation));
-            return typeMetadata.TryGetOperationMetadata(operation.op, operation.path, out operationMetadata);
-        }
-
-    }
-
+    /// <summary>
+    /// Represents the default implementation of the <see cref="IJsonPatchTypeMetadata"/> interface
+    /// </summary>
     public class JsonPatchTypeMetadata
         : IJsonPatchTypeMetadata
     {
 
+        /// <summary>
+        /// Initializes a new <see cref="JsonPatchTypeMetadata"/>
+        /// </summary>
+        /// <param name="type">The type to describe</param>
+        /// <param name="operations">An <see cref="IEnumerable{T}"/> containing the type's Json Patch operations</param>
+        public JsonPatchTypeMetadata(Type type, IEnumerable<IJsonPatchOperationMetadata> operations)
+        {
+            if (operations == null)
+                throw new ArgumentNullException(nameof(operations));
+            this.Type = type ?? throw new ArgumentNullException(nameof(type));
+            this.Operations = operations.ToList().AsReadOnly();
+        }
+
+        /// <inheritdoc/>
         public virtual Type Type { get; }
 
+        /// <summary>
+        /// Gets an <see cref="IReadOnlyCollection{T}"/> containing the <see cref="IJsonPatchOperationMetadata"/> that describe the type's Json Patch operations
+        /// </summary>
         public virtual IReadOnlyCollection<IJsonPatchOperationMetadata> Operations { get; }
 
+        /// <inheritdoc/>
         public virtual bool TryGetOperationMetadata(string type, string path, out IJsonPatchOperationMetadata operationMetadata)
         {
             if (string.IsNullOrWhiteSpace(type))
@@ -67,33 +63,6 @@ namespace Microsoft.AspNetCore.JsonPatch
                     || o.Path.Equals($"/{path}", StringComparison.OrdinalIgnoreCase)));
             return operationMetadata != null;
         }
-
-    }
-
-    public interface IJsonPatchOperationMetadata
-    {
-
-        string Type { get; }
-
-        string Path { get; }
-
-        Type ReferencedType { get; }
-
-        MemberInfo Member { get; }
-
-    }
-
-    public class JsonPatchOperationMetadata
-        : IJsonPatchOperationMetadata
-    {
-
-        public virtual string Type { get; }
-
-        public virtual string Path { get; }
-
-        public virtual Type ReferencedType { get; }
-
-        public virtual MemberInfo Member { get; }
 
     }
 
