@@ -26,8 +26,86 @@ namespace Neuroglia.Data
     /// <summary>
     /// Defines the fundamentals of a service used to manage data
     /// </summary>
+    public interface IRepository
+    {
+
+        /// <summary>
+        /// Finds the entity with the specified key
+        /// </summary>
+        /// <param name="key">The key of the entity to find</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>The entity with the specified key</returns>
+        Task<object> FindAsync(object key, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Finds the entity with the specified key values
+        /// </summary>
+        /// <param name="keyValues">The key values of the entity to find</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>The entity with the specified key values</returns>
+        Task<object> FindAsync(object[] keyValues, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Adds the specified entity to the <see cref="IRepository"/>
+        /// </summary>
+        /// <param name="entity">The entity to add</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>The newly added entity</returns>
+        Task<object> AddAsync(object entity, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Updates the specified entity
+        /// </summary>
+        /// <param name="entity">The entity to update</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>The updated entity</returns>
+        Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Removes the specified entity from the <see cref="IRepository"/>
+        /// </summary>
+        /// <param name="entity">The entity to remove</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>The removed entity</returns>
+        Task<object> RemoveAsync(object entity, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Determines whether or not the <see cref="IRepository"/> contains an entity with the specified key
+        /// </summary>
+        /// <param name="key">The key to check</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A boolean indicating whether or not the <see cref="IRepository{TEntity}"/> contains an entity with the specified key</returns>
+        Task<bool> ContainsAsync(object key, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Lists all entities contained in the <see cref="IRepository"/>
+        /// </summary>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A new <see cref="List{T}"/> containing all the entities contained in the <see cref="IRepository{TEntity}"/></returns>
+        Task<List<object>> ToListAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Queries the <see cref="IRepository"/>
+        /// </summary>
+        /// <returns>A new <see cref="IQueryable"/></returns>
+        IQueryable AsQueryable();
+
+        /// <summary>
+        /// Saves all pending changes
+        /// </summary>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
+
+
+    }
+
+    /// <summary>
+    /// Defines the fundamentals of a service used to manage data
+    /// </summary>
     /// <typeparam name="TEntity">The type of data managed by the <see cref="IRepository{T}"/></typeparam>
     public interface IRepository<TEntity>
+        : IRepository
         where TEntity : class, IIdentifiable
     {
 
@@ -37,7 +115,7 @@ namespace Neuroglia.Data
         /// <param name="key">The key of the entity to find</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>The entity with the specified key</returns>
-        Task<TEntity> FindAsync(object key, CancellationToken cancellationToken = default);
+        new Task<TEntity> FindAsync(object key, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Finds the entity with the specified key values
@@ -45,7 +123,7 @@ namespace Neuroglia.Data
         /// <param name="keyValues">The key values of the entity to find</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>The entity with the specified key values</returns>
-        Task<TEntity> FindAsync(object[] keyValues, CancellationToken cancellationToken = default);
+        new Task<TEntity> FindAsync(object[] keyValues, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds the specified entity to the <see cref="IRepository{TEntity}"/>
@@ -72,40 +150,17 @@ namespace Neuroglia.Data
         Task<TEntity> RemoveAsync(TEntity entity, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Removes the specified entity from the <see cref="IRepository{TEntity}"/>
-        /// </summary>
-        /// <param name="key">The key of the entity to remove</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>A new awaitable <see cref="Task"/></returns>
-        Task RemoveAsync(object key, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Determines whether or not the <see cref="IRepository{TEntity}"/> contains an entity with the specified key
-        /// </summary>
-        /// <param name="key">The key to check</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>A boolean indicating whether or not the <see cref="IRepository{TEntity}"/> contains an entity with the specified key</returns>
-        Task<bool> ContainsAsync(object key, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Lists all entities contained in the <see cref="IRepository{TEntity}"/>
         /// </summary>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="List{T}"/> containing all the entities contained in the <see cref="IRepository{TEntity}"/></returns>
-        Task<List<TEntity>> ToListAsync(CancellationToken cancellationToken = default);
+        new Task<List<TEntity>> ToListAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Queries the <see cref="IRepository{TEntity}"/>
         /// </summary>
         /// <returns>A new <see cref="IQueryable"/></returns>
-        IQueryable<TEntity> AsQueryable();
-
-        /// <summary>
-        /// Saves all pending changes
-        /// </summary>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>A new awaitable <see cref="Task"/></returns>
-        Task SaveChangesAsync(CancellationToken cancellationToken = default);
+        new IQueryable<TEntity> AsQueryable();
 
     }
 

@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Neuroglia.Serialization</RootNamespace>
+    <RootNamespace>Microsoft.AspNetCore.JsonPatch</RootNamespace>
     <Company>Neuroglia SPRL</Company>
     <Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
     <Authors>Neuroglia SPRL</Authors>
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>neuroglia framework serialization avro</PackageTags>
+    <PackageTags>neuroglia aspnet core json patch</PackageTags>
     <Version>2.0.0.23</Version>
     <AssemblyVersion>2.0.0.23</AssemblyVersion>
     <FileVersion>2.0.0.23</FileVersion>
@@ -21,27 +21,26 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>Neuroglia.Serialization.Avro.xml</DocumentationFile>
+    <DocumentationFile>Neuroglia.AspNetCore.JsonPatch.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Hadoop.Avro-Core" Version="1.1.19" />
+    <None Include="..\..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Include="..\..\..\LICENSE" Link="LICENSE">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="5.0.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\assets\img\logo_white_on_blue_256.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <ProjectReference Include="..\..\Data\Neuroglia.Data\Neuroglia.Data.csproj" />
   </ItemGroup>
 
 </Project>

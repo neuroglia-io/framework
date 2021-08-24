@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\AspNetCore\Neuroglia.AspNetCore.JsonPatch\Neuroglia.AspNetCore.JsonPatch.csproj" />
     <ProjectReference Include="..\..\src\AspNetCore\Neuroglia.AspNetCore\Neuroglia.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\Caching\Neuroglia.Caching.InMemory\Neuroglia.Caching.InMemory.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.DistributedCache\Neuroglia.Data.DistributedCache.csproj" />
