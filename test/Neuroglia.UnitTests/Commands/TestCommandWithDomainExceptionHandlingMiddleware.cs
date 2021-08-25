@@ -1,4 +1,5 @@
-﻿using Neuroglia.Data;
+﻿using FluentValidation;
+using Neuroglia.Data;
 using Neuroglia.Mediation;
 using Neuroglia.UnitTests.Data;
 using System;
@@ -9,6 +10,7 @@ namespace Neuroglia.UnitTests.Commands
 {
 
     [PipelineMiddleware(typeof(DomainExceptionHandlingMiddleware<,>))]
+    [PipelineMiddleware(typeof(FluentValidationMiddleware<,>))]
     public class TestCommandWithDomainExceptionHandlingMiddleware
         : Command
     {
@@ -19,6 +21,18 @@ namespace Neuroglia.UnitTests.Commands
         }
 
         public TestPerson Person { get; }
+
+    }
+
+    public class TestCommandWithDomainExceptionHandlingMiddlewareValidator
+        : AbstractValidator<TestCommandWithDomainExceptionHandlingMiddleware>
+    {
+
+        public TestCommandWithDomainExceptionHandlingMiddlewareValidator()
+        {
+            this.RuleFor(c => c.Person)
+                .NotNull();
+        }
 
     }
 

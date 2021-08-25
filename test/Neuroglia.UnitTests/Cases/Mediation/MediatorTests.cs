@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Mediation;
 using Neuroglia.UnitTests.Commands;
@@ -18,6 +19,7 @@ namespace Neuroglia.UnitTests.Cases.Mediation
         public MediatorTests()
         {
             ServiceCollection services = new();
+            services.AddValidatorsFromAssemblyContaining<MediatorTests>();
             services.AddMediator(builder => builder.ScanAssembly(typeof(MediatorTests).Assembly));
             this.Mediator = services.BuildServiceProvider().GetRequiredService<Mediator>();
         }
@@ -69,7 +71,7 @@ namespace Neuroglia.UnitTests.Cases.Mediation
         }
 
         [Fact]
-        public async Task Command_MultpleHandlers_ShouldFail()
+        public async Task Command_MultipleHandlers_ShouldFail()
         {
             //arrange
             var command = new TestCommandWithMultipleHandlers();
@@ -130,6 +132,20 @@ namespace Neuroglia.UnitTests.Cases.Mediation
             //arrange
             result.Should().NotBeNull();
             result.Code.Should().BeEquivalentTo(OperationResultCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Command_WithFluentValidationMiddleware_ShouldWork()
+        {
+            //arrange
+            var command = new TestCommandWithDomainExceptionHandlingMiddleware(null);
+
+            //act
+            var result = await this.Mediator.ExecuteAsync(command);
+
+            //assert
+            result.Should().NotBeNull();
+            result.Code.Should().BeEquivalentTo(OperationResultCode.Invalid);
         }
 
         [Fact]

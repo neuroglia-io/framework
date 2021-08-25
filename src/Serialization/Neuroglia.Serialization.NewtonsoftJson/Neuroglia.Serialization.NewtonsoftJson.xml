@@ -44,7 +44,7 @@
         </member>
         <member name="F:Newtonsoft.Json.AbstractClassConverterFactory.Converters">
             <summary>
-            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the mappings of types to their respective <see cref="T:Newtonsoft.Json.JsonConverter"/>
+            Gets a <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/> containing the mappings of types to their respective <see cref="T:Newtonsoft.Json.JsonConverter"/>
             </summary>
         </member>
         <member name="M:Newtonsoft.Json.AbstractClassConverterFactory.CanConvert(System.Type)">

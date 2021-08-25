@@ -2,13 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Neuroglia.Caching</RootNamespace>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Neuroglia.Mediation</RootNamespace>
     <Company>Neuroglia SPRL</Company>
     <Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
     <Authors>Neuroglia SPRL</Authors>
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>neuroglia caching redis</PackageTags>
+    <PackageTags>neuroglia framework mediation fluent validation</PackageTags>
     <Version>2.0.0.25</Version>
     <AssemblyVersion>2.0.0.25</AssemblyVersion>
     <FileVersion>2.0.0.25</FileVersion>
@@ -21,8 +22,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>Neuroglia.Caching.Redis.xml</DocumentationFile>
+    <DocumentationFile>Neuroglia.Mediation.FluentValidation.xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Include="..\..\..\assets\img\logo_white_on_blue_256.png">
@@ -36,14 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="StackExchange.Redis" Version="2.2.62" />
-    <PackageReference Include="StackExchange.Redis.Extensions.Core" Version="7.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Serialization\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Serialization\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
-    <ProjectReference Include="..\Neuroglia.Caching.Abstractions\Neuroglia.Caching.Abstractions.csproj" />
+    <PackageReference Include="FluentValidation" Version="10.3.3" />
   </ItemGroup>
 
 </Project>

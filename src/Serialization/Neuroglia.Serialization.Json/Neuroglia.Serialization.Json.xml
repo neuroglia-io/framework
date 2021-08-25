@@ -44,7 +44,7 @@
         </member>
         <member name="F:System.Text.Json.Serialization.AbstractClassConverterFactory.Converters">
             <summary>
-            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the mappings of types to their respective <see cref="T:System.Text.Json.Serialization.JsonConverter"/>
+            Gets a <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/> containing the mappings of types to their respective <see cref="T:System.Text.Json.Serialization.JsonConverter"/>
             </summary>
         </member>
         <member name="M:System.Text.Json.Serialization.AbstractClassConverterFactory.#ctor(System.Text.Json.JsonSerializerOptions)">
@@ -154,7 +154,7 @@
         </member>
         <member name="F:System.Text.Json.Serialization.StringEnumConverterFactory.Converters">
             <summary>
-            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the mappings of types to their respective <see cref="T:System.Text.Json.Serialization.JsonConverter"/>
+            Gets a <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/> containing the mappings of types to their respective <see cref="T:System.Text.Json.Serialization.JsonConverter"/>
             </summary>
         </member>
         <member name="M:System.Text.Json.Serialization.StringEnumConverterFactory.#ctor(System.Text.Json.JsonSerializerOptions)">

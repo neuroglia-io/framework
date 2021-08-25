@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="DotNet.Testcontainers" Version="1.4.0" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.7" />
@@ -35,6 +36,7 @@
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.MongoDB\Neuroglia.Data.MongoDB.csproj" />
     <ProjectReference Include="..\..\src\Mapping\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
     <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation.AspNetCore\Neuroglia.Mediation.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
     <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.Avro\Neuroglia.Serialization.Avro.csproj" />
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.Json\Neuroglia.Serialization.Json.csproj" />

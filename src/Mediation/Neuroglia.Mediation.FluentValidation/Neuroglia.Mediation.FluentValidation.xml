@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Mediation.FluentValidation</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Mediation.FluentValidationMiddleware`2">
+            <summary>
+            Represents an <see cref="T:Neuroglia.Mediation.IMiddleware`2"/> used to validate <see cref="T:Neuroglia.IRequest"/>s
+            </summary>
+            <typeparam name="TRequest">The type of <see cref="T:Neuroglia.IRequest"/> to handle</typeparam>
+            <typeparam name="TResult">The type of expected <see cref="T:Neuroglia.IOperationResult"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Mediation.FluentValidationMiddleware`2.#ctor(System.Collections.Generic.IEnumerable{FluentValidation.IValidator{`0}})">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Mediation.FluentValidationMiddleware`2"/>
+            </summary>
+            <param name="validators">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the services used to validate <see cref="T:Neuroglia.IRequest"/>s handled by the <see cref="T:Neuroglia.Mediation.FluentValidationMiddleware`2"/></param>
+        </member>
+        <member name="P:Neuroglia.Mediation.FluentValidationMiddleware`2.Validators">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the services used to validate <see cref="T:Neuroglia.IRequest"/>s handled by the <see cref="T:Neuroglia.Mediation.FluentValidationMiddleware`2"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Mediation.FluentValidationMiddleware`2.HandleAsync(`0,Neuroglia.Mediation.RequestHandlerDelegate{`1},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>
