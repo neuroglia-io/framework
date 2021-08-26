@@ -14,51 +14,35 @@
  * limitations under the License.
  *
  */
-using EventStore.ClientAPI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Neuroglia.Data.EventSourcing.EventStore
 {
 
     /// <summary>
-    /// Represents the <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="IEventStream{TKey}"/> interface
+    /// Represents the <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="IEventStream"/> interface
     /// </summary>
-    /// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="EventStream{TKey}"/></typeparam>
-    public class EventStream<TKey>
-        : IEventStream<TKey>
-        where TKey : IEquatable<TKey>
+    public class EventStream
+        : IEventStream
     {
 
         /// <summary>
-        /// Initializes a new <see cref="EventStream{TKey}"/>
+        /// Initializes a new <see cref="EventStream"/>
         /// </summary>
-        /// <param name="connection">The service used to interact with the <see href="https://www.eventstore.com/">Event Store</see> API</param>
         /// <param name="streamId">The id of the described stream</param>
         /// <param name="length">The length of the stream</param>
         /// <param name="firstEventAt">The date and time at which the first event of the stream has been created</param>
         /// <param name="lastEventAt">The date and time at which the last event of the stream has been created</param>
-        public EventStream(IEventStoreConnection connection, TKey streamId, long length, DateTime firstEventAt, DateTime lastEventAt)
+        public EventStream(object streamId, long length, DateTime firstEventAt, DateTime lastEventAt)
         {
-            this.Connection = connection;
             this.Id = streamId;
             this.Length = length;
             this.FirstEventAt = firstEventAt;
             this.LastEventAt = lastEventAt;
         }
 
-        /// <summary>
-        /// Gets the service used to interact with the <see href="https://www.eventstore.com/">Event Store</see> API
-        /// </summary>
-        protected IEventStoreConnection Connection { get; }
-
         /// <inheritdoc/>
-        public virtual TKey Id { get; }
-
-        object IIdentifiable.Id => this.Id;
+        public virtual object Id { get; }
 
         /// <inheritdoc/>
         public virtual long Length { get; }
@@ -71,37 +55,6 @@ namespace Neuroglia.Data.EventSourcing.EventStore
 
         /// <inheritdoc/>
         public virtual long Position { get; protected set; }
-
-        /// <inheritdoc/>
-        public virtual async IAsyncEnumerator<IEvent<TKey>> GetAsyncEnumerator(CancellationToken cancellationToken = default)
-        {
-            StreamEventsSlice slice;
-            do
-            {
-                slice = await this.Connection.ReadStreamEventsForwardAsync(this.Id.ToString(), this.Position, 1, true);
-                yield return slice.Events.First().AsAbstraction<TKey>();
-                this.Position++;
-            }
-            while (!cancellationToken.IsCancellationRequested
-                &&!slice.IsEndOfStream);
-        }
-
-        IAsyncEnumerator<IEvent> IAsyncEnumerable<IEvent>.GetAsyncEnumerator(CancellationToken cancellationToken)
-        {
-            return this.GetAsyncEnumerator(cancellationToken);
-        }
-
-        /// <inheritdoc/>
-        public virtual async Task<List<IEvent<TKey>>> ToListAsync(CancellationToken cancellationToken = default)
-        {
-            List<ResolvedEvent> resolvedEvents = await this.Connection.ReadStreamEventsForwardAsync(this.Id.ToString(), this.Position);
-            return resolvedEvents.Select(e => e.AsAbstraction<TKey>()).ToList();
-        }
-
-        async Task<List<IEvent>> IEventStream.ToListAsync(CancellationToken cancellationToken)
-        {
-            return (await this.ToListAsync(cancellationToken)).OfType<IEvent>().ToList();
-        }
 
     }
 

@@ -14,37 +14,21 @@
  * limitations under the License.
  *
  */
-using System;
 
 namespace Neuroglia.Data.EventSourcing
 {
-
     /// <summary>
-    /// Defines the fundamentals of an object used to describe a stream of <see cref="IDomainEvent"/>s
+    /// Defines the fundamentals of a service used to aggregate <see cref="ISourcedEvent"/>s
     /// </summary>
-    public interface IEventStream
-        : IIdentifiable
+    public interface IEventAggregator
     {
 
         /// <summary>
-        /// Gets the stream's length, or events count
+        /// Aggregates the specified <see cref="ISourcedEvent"/>
         /// </summary>
-        long Length { get; }
-
-        /// <summary>
-        /// Gets the current position in the stream
-        /// </summary>
-        long Position { get; }
-
-        /// <summary>
-        /// Gets the date and time at which the first event has been created
-        /// </summary>
-        DateTimeOffset FirstEventAt { get; }
-
-        /// <summary>
-        /// Gets the date and time at which the last event has been created
-        /// </summary>
-        DateTimeOffset LastEventAt { get; }
+        /// <param name="aggregate">The aggregate to apply the specified <see cref="ISourcedEvent"/> to</param>
+        /// <param name="e">The <see cref="ISourcedEvent"/> to apply</param>
+        void Aggregate(object aggregate, ISourcedEvent e);
 
     }
 

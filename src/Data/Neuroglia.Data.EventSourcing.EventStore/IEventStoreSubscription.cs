@@ -16,35 +16,25 @@
  */
 using System;
 
-namespace Neuroglia.Data.EventSourcing
+namespace Neuroglia.Data.EventSourcing.EventStore
 {
 
     /// <summary>
-    /// Defines the fundamentals of an object used to describe a stream of <see cref="IDomainEvent"/>s
+    /// Defines the fundamentals of an <see href="https://eventstore.com/">Event Store</see> subscription
     /// </summary>
-    public interface IEventStream
-        : IIdentifiable
+    public interface IEventStoreSubscription
+        : IDisposable
     {
 
         /// <summary>
-        /// Gets the stream's length, or events count
+        /// Represents the event fired whenever the <see cref="IEventStoreSubscription"/> has been disposed of
         /// </summary>
-        long Length { get; }
+        event EventHandler Disposed;
 
         /// <summary>
-        /// Gets the current position in the stream
+        /// Gets the <see cref="IEventStoreSubscription"/>'s id
         /// </summary>
-        long Position { get; }
-
-        /// <summary>
-        /// Gets the date and time at which the first event has been created
-        /// </summary>
-        DateTimeOffset FirstEventAt { get; }
-
-        /// <summary>
-        /// Gets the date and time at which the last event has been created
-        /// </summary>
-        DateTimeOffset LastEventAt { get; }
+        string Id { get; }
 
     }
 

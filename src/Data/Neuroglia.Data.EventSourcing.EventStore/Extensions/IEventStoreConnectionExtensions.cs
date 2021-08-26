@@ -17,6 +17,7 @@
 using EventStore.ClientAPI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Neuroglia.Data.EventSourcing
@@ -46,7 +47,7 @@ namespace Neuroglia.Data.EventSourcing
             if(maxSliceLength < 1)
                 throw new ArgumentOutOfRangeException(nameof(maxSliceLength));
             EventReadResult lastEvent = await connection.ReadEventAsync(streamId, StreamPosition.End, false);
-            List<ResolvedEvent> streamEvents = new List<ResolvedEvent>();
+            List<ResolvedEvent> streamEvents = new();
             StreamEventsSlice currentSlice;
             long nextSliceStart = position;
             long sliceLength = lastEvent.EventNumber - position;
@@ -71,10 +72,11 @@ namespace Neuroglia.Data.EventSourcing
         /// <param name="maxSliceLength">The maximum length of the <see cref="StreamEventsSlice"/>s used to page events</param>
         /// <param name="resolveLinkTos">Whether to resolve LinkTo events automatically</param>
         /// <returns>A new <see cref="List{T}"/> containing the events read from the specified stream</returns>
-        public static async Task<List<IEvent<Guid>>> ReadAndAbstractStreamEventsForwardAsync(this IEventStoreConnection connection, string streamId, long position = StreamPosition.Start, long maxSliceLength = 100, bool resolveLinkTos = false)
+        public static async Task<List<ISourcedEvent<TKey>>> ReadAndAbstractStreamEventsForwardAsync<TKey>(this IEventStoreConnection connection, string streamId, long position = StreamPosition.Start, long maxSliceLength = 100, bool resolveLinkTos = false)
+            where TKey : IEquatable<TKey>
         {
             List<ResolvedEvent> events = await connection.ReadStreamEventsForwardAsync(streamId, position, maxSliceLength, resolveLinkTos);
-            throw new NotImplementedException(); //TODO: return events.Select(e => e.AsAbstraction()).ToList(); 
+            return events.Select(e => e.AsAbstraction<TKey>()).ToList(); 
         }
 
     }

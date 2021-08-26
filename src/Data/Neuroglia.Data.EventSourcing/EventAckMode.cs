@@ -14,38 +14,22 @@
  * limitations under the License.
  *
  */
-using System;
 
 namespace Neuroglia.Data.EventSourcing
 {
-
     /// <summary>
-    /// Defines the fundamentals of an object used to describe a stream of <see cref="IDomainEvent"/>s
+    /// Enumerates all types of event ack modes
     /// </summary>
-    public interface IEventStream
-        : IIdentifiable
+    public enum EventAckMode
     {
-
         /// <summary>
-        /// Gets the stream's length, or events count
+        /// Automatically acks events
         /// </summary>
-        long Length { get; }
-
+        Automatic,
         /// <summary>
-        /// Gets the current position in the stream
+        /// Manually acks events
         /// </summary>
-        long Position { get; }
-
-        /// <summary>
-        /// Gets the date and time at which the first event has been created
-        /// </summary>
-        DateTimeOffset FirstEventAt { get; }
-
-        /// <summary>
-        /// Gets the date and time at which the last event has been created
-        /// </summary>
-        DateTimeOffset LastEventAt { get; }
-
+        Manual
     }
 
 }

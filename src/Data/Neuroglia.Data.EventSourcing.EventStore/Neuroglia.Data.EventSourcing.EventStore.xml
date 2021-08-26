@@ -4,104 +4,459 @@
         <name>Neuroglia.Data.EventSourcing.EventStore</name>
     </assembly>
     <members>
-        <member name="T:Neuroglia.Data.EventStoreRepository`1">
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreConnectionBuilder">
             <summary>
-            Represents the <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="T:Neuroglia.Data.IEventSourcingRepository`2"/>
-            </summary>
-            <typeparam name="TAggregate">The type of <see cref="T:Neuroglia.Data.IAggregateRoot"/> managed by the <see cref="T:Neuroglia.Data.EventStoreRepository`1"/></typeparam>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,Neuroglia.Serialization.ISerializer,Neuroglia.Data.EventSourcing.IAggregatorFactory,EventStore.ClientAPI.IEventStoreConnection,EventStore.ClientAPI.Projections.ProjectionsManager)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.EventStoreRepository`1"/>
-            </summary>
-            <param name="loggerFactory">The service used to create <see cref="T:Microsoft.Extensions.Logging.ILogger"/>s</param>
-            <param name="serializer">The service used to serialize/deserialize events to/from managed streams</param>
-            <param name="aggregatorFactory">The service used to create <see cref="T:Neuroglia.Data.EventSourcing.IAggregator"/>s</param>
-            <param name="connection">The underlying connection to the EventStore remote server</param>
-            <param name="projectionsManager">The service used to manage EventStore projections</param>
-        </member>
-        <member name="P:Neuroglia.Data.EventStoreRepository`1.Logger">
-            <summary>
-            Gets the service used to perform logging
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder"/>
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventStoreRepository`1.Serializer">
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreConnectionBuilder.#ctor">
             <summary>
-            Gets the service used to serialize/deserialize events to/from managed streams
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreConnectionBuilder"/>
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventStoreRepository`1.AggregatorFactory">
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreConnectionBuilder.Name">
             <summary>
-            Gets the service used to create <see cref="T:Neuroglia.Data.EventSourcing.IAggregator"/>s
+            Gets/sets the name of the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/> to create
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventStoreRepository`1.Connection">
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreConnectionBuilder.ConnectionString">
             <summary>
-            Gets the underlying connection to the EventStore remote server
+            Gets/sets the connection string of the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/> to create
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventStoreRepository`1.ProjectionsManager">
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreConnectionBuilder.SettingsConfigurationAction">
             <summary>
-            Gets the service used to manage EventStore projections
+            Gets/sets an <see cref="T:System.Action`1"/> used to configure the <see cref="T:EventStore.ClientAPI.ConnectionSettings"/> of the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/> to create
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventStoreRepository`1.PendingTransactions">
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreConnectionBuilder.WithName(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreConnectionBuilder.UseConnectionString(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreConnectionBuilder.ConfigureSettings(System.Action{EventStore.ClientAPI.ConnectionSettingsBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreConnectionBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions">
             <summary>
-            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing all pending <see cref="T:EventStore.ClientAPI.EventStoreTransaction"/>s
+            Represents the options used to configure an <see cref="T:Neuroglia.Data.EventSourcing.ESEventStore"/>
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventStoreRepository`1.StreamPrefix">
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions.#ctor">
             <summary>
-            Gets the prefix for all streams managed by the <see cref="T:Neuroglia.Data.EventStoreRepository`1"/>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions"/>
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.GetStreamAsync(System.String,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.ContainsAsync(System.String,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.FindAsync(System.String,System.Int64,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.FindAsync(System.String,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.FindAsync(System.Object[],System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.AddAsync(`0,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.UpdateAsync(`0,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.RemoveAsync(`0,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.ToListAsync(System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.AsQueryable">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.SaveChangesAsync(System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.GetStreamNameFor(System.String)">
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions.MaxSliceLength">
             <summary>
-            Gets the stream name for the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/>'s key
+            Gets/sets the maximum length for an <see cref="T:Neuroglia.Data.EventSourcing.IEvent"/> slice. Defaults to 100.
             </summary>
-            <param name="aggregateId">The <see cref="T:Neuroglia.Data.IAggregateRoot"/>'s key to get the stream name for</param>
-            <returns>The stream name for the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/>'s key</returns>
         </member>
-        <member name="M:Neuroglia.Data.EventStoreRepository`1.ProcessEventsDataAsync(System.Collections.Generic.IEnumerable{Neuroglia.Data.IDomainEvent},System.Threading.CancellationToken)">
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions.SerializerType">
             <summary>
-            Processes the specified <see cref="T:Neuroglia.Data.IDomainEvent"/>s
+            Gets/sets the type of <see cref="T:Neuroglia.Serialization.ISerializer"/> to use to serialize and deserialize events
             </summary>
-            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.IDomainEvent"/>s to process</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the processed <see cref="T:EventStore.ClientAPI.EventData"/></returns>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions.AggregatorFactoryType">
+            <summary>
+            Gets/sets the type of <see cref="T:Neuroglia.Data.EventSourcing.IAggregatorFactory"/> to use to create <see cref="T:Neuroglia.Data.EventSourcing.IAggregator"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions.ConnectionConfigurationAction">
+            <summary>
+            Gets/sets an <see cref="T:System.Action`1"/> used to configure the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/> to use
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions.ProjectionsManagerConfigurationAction">
+            <summary>
+            Gets/sets an <see cref="T:System.Action`1"/> used to configure the <see cref="T:EventStore.ClientAPI.Projections.ProjectionsManager"/> to use
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions.DefaultCredentials">
+            <summary>
+            Gets/sets the default <see cref="T:EventStore.ClientAPI.SystemData.UserCredentials"/> to use to connect to the remote EventStore server
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder.#ctor(Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder"/>
+            </summary>
+            <param name="options">The <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions"/> to configure</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder.Options">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions"/> to configure
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder.UseAggregatorFactory``1">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder.UseSerializer``1">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder.UseConnection(System.Action{Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder.UseProjectionsManager(System.Action{Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder.UseDefaultCredentials(EventStore.ClientAPI.SystemData.UserCredentials)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptionsBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreProjectionsManagerBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreProjectionsManagerBuilder.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreProjectionsManagerBuilder"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreProjectionsManagerBuilder.Endpoint">
+            <summary>
+            Gets/sets the <see cref="T:System.Net.EndPoint"/> to use
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreProjectionsManagerBuilder.OperationTimeout">
+            <summary>
+            Gets/sets the operations timeout to use
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreProjectionsManagerBuilder.HttpScheme">
+            <summary>
+            Gets/sets the http scheme to use
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreProjectionsManagerBuilder.UseEndpoint(System.Net.EndPoint)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreProjectionsManagerBuilder.UseSecuredEndpoint(System.Net.EndPoint)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreProjectionsManagerBuilder.WithOperationTimeout(System.TimeSpan)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreProjectionsManagerBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build an <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder.WithName(System.String)">
+            <summary>
+            Sets the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/>'s name
+            </summary>
+            <param name="name">The name of the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/> to create</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder.UseConnectionString(System.String)">
+            <summary>
+            Uses the specified connection string to connect to the remote server
+            </summary>
+            <param name="connectionString">The connection string to connect to the remote server</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder.ConfigureSettings(System.Action{EventStore.ClientAPI.ConnectionSettingsBuilder})">
+            <summary>
+            Configures the settings of the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/> to create
+            </summary>
+            <param name="configurationAction">The <see cref="T:System.Action`1"/> used to configure the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/>'s <see cref="T:EventStore.ClientAPI.ConnectionSettingsBuilder"/></param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder.Build">
+            <summary>
+            Builds the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/>
+            </summary>
+            <returns>A new <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder.UseSerializer``1">
+            <summary>
+            Uses the specified <see cref="T:Neuroglia.Serialization.ISerializer"/> to serialize and deserialize events
+            </summary>
+            <typeparam name="TSerializer">The type of <see cref="T:Neuroglia.Serialization.ISerializer"/> to use to serialize and deserialize events</typeparam>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder.UseAggregatorFactory``1">
+            <summary>
+            Uses the specified <see cref="T:Neuroglia.Data.EventSourcing.IAggregatorFactory"/> to create <see cref="T:Neuroglia.Data.EventSourcing.IAggregator"/>s
+            </summary>
+            <typeparam name="TFactory">The type of <see cref="T:Neuroglia.Data.EventSourcing.IAggregatorFactory"/> to use to create <see cref="T:Neuroglia.Data.EventSourcing.IAggregator"/>s</typeparam>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder.UseConnection(System.Action{Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreConnectionBuilder})">
+            <summary>
+            Configures the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/> to use
+            </summary>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/> to use</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder.UseProjectionsManager(System.Action{Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder})">
+            <summary>
+            Configures the <see cref="T:EventStore.ClientAPI.Projections.ProjectionsManager"/> to use
+            </summary>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:EventStore.ClientAPI.Projections.ProjectionsManager"/> to use</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder.UseDefaultCredentials(EventStore.ClientAPI.SystemData.UserCredentials)">
+            <summary>
+            Uses the specified <see cref="T:EventStore.ClientAPI.SystemData.UserCredentials"/> when contacting the remote server
+            </summary>
+            <param name="credentials">The default <see cref="T:EventStore.ClientAPI.SystemData.UserCredentials"/> to use</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder.Build">
+            <summary>
+            Builds the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions"/>
+            </summary>
+            <returns>A new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.EventStoreOptions"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build a <see cref="T:EventStore.ClientAPI.Projections.ProjectionsManager"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder.UseEndpoint(System.Net.EndPoint)">
+            <summary>
+            Uses the specified <see cref="T:System.Net.EndPoint"/>
+            </summary>
+            <param name="endPoint">The <see cref="T:System.Net.EndPoint"/> to use</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder.UseSecuredEndpoint(System.Net.EndPoint)">
+            <summary>
+            Uses the specified secured <see cref="T:System.Net.EndPoint"/>
+            </summary>
+            <param name="endPoint">The secured <see cref="T:System.Net.EndPoint"/> to use</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder.WithOperationTimeout(System.TimeSpan)">
+            <summary>
+            Configures the <see cref="T:EventStore.ClientAPI.Projections.ProjectionsManager"/> to use the specify operations timeout
+            </summary>
+            <param name="timeout">A <see cref="T:System.TimeSpan"/> representing the timeout to use when executing operations</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreProjectionsManagerBuilder.Build">
+            <summary>
+            Builds the <see cref="T:EventStore.ClientAPI.Projections.ProjectionsManager"/>
+            </summary>
+            <returns>A new <see cref="T:EventStore.ClientAPI.Projections.ProjectionsManager"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions.DurableName">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions.IsDurable">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions.ResolveLinks">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions.StreamPosition">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions.StartFrom">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions.MinEventsBeforeCheckpoint">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions.MaxEventsBeforeCheckpoint">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions.MaxSubscribers">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions.AckMode">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.#ctor(Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder"/>
+            </summary>
+            <param name="options">The <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions"/> to configure</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.Options">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptions"/> to configure
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.AsDurable(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.StartFrom(System.Int64)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.StartFromBegining">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.StartFromCurrent">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.ResolveLinks(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.WithMaxSubscribers(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.WithMinEventsBeforeCheckpoint(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.WithMaxEventsBeforeCheckpoint(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.WithAckMode(Neuroglia.Data.EventSourcing.EventAckMode)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Configuration.SubscriptionOptionsBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/> interface
+            </summary>
+        </member>
+        <member name="E:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.Disposed">
+            <summary>
+            Represents the event fired whenever the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/> has been disposed of
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.#ctor(System.String,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>
+            </summary>
+            <param name="id">The <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>'s id</param>
+            <param name="source">The <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>'s source</param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.Id">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.Source">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>'s source
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.SetSource(System.Object)">
+            <summary>
+            Sets the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>'s source
+            </summary>
+            <param name="source"></param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.CreateFor(System.String,EventStore.ClientAPI.EventStorePersistentSubscriptionBase)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>
+            </summary>
+            <param name="subscriptionId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/> to create</param>
+            <param name="source">The <see cref="T:EventStore.ClientAPI.EventStorePersistentSubscriptionBase"/> to create a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/> for</param>
+            <returns>A new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.CreateFor(System.String,EventStore.ClientAPI.EventStoreStreamCatchUpSubscription)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>
+            </summary>
+            <param name="subscriptionId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/> to create</param>
+            <param name="source">The <see cref="T:EventStore.ClientAPI.EventStoreStreamCatchUpSubscription"/> to create a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/> for</param>
+            <returns>A new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.CreateFor(System.String,EventStore.ClientAPI.EventStoreSubscription)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>
+            </summary>
+            <param name="subscriptionId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/> to create</param>
+            <param name="source">The <see cref="T:EventStore.ClientAPI.EventStoreSubscription"/> to create a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/> for</param>
+            <returns>A new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.Dispose(System.Boolean)">
+            <summary>
+            Disposes of the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>
+            </summary>
+            <param name="disposing">A boolean indicating whether or not the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/> is being disposed of</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction">
+            <summary>
+            Represents the <see href="https://www.eventstore.com/">Event Store</see> implementation of an <see cref="T:Neuroglia.ITransaction"/>
+            </summary>
+        </member>
+        <member name="E:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction.Disposed">
+            <summary>
+            Represents the event fired whenever the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction"/> has been disposed of
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction.#ctor(EventStore.ClientAPI.EventStoreTransaction)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction"/>
+            </summary>
+            <param name="underlyingTransaction">The underlying <see cref="T:EventStore.ClientAPI.EventStoreTransaction"/></param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction.UnderlyingTransaction">
+            <summary>
+            Gets the underlying <see cref="T:EventStore.ClientAPI.EventStoreTransaction"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction.CommitAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction.RollbackAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction.Dispose(System.Boolean)">
+            <summary>
+            Disposes of the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction"/>
+            </summary>
+            <param name="disposing">A boolean indicating whether or not the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction"/> is being disposed of</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction.DisposeAsync">
+            <inheritdoc/>
         </member>
         <member name="T:Neuroglia.Data.EventSourcing.EventStore.EventStream`1">
             <summary>
@@ -145,6 +500,96 @@
         <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStream`1.ToListAsync(System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription">
+            <summary>
+            Defines the fundamentals of an <see href="https://eventstore.com/">Event Store</see> subscription
+            </summary>
+        </member>
+        <member name="E:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription.Disposed">
+            <summary>
+            Represents the event fired whenever the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/> has been disposed of
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription.Id">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/>'s id
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.CatchUpSubscription">
+            <summary>
+            Represents a catch-up <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.CatchUpSubscription.#ctor(System.String,EventStore.ClientAPI.EventStoreCatchUpSubscription)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.CatchUpSubscription"/>
+            </summary>
+            <param name="id">The <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.CatchUpSubscription"/>'s id</param>
+            <param name="source">The underlying <see cref="T:EventStore.ClientAPI.EventStoreCatchUpSubscription"/></param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.CatchUpSubscription.Source">
+            <summary>
+            Gets the underlying <see cref="T:EventStore.ClientAPI.EventStoreCatchUpSubscription"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.CatchUpSubscription.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.DurableSubscription">
+            <summary>
+            Represents a durable <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.DurableSubscription.DefaultTimeout">
+            <summary>
+            Gets the default timeout, in milliseconds
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.DurableSubscription.#ctor(System.String,EventStore.ClientAPI.EventStorePersistentSubscriptionBase)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.DurableSubscription"/>
+            </summary>
+            <param name="id">The <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.DurableSubscription"/>'s id</param>
+            <param name="source">The underlying <see cref="T:EventStore.ClientAPI.EventStorePersistentSubscriptionBase"/></param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.DurableSubscription.StreamId">
+            <summary>
+            Gets the id of the stream to subscribe to
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.DurableSubscription.DurableName">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.DurableSubscription"/>'s name
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.DurableSubscription.Source">
+            <summary>
+            Gets the underlying <see cref="T:EventStore.ClientAPI.EventStorePersistentSubscriptionBase"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.DurableSubscription.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.StandardSubscription">
+            <summary>
+            Represents a standard <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.StandardSubscription.#ctor(System.String,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.StandardSubscription"/>
+            </summary>
+            <param name="id">The <see cref="T:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.StandardSubscription"/>'s id</param>
+            <param name="source">The underlying <see cref="T:EventStore.ClientAPI.EventStoreSubscription"/></param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.StandardSubscription.Source">
+            <summary>
+            Gets the underlying <see cref="T:EventStore.ClientAPI.EventStoreSubscription"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStore.Subscriptions.StandardSubscription.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
         <member name="T:Neuroglia.Data.EventSourcing.IEventStoreConnectionExtensions">
             <summary>
             Defines extensions for <see cref="T:EventStore.ClientAPI.IEventStoreConnection"/>s
@@ -161,7 +606,7 @@
             <param name="resolveLinkTos">Whether to resolve LinkTo events automatically</param>
             <returns>A new <see cref="T:System.Collections.Generic.List`1"/> containing the events read from the specified stream</returns>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.IEventStoreConnectionExtensions.ReadAndAbstractStreamEventsForwardAsync(EventStore.ClientAPI.IEventStoreConnection,System.String,System.Int64,System.Int64,System.Boolean)">
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStoreConnectionExtensions.ReadAndAbstractStreamEventsForwardAsync``1(EventStore.ClientAPI.IEventStoreConnection,System.String,System.Int64,System.Int64,System.Boolean)">
             <summary>
             Reads and abstracts events from the specified stream
             </summary>
@@ -171,6 +616,38 @@
             <param name="maxSliceLength">The maximum length of the <see cref="T:EventStore.ClientAPI.StreamEventsSlice"/>s used to page events</param>
             <param name="resolveLinkTos">Whether to resolve LinkTo events automatically</param>
             <returns>A new <see cref="T:System.Collections.Generic.List`1"/> containing the events read from the specified stream</returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IServiceCollectionExtensions.AddEventStore(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Neuroglia.Data.EventSourcing.EventStore.Configuration.IEventStoreOptionsBuilder})">
+            <summary>
+            Adds and configures the <see cref="T:Neuroglia.Data.EventSourcing.ESEventStore"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="setupAction">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Data.EventSourcing.ESEventStore"/> to add</param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsExtensions.ToPersistentSubscriptionSettings(Neuroglia.Data.EventSourcing.ISubscriptionOptions)">
+            <summary>
+            Transforms the <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions"/> into a new <see cref="T:EventStore.ClientAPI.PersistentSubscriptionSettings"/>
+            </summary>
+            <param name="subscriptionOptions">The <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions"/> to transform</param>
+            <returns>A new <see cref="T:EventStore.ClientAPI.PersistentSubscriptionSettings"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsExtensions.ToCatchUpSubscriptionSettings(Neuroglia.Data.EventSourcing.ISubscriptionOptions)">
+            <summary>
+            Transforms the <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions"/> into a new <see cref="T:EventStore.ClientAPI.CatchUpSubscriptionSettings"/>
+            </summary>
+            <param name="subscriptionOptions">The <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions"/> to transform</param>
+            <returns>A new <see cref="T:EventStore.ClientAPI.CatchUpSubscriptionSettings"/></returns>
         </member>
         <member name="T:Neuroglia.Data.EventSourcing.ResolvedEventExtensions">
             <summary>
@@ -184,6 +661,160 @@
             <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:EventStore.ClientAPI.ResolvedEvent"/>'s abstraction</typeparam>
             <param name="e">The <see cref="T:EventStore.ClientAPI.ResolvedEvent"/> to abstract</param>
             <returns>A new <see cref="T:Neuroglia.Data.EventSourcing.IEvent`1"/> used to abstract the specified <see cref="T:EventStore.ClientAPI.ResolvedEvent"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.ESEventStore">
+            <summary>
+            Represents the default <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStore`1"/> interface
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ESEventStore.Options">
+            <summary>
+            Gets the options used to configure the <see cref="T:Neuroglia.Data.EventSourcing.ESEventStore"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ESEventStore.ServiceProvider">
+            <summary>
+            Gets the current <see cref="T:System.IServiceProvider"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ESEventStore.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ESEventStore.Connection">
+            <summary>
+            Gets the service used to interact with the remove <see href="https://www.eventstore.com/">Event Store</see> service
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ESEventStore.Serializer">
+            <summary>
+            Gets the service used to serialize and deserialize <see cref="T:Neuroglia.Data.EventSourcing.IEvent"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ESEventStore.PendingTransactions">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing all pending <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreTransaction"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ESEventStore.Subscriptions">
+            <summary>
+            Gets a <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/> containing all active <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.StartTransactionAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.GetStreamAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.AppendToStreamAsync(System.String,System.Collections.Generic.IEnumerable{Neuroglia.Data.EventSourcing.IEvent{System.String}},System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.AppendToStreamAsync(System.String,System.Collections.Generic.IEnumerable{Neuroglia.Data.EventSourcing.IEvent{System.String}},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadEventsForwardAsync(System.String,System.Int64,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadEventsForwardAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadAllEventsForwardAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadEventsBackwardAsync(System.String,System.Int64,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadEventsBackwardAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadAllEventsBackwardAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.SubscribeToStreamAsync(System.String,System.Action{Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder},System.Func{System.IServiceProvider,Neuroglia.Data.EventSourcing.IEvent{System.String},System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.SubscribeToStreamAsync(System.String,System.Func{System.IServiceProvider,Neuroglia.Data.EventSourcing.IEvent{System.String},System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.UnsubscribeFrom(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ProcessEventsDataAsync(System.Collections.Generic.IEnumerable{Neuroglia.Data.EventSourcing.IEvent{System.String}},System.Threading.CancellationToken)">
+            <summary>
+            Processes the specified <see cref="T:Neuroglia.Data.IDomainEvent"/>s
+            </summary>
+            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.IDomainEvent"/>s to process</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the processed <see cref="T:EventStore.ClientAPI.EventData"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.AddOrUpdateSubscription(System.String,System.Object)">
+            <summary>
+            Adds or updates a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/>
+            </summary>
+            <param name="subscriptionId">The <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/>'s id</param>
+            <param name="subscriptionSource">The <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/>'s source</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.CreatePersistentSubscriptionHandler(System.Func{System.IServiceProvider,Neuroglia.Data.EventSourcing.IEvent{System.String},System.Threading.Tasks.Task})">
+            <summary>
+            Creates a new persistent subscription handler
+            </summary>
+            <param name="handler">A <see cref="T:System.Func`3"/> used to handle the subscription</param>
+            <returns>A new <see cref="T:System.Func`3"/> used to handle the persistent subscription</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.CreatePersistentSubscriptionDropHandler(System.String,System.String,System.String,System.Func{System.IServiceProvider,Neuroglia.Data.EventSourcing.IEvent{System.String},System.Threading.Tasks.Task},Neuroglia.Data.EventSourcing.EventAckMode)">
+            <summary>
+            Creates a new <see cref="T:System.Action`3"/> used to handle subscription drops
+            </summary>
+            <param name="subscriptionId">The id of the subscription that has been dropped</param>
+            <param name="streamId">The id of the subscribed stream</param>
+            <param name="subscriptionName">The persistent subscription's name</param>
+            <param name="handler">A <see cref="T:System.Func`3"/> used to handle the subscription</param>
+            <param name="eventAckMode">The way subscribed events should be acknowledged</param>
+            <returns>A new <see cref="T:System.Action`3"/> used to handle subscription drops</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.CreateCatchUpSubscriptionHandler(System.Func{System.IServiceProvider,Neuroglia.Data.EventSourcing.IEvent{System.String},System.Threading.Tasks.Task})">
+            <summary>
+            Creates a new catch-up subscription handler
+            </summary>
+            <param name="handler">A <see cref="T:System.Func`3"/> used to handle the subscription</param>
+            <returns>A new <see cref="T:System.Func`3"/> used to handle the catch-up subscription</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.CreateCatchUpSubscriptionDropHandler(System.String,System.String,System.Nullable{System.Int64},EventStore.ClientAPI.CatchUpSubscriptionSettings,System.Func{System.IServiceProvider,Neuroglia.Data.EventSourcing.IEvent{System.String},System.Threading.Tasks.Task})">
+            <summary>
+            Creates a new <see cref="T:System.Action`3"/> used to handle subscription drops
+            </summary>
+            <param name="subscriptionId">The id of the subscription that has been dropped</param>
+            <param name="streamId">The id of the catch-up stream</param>
+            <param name="startFrom">The event number from which to start</param>
+            <param name="settings">The <see cref="T:EventStore.ClientAPI.CatchUpSubscriptionSettings"/> to use</param>
+            <param name="handler">A <see cref="T:System.Func`3"/> used to handle the subscription</param>
+            <returns>A new <see cref="T:System.Action`3"/> used to handle subscription drops</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.CreateStandardSubscriptionHandler(System.Func{System.IServiceProvider,Neuroglia.Data.EventSourcing.IEvent{System.String},System.Threading.Tasks.Task})">
+            <summary>
+            Creates a new standard subscription handler
+            </summary>
+            <param name="handler">A <see cref="T:System.Func`3"/> used to handle the subscription</param>
+            <returns>A new <see cref="T:System.Func`3"/> used to handle the standard subscription</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.CreateStandardSubscriptionDropHandler(System.String,System.String,System.Boolean,System.Func{System.IServiceProvider,Neuroglia.Data.EventSourcing.IEvent{System.String},System.Threading.Tasks.Task})">
+            <summary>
+            Creates a new <see cref="T:System.Action`3"/> used to handle subscription drops
+            </summary>
+            <param name="subscriptionId">The id of the subscription that has been dropped</param>
+            <param name="streamId">The id of the catch-up stream</param>
+            <param name="resolveLinks">A boolean indicating whether or not to resolve event links</param>
+            <param name="handler">A <see cref="T:System.Func`3"/> used to handle the subscription</param>
+            <returns>A new <see cref="T:System.Action`3"/> used to handle subscription drops</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.OnSubscriptionDisposed(System.Object,System.EventArgs)">
+            <summary>
+            Represents the handler fired whenever an <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/> has been disposed
+            </summary>
+            <param name="sender">The disposed <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/></param>
+            <param name="e">The event's arguments</param>
         </member>
     </members>
 </doc>

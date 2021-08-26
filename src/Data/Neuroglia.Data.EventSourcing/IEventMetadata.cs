@@ -16,48 +16,34 @@
  */
 using System;
 
-namespace Neuroglia.Data
+namespace Neuroglia.Data.EventSourcing
 {
 
     /// <summary>
-    /// Defines the fundamentals of an entity
+    /// Defines the fundamentals of an object that holds <see cref="ISourcedEvent"/> data
     /// </summary>
-    public interface IEntity
-        : IIdentifiable
+    public interface IEventMetadata
     {
 
         /// <summary>
-        /// Gets the date and time at which the <see cref="IEntity"/> has been created
+        /// Gets the <see cref="ISourcedEvent"/>'s id
         /// </summary>
-        DateTimeOffset CreatedAt { get; }
+        Guid Id { get; }
 
         /// <summary>
-        /// Gets the date and time at which the <see cref="IEntity"/> has last been modified
+        /// Gets the <see cref="ISourcedEvent"/>'s type
         /// </summary>
-        DateTimeOffset LastModified { get; }
+        string Type { get; }
 
         /// <summary>
-        /// Gets the entity's version
+        /// Gets the <see cref="ISourcedEvent"/>'s data
         /// </summary>
-        int Version { get; }
+        object Data { get; }
 
         /// <summary>
-        /// Sets the <see cref="IEntity"/>'s version
+        /// Gets the <see cref="ISourcedEvent"/>'s metadata
         /// </summary>
-        /// <param name="version">The <see cref="IEntity"/>'s version</param>
-        void SetVersion(int version);
-
-    }
-
-    /// <summary>
-    /// Defines the fundamentals of an entity
-    /// </summary>
-    public interface IEntity<TKey>
-        : IEntity, IIdentifiable<TKey>
-        where TKey : IEquatable<TKey>
-    {
-
-
+        object Metadata { get; }
 
     }
 

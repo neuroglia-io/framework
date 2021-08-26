@@ -24,6 +24,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Mediation\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
     <ProjectReference Include="..\Neuroglia.Data\Neuroglia.Data.csproj" />
   </ItemGroup>
   

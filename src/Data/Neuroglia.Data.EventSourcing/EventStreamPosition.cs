@@ -14,51 +14,31 @@
  * limitations under the License.
  *
  */
-using System;
 
-namespace Neuroglia.Data
+namespace Neuroglia.Data.EventSourcing
 {
 
     /// <summary>
-    /// Defines the fundamentals of an entity
+    /// Enumerates all types of event stream positions
     /// </summary>
-    public interface IEntity
-        : IIdentifiable
+    public enum EventStreamPosition
     {
-
         /// <summary>
-        /// Gets the date and time at which the <see cref="IEntity"/> has been created
+        /// No specific position specified
         /// </summary>
-        DateTimeOffset CreatedAt { get; }
-
+        None,
         /// <summary>
-        /// Gets the date and time at which the <see cref="IEntity"/> has last been modified
+        /// Indicates the start of the event stream
         /// </summary>
-        DateTimeOffset LastModified { get; }
-
+        Start,
         /// <summary>
-        /// Gets the entity's version
+        /// Indicates the current position of the event stream
         /// </summary>
-        int Version { get; }
-
+        Current,
         /// <summary>
-        /// Sets the <see cref="IEntity"/>'s version
+        /// Indicates a custom position
         /// </summary>
-        /// <param name="version">The <see cref="IEntity"/>'s version</param>
-        void SetVersion(int version);
-
-    }
-
-    /// <summary>
-    /// Defines the fundamentals of an entity
-    /// </summary>
-    public interface IEntity<TKey>
-        : IEntity, IIdentifiable<TKey>
-        where TKey : IEquatable<TKey>
-    {
-
-
-
+        Custom
     }
 
 }

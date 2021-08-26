@@ -20,25 +20,25 @@ namespace Neuroglia.Data.EventSourcing
 {
 
     /// <summary>
-    /// Defines the fundamentals of a service used to aggregate <see cref="IDomainEvent"/>s
+    /// Defines the fundamentals of a service used to aggregate <see cref="ISourcedEvent"/>s
     /// </summary>
     public interface IAggregator
     {
 
         /// <summary>
-        /// Aggregates the specified <see cref="IEvent"/>s
+        /// Aggregates the specified <see cref="IDomainEvent"/>s
         /// </summary>
-        /// <param name="events">An <see cref="IEnumerable{T}"/> containing the <see cref="IEvent"/>s to aggregate</param>
+        /// <param name="events">An <see cref="IEnumerable{T}"/> containing the <see cref="IDomainEvent"/>s to aggregate</param>
         /// <returns>The resulting aggregate</returns>
-        object Aggregate(IEnumerable<IEvent> events);
+        object Aggregate(IEnumerable<IDomainEvent> events);
 
         /// <summary>
-        /// Aggregates the specified <see cref="IEvent"/>s
+        /// Aggregates the specified <see cref="IDomainEvent"/>s
         /// </summary>
         /// <param name="state">The current state of the aggregate</param>
-        /// <param name="events">An <see cref="IEnumerable{T}"/> containing the <see cref="IEvent"/>s to aggregate</param>
+        /// <param name="events">An <see cref="IEnumerable{T}"/> containing the <see cref="IDomainEvent"/>s to aggregate</param>
         /// <returns>The resulting aggregate</returns>
-        object Aggregate(object state, IEnumerable<IEvent> events);
+        object Aggregate(object state, IEnumerable<IDomainEvent> events);
 
     }
 
@@ -52,19 +52,19 @@ namespace Neuroglia.Data.EventSourcing
     {
 
         /// <summary>
-        /// Aggregates the specified <see cref="IEvent"/>s
+        /// Aggregates the specified <see cref="IDomainEvent"/>s
         /// </summary>
-        /// <param name="events">An <see cref="IEnumerable{T}"/> containing the <see cref="IEvent"/>s to aggregate</param>
+        /// <param name="events">An <see cref="IEnumerable{T}"/> containing the <see cref="IDomainEvent"/>s to aggregate</param>
         /// <returns>The resulting aggregate</returns>
-        new TAggregate Aggregate(IEnumerable<IEvent> events);
+        new TAggregate Aggregate(IEnumerable<IDomainEvent> events);
 
         /// <summary>
-        /// Aggregates the specified <see cref="IEvent"/>s
+        /// Aggregates the specified <see cref="IDomainEvent"/>s
         /// </summary>
         /// <param name="state">The current state of the aggregate</param>
-        /// <param name="events">An <see cref="IEnumerable{T}"/> containing the <see cref="IEvent"/>s to aggregate</param>
+        /// <param name="events">An <see cref="IEnumerable{T}"/> containing the <see cref="IDomainEvent"/>s to aggregate</param>
         /// <returns>The resulting aggregate</returns>
-        TAggregate Aggregate(TAggregate state, IEnumerable<IEvent> events);
+        TAggregate Aggregate(TAggregate state, IEnumerable<IDomainEvent> events);
 
     }
 

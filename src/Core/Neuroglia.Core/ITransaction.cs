@@ -15,36 +15,32 @@
  *
  */
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Neuroglia.Data.EventSourcing
+namespace Neuroglia
 {
 
     /// <summary>
-    /// Defines the fundamentals of an object used to describe a stream of <see cref="IDomainEvent"/>s
+    /// Defines the fundamentals of a transaction
     /// </summary>
-    public interface IEventStream
-        : IIdentifiable
+    public interface ITransaction
+        : IDisposable, IAsyncDisposable
     {
 
         /// <summary>
-        /// Gets the stream's length, or events count
+        /// Commits the changes made in the transaction's scope
         /// </summary>
-        long Length { get; }
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        Task CommitAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Gets the current position in the stream
+        /// Rollbacks the changes made in the transaction's scope
         /// </summary>
-        long Position { get; }
-
-        /// <summary>
-        /// Gets the date and time at which the first event has been created
-        /// </summary>
-        DateTimeOffset FirstEventAt { get; }
-
-        /// <summary>
-        /// Gets the date and time at which the last event has been created
-        /// </summary>
-        DateTimeOffset LastEventAt { get; }
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        Task RollbackAsync(CancellationToken cancellationToken = default);
 
     }
 

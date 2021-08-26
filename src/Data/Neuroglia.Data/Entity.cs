@@ -50,6 +50,13 @@ namespace Neuroglia.Data
 
         object IIdentifiable.Id => this.Id;
 
+        void IEntity.SetVersion(int version)
+        {
+            if (this.Version <= 0)
+                throw new ArgumentOutOfRangeException(nameof(version));
+            this.Version = version;
+        }
+
     }
 
 }

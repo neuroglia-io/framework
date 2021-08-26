@@ -658,6 +658,12 @@
             Gets the entity's version
             </summary>
         </member>
+        <member name="M:Neuroglia.Data.IEntity.SetVersion(System.Int32)">
+            <summary>
+            Sets the <see cref="T:Neuroglia.Data.IEntity"/>'s version
+            </summary>
+            <param name="version">The <see cref="T:Neuroglia.Data.IEntity"/>'s version</param>
+        </member>
         <member name="T:Neuroglia.Data.IEntity`1">
             <summary>
             Defines the fundamentals of an entity

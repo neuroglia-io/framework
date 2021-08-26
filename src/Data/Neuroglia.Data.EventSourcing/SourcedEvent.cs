@@ -20,32 +20,30 @@ namespace Neuroglia.Data.EventSourcing
 {
 
     /// <summary>
-    /// Represents the default implementation of the <see cref="IEvent{TKey}"/> interface
+    /// Represents the default implementation of the <see cref="ISourcedEvent"/> interface
     /// </summary>
-    /// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="IEvent{TKey}"/></typeparam>
-    public class Event<TKey>
-        : IEvent<TKey>
-        where TKey : IEquatable<TKey>
+    public class SourcedEvent
+        : ISourcedEvent
     {
 
         /// <summary>
-        /// Initializes a new <see cref="Event{TKey}"/>
+        /// Initializes a new <see cref="SourcedEvent"/>
         /// </summary>
-        protected Event()
+        protected SourcedEvent()
         {
 
         }
 
         /// <summary>
-        /// Initializes a new <see cref="Event{TKey}"/>
+        /// Initializes a new <see cref="SourcedEvent"/>
         /// </summary>
-        /// <param name="id">The id used to uniquely identity the <see cref="Event{TKey}"/></param>
-        /// <param name="sequence">The <see cref="Event{TKey}"/>'s sequence</param>
-        /// <param name="createdAt">The date and time at which the <see cref="Event{TKey}"/> has been created</param>
+        /// <param name="id">The id used to uniquely identity the <see cref="SourcedEvent"/></param>
+        /// <param name="sequence">The <see cref="SourcedEvent"/>'s sequence</param>
+        /// <param name="createdAt">The date and time at which the <see cref="SourcedEvent"/> has been created</param>
         /// <param name="type">The type of the described event</param>
         /// <param name="data">The data of the described event</param>
         /// <param name="metadata">The metadata of the described event</param>
-        public Event(TKey id, long sequence, DateTimeOffset createdAt, string type, object data, object metadata)
+        public SourcedEvent(Guid id, long sequence, DateTimeOffset createdAt, string type, object data, object metadata)
         {
             this.Id = id;
             this.Sequence = sequence;
@@ -56,9 +54,7 @@ namespace Neuroglia.Data.EventSourcing
         }
 
         /// <inheritdoc/>
-        public virtual TKey Id { get; }
-
-        object IEvent.Id => this.Id;
+        public virtual Guid Id { get; }
 
         /// <inheritdoc/>
         public virtual long Sequence { get; }
