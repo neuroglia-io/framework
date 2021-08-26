@@ -50,8 +50,17 @@ namespace Neuroglia.Data.EventSourcing
             services.TryAddSingleton(projectionManagerBuilder.Build());
             services.TryAddSingleton<ESEventStore>();
             services.TryAddSingleton<IEventStore>(provider => provider.GetRequiredService<ESEventStore>());
-            services.TryAddSingleton<IEventStore<string>>(provider => provider.GetRequiredService<ESEventStore>());
             return services;
+        }
+
+        /// <summary>
+        /// Adds and configures the <see cref="ESEventStore"/>
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+        /// <returns>The configured <see cref="IServiceCollection"/></returns>
+        public static IServiceCollection AddEventStore(this IServiceCollection services)
+        {
+            return services.AddEventStore(_ => { });
         }
 
     }

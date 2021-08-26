@@ -36,7 +36,7 @@ namespace Neuroglia.Data.EventSourcing
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
             JObject metadata = new();
-            metadata.Add(AssemblyQualifiedTypeNameMetadata, e.GetType().AssemblyQualifiedName);
+            metadata.Add(EventSourcingDefaults.Metadata.RuntimeTypeName, e.GetType().AssemblyQualifiedName);
             return new EventMetadata(e.GetTypeName(), e, metadata);
         }
 

@@ -25,10 +25,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EventStore.Client" Version="21.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Serialization\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
     <ProjectReference Include="..\Neuroglia.Data.EventSourcing\Neuroglia.Data.EventSourcing.csproj" />
   </ItemGroup>
@@ -42,6 +38,10 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="EventStore.Client" Version="21.2.0" />
   </ItemGroup>
 
 </Project>

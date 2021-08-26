@@ -13,10 +13,9 @@ using Xunit;
 namespace Neuroglia.UnitTests.Cases.Data.Repositories
 {
 
-
     [TestCaseOrderer("Xunit.PriorityTestCaseOrderer", "Neuroglia.Xunit")]
     public sealed class DistributedCacheRepositoryTest
-      : IDisposable
+        : IDisposable
     {
 
         public DistributedCacheRepositoryTest()

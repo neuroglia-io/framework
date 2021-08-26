@@ -97,8 +97,13 @@ namespace Neuroglia.Data.EventSourcing
         {
             if (string.IsNullOrWhiteSpace(streamId))
                 throw new ArgumentNullException(nameof(streamId));
-            RecordedEvent firstEvent = (await this.Connection.ReadEventAsync(streamId, StreamPosition.Start, false)).Event.Value.Event;
-            RecordedEvent lastEvent = (await this.Connection.ReadEventAsync(streamId, StreamPosition.End, false)).Event.Value.Event;
+            EventReadResult readResult;
+            readResult = await this.Connection.ReadEventAsync(streamId, StreamPosition.Start, false);
+            if (readResult.Status == EventReadStatus.NoStream)
+                return null;
+            RecordedEvent firstEvent = readResult.Event.Value.Event;
+            readResult = await this.Connection.ReadEventAsync(streamId, StreamPosition.End, false);
+            RecordedEvent lastEvent = readResult.Event.Value.Event;
             return new EventStream(streamId, lastEvent.EventNumber, firstEvent.Created, lastEvent.Created);
         }
 

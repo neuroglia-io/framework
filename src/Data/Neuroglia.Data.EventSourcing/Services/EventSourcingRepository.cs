@@ -95,14 +95,16 @@ namespace Neuroglia.Data.EventSourcing.Services
         /// <inheritdoc/>
         public override async Task<bool> ContainsAsync(TKey key, CancellationToken cancellationToken = default)
         {
-            
+            IEventStream stream = await this.EventStore.GetStreamAsync(this.GetStreamIdFor(key), cancellationToken);
+            return stream == null;
         }
 
         /// <inheritdoc/>
         public override async Task<TAggregate> FindAsync(TKey key, CancellationToken cancellationToken = default)
         {
-
-            return await Task.FromResult(this.Aggregator.Aggregate());
+            IEnumerable<ISourcedEvent> sourcedEvents = await this.EventStore.ReadAllEventsForwardAsync(this.GetStreamIdFor(key), cancellationToken);
+            IEnumerable<IDomainEvent> domainEvents = sourcedEvents.Select(e => e.AsDomainEvent());
+            return await Task.FromResult(this.Aggregator.Aggregate(domainEvents));
         }
 
         /// <inheritdoc/>

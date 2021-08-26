@@ -10,6 +10,7 @@ namespace Neuroglia.UnitTests.Containers
         public const string DefaultDatabase = "test";
         public const string DefaultUsername = "test";
         public const string DefaultPassword = "test";
+        public const int PublicPort = 27017;
 
         internal MongoDBContainer(ITestcontainersConfiguration configuration) 
             : base(configuration)
@@ -19,7 +20,7 @@ namespace Neuroglia.UnitTests.Containers
             base.Password = DefaultPassword;
         }
 
-        public override string ConnectionString => $"mongodb://{Username}:{Password}@{this.Hostname}:{this.GetMappedPublicPort(27017)}";
+        public override string ConnectionString => $"mongodb://{Username}:{Password}@{this.Hostname}:{this.GetMappedPublicPort(PublicPort)}";
 
     }
 

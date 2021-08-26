@@ -16,12 +16,12 @@ namespace Neuroglia.UnitTests.Containers
             Container = new TestcontainersBuilder<MongoDBContainer>()
                 .WithName("mongo")
                 .WithImage("mongo:latest")
-                .WithPortBinding(27017, true)
+                .WithPortBinding(MongoDBContainer.PublicPort, true)
                 .WithEnvironment("MONGO_INITDB_ROOT_USERNAME", MongoDBContainer.DefaultUsername)
                 .WithEnvironment("MONGO_INITDB_ROOT_PASSWORD", MongoDBContainer.DefaultPassword)
                 .WithWaitStrategy(Wait
                     .ForUnixContainer()
-                    .UntilPortIsAvailable(27017)
+                    .UntilPortIsAvailable(MongoDBContainer.PublicPort)
                     .UntilCommandIsCompleted($"mongo {MongoDBContainer.DefaultDatabase}"))
                 .Build();
             Container.StartAsync().GetAwaiter().GetResult();

@@ -35,7 +35,7 @@ namespace Neuroglia.Data.EventSourcing
         {
             if (e.Metadata is not JObject metadata)
                 return null;
-            string typeName = metadata.Property(AssemblyQualifiedTypeNameMetadata).Value.ToString();
+            string typeName = metadata.Property(EventSourcingDefaults.Metadata.RuntimeTypeName).Value.ToString();
             if (string.IsNullOrWhiteSpace(typeName))
                 return null;
             if (e.Data is not JObject data)
