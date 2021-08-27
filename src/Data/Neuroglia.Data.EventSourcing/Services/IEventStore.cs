@@ -29,14 +29,6 @@ namespace Neuroglia.Data.EventSourcing
     {
 
         /// <summary>
-        /// Starts a new <see cref="ITransaction"/> for the specified stream
-        /// </summary>
-        /// <param name="streamId">The id of the stream to start a new <see cref="ITransaction"/> for</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>A new <see cref="ITransaction"/></returns>
-        Task<ITransaction> StartTransactionAsync(string streamId, CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Gets the specified <see cref="IAggregateRoot"/>'s <see cref="IEventStream"/>
         /// </summary>
         /// <param name="streamId">The id of the <see cref="IEventStream"/> to fetch</param>

@@ -152,7 +152,6 @@
             <summary>
             Represents an <see cref="T:Microsoft.AspNetCore.Mvc.ModelBinding.IModelBinderProvider"/> implementation used to provide <see cref="T:Microsoft.AspNetCore.AbstractModelBinder"/>s instances
             </summary>
-            <typeparam name="T">The type of the abstract class to bind</typeparam>
         </member>
         <member name="M:Microsoft.AspNetCore.AbstractModelBinderProvider.GetBinder(Microsoft.AspNetCore.Mvc.ModelBinding.ModelBinderProviderContext)">
             <inheritdoc/>

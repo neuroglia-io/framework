@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-using EventStore.ClientAPI;
+using EventStore.Client;
 using Neuroglia.Data.EventSourcing.EventStore.Subscriptions;
 using System;
 
@@ -65,9 +65,9 @@ namespace Neuroglia.Data.EventSourcing.EventStore
         /// Creates a new <see cref="EventStoreSubscription"/>
         /// </summary>
         /// <param name="subscriptionId">The id of the <see cref="EventStoreSubscription"/> to create</param>
-        /// <param name="source">The <see cref="EventStorePersistentSubscriptionBase"/> to create a new <see cref="EventStoreSubscription"/> for</param>
+        /// <param name="source">The <see cref="PersistentSubscription"/> to create a new <see cref="EventStoreSubscription"/> for</param>
         /// <returns>A new <see cref="EventStoreSubscription"/></returns>
-        public static EventStoreSubscription CreateFor(string subscriptionId, EventStorePersistentSubscriptionBase source)
+        public static EventStoreSubscription CreateFor(string subscriptionId, PersistentSubscription source)
         {
             return new DurableSubscription(subscriptionId, source);
         }
@@ -76,20 +76,9 @@ namespace Neuroglia.Data.EventSourcing.EventStore
         /// Creates a new <see cref="EventStoreSubscription"/>
         /// </summary>
         /// <param name="subscriptionId">The id of the <see cref="EventStoreSubscription"/> to create</param>
-        /// <param name="source">The <see cref="EventStoreStreamCatchUpSubscription"/> to create a new <see cref="EventStoreSubscription"/> for</param>
+        /// <param name="source">The <see cref="StreamSubscription"/> to create a new <see cref="EventStoreSubscription"/> for</param>
         /// <returns>A new <see cref="EventStoreSubscription"/></returns>
-        public static EventStoreSubscription CreateFor(string subscriptionId, EventStoreStreamCatchUpSubscription source)
-        {
-            return new CatchUpSubscription(subscriptionId, source);
-        }
-
-        /// <summary>
-        /// Creates a new <see cref="EventStoreSubscription"/>
-        /// </summary>
-        /// <param name="subscriptionId">The id of the <see cref="EventStoreSubscription"/> to create</param>
-        /// <param name="source">The <see cref="global::EventStore.ClientAPI.EventStoreSubscription"/> to create a new <see cref="EventStoreSubscription"/> for</param>
-        /// <returns>A new <see cref="EventStoreSubscription"/></returns>
-        public static EventStoreSubscription CreateFor(string subscriptionId, global::EventStore.ClientAPI.EventStoreSubscription source)
+        public static EventStoreSubscription CreateFor(string subscriptionId, StreamSubscription source)
         {
             return new StandardSubscription(subscriptionId, source);
         }

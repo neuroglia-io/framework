@@ -14,11 +14,11 @@
  * limitations under the License.
  *
  */
-using EventStore.ClientAPI;
-using System;
+using EventStore.Client;
 
 namespace Neuroglia.Data.EventSourcing.EventStore.Subscriptions
 {
+
     /// <summary>
     /// Represents a durable <see cref="EventStoreSubscription"/>
     /// </summary>
@@ -27,16 +27,11 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Subscriptions
     {
 
         /// <summary>
-        /// Gets the default timeout, in milliseconds
-        /// </summary>
-        private const int DefaultTimeout = 3000;
-
-        /// <summary>
         /// Initializes a new <see cref="DurableSubscription"/>
         /// </summary>
         /// <param name="id">The <see cref="DurableSubscription"/>'s id</param>
-        /// <param name="source">The underlying <see cref="EventStorePersistentSubscriptionBase"/></param>
-        public DurableSubscription(string id, EventStorePersistentSubscriptionBase source)
+        /// <param name="source">The underlying <see cref="PersistentSubscription"/></param>
+        public DurableSubscription(string id, PersistentSubscription source)
             : base(id, source)
         {
 
@@ -53,13 +48,13 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Subscriptions
         public string DurableName { get; }
 
         /// <summary>
-        /// Gets the underlying <see cref="EventStorePersistentSubscriptionBase"/>
+        /// Gets the underlying <see cref="PersistentSubscription"/>
         /// </summary>
-        protected new EventStorePersistentSubscriptionBase Source
+        protected new PersistentSubscription Source
         {
             get
             {
-                return (EventStorePersistentSubscriptionBase)base.Source;
+                return (PersistentSubscription)base.Source;
             }
         }
 
@@ -68,7 +63,7 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Subscriptions
         {
             if (disposing)
             {
-                this.Source?.Stop(TimeSpan.FromMilliseconds(DefaultTimeout));
+                this.Source?.Dispose();
                 base.Source = null;
             }
             base.Dispose(disposing);

@@ -593,14 +593,6 @@
             Defines the fundamentals of a service used to store <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.StartTransactionAsync(System.String,System.Threading.CancellationToken)">
-            <summary>
-            Starts a new <see cref="T:Neuroglia.ITransaction"/> for the specified stream
-            </summary>
-            <param name="streamId">The id of the stream to start a new <see cref="T:Neuroglia.ITransaction"/> for</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new <see cref="T:Neuroglia.ITransaction"/></returns>
-        </member>
         <member name="M:Neuroglia.Data.EventSourcing.IEventStore.GetStreamAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/>'s <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/>

@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-using EventStore.ClientAPI;
+using EventStore.Client;
 
 namespace Neuroglia.Data.EventSourcing
 {
@@ -31,39 +31,22 @@ namespace Neuroglia.Data.EventSourcing
         /// <returns>A new <see cref="PersistentSubscriptionSettings"/></returns>
         public static PersistentSubscriptionSettings ToPersistentSubscriptionSettings(this ISubscriptionOptions subscriptionOptions)
         {
-            PersistentSubscriptionSettingsBuilder builder = PersistentSubscriptionSettings.Create();
+            StreamPosition? startFrom = null;
             switch (subscriptionOptions.StreamPosition)
             {
                 case EventStreamPosition.Custom:
                     if (subscriptionOptions.StartFrom.HasValue)
-                        builder.StartFrom(subscriptionOptions.StartFrom.Value);
+                        startFrom = StreamPosition.FromInt64(subscriptionOptions.StartFrom.Value);
                     break;
                 case EventStreamPosition.Start:
-                    builder.StartFromBeginning();
+                    startFrom = StreamPosition.Start;
                     break;
                 case EventStreamPosition.Current:
-                    builder.StartFromCurrent();
+                    startFrom = StreamPosition.End;
                     break;
             }
-            if (subscriptionOptions.ResolveLinks)
-                builder.ResolveLinkTos();
-            else
-                builder.DoNotResolveLinkTos();
-            builder.WithMaxSubscriberCountOf(subscriptionOptions.MaxSubscribers);
-            builder.MinimumCheckPointCountOf(subscriptionOptions.MinEventsBeforeCheckpoint);
-            builder.MaximumCheckPointCountOf(subscriptionOptions.MaxEventsBeforeCheckpoint);
-            return builder.Build();
-        }
-
-        /// <summary>
-        /// Transforms the <see cref="ISubscriptionOptions"/> into a new <see cref="CatchUpSubscriptionSettings"/>
-        /// </summary>
-        /// <param name="subscriptionOptions">The <see cref="ISubscriptionOptions"/> to transform</param>
-        /// <returns>A new <see cref="CatchUpSubscriptionSettings"/></returns>
-        public static CatchUpSubscriptionSettings ToCatchUpSubscriptionSettings(this ISubscriptionOptions subscriptionOptions)
-        {
-            CatchUpSubscriptionSettings defaultSettings = CatchUpSubscriptionSettings.Default;
-            return new CatchUpSubscriptionSettings(defaultSettings.MaxLiveQueueSize, defaultSettings.ReadBatchSize, defaultSettings.VerboseLogging, subscriptionOptions.ResolveLinks);
+            PersistentSubscriptionSettings settings = new(subscriptionOptions.ResolveLinks, startFrom, maxSubscriberCount: subscriptionOptions.MaxSubscribers, minCheckPointCount: subscriptionOptions.MinEventsBeforeCheckpoint, maxCheckPointCount: subscriptionOptions.MaxEventsBeforeCheckpoint);
+            return settings;
         }
 
     }

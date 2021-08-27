@@ -15,9 +15,7 @@
  *
  */
 
-using EventStore.ClientAPI;
-using EventStore.ClientAPI.Projections;
-using EventStore.ClientAPI.SystemData;
+using EventStore.Client;
 using Neuroglia.Serialization;
 using System;
 
@@ -46,18 +44,11 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Configuration
             where TFactory : class, IAggregatorFactory;
 
         /// <summary>
-        /// Configures the <see cref="IEventStoreConnection"/> to use
+        /// Configures the <see cref="IEventStoreClientBuilder"/> to use
         /// </summary>
-        /// <param name="configurationAction">An <see cref="Action{T}"/> used to configure the <see cref="IEventStoreConnection"/> to use</param>
+        /// <param name="setupAction">An <see cref="Action{T}"/> used to setup the <see cref="EventStoreClient"/> to use</param>
         /// <returns>The configured <see cref="IEventStoreOptionsBuilder"/></returns>
-        IEventStoreOptionsBuilder UseConnection(Action<IEventStoreConnectionBuilder> configurationAction);
-
-        /// <summary>
-        /// Configures the <see cref="ProjectionsManager"/> to use
-        /// </summary>
-        /// <param name="configurationAction">An <see cref="Action{T}"/> used to configure the <see cref="ProjectionsManager"/> to use</param>
-        /// <returns>The configured <see cref="IEventStoreOptionsBuilder"/></returns>
-        IEventStoreOptionsBuilder UseProjectionsManager(Action<IEventStoreProjectionsManagerBuilder> configurationAction);
+        IEventStoreOptionsBuilder ConfigureClient(Action<IEventStoreClientBuilder> setupAction);
 
         /// <summary>
         /// Uses the specified <see cref="UserCredentials"/> when contacting the remote server

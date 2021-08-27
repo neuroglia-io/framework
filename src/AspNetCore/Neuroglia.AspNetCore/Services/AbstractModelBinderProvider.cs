@@ -21,10 +21,10 @@ using System.Collections.Generic;
 
 namespace Microsoft.AspNetCore
 {
+
     /// <summary>
     /// Represents an <see cref="IModelBinderProvider"/> implementation used to provide <see cref="AbstractModelBinder"/>s instances
     /// </summary>
-    /// <typeparam name="T">The type of the abstract class to bind</typeparam>
     public class AbstractModelBinderProvider
         : IModelBinderProvider
     {

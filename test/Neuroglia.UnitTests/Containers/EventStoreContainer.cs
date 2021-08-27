@@ -17,7 +17,7 @@ namespace Neuroglia.UnitTests.Containers
             
         }
 
-        public override string ConnectionString => $"ConnectTo=tcp://admin:changeit@{this.Hostname}:{this.GetMappedPublicPort(PublicPort2)};";
+        public override string ConnectionString => $"esdb://{this.Hostname}:{this.GetMappedPublicPort(PublicPort2)}?tls=false";
 
     }
 

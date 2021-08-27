@@ -14,6 +14,8 @@
  * limitations under the License.
  *
  */
+using EventStore.Client;
+
 namespace Neuroglia.Data.EventSourcing.EventStore.Subscriptions
 {
 
@@ -28,7 +30,7 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Subscriptions
         /// Initializes a new <see cref="StandardSubscription"/>
         /// </summary>
         /// <param name="id">The <see cref="StandardSubscription"/>'s id</param>
-        /// <param name="source">The underlying <see cref="global::EventStore.ClientAPI.EventStoreSubscription"/></param>
+        /// <param name="source">The underlying <see cref="StreamSubscription"/></param>
         public StandardSubscription(string id, object source)
             : base(id, source)
         {
@@ -36,13 +38,13 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Subscriptions
         }
 
         /// <summary>
-        /// Gets the underlying <see cref="global::EventStore.ClientAPI.EventStoreSubscription"/>
+        /// Gets the underlying <see cref="StreamSubscription"/>
         /// </summary>
-        protected new global::EventStore.ClientAPI.EventStoreSubscription Source
+        protected new StreamSubscription Source
         {
             get
             {
-                return (global::EventStore.ClientAPI.EventStoreSubscription)base.Source;
+                return (StreamSubscription)base.Source;
             }
         }
 

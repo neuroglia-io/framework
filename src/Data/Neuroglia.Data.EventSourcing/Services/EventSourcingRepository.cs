@@ -152,13 +152,13 @@ namespace Neuroglia.Data.EventSourcing.Services
         /// <inheritdoc/>
         public override Task<List<TAggregate>> ToListAsync(CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException($"Querying an event sourcing repository is not supported. Event sourcing repositories should only be used as write-model stores (cfr. CQRS)");
+            throw new NotSupportedException($"Querying an event sourcing repository is not supported. Event sourcing repositories should only be used as write-model stores (cfr. CQRS)");
         }
 
         /// <inheritdoc/>
         public override IQueryable<TAggregate> AsQueryable()
         {
-            throw new NotImplementedException($"Querying an event sourcing repository is not supported. Event sourcing repositories should only be used as write-model stores (cfr. CQRS)");
+            throw new NotSupportedException($"Querying an event sourcing repository is not supported. Event sourcing repositories should only be used as write-model stores (cfr. CQRS)");
         }
 
         /// <inheritdoc/>

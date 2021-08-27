@@ -40,14 +40,11 @@ namespace Neuroglia.Data.EventSourcing
             IEventStoreOptionsBuilder optionsBuilder = new EventStoreOptionsBuilder();
             setupAction(optionsBuilder);
             EventStoreOptions options = optionsBuilder.Build();
-            IEventStoreConnectionBuilder connectionBuilder = new EventStoreConnectionBuilder();
-            options.ConnectionConfigurationAction?.Invoke(connectionBuilder);
-            IEventStoreProjectionsManagerBuilder projectionManagerBuilder = new EventStoreProjectionsManagerBuilder();
-            options.ProjectionsManagerConfigurationAction?.Invoke(projectionManagerBuilder);
+            IEventStoreClientBuilder connectionBuilder = new EventStoreClientBuilder();
+            options.ClientSetupAction?.Invoke(connectionBuilder);
             services.TryAddSingleton(Options.Create(options));
             services.TryAddSingleton(typeof(IAggregatorFactory), options.AggregatorFactoryType);
             services.TryAddSingleton(connectionBuilder.Build());
-            services.TryAddSingleton(projectionManagerBuilder.Build());
             services.TryAddSingleton<ESEventStore>();
             services.TryAddSingleton<IEventStore>(provider => provider.GetRequiredService<ESEventStore>());
             return services;

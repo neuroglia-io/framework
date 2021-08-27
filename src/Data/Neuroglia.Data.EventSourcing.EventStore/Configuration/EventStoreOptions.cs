@@ -14,9 +14,7 @@
  * limitations under the License.
  *
  */
-using EventStore.ClientAPI;
-using EventStore.ClientAPI.Projections;
-using EventStore.ClientAPI.SystemData;
+using EventStore.Client;
 using Neuroglia.Serialization;
 using System;
 
@@ -36,7 +34,7 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Configuration
         {
             this.SerializerType = typeof(NewtonsoftJsonSerializer);
             this.AggregatorFactoryType = typeof(AggregatorFactory);
-            this.ConnectionConfigurationAction = builder => { };
+            this.ClientSetupAction = builder => { };
         }
 
         /// <summary>
@@ -55,14 +53,9 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Configuration
         public Type AggregatorFactoryType { get; set; }
 
         /// <summary>
-        /// Gets/sets an <see cref="Action{T}"/> used to configure the <see cref="IEventStoreConnection"/> to use
+        /// Gets/sets an <see cref="Action{T}"/> used to configure the <see cref="EventStoreClient"/> to use
         /// </summary>
-        public Action<IEventStoreConnectionBuilder> ConnectionConfigurationAction { get; set; }
-
-        /// <summary>
-        /// Gets/sets an <see cref="Action{T}"/> used to configure the <see cref="ProjectionsManager"/> to use
-        /// </summary>
-        public Action<IEventStoreProjectionsManagerBuilder> ProjectionsManagerConfigurationAction { get; set; }
+        public Action<IEventStoreClientBuilder> ClientSetupAction { get; set; }
 
         /// <summary>
         /// Gets/sets the default <see cref="UserCredentials"/> to use to connect to the remote EventStore server

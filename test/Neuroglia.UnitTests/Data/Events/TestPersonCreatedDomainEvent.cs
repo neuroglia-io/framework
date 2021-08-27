@@ -11,6 +11,11 @@ namespace Neuroglia.UnitTests.Data.Events
         : DomainEvent<TestPerson, Guid>
     {
 
+        protected TestPersonCreatedDomainEvent()
+        {
+
+        }
+
         public TestPersonCreatedDomainEvent(Guid personId, string firstName, string lastName)
             : base(personId)
         {
@@ -18,9 +23,9 @@ namespace Neuroglia.UnitTests.Data.Events
             this.LastName = lastName;
         }
 
-        public string FirstName { get; }
+        public string FirstName { get; protected set; }
 
-        public string LastName { get; }
+        public string LastName { get; protected set; }
 
     }
 

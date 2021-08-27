@@ -15,12 +15,13 @@
  *
  */
 
-using EventStore.ClientAPI.SystemData;
+using EventStore.Client;
 using Neuroglia.Serialization;
 using System;
 
 namespace Neuroglia.Data.EventSourcing.EventStore.Configuration
 {
+
     /// <summary>
     /// Represents the default implementation of the <see cref="IEventStoreOptionsBuilder"/> interface
     /// </summary>
@@ -68,16 +69,9 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Configuration
         }
 
         /// <inheritdoc/>
-        public IEventStoreOptionsBuilder UseConnection(Action<IEventStoreConnectionBuilder> configurationAction)
+        public IEventStoreOptionsBuilder ConfigureClient(Action<IEventStoreClientBuilder> setupAction)
         {
-            this.Options.ConnectionConfigurationAction = configurationAction;
-            return this;
-        }
-
-        /// <inheritdoc/>
-        public IEventStoreOptionsBuilder UseProjectionsManager(Action<IEventStoreProjectionsManagerBuilder> configurationAction)
-        {
-            this.Options.ProjectionsManagerConfigurationAction = configurationAction;
+            this.Options.ClientSetupAction = setupAction;
             return this;
         }
 
