@@ -50,7 +50,7 @@ namespace Neuroglia.Data.EventSourcing
         }
 
         /// <inheritdoc/>
-        void IEventAggregator.Aggregate(object aggregate, ISourcedEvent e)
+        void IEventAggregator.Aggregate(object aggregate, IDomainEvent e)
         {
             this.Aggregate((TAggregate)aggregate, (TEvent)e);
         }

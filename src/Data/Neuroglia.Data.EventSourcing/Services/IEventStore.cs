@@ -135,6 +135,23 @@ namespace Neuroglia.Data.EventSourcing
         void UnsubscribeFrom(string subscriptionId);
 
         /// <summary>
+        /// Truncates the specified stream
+        /// </summary>
+        /// <param name="streamId">The id of the stream to truncate</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        Task TruncateStreamAsync(string streamId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Truncates the specified stream
+        /// </summary>
+        /// <param name="streamId">The id of the stream to truncate</param>
+        /// <param name="beforeVersion">The version before which to truncate the stream</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        Task TruncateStreamAsync(string streamId, long beforeVersion, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Deletes the specified stream
         /// </summary>
         /// <param name="streamId">The id of the stream to delete</param>

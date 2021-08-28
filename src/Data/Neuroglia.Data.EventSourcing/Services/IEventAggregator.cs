@@ -18,17 +18,17 @@
 namespace Neuroglia.Data.EventSourcing
 {
     /// <summary>
-    /// Defines the fundamentals of a service used to aggregate <see cref="ISourcedEvent"/>s
+    /// Defines the fundamentals of a service used to aggregate <see cref="IDomainEvent"/>s
     /// </summary>
     public interface IEventAggregator
     {
 
         /// <summary>
-        /// Aggregates the specified <see cref="ISourcedEvent"/>
+        /// Aggregates the specified <see cref="IDomainEvent"/>
         /// </summary>
-        /// <param name="aggregate">The aggregate to apply the specified <see cref="ISourcedEvent"/> to</param>
-        /// <param name="e">The <see cref="ISourcedEvent"/> to apply</param>
-        void Aggregate(object aggregate, ISourcedEvent e);
+        /// <param name="aggregate">The aggregate to apply the specified <see cref="IDomainEvent"/> to</param>
+        /// <param name="e">The <see cref="IDomainEvent"/> to apply</param>
+        void Aggregate(object aggregate, IDomainEvent e);
 
     }
 

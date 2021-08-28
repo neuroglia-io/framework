@@ -96,7 +96,7 @@ namespace Neuroglia.Data.EventSourcing.Services
         public override async Task<bool> ContainsAsync(TKey key, CancellationToken cancellationToken = default)
         {
             IEventStream stream = await this.EventStore.GetStreamAsync(this.GetStreamIdFor(key), cancellationToken);
-            return stream == null;
+            return stream != null;
         }
 
         /// <inheritdoc/>
@@ -123,8 +123,8 @@ namespace Neuroglia.Data.EventSourcing.Services
                 throw new ArgumentNullException(nameof(aggregate));
             IEnumerable<IDomainEvent> events = aggregate.PendingEvents;
             await this.EventStore.AppendToStreamAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetMetadata()), cancellationToken);
-            aggregate.ClearPendingEvents();
             aggregate.SetVersion(events.Count());
+            aggregate.ClearPendingEvents();
             return aggregate;
         }
 
@@ -135,8 +135,8 @@ namespace Neuroglia.Data.EventSourcing.Services
                 throw new ArgumentNullException(nameof(aggregate));
             IEnumerable<IDomainEvent> events = aggregate.PendingEvents;
             await this.EventStore.AppendToStreamAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetMetadata()), aggregate.Version, cancellationToken);
-            aggregate.ClearPendingEvents();
             aggregate.SetVersion(aggregate.Version + events.Count());
+            aggregate.ClearPendingEvents();
             return aggregate;
         }
 

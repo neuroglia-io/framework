@@ -555,6 +555,12 @@
         <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.UnsubscribeFrom(System.String)">
             <inheritdoc/>
         </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.TruncateStreamAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.TruncateStreamAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.DeleteStreamAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>

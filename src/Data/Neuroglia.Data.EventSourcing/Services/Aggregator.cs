@@ -87,12 +87,14 @@ namespace Neuroglia.Data.EventSourcing
         {
             if (aggregate == null)
                 aggregate = this.CreateAggregateInstance();
-            foreach (ISourcedEvent e in events)
+            foreach (IDomainEvent e in events)
             {
                 if (!this.Aggregators.TryGetValue(e.GetType(), out IEventAggregator aggregator))
                     continue;
                 aggregator.Aggregate(aggregate, e);
             }
+            if (aggregate is IAggregateRoot aggregateRoot)
+                aggregateRoot.SetVersion(aggregateRoot.Version + events.Count());
             return aggregate;
         }
 

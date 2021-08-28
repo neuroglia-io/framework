@@ -114,8 +114,9 @@ namespace Neuroglia.Data.EventSourcing
                 throw new ArgumentNullException(nameof(streamId));
             if (events == null || !events.Any())
                 throw new ArgumentNullException(nameof(events));
+            StreamRevision streamRevision = expectedVersion <= 0 ? StreamRevision.FromInt64(expectedVersion) : StreamRevision.FromInt64(expectedVersion - 1);
             IEnumerable<EventData> eventDataCollection = await this.GenerateEventsDataAsync(events, cancellationToken);
-            await EventStoreClient.AppendToStreamAsync(streamId, StreamRevision.FromInt64(expectedVersion), eventDataCollection, cancellationToken: cancellationToken);
+            await EventStoreClient.AppendToStreamAsync(streamId, streamRevision, eventDataCollection, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -301,12 +302,29 @@ namespace Neuroglia.Data.EventSourcing
         }
 
         /// <inheritdoc/>
+        public virtual async Task TruncateStreamAsync(string streamId, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(streamId))
+                throw new ArgumentNullException(nameof(streamId));
+            await this.EventStoreClient.SoftDeleteAsync(streamId, StreamState.StreamExists, cancellationToken: cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public virtual async Task TruncateStreamAsync(string streamId, long beforeVersion, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(streamId))
+                throw new ArgumentNullException(nameof(streamId));
+            if (beforeVersion < 0)
+                throw new ArgumentOutOfRangeException(nameof(beforeVersion));
+            await this.EventStoreClient.SoftDeleteAsync(streamId, StreamRevision.FromInt64(beforeVersion), cancellationToken: cancellationToken);
+        }
+
+        /// <inheritdoc/>
         public virtual async Task DeleteStreamAsync(string streamId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(streamId))
                 throw new ArgumentNullException(nameof(streamId));
-            await this.EventStoreClient.SoftDeleteAsync(streamId, StreamRevision.FromStreamPosition(StreamPosition.End), cancellationToken: cancellationToken);
-            //todo: think about version locking
+            await this.EventStoreClient.TombstoneAsync(streamId, StreamState.StreamExists, cancellationToken: cancellationToken);
         }
 
         /// <summary>

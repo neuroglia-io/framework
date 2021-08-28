@@ -254,6 +254,31 @@
             <param name="e">The <see cref="T:Neuroglia.Data.IDomainEvent"/> to get the type name of</param>
             <returns>The <see cref="T:Neuroglia.Data.IDomainEvent"/>'s type name</returns>
         </member>
+        <member name="T:Neuroglia.Data.EventSourcing.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IServiceCollectionExtensions.AddEventSourcingRepository``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/>
+            </summary>
+            <typeparam name="TAggregate">The type of <see cref="T:Neuroglia.Data.IAggregateRoot`1"/> to add a new <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> for</typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IAggregateRoot"/>s managed by the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> to add</typeparam>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="lifetime">The lifetime of the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IServiceCollectionExtensions.AddEventSourcingRepository(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Type,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="aggregateType">The type of <see cref="T:Neuroglia.Data.IAggregateRoot`1"/> to add a new <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> for</param>
+            <param name="keyType">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IAggregateRoot"/>s managed by the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> to add</param>
+            <param name="lifetime">The lifetime of the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
         <member name="T:Neuroglia.Data.EventSourcing.ISourcedEventExtensions">
             <summary>
             Defines extensions for <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s
@@ -432,7 +457,7 @@
         <member name="M:Neuroglia.Data.EventSourcing.EventAggregator`2.Aggregate(`0,`1)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.EventAggregator`2.Neuroglia#Data#EventSourcing#IEventAggregator#Aggregate(System.Object,Neuroglia.Data.EventSourcing.ISourcedEvent)">
+        <member name="M:Neuroglia.Data.EventSourcing.EventAggregator`2.Neuroglia#Data#EventSourcing#IEventAggregator#Aggregate(System.Object,Neuroglia.Data.IDomainEvent)">
             <inheritdoc/>
         </member>
         <member name="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2">
@@ -578,15 +603,15 @@
         </member>
         <member name="T:Neuroglia.Data.EventSourcing.IEventAggregator">
             <summary>
-            Defines the fundamentals of a service used to aggregate <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s
+            Defines the fundamentals of a service used to aggregate <see cref="T:Neuroglia.Data.IDomainEvent"/>s
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.IEventAggregator.Aggregate(System.Object,Neuroglia.Data.EventSourcing.ISourcedEvent)">
+        <member name="M:Neuroglia.Data.EventSourcing.IEventAggregator.Aggregate(System.Object,Neuroglia.Data.IDomainEvent)">
             <summary>
-            Aggregates the specified <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>
+            Aggregates the specified <see cref="T:Neuroglia.Data.IDomainEvent"/>
             </summary>
-            <param name="aggregate">The aggregate to apply the specified <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> to</param>
-            <param name="e">The <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> to apply</param>
+            <param name="aggregate">The aggregate to apply the specified <see cref="T:Neuroglia.Data.IDomainEvent"/> to</param>
+            <param name="e">The <see cref="T:Neuroglia.Data.IDomainEvent"/> to apply</param>
         </member>
         <member name="T:Neuroglia.Data.EventSourcing.IEventStore">
             <summary>
@@ -698,6 +723,23 @@
             Unsubscribes from the specified subscription
             </summary>
             <param name="subscriptionId">The id of the subscription to unsubscribe from</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.TruncateStreamAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Truncates the specified stream
+            </summary>
+            <param name="streamId">The id of the stream to truncate</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.TruncateStreamAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Truncates the specified stream
+            </summary>
+            <param name="streamId">The id of the stream to truncate</param>
+            <param name="beforeVersion">The version before which to truncate the stream</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
         </member>
         <member name="M:Neuroglia.Data.EventSourcing.IEventStore.DeleteStreamAsync(System.String,System.Threading.CancellationToken)">
             <summary>
