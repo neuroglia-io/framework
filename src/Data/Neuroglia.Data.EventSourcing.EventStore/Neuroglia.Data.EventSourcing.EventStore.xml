@@ -312,35 +312,6 @@
         <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription.Dispose">
             <inheritdoc/>
         </member>
-        <member name="T:Neuroglia.Data.EventSourcing.EventStore.EventStream">
-            <summary>
-            Represents the <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> interface
-            </summary>
-        </member>
-        <member name="M:Neuroglia.Data.EventSourcing.EventStore.EventStream.#ctor(System.Object,System.Int64,System.DateTime,System.DateTime)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStream"/>
-            </summary>
-            <param name="streamId">The id of the described stream</param>
-            <param name="length">The length of the stream</param>
-            <param name="firstEventAt">The date and time at which the first event of the stream has been created</param>
-            <param name="lastEventAt">The date and time at which the last event of the stream has been created</param>
-        </member>
-        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream.Id">
-            <inheritdoc/>
-        </member>
-        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream.Length">
-            <inheritdoc/>
-        </member>
-        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream.FirstEventAt">
-            <inheritdoc/>
-        </member>
-        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream.LastEventAt">
-            <inheritdoc/>
-        </member>
-        <member name="P:Neuroglia.Data.EventSourcing.EventStore.EventStream.Position">
-            <inheritdoc/>
-        </member>
         <member name="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription">
             <summary>
             Defines the fundamentals of an <see href="https://eventstore.com/">Event Store</see> subscription
@@ -506,13 +477,16 @@
         <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadAllEventsForwardAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadSingleEventForwardAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadResolvedEventsForwardAsync(System.String,System.Int64,System.Int64,System.Threading.CancellationToken)">
             <summary>
             Reads the <see cref="T:EventStore.Client.ResolvedEvent"/>s of the specified <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> in a forward fashion
             </summary>
             <param name="streamId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to get the <see cref="T:EventStore.Client.ResolvedEvent"/>s of</param>
-            <param name="start">The number of the <see cref="T:EventStore.Client.ResolvedEvent"/> to start reading the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> from</param>
-            <param name="end">The number of the <see cref="T:EventStore.Client.ResolvedEvent"/> to read the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to</param>
+            <param name="offset">The number of the <see cref="T:EventStore.Client.ResolvedEvent"/> to offset reading the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> from</param>
+            <param name="length">The number of the <see cref="T:EventStore.Client.ResolvedEvent"/> to read the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:EventStore.Client.ResolvedEvent"/>s the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> is made out of</returns>
         </member>
@@ -520,6 +494,9 @@
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadEventsBackwardAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadSingleEventBackwardAsync(System.String,System.Int64,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.ReadAllEventsBackwardAsync(System.String,System.Threading.CancellationToken)">
@@ -530,8 +507,8 @@
             Reads the <see cref="T:EventStore.Client.ResolvedEvent"/>s of the specified <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> in a backward fashion
             </summary>
             <param name="streamId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to get the <see cref="T:EventStore.Client.ResolvedEvent"/>s of</param>
-            <param name="start">The number of the <see cref="T:EventStore.Client.ResolvedEvent"/> to start reading the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> from</param>
-            <param name="end">The number of the <see cref="T:EventStore.Client.ResolvedEvent"/> to read the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to</param>
+            <param name="offset">The number of the <see cref="T:EventStore.Client.ResolvedEvent"/> to offset reading the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> from</param>
+            <param name="length">The amount of <see cref="T:EventStore.Client.ResolvedEvent"/>s to read from the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/></param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:EventStore.Client.ResolvedEvent"/>s the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> is made out of</returns>
         </member>
@@ -541,8 +518,8 @@
             </summary>
             <param name="direction">The direction to read the stream from</param>
             <param name="streamId">The id of the stream to read</param>
-            <param name="start">The position from which to start reading the stream</param>
-            <param name="end">The position until which to read the stream</param>
+            <param name="offset">The position from which to offset reading the stream</param>
+            <param name="length">The amount of <see cref="T:EventStore.Client.ResolvedEvent"/>s to read from the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/></param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:EventStore.Client.ResolvedEvent"/>s the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> is made out of</returns>
         </member>
@@ -618,7 +595,7 @@
             </summary>
             <param name="subscriptionId">The id of the subscription that has been dropped</param>
             <param name="streamId">The id of the catch-up stream</param>
-            <param name="startFrom">The event number from which to start</param>
+            <param name="offsetFrom">The event number from which to offset</param>
             <param name="options">The <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions"/> to use</param>
             <param name="handler">A <see cref="T:System.Func`3"/> used to handle the subscription</param>
             <returns>A new <see cref="T:System.Action`3"/> used to handle subscription drops</returns>
@@ -644,7 +621,7 @@
             <summary>
             Represents the handler fired whenever an <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/> has been disposed
             </summary>
-            <param name="sender">The disposed <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/></param>
+            <param name="slengther">The disposed <see cref="T:Neuroglia.Data.EventSourcing.EventStore.IEventStoreSubscription"/></param>
             <param name="e">The event's arguments</param>
         </member>
     </members>

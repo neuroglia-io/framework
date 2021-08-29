@@ -57,7 +57,6 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Configuration
         /// <inheritdoc/>
         public virtual ISubscriptionOptionsBuilder StartFrom(long position)
         {
-            this.Options.StreamPosition = EventStreamPosition.Custom;
             this.Options.StartFrom = position;
             return this;
         }
@@ -72,7 +71,7 @@ namespace Neuroglia.Data.EventSourcing.EventStore.Configuration
         /// <inheritdoc/>
         public virtual ISubscriptionOptionsBuilder StartFromCurrent()
         {
-            this.Options.StreamPosition = EventStreamPosition.Current;
+            this.Options.StreamPosition = EventStreamPosition.End;
             return this;
         }
 

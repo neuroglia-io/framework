@@ -15,6 +15,7 @@
  *
  */
 using System;
+using System.Collections.Generic;
 
 namespace Neuroglia.Data.EventSourcing
 {
@@ -23,7 +24,7 @@ namespace Neuroglia.Data.EventSourcing
     /// Defines the fundamentals of an object used to describe a stream of <see cref="IDomainEvent"/>s
     /// </summary>
     public interface IEventStream
-        : IIdentifiable
+        : IIdentifiable, IAsyncEnumerable<ISourcedEvent>
     {
 
         /// <summary>
@@ -45,6 +46,11 @@ namespace Neuroglia.Data.EventSourcing
         /// Gets the date and time at which the last event has been created
         /// </summary>
         DateTimeOffset LastEventAt { get; }
+
+        /// <summary>
+        /// Gets the <see cref="ISourcedEvent"/> at the current position
+        /// </summary>
+        ISourcedEvent Current { get; }
 
     }
 

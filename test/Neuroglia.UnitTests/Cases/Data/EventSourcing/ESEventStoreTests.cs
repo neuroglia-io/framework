@@ -85,11 +85,13 @@ namespace Neuroglia.UnitTests.Cases.Data.EventSourcing
         {
             //act
             var stream = await this.EventStore.GetStreamAsync(StreamId);
+            var events = await stream.ToListAsync();
 
             //assert
             stream.Should().NotBeNull();
             stream.Id.Should().Be(StreamId);
             stream.Length.Should().Be(1);
+            events.Count.Should().Be(1);
         }
 
         [Fact, Priority(2)]
@@ -130,9 +132,10 @@ namespace Neuroglia.UnitTests.Cases.Data.EventSourcing
             return Task.CompletedTask;
         }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
             this.ServiceScope.Dispose();
+            GC.SuppressFinalize(this);
         }
 
     }

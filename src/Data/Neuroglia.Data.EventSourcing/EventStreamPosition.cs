@@ -19,26 +19,52 @@ namespace Neuroglia.Data.EventSourcing
 {
 
     /// <summary>
-    /// Enumerates all types of event stream positions
+    /// Represents a position in a <see cref="EventStream"/>
     /// </summary>
-    public enum EventStreamPosition
+    public struct EventStreamPosition
     {
+
         /// <summary>
-        /// No specific position specified
+        /// Gets an <see cref="EventStreamPosition"/> that represents the beginning (i.e., the first event) of a stream
         /// </summary>
-        None,
+        public static readonly EventStreamPosition Start = 0;
         /// <summary>
-        /// Indicates the start of the event stream
+        /// Gets an <see cref="EventStreamPosition"/> that represents the end of a stream. Use this when reading a stream backwards, or subscribing live to a stream
         /// </summary>
-        Start,
+        public static readonly EventStreamPosition End = -1;
+
         /// <summary>
-        /// Indicates the current position of the event stream
+        /// Initializes a new <see cref="EventStreamPosition"/>
         /// </summary>
-        Current,
+        /// <param name="value">The <see cref="EventStreamPosition"/>'s value</param>
+        public EventStreamPosition(long value)
+        {
+            this.Value = value;
+        }
+
         /// <summary>
-        /// Indicates a custom position
+        /// Gets the <see cref="EventStreamPosition"/>'s value
         /// </summary>
-        Custom
+        public long Value { get; }
+
+        /// <summary>
+        /// Implicitly converts the specified value into a new <see cref="EventStreamPosition"/>
+        /// </summary>
+        /// <param name="value">The value of the <see cref="EventStreamPosition"/> to create</param>
+        public static implicit operator EventStreamPosition(long value)
+        {
+            return new(value);
+        }
+
+        /// <summary>
+        /// Implicitly converts the specified <see cref="EventStreamPosition"/> into a <see cref="long"/>
+        /// </summary>
+        /// <param name="position">The <see cref="EventStreamPosition"/> to convert</param>
+        public static implicit operator long(EventStreamPosition position)
+        {
+            return position.Value;
+        }
+
     }
 
 }

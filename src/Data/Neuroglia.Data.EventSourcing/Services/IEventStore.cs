@@ -59,20 +59,20 @@ namespace Neuroglia.Data.EventSourcing
         /// Reads the <see cref="ISourcedEvent"/>s of the specified <see cref="IEventStream"/> in a forward fashion
         /// </summary>
         /// <param name="streamId">The id of the <see cref="IEventStream"/> to get the <see cref="ISourcedEvent"/>s of</param>
-        /// <param name="start">The number of the <see cref="ISourcedEvent"/> to start reading the <see cref="IEventStream"/> from</param>
-        /// <param name="end">The number of the <see cref="ISourcedEvent"/> to read the <see cref="IEventStream"/> to</param>
+        /// <param name="offset">The number of the <see cref="ISourcedEvent"/> to start reading the <see cref="IEventStream"/> from</param>
+        /// <param name="length">The amount of <see cref="ISourcedEvent"/>s to read the <see cref="IEventStream"/> to</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="ISourcedEvent"/>s the <see cref="IEventStream"/> is made out of</returns>
-        Task<IEnumerable<ISourcedEvent>> ReadEventsForwardAsync(string streamId, long start, long end, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ISourcedEvent>> ReadEventsForwardAsync(string streamId, long offset, long length, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads the <see cref="ISourcedEvent"/>s of the specified <see cref="IEventStream"/> in a forward fashion
         /// </summary>
         /// <param name="streamId">The id of the <see cref="IEventStream"/> to get the <see cref="ISourcedEvent"/>s of</param>
-        /// <param name="start">The number of the <see cref="ISourcedEvent"/> to start reading the <see cref="IEventStream"/> from</param>
+        /// <param name="offset">The number of the <see cref="ISourcedEvent"/> to start reading the <see cref="IEventStream"/> from</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="ISourcedEvent"/>s the <see cref="IEventStream"/> is made out of</returns>
-        Task<IEnumerable<ISourcedEvent>> ReadEventsForwardAsync(string streamId, long start, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ISourcedEvent>> ReadEventsForwardAsync(string streamId, long offset, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads all the <see cref="ISourcedEvent"/>s of the specified <see cref="IEventStream"/> in a forward fashion
@@ -86,20 +86,20 @@ namespace Neuroglia.Data.EventSourcing
         /// Reads the <see cref="ISourcedEvent"/>s of the specified <see cref="IEventStream"/> in a backward fashion
         /// </summary>
         /// <param name="streamId">The id of the <see cref="IEventStream"/> to get the <see cref="ISourcedEvent"/>s of</param>
-        /// <param name="start">The number of the <see cref="ISourcedEvent"/> to start reading the <see cref="IEventStream"/> from</param>
-        /// <param name="end">The number of the <see cref="ISourcedEvent"/> to read the <see cref="IEventStream"/> to</param>
+        /// <param name="offset">The number of the <see cref="ISourcedEvent"/> to start reading the <see cref="IEventStream"/> from</param>
+        /// <param name="length">The amount of <see cref="ISourcedEvent"/>s to read the <see cref="IEventStream"/> to</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="ISourcedEvent"/>s the <see cref="IEventStream"/> is made out of</returns>
-        Task<IEnumerable<ISourcedEvent>> ReadEventsBackwardAsync(string streamId, long start, long end, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ISourcedEvent>> ReadEventsBackwardAsync(string streamId, long offset, long length, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads the <see cref="ISourcedEvent"/>s of the specified <see cref="IEventStream"/> in a backward fashion
         /// </summary>
         /// <param name="streamId">The id of the <see cref="IEventStream"/> to get the <see cref="ISourcedEvent"/>s of</param>
-        /// <param name="start">The number of the <see cref="ISourcedEvent"/> to start reading the <see cref="IEventStream"/> from</param>
+        /// <param name="offset">The number of the <see cref="ISourcedEvent"/> to start reading the <see cref="IEventStream"/> from</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="ISourcedEvent"/>s the <see cref="IEventStream"/> is made out of</returns>
-        Task<IEnumerable<ISourcedEvent>> ReadEventsBackwardAsync(string streamId, long start, CancellationToken cancellationToken = default);
+        Task<IEnumerable<ISourcedEvent>> ReadEventsBackwardAsync(string streamId, long offset, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads all the <see cref="ISourcedEvent"/>s of the specified <see cref="IEventStream"/> in a backward fashion

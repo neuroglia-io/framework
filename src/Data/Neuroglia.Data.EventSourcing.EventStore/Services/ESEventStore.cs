@@ -99,12 +99,19 @@ namespace Neuroglia.Data.EventSourcing
                 throw new ArgumentNullException(nameof(streamId));
             ReadStreamResult readResult;
             readResult = this.EventStoreClient.ReadStreamAsync(Direction.Forwards, streamId, StreamPosition.Start, cancellationToken: cancellationToken);
-            if (await readResult.ReadState == ReadState.StreamNotFound)
+            try
+            {
+                if (await readResult.ReadState == ReadState.StreamNotFound)
+                    return null;
+            }
+            catch (StreamDeletedException)
+            {
                 return null;
+            }
             ResolvedEvent firstEvent = await readResult.FirstAsync(cancellationToken);
             readResult = this.EventStoreClient.ReadStreamAsync(Direction.Forwards, streamId, StreamPosition.Start, cancellationToken: cancellationToken);
             ResolvedEvent lastEvent = await readResult.FirstAsync(cancellationToken);
-            return new EventStream(streamId, lastEvent.Event.EventNumber.ToInt64() + 1, firstEvent.Event.Created, lastEvent.Event.Created);
+            return new EventStream(this, streamId, lastEvent.Event.EventNumber.ToInt64() + 1, firstEvent.Event.Created, lastEvent.Event.Created, await this.UnwrapsStoredEventAsync(firstEvent, cancellationToken));
         }
 
         /// <inheritdoc/>
@@ -126,9 +133,13 @@ namespace Neuroglia.Data.EventSourcing
         }
 
         /// <inheritdoc/>
-        public virtual async Task<IEnumerable<ISourcedEvent>> ReadEventsForwardAsync(string streamId, long start, long end, CancellationToken cancellationToken = default)
-        { 
-            IEnumerable<ResolvedEvent> resolvedEvents = await this.ReadResolvedEventsForwardAsync(streamId, start, end, cancellationToken);
+        public virtual async Task<IEnumerable<ISourcedEvent>> ReadEventsForwardAsync(string streamId, long offset, long length, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(streamId))
+                throw new ArgumentNullException(nameof(streamId));
+            IEnumerable<ResolvedEvent> resolvedEvents = await this.ReadResolvedEventsForwardAsync(streamId, offset, length, cancellationToken);
+            if (resolvedEvents == null)
+                return null;
             List<ISourcedEvent> events = new(resolvedEvents.Count());
             foreach(ResolvedEvent e in resolvedEvents)
             {
@@ -138,9 +149,9 @@ namespace Neuroglia.Data.EventSourcing
         }
 
         /// <inheritdoc/>
-        public virtual async Task<IEnumerable<ISourcedEvent>> ReadEventsForwardAsync(string streamId, long start, CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<ISourcedEvent>> ReadEventsForwardAsync(string streamId, long offset, CancellationToken cancellationToken = default)
         {
-            return await this.ReadEventsForwardAsync(streamId, start, StreamPosition.End.ToInt64(), cancellationToken);
+            return await this.ReadEventsForwardAsync(streamId, offset, StreamPosition.End.ToInt64(), cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -149,23 +160,37 @@ namespace Neuroglia.Data.EventSourcing
             return await this.ReadEventsForwardAsync(streamId, StreamPosition.Start.ToInt64(), StreamPosition.End.ToInt64(), cancellationToken);
         }
 
+        /// <inheritdoc/>
+        public virtual async Task<ISourcedEvent> ReadSingleEventForwardAsync(string streamId, long offset, CancellationToken cancellationToken = default)
+        {
+            IEnumerable<ResolvedEvent> resolvedEvents = await this.ReadResolvedEventsForwardAsync(streamId, offset, 1, cancellationToken);
+            if (resolvedEvents == null)
+                return null;
+            ResolvedEvent e = resolvedEvents.FirstOrDefault();
+            return await this.UnwrapsStoredEventAsync(e, cancellationToken);
+        }
+
         /// <summary>
         /// Reads the <see cref="ResolvedEvent"/>s of the specified <see cref="IEventStream"/> in a forward fashion
         /// </summary>
         /// <param name="streamId">The id of the <see cref="IEventStream"/> to get the <see cref="ResolvedEvent"/>s of</param>
-        /// <param name="start">The number of the <see cref="ResolvedEvent"/> to start reading the <see cref="IEventStream"/> from</param>
-        /// <param name="end">The number of the <see cref="ResolvedEvent"/> to read the <see cref="IEventStream"/> to</param>
+        /// <param name="offset">The number of the <see cref="ResolvedEvent"/> to offset reading the <see cref="IEventStream"/> from</param>
+        /// <param name="length">The number of the <see cref="ResolvedEvent"/> to read the <see cref="IEventStream"/> to</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="ResolvedEvent"/>s the <see cref="IEventStream"/> is made out of</returns>
-        protected virtual async Task<IEnumerable<ResolvedEvent>> ReadResolvedEventsForwardAsync(string streamId, long start, long end, CancellationToken cancellationToken = default)
+        protected virtual async Task<IEnumerable<ResolvedEvent>> ReadResolvedEventsForwardAsync(string streamId, long offset, long length, CancellationToken cancellationToken = default)
         {
-            return await this.ReadResolvedEventsAsync(Direction.Forwards, streamId, start, end, cancellationToken);
+            return await this.ReadResolvedEventsAsync(Direction.Forwards, streamId, offset, length, cancellationToken);
         }
 
         /// <inheritdoc/>
-        public virtual async Task<IEnumerable<ISourcedEvent>> ReadEventsBackwardAsync(string streamId, long start, long end, CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<ISourcedEvent>> ReadEventsBackwardAsync(string streamId, long offset, long length, CancellationToken cancellationToken = default)
         {
-            IEnumerable<ResolvedEvent> resolvedEvents = await this.ReadResolvedEventsBackwardAsync(streamId, start, end, cancellationToken);
+            if (string.IsNullOrWhiteSpace(streamId))
+                throw new ArgumentNullException(nameof(streamId));
+            IEnumerable<ResolvedEvent> resolvedEvents = await this.ReadResolvedEventsBackwardAsync(streamId, offset, length, cancellationToken);
+            if (resolvedEvents == null)
+                return null;
             List<ISourcedEvent> events = new(resolvedEvents.Count());
             foreach (ResolvedEvent e in resolvedEvents)
             {
@@ -175,9 +200,19 @@ namespace Neuroglia.Data.EventSourcing
         }
 
         /// <inheritdoc/>
-        public virtual async Task<IEnumerable<ISourcedEvent>> ReadEventsBackwardAsync(string streamId, long start, CancellationToken cancellationToken = default)
+        public virtual async Task<IEnumerable<ISourcedEvent>> ReadEventsBackwardAsync(string streamId, long offset, CancellationToken cancellationToken = default)
         {
-            return await this.ReadEventsBackwardAsync(streamId, StreamPosition.Start.ToInt64(), cancellationToken);
+            return await this.ReadEventsBackwardAsync(streamId, offset, StreamPosition.End.ToInt64(), cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public virtual async Task<ISourcedEvent> ReadSingleEventBackwardAsync(string streamId, long offset, CancellationToken cancellationToken = default)
+        {
+            IEnumerable<ResolvedEvent> resolvedEvents = await this.ReadResolvedEventsBackwardAsync(streamId, offset, 1, cancellationToken);
+            if (resolvedEvents == null)
+                return null;
+            ResolvedEvent e = resolvedEvents.FirstOrDefault();
+            return await this.UnwrapsStoredEventAsync(e, cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -190,13 +225,13 @@ namespace Neuroglia.Data.EventSourcing
         /// Reads the <see cref="ResolvedEvent"/>s of the specified <see cref="IEventStream"/> in a backward fashion
         /// </summary>
         /// <param name="streamId">The id of the <see cref="IEventStream"/> to get the <see cref="ResolvedEvent"/>s of</param>
-        /// <param name="start">The number of the <see cref="ResolvedEvent"/> to start reading the <see cref="IEventStream"/> from</param>
-        /// <param name="end">The number of the <see cref="ResolvedEvent"/> to read the <see cref="IEventStream"/> to</param>
+        /// <param name="offset">The number of the <see cref="ResolvedEvent"/> to offset reading the <see cref="IEventStream"/> from</param>
+        /// <param name="length">The amount of <see cref="ResolvedEvent"/>s to read from the <see cref="IEventStream"/></param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="ResolvedEvent"/>s the <see cref="IEventStream"/> is made out of</returns>
-        protected virtual async Task<IEnumerable<ResolvedEvent>> ReadResolvedEventsBackwardAsync(string streamId, long start, long end, CancellationToken cancellationToken = default)
+        protected virtual async Task<IEnumerable<ResolvedEvent>> ReadResolvedEventsBackwardAsync(string streamId, long offset, long length, CancellationToken cancellationToken = default)
         {
-            return await this.ReadResolvedEventsAsync(Direction.Backwards, streamId, start, end, cancellationToken);
+            return await this.ReadResolvedEventsAsync(Direction.Backwards, streamId, offset, length, cancellationToken);
         }
 
         /// <summary>
@@ -204,30 +239,30 @@ namespace Neuroglia.Data.EventSourcing
         /// </summary>
         /// <param name="direction">The direction to read the stream from</param>
         /// <param name="streamId">The id of the stream to read</param>
-        /// <param name="start">The position from which to start reading the stream</param>
-        /// <param name="end">The position until which to read the stream</param>
+        /// <param name="offset">The position from which to offset reading the stream</param>
+        /// <param name="length">The amount of <see cref="ResolvedEvent"/>s to read from the <see cref="IEventStream"/></param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="ResolvedEvent"/>s the <see cref="IEventStream"/> is made out of</returns>
-        protected virtual async Task<IEnumerable<ResolvedEvent>> ReadResolvedEventsAsync(Direction direction, string streamId, long start, long end, CancellationToken cancellationToken = default)
+        protected virtual async Task<IEnumerable<ResolvedEvent>> ReadResolvedEventsAsync(Direction direction, string streamId, long offset, long length, CancellationToken cancellationToken = default)
         {
-            long eventsCount = long.MaxValue;
-            if (direction == Direction.Forwards)
+            if (length == 0)
+                throw new ArgumentOutOfRangeException(nameof(length));
+            try
             {
-                if(end >= 0)
+                ReadStreamResult readResult = this.EventStoreClient.ReadStreamAsync(direction, streamId, StreamPosition.FromInt64(offset), length, resolveLinkTos: true, cancellationToken: cancellationToken);
+                return await readResult.ToListAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                switch (ex)
                 {
-                    if (start > end)
-                        throw new ArgumentOutOfRangeException(nameof(end));
-                    eventsCount = end - start;
+                    case StreamDeletedException:
+                    case StreamNotFoundException:
+                        return null;
+                    default:
+                        throw;
                 }
             }
-            else
-            {
-                if(end > start)
-                    throw new ArgumentOutOfRangeException(nameof(end));
-                eventsCount = start - end;
-            }
-            ReadStreamResult readResult = this.EventStoreClient.ReadStreamAsync(direction, streamId, StreamPosition.FromInt64(start), eventsCount, resolveLinkTos: true, cancellationToken: cancellationToken);
-            return await readResult.ToListAsync(cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -324,7 +359,7 @@ namespace Neuroglia.Data.EventSourcing
         {
             if (string.IsNullOrWhiteSpace(streamId))
                 throw new ArgumentNullException(nameof(streamId));
-            await this.EventStoreClient.TombstoneAsync(streamId, StreamState.StreamExists, cancellationToken: cancellationToken);
+            await this.EventStoreClient.TombstoneAsync(streamId, StreamState.Any, cancellationToken: cancellationToken);
         }
 
         /// <summary>
@@ -460,11 +495,11 @@ namespace Neuroglia.Data.EventSourcing
         /// </summary>
         /// <param name="subscriptionId">The id of the subscription that has been dropped</param>
         /// <param name="streamId">The id of the catch-up stream</param>
-        /// <param name="startFrom">The event number from which to start</param>
+        /// <param name="offsetFrom">The event number from which to offset</param>
         /// <param name="options">The <see cref="ISubscriptionOptions"/> to use</param>
         /// <param name="handler">A <see cref="Func{T1, T2, TResult}"/> used to handle the subscription</param>
         /// <returns>A new <see cref="Action{T1, T2, T3}"/> used to handle subscription drops</returns>
-        protected virtual Action<StreamSubscription, SubscriptionDroppedReason, Exception> CreateCatchUpSubscriptionDropHandler(string subscriptionId, string streamId, long? startFrom, ISubscriptionOptions options, Func<IServiceProvider, ISourcedEvent, Task> handler)
+        protected virtual Action<StreamSubscription, SubscriptionDroppedReason, Exception> CreateCatchUpSubscriptionDropHandler(string subscriptionId, string streamId, long? offsetFrom, ISubscriptionOptions options, Func<IServiceProvider, ISourcedEvent, Task> handler)
         {
             return async (sub, reason, ex) =>
             {
@@ -481,7 +516,7 @@ namespace Neuroglia.Data.EventSourcing
                             options.StartFrom.HasValue ? StreamPosition.FromInt64(options.StartFrom.Value) : StreamPosition.Start,
                             this.CreateCatchUpSubscriptionHandler(handler),
                             options.ResolveLinks,
-                            subscriptionDropped: this.CreateCatchUpSubscriptionDropHandler(subscriptionId, streamId, startFrom, options, handler));
+                            subscriptionDropped: this.CreateCatchUpSubscriptionDropHandler(subscriptionId, streamId, offsetFrom, options, handler));
                         this.AddOrUpdateSubscription(subscriptionId, subscriptionSource);
                         break;
                 }
@@ -544,11 +579,11 @@ namespace Neuroglia.Data.EventSourcing
         /// <summary>
         /// Represents the handler fired whenever an <see cref="IEventStoreSubscription"/> has been disposed
         /// </summary>
-        /// <param name="sender">The disposed <see cref="IEventStoreSubscription"/></param>
+        /// <param name="slengther">The disposed <see cref="IEventStoreSubscription"/></param>
         /// <param name="e">The event's arguments</param>
-        protected virtual void OnSubscriptionDisposed(object sender, EventArgs e)
+        protected virtual void OnSubscriptionDisposed(object slengther, EventArgs e)
         {
-            EventStoreSubscription subscription = (EventStoreSubscription)sender;
+            EventStoreSubscription subscription = (EventStoreSubscription)slengther;
             this.Subscriptions.Remove(subscription.Id, out _);
         }
 

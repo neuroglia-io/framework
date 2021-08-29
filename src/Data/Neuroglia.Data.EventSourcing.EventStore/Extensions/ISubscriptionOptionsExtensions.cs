@@ -32,19 +32,20 @@ namespace Neuroglia.Data.EventSourcing
         public static PersistentSubscriptionSettings ToPersistentSubscriptionSettings(this ISubscriptionOptions subscriptionOptions)
         {
             StreamPosition? startFrom = null;
-            switch (subscriptionOptions.StreamPosition)
-            {
-                case EventStreamPosition.Custom:
-                    if (subscriptionOptions.StartFrom.HasValue)
-                        startFrom = StreamPosition.FromInt64(subscriptionOptions.StartFrom.Value);
-                    break;
-                case EventStreamPosition.Start:
-                    startFrom = StreamPosition.Start;
-                    break;
-                case EventStreamPosition.Current:
-                    startFrom = StreamPosition.End;
-                    break;
-            }
+            //todo: 
+            //switch (subscriptionOptions.StreamPosition)
+            //{
+            //    case EventStreamPosition.Custom:
+            //        if (subscriptionOptions.StartFrom.HasValue)
+            //            startFrom = StreamPosition.FromInt64(subscriptionOptions.StartFrom.Value);
+            //        break;
+            //    case EventStreamPosition.Start:
+            //        startFrom = StreamPosition.Start;
+            //        break;
+            //    case EventStreamPosition.End:
+            //        startFrom = StreamPosition.End;
+            //        break;
+            //}
             PersistentSubscriptionSettings settings = new(subscriptionOptions.ResolveLinks, startFrom, maxSubscriberCount: subscriptionOptions.MaxSubscribers, minCheckPointCount: subscriptionOptions.MinEventsBeforeCheckpoint, maxCheckPointCount: subscriptionOptions.MaxEventsBeforeCheckpoint);
             return settings;
         }

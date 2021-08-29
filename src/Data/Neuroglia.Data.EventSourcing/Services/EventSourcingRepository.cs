@@ -14,8 +14,12 @@
  * limitations under the License.
  *
  */
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Neuroglia.Data.EventSourcing.Configuration;
 using Neuroglia.Mediation;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,29 +41,31 @@ namespace Neuroglia.Data.EventSourcing.Services
         /// <summary>
         /// Initializes a new <see cref="EventSourcingRepository{TEntity, TKey}"/>
         /// </summary>
+        /// <param name="options">The service used to access the current <see cref="EventSourcingRepositoryOptions{TAggregate, TKey}"/></param>
+        /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
         /// <param name="logger">The service used to perform logging</param>
         /// <param name="eventStore">The <see cref="IEventStore"/> used to persist data managed by the <see cref="EventSourcingRepository{TEntity, TKey}"/></param>
         /// <param name="aggregatorFactory">The service used to aggregate <see cref="IDomainEvent"/>s</param>
-        /// <param name="mediator">The service used to mediate calls</param>
-        public EventSourcingRepository(ILogger<EventSourcingRepository<TAggregate, TKey>> logger, IEventStore eventStore, IAggregatorFactory aggregatorFactory, IMediator mediator)
+        public EventSourcingRepository(IOptions<EventSourcingRepositoryOptions<TAggregate, TKey>> options, IServiceProvider serviceProvider, 
+            ILogger<EventSourcingRepository<TAggregate, TKey>> logger, IEventStore eventStore, IAggregatorFactory aggregatorFactory)
         {
+            this.Options = options.Value;
+            this.ServiceProvider = serviceProvider;
             this.Logger = logger;
             this.EventStore = eventStore;
             this.Aggregator = aggregatorFactory.CreateAggregator<TAggregate>();
-            this.Mediator = mediator;
+            this.Mediator = this.ServiceProvider.GetService<IMediator>();
         }
 
         /// <summary>
-        /// Initializes a new <see cref="EventSourcingRepository{TEntity, TKey}"/>
+        /// Gets the options used to configure the <see cref="EventSourcingRepositoryOptions{TAggregate, TKey}"/>
         /// </summary>
-        /// <param name="logger">The service used to perform logging</param>
-        /// <param name="eventStore">The <see cref="IEventStore"/> used to persist data managed by the <see cref="EventSourcingRepository{TEntity, TKey}"/></param>
-        /// <param name="aggregatorFactory">The service used to aggregate <see cref="IDomainEvent"/>s</param>
-        public EventSourcingRepository(ILogger<EventSourcingRepository<TAggregate, TKey>> logger, IEventStore eventStore, IAggregatorFactory aggregatorFactory)
-            : this(logger, eventStore, aggregatorFactory, null)
-        {
+        protected virtual EventSourcingRepositoryOptions<TAggregate, TKey> Options { get; }
 
-        }
+        /// <summary>
+        /// Gets the current <see cref="IServiceProvider"/>
+        /// </summary>
+        protected virtual IServiceProvider ServiceProvider { get; }
 
         /// <summary>
         /// Gets the service used to perform logging
@@ -102,9 +108,23 @@ namespace Neuroglia.Data.EventSourcing.Services
         /// <inheritdoc/>
         public override async Task<TAggregate> FindAsync(TKey key, CancellationToken cancellationToken = default)
         {
-            IEnumerable<ISourcedEvent> sourcedEvents = await this.EventStore.ReadAllEventsForwardAsync(this.GetStreamIdFor(key), cancellationToken);
-            IEnumerable<IDomainEvent> domainEvents = sourcedEvents.Select(e => e.AsDomainEvent());
-            return await Task.FromResult(this.Aggregator.Aggregate(domainEvents));
+            TAggregate aggregate = await this.GetSnapshotAsync(key, cancellationToken);
+            IEnumerable<ISourcedEvent> sourcedEvents;
+            if (aggregate == null)
+            {
+                sourcedEvents = await this.EventStore.ReadAllEventsForwardAsync(this.GetStreamIdFor(key), cancellationToken);
+                if (sourcedEvents == null)
+                    return null;
+                aggregate = this.Aggregator.Aggregate(sourcedEvents.Select(e => e.AsDomainEvent()));
+            }   
+            else
+            {
+                sourcedEvents = await this.EventStore.ReadEventsForwardAsync(this.GetStreamIdFor(key), aggregate.Version, cancellationToken);
+                if (sourcedEvents == null)
+                    return null;
+                aggregate = this.Aggregator.Aggregate(aggregate, sourcedEvents.Select(e => e.AsDomainEvent()));
+            }
+            return aggregate;
         }
 
         /// <inheritdoc/>
@@ -125,6 +145,7 @@ namespace Neuroglia.Data.EventSourcing.Services
             await this.EventStore.AppendToStreamAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetMetadata()), cancellationToken);
             aggregate.SetVersion(events.Count());
             aggregate.ClearPendingEvents();
+            await this.TrySnapshotAsync(aggregate, cancellationToken);
             return aggregate;
         }
 
@@ -133,10 +154,13 @@ namespace Neuroglia.Data.EventSourcing.Services
         {
             if (aggregate == null)
                 throw new ArgumentNullException(nameof(aggregate));
+            if (!aggregate.PendingEvents.Any())
+                return aggregate;
             IEnumerable<IDomainEvent> events = aggregate.PendingEvents;
             await this.EventStore.AppendToStreamAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetMetadata()), aggregate.Version, cancellationToken);
             aggregate.SetVersion(aggregate.Version + events.Count());
             aggregate.ClearPendingEvents();
+            await this.TrySnapshotAsync(aggregate, cancellationToken);
             return aggregate;
         }
 
@@ -175,6 +199,47 @@ namespace Neuroglia.Data.EventSourcing.Services
         protected virtual string GetStreamIdFor(TKey key)
         {
             return $"{this.StreamPrefix}-{key.ToString().Replace("-", "")}";
+        }
+
+        /// <summary>
+        /// Gets the id of the snapshot stream that corresponds to the specified aggregate key
+        /// </summary>
+        /// <param name="key">The key of the aggregate to get the snapshot stream id for</param>
+        /// <returns>The id of the stream that corresponds to the specified aggregate key</returns>
+        protected virtual string GetSnapshotStreamIdFor(TKey key)
+        {
+            return $"{this.StreamPrefix}-snapshots-{key.ToString().Replace("-", "")}";
+        }
+
+        /// <summary>
+        /// Gets the snapshot of the specified <see cref="IAggregateRoot"/>
+        /// </summary>
+        /// <param name="key">The key of the <see cref="IAggregateRoot"/> to find</param>
+        /// <param name="cancellation">A <see cref="CancellationToken"/></param>
+        /// <returns>The snapshot of the <see cref="IAggregateRoot"/> with the specified key</returns>
+        protected virtual async Task<TAggregate> GetSnapshotAsync(TKey key, CancellationToken cancellation = default)
+        {
+            ISourcedEvent sourcedEvent = await this.EventStore.ReadSingleEventBackwardAsync(this.GetSnapshotStreamIdFor(key), EventStreamPosition.End, cancellation);
+            if (sourcedEvent == null)
+                return null;
+            Snapshot<TAggregate> snapshot = ((JObject)sourcedEvent.Data).ToObject<Snapshot<TAggregate>>();
+            return snapshot.Data;
+        }
+
+        /// <summary>
+        /// Attempts to snapshot the specified <see cref="IAggregateRoot"/>
+        /// </summary>
+        /// <param name="aggregate">The <see cref="IAggregateRoot"/> to create a new <see cref="Snapshot{TAggregate}"/> for</param>
+        /// <param name="cancellation">A <see cref="CancellationToken"/></param>
+        /// <returns>A boolean indicating whether or not a new <see cref="Snapshot{TAggregate}"/> has been created</returns>
+        protected virtual async Task<bool> TrySnapshotAsync(TAggregate aggregate, CancellationToken cancellation = default)
+        {
+            if (!this.Options.SnapshotFrequency.HasValue
+                || aggregate.Version % this.Options.SnapshotFrequency.Value != 0)
+                    return false;
+            Snapshot<TAggregate> snapshot = Snapshot<TAggregate>.CreateFor(aggregate);
+            await this.EventStore.AppendToStreamAsync(this.GetSnapshotStreamIdFor(aggregate.Id), new EventMetadata[] { new("snapshot", snapshot) }, cancellation);
+            return true;
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Data.EventSourcing;
+using Neuroglia.Data.EventSourcing.Configuration;
 using Neuroglia.Data.EventSourcing.Services;
 using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Containers;
@@ -40,10 +41,13 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
                 }));
             services.AddEventSourcingRepository<TestPerson, Guid>();
             this.ServiceScope = services.BuildServiceProvider().CreateScope();
+            this.EventStore = this.ServiceScope.ServiceProvider.GetRequiredService<IEventStore>();
             this.Repository = this.ServiceScope.ServiceProvider.GetRequiredService<EventSourcingRepository<TestPerson, Guid>>();
         }
 
         IServiceScope ServiceScope { get; }
+
+        IEventStore EventStore { get; }
 
         EventSourcingRepository<TestPerson, Guid> Repository { get; }
 
@@ -139,6 +143,25 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
         }
 
         [Fact, Priority(6)]
+        public async Task Snapshot()
+        {
+            //act
+            var aggregate = await this.Repository.FindAsync(AggregateId.Value);
+            for (int i = 0; i < EventSourcingRepositoryOptions.DefaultSnapshotFrequency / 2; i++)
+            {
+                aggregate.SetFirstName($"Fake First Name {i}");
+                aggregate.SetLastName($"Fake Last Name {i}");
+            }
+            await this.Repository.UpdateAsync(aggregate);
+            await this.Repository.SaveChangesAsync();
+            var stream = await this.EventStore.GetStreamAsync($"{nameof(TestPerson).ToLower()}-snapshots-{AggregateId.Value.ToString().Replace("-", "")}");
+
+            //assert
+            stream.Should().NotBeNull();
+            stream.Length.Should().Be(1);
+        }
+
+        [Fact, Priority(7)]
         public async Task RemoveAggregate()
         {
             //act

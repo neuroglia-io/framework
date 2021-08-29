@@ -30,6 +30,14 @@ namespace Neuroglia.Data
         /// <summary>
         /// Initializes a new <see cref="Entity{TKey}"/>
         /// </summary>
+        protected Entity()
+        {
+            
+        }
+
+        /// <summary>
+        /// Initializes a new <see cref="Entity{TKey}"/>
+        /// </summary>
         /// <param name="id">The <see cref="IEntity"/>'s unique key</param>
         protected Entity(TKey id)
         {

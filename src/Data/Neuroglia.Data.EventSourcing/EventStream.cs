@@ -15,12 +15,14 @@
  *
  */
 using System;
+using System.Collections.Generic;
+using System.Threading;
 
-namespace Neuroglia.Data.EventSourcing.EventStore
+namespace Neuroglia.Data.EventSourcing
 {
 
     /// <summary>
-    /// Represents the <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="IEventStream"/> interface
+    /// Represents the default implementation of the <see cref="IEventStream"/> interface
     /// </summary>
     public class EventStream
         : IEventStream
@@ -29,17 +31,26 @@ namespace Neuroglia.Data.EventSourcing.EventStore
         /// <summary>
         /// Initializes a new <see cref="EventStream"/>
         /// </summary>
-        /// <param name="streamId">The id of the described stream</param>
+        /// <param name="eventStore">The <see cref="IEventStore"/> used to read the <see cref="EventStream"/>'s <see cref="ISourcedEvent"/>s</param>
+        /// <param name="id">The id of the described stream</param>
         /// <param name="length">The length of the stream</param>
         /// <param name="firstEventAt">The date and time at which the first event of the stream has been created</param>
         /// <param name="lastEventAt">The date and time at which the last event of the stream has been created</param>
-        public EventStream(object streamId, long length, DateTime firstEventAt, DateTime lastEventAt)
+        /// <param name="current">The <see cref="ISourcedEvent"/> at the current position</param>
+        public EventStream(IEventStore eventStore, object id, long length, DateTime firstEventAt, DateTime lastEventAt, ISourcedEvent current)
         {
-            this.Id = streamId;
+            this.EventStore = eventStore;
+            this.Id = id;
             this.Length = length;
             this.FirstEventAt = firstEventAt;
             this.LastEventAt = lastEventAt;
+            this.Current = current;
         }
+
+        /// <summary>
+        /// Gets the <see cref="IEventStore"/> used to read the <see cref="EventStream"/>'s <see cref="ISourcedEvent"/>s
+        /// </summary>
+        protected virtual IEventStore EventStore { get; }
 
         /// <inheritdoc/>
         public virtual object Id { get; }
@@ -55,6 +66,17 @@ namespace Neuroglia.Data.EventSourcing.EventStore
 
         /// <inheritdoc/>
         public virtual long Position { get; protected set; }
+
+        /// <inheritdoc/>
+        public virtual ISourcedEvent Current { get; protected set; }
+
+        /// <inheritdoc/>
+        public virtual async IAsyncEnumerator<ISourcedEvent> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+        {
+            this.Current = await this.EventStore.ReadSingleEventForwardAsync(this.Id.ToString(), this.Position, cancellationToken);
+            yield return this.Current;
+            this.Position++;
+        }
 
     }
 

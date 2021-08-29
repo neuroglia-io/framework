@@ -549,6 +549,11 @@
             </summary>
             <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IEntity"/></typeparam>
         </member>
+        <member name="M:Neuroglia.Data.Entity`1.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.Entity`1"/>
+            </summary>
+        </member>
         <member name="M:Neuroglia.Data.Entity`1.#ctor(`0)">
             <summary>
             Initializes a new <see cref="T:Neuroglia.Data.Entity`1"/>
