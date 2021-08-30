@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Neuroglia.Data.EventSourcing;
 using Neuroglia.Data.EventSourcing.Configuration;
 using Neuroglia.Data.EventSourcing.Services;
+using Neuroglia.Mediation;
 using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Containers;
 using Neuroglia.UnitTests.Data;
@@ -36,6 +37,10 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             services.AddNewtonsoftJsonSerializer(options =>
             {
                 options.ContractResolver = new NonPublicSetterContractResolver();
+            });
+            services.AddMediator(options =>
+            {
+                options.ScanAssembly(typeof(EventSourcingRepositoryTests).Assembly);
             });
             services.AddEventStore(builder =>
                 builder.ConfigureClient(client =>
@@ -181,7 +186,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
         }
 
         [Fact, Priority(8)]
-        public async Task Benchmark()
+        public async Task BenchmarkSnapshotting()
         {
             //arrange
             var repositoryWithSnapshots = ActivatorUtilities.CreateInstance<EventSourcingRepository<TestPerson, Guid>>(this.ServiceScope.ServiceProvider);

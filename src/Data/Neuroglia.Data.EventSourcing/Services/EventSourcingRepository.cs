@@ -140,11 +140,18 @@ namespace Neuroglia.Data.EventSourcing.Services
         {
             if (aggregate == null)
                 throw new ArgumentNullException(nameof(aggregate));
-            IEnumerable<IDomainEvent> events = aggregate.PendingEvents;
+            IEnumerable<IDomainEvent> events = aggregate.PendingEvents.ToList();
             await this.EventStore.AppendToStreamAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetMetadata()), cancellationToken);
             aggregate.SetVersion(events.Count());
             aggregate.ClearPendingEvents();
             await this.TrySnapshotAsync(aggregate, cancellationToken);
+            if(this.Mediator != null)
+            {
+                foreach (IDomainEvent e in events)
+                {
+                    await this.Mediator.PublishAsync((dynamic)e, cancellationToken);
+                }
+            }
             return aggregate;
         }
 
@@ -155,11 +162,18 @@ namespace Neuroglia.Data.EventSourcing.Services
                 throw new ArgumentNullException(nameof(aggregate));
             if (!aggregate.PendingEvents.Any())
                 return aggregate;
-            IEnumerable<IDomainEvent> events = aggregate.PendingEvents;
+            IEnumerable<IDomainEvent> events = aggregate.PendingEvents.ToList();
             await this.EventStore.AppendToStreamAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetMetadata()), aggregate.Version, cancellationToken);
             aggregate.SetVersion(aggregate.Version + events.Count());
             aggregate.ClearPendingEvents();
             await this.TrySnapshotAsync(aggregate, cancellationToken);
+            if (this.Mediator != null)
+            {
+                foreach (IDomainEvent e in events)
+                {
+                    await this.Mediator.PublishAsync((dynamic)e, cancellationToken);
+                }
+            }
             return aggregate;
         }
 

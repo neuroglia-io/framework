@@ -42,7 +42,8 @@ namespace Neuroglia.UnitTests.Data.Events
 
         public Task HandleAsync(TestPersonCreatedDomainEvent e, CancellationToken cancellationToken = default)
         {
-            WaitForEventCompletionSource.SetResult(e);
+            if (!WaitForEventCompletionSource.Task.IsCompleted)
+                WaitForEventCompletionSource.SetResult(e);
             return Task.CompletedTask;
         }
 
