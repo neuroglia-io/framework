@@ -16,8 +16,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Neuroglia.Data.EventSourcing
 {
@@ -26,7 +24,7 @@ namespace Neuroglia.Data.EventSourcing
     /// Defines the fundamentals of an object used to describe a stream of <see cref="IDomainEvent"/>s
     /// </summary>
     public interface IEventStream
-        : IIdentifiable, IAsyncEnumerable<IEvent>
+        : IIdentifiable, IAsyncEnumerable<ISourcedEvent>
     {
 
         /// <summary>
@@ -50,28 +48,9 @@ namespace Neuroglia.Data.EventSourcing
         DateTimeOffset LastEventAt { get; }
 
         /// <summary>
-        /// Converts the <see cref="IEventStream"/> to a new <see cref="IEnumerable{T}"/> of <see cref="IEvent">events</see>
+        /// Gets the <see cref="ISourcedEvent"/> at the current position
         /// </summary>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="IEvent">events</see> the <see cref="IEventStream"/> is made out of</returns>
-        Task<List<IEvent>> ToListAsync(CancellationToken cancellationToken = default);
-
-    }
-
-    /// <summary>
-    /// Defines the fundamentals of an object used to describe a stream of <see cref="IDomainEvent"/>s
-    /// </summary>
-    public interface IEventStream<TKey>
-        : IEventStream, IIdentifiable<TKey>, IAsyncEnumerable<IEvent<TKey>>
-        where TKey : IEquatable<TKey>
-    {
-
-        /// <summary>
-        /// Converts the <see cref="IEventStream{TKey}"/> to a new <see cref="IEnumerable{T}"/> of <see cref="IEvent{TKey}">events</see>
-        /// </summary>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="IEvent{TKey}">events</see> the <see cref="IEventStream{TKey}"/> is made out of</returns>
-        new Task<List<IEvent<TKey>>> ToListAsync(CancellationToken cancellationToken = default);
+        ISourcedEvent Current { get; }
 
     }
 

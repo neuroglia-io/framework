@@ -4,90 +4,406 @@
         <name>Neuroglia.Data.EventSourcing</name>
     </assembly>
     <members>
-        <member name="T:Neuroglia.Data.EventSourcing.Event`1">
+        <member name="T:Neuroglia.Data.EventSourcing.Configuration.EventSourcingRepositoryOptions">
             <summary>
-            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.IEvent`1"/> interface
-            </summary>
-            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.EventSourcing.IEvent`1"/></typeparam>
-        </member>
-        <member name="M:Neuroglia.Data.EventSourcing.Event`1.#ctor">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Event`1"/>
+            Represents the options used to configure an <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/>
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.Event`1.#ctor(`0,System.Int64,System.DateTimeOffset,System.String,System.Object,System.Object)">
+        <member name="F:Neuroglia.Data.EventSourcing.Configuration.EventSourcingRepositoryOptions.DefaultSnapshotFrequency">
             <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Event`1"/>
+            Gets the default snapshot frequency
             </summary>
-            <param name="id">The id used to uniquely identity the <see cref="T:Neuroglia.Data.EventSourcing.Event`1"/></param>
-            <param name="sequence">The <see cref="T:Neuroglia.Data.EventSourcing.Event`1"/>'s sequence</param>
-            <param name="createdAt">The date and time at which the <see cref="T:Neuroglia.Data.EventSourcing.Event`1"/> has been created</param>
-            <param name="type">The type of the described event</param>
-            <param name="data">The data of the described event</param>
-            <param name="metadata">The metadata of the described event</param>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.Event`1.Id">
+        <member name="P:Neuroglia.Data.EventSourcing.Configuration.EventSourcingRepositoryOptions.SnapshotFrequency">
+            <summary>
+            Gets/sets the frequency at which to snapshot <see cref="T:Neuroglia.Data.IAggregateRoot"/>s
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.Configuration.EventSourcingRepositoryOptions`2">
+            <summary>
+            Represents the options used to configure an <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/>
+            </summary>
+            <typeparam name="TAggregate">The type of <see cref="T:Neuroglia.Data.IAggregateRoot"/> managed by the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> to configure</typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IAggregateRoot"/> managed by the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> to configure</typeparam>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions">
+            <summary>
+            Defines the fundamentals of an event stream subscription options
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISubscriptionOptions.DurableName">
+            <summary>
+            Gets the durable name of the subscription
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISubscriptionOptions.IsDurable">
+            <summary>
+            Gets a boolean indicating whether or not the subscription is durable
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISubscriptionOptions.ResolveLinks">
+            <summary>
+            Gets a boolean indicating whether or not to resolve event links
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISubscriptionOptions.StreamPosition">
+            <summary>
+            Gets the initial event stream position
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISubscriptionOptions.StartFrom">
+            <summary>
+            Gets the event stream position to start from
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISubscriptionOptions.MinEventsBeforeCheckpoint">
+            <summary>
+            Gets the minimum events before a checkpoint
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISubscriptionOptions.MaxEventsBeforeCheckpoint">
+            <summary>
+            Gets the maximum events before a checkpoint
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISubscriptionOptions.MaxSubscribers">
+            <summary>
+            Gets the maximum amount of subscribers
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISubscriptionOptions.AckMode">
+            <summary>
+            Gets the event ack mode
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder.AsDurable(System.String)">
+            <summary>
+            Configures the subscription to be durable
+            </summary>
+            <param name="durableName">The subscription's durable name</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder.StartFrom(System.Int64)">
+            <summary>
+            Starts from the specified position in the event stream
+            </summary>
+            <param name="position">The event stream position to start from</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder.StartFromBegining">
+            <summary>
+            Starts from the begining of the event stream
+            </summary>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder.StartFromCurrent">
+            <summary>
+            Starts from the current position in the event stream
+            </summary>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder.ResolveLinks(System.Boolean)">
+            <summary>
+            Configures the subscription to resolve event links
+            </summary>
+            <param name="resolve">A boolean indicating whether or not to resolve event links</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder.WithMaxSubscribers(System.Int32)">
+            <summary>
+            Configures the subscription to have a maximum amount of subscribers
+            </summary>
+            <param name="subscribers">The maximum amount of subscribers</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder.WithMinEventsBeforeCheckpoint(System.Int32)">
+            <summary>
+            Configures the minimum event count before the subscription creates a checkpoint
+            </summary>
+            <param name="min">The minimum event count before the subscription creates a checkpoint</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder.WithMaxEventsBeforeCheckpoint(System.Int32)">
+            <summary>
+            Configures the maximum event count before the subscription creates a checkpoint
+            </summary>
+            <param name="max">The maximum event count before the subscription creates a checkpoint</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder.WithAckMode(Neuroglia.Data.EventSourcing.EventAckMode)">
+            <summary>
+            Configures the subscription to use the specified <see cref="T:Neuroglia.Data.EventSourcing.EventAckMode"/>
+            </summary>
+            <param name="mode">The <see cref="T:Neuroglia.Data.EventSourcing.EventAckMode"/> to use</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder.Build">
+            <summary>
+            Builds the <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions"/>
+            </summary>
+            <returns>A new <see cref="T:Neuroglia.Data.EventSourcing.ISubscriptionOptions"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventAckMode">
+            <summary>
+            Enumerates all types of event ack modes
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.EventSourcing.EventAckMode.Automatic">
+            <summary>
+            Automatically acks events
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.EventSourcing.EventAckMode.Manual">
+            <summary>
+            Manually acks events
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventMetadata">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.IEventMetadata"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventMetadata.#ctor(System.Guid,System.String,System.Object,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventMetadata"/>
+            </summary>
+            <param name="id">The event's id</param>
+            <param name="type">The event's type</param>
+            <param name="data">The event's data</param>
+            <param name="metadata">The event's metadata</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventMetadata.#ctor(System.Guid,System.String,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventMetadata"/>
+            </summary>
+            <param name="id">The event's id</param>
+            <param name="type">The event's type</param>
+            <param name="data">The event's data</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventMetadata.#ctor(System.String,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventMetadata"/>
+            </summary>
+            <param name="type">The event's type</param>
+            <param name="data">The event's data</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventMetadata.#ctor(System.String,System.Object,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventMetadata"/>
+            </summary>
+            <param name="type">The event's type</param>
+            <param name="data">The event's data</param>
+            <param name="metadata">The event's metadata</param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventMetadata.Id">
             <inheritdoc/>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.Event`1.Sequence">
+        <member name="P:Neuroglia.Data.EventSourcing.EventMetadata.Type">
             <inheritdoc/>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.Event`1.CreatedAt">
+        <member name="P:Neuroglia.Data.EventSourcing.EventMetadata.Data">
             <inheritdoc/>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.Event`1.Type">
+        <member name="P:Neuroglia.Data.EventSourcing.EventMetadata.Metadata">
             <inheritdoc/>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.Event`1.Data">
+        <member name="T:Neuroglia.Data.EventSourcing.EventSourcingDefaults">
+            <summary>
+            Exposes event sourcing defaults
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventSourcingDefaults.Metadata">
+            <summary>
+            Exposes event sourcing metadata defaults
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.EventSourcing.EventSourcingDefaults.Metadata.Prefix">
+            <summary>
+            Gets the prefix of the default event-sourcing related metadata properties
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.EventSourcing.EventSourcingDefaults.Metadata.RuntimeTypeName">
+            <summary>
+            Gets the name of the metadata used to store the assembly-qualified name of the serialized event's runtime type
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStream">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStream.#ctor(Neuroglia.Data.EventSourcing.IEventStore,System.Object,System.Int64,System.DateTime,System.DateTime,Neuroglia.Data.EventSourcing.ISourcedEvent)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStream"/>
+            </summary>
+            <param name="eventStore">The <see cref="T:Neuroglia.Data.EventSourcing.IEventStore"/> used to read the <see cref="T:Neuroglia.Data.EventSourcing.EventStream"/>'s <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s</param>
+            <param name="id">The id of the described stream</param>
+            <param name="length">The length of the stream</param>
+            <param name="firstEventAt">The date and time at which the first event of the stream has been created</param>
+            <param name="lastEventAt">The date and time at which the last event of the stream has been created</param>
+            <param name="current">The <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> at the current position</param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStream.EventStore">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.IEventStore"/> used to read the <see cref="T:Neuroglia.Data.EventSourcing.EventStream"/>'s <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStream.Id">
             <inheritdoc/>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.Event`1.Metadata">
+        <member name="P:Neuroglia.Data.EventSourcing.EventStream.Length">
             <inheritdoc/>
         </member>
-        <member name="T:Neuroglia.Data.EventSourcing.IEvent">
+        <member name="P:Neuroglia.Data.EventSourcing.EventStream.FirstEventAt">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStream.LastEventAt">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStream.Position">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStream.Current">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStream.GetAsyncEnumerator(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventStreamPosition">
             <summary>
-            Defines the fundamentals of an object used to describe a managed event
+            Represents a position in a <see cref="T:Neuroglia.Data.EventSourcing.EventStream"/>
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.IEvent.Id">
+        <member name="F:Neuroglia.Data.EventSourcing.EventStreamPosition.Start">
             <summary>
-            Gets the id of the managed event
+            Gets an <see cref="T:Neuroglia.Data.EventSourcing.EventStreamPosition"/> that represents the beginning (i.e., the first event) of a stream
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.IEvent.Sequence">
+        <member name="F:Neuroglia.Data.EventSourcing.EventStreamPosition.End">
             <summary>
-            Gets the sequence of the managed event
+            Gets an <see cref="T:Neuroglia.Data.EventSourcing.EventStreamPosition"/> that represents the end of a stream. Use this when reading a stream backwards, or subscribing live to a stream
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.IEvent.CreatedAt">
+        <member name="M:Neuroglia.Data.EventSourcing.EventStreamPosition.#ctor(System.Int64)">
             <summary>
-            Gets the date and time at which the managed event has been created
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventStreamPosition"/>
+            </summary>
+            <param name="value">The <see cref="T:Neuroglia.Data.EventSourcing.EventStreamPosition"/>'s value</param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventStreamPosition.Value">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.EventStreamPosition"/>'s value
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.IEvent.Type">
+        <member name="M:Neuroglia.Data.EventSourcing.EventStreamPosition.op_Implicit(System.Int64)~Neuroglia.Data.EventSourcing.EventStreamPosition">
             <summary>
-            Gets the type of the managed event
+            Implicitly converts the specified value into a new <see cref="T:Neuroglia.Data.EventSourcing.EventStreamPosition"/>
+            </summary>
+            <param name="value">The value of the <see cref="T:Neuroglia.Data.EventSourcing.EventStreamPosition"/> to create</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventStreamPosition.op_Implicit(Neuroglia.Data.EventSourcing.EventStreamPosition)~System.Int64">
+            <summary>
+            Implicitly converts the specified <see cref="T:Neuroglia.Data.EventSourcing.EventStreamPosition"/> into a <see cref="T:System.Int64"/>
+            </summary>
+            <param name="position">The <see cref="T:Neuroglia.Data.EventSourcing.EventStreamPosition"/> to convert</param>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.IDomainEventExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Neuroglia.Data.IDomainEvent"/>s
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.IEvent.Data">
+        <member name="M:Neuroglia.Data.EventSourcing.IDomainEventExtensions.GetMetadata(Neuroglia.Data.IDomainEvent)">
             <summary>
-            Gets the data of the managed event
+            Gets the <see cref="T:Neuroglia.Data.IDomainEvent"/>'s <see cref="T:Neuroglia.Data.EventSourcing.IEventMetadata"/>
+            </summary>
+            <param name="e">The <see cref="T:Neuroglia.Data.IDomainEvent"/> to get the <see cref="T:Neuroglia.Data.EventSourcing.IEventMetadata"/> of</param>
+            <returns>The <see cref="T:Neuroglia.Data.EventSourcing.IEventMetadata"/> of the specified <see cref="T:Neuroglia.Data.IDomainEvent"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IDomainEventExtensions.GetTypeName(Neuroglia.Data.IDomainEvent)">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.IDomainEvent"/>'s type name
+            </summary>
+            <param name="e">The <see cref="T:Neuroglia.Data.IDomainEvent"/> to get the type name of</param>
+            <returns>The <see cref="T:Neuroglia.Data.IDomainEvent"/>'s type name</returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.IEventStoreExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Neuroglia.Data.EventSourcing.IEventStore"/>s
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.IEvent.Metadata">
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStoreExtensions.ReadSingleEventForwardAsync(Neuroglia.Data.EventSourcing.IEventStore,System.String,System.Int64,System.Threading.CancellationToken)">
             <summary>
-            Gets the metadata of the managed event
+            Reads a single event in a forward direction
+            </summary>
+            <param name="eventStore">The extended <see cref="T:Neuroglia.Data.EventSourcing.IEventStore"/></param>
+            <param name="streamId">The id of the stream to read</param>
+            <param name="offset">The offset at which to read the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> from</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> at the specified offset</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStoreExtensions.ReadSingleEventBackwardAsync(Neuroglia.Data.EventSourcing.IEventStore,System.String,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Reads a single event in a backward direction
+            </summary>
+            <param name="eventStore">The extended <see cref="T:Neuroglia.Data.EventSourcing.IEventStore"/></param>
+            <param name="streamId">The id of the stream to read</param>
+            <param name="offset">The offset at which to read the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> from</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> at the specified offset</returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
             </summary>
         </member>
-        <member name="T:Neuroglia.Data.EventSourcing.IEvent`1">
+        <member name="M:Neuroglia.Data.EventSourcing.IServiceCollectionExtensions.AddEventSourcingRepository``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
             <summary>
-            Defines the fundamentals of an object used to describe a managed event
+            Adds and configures a new <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/>
             </summary>
-            <typeparam name="TKey">The type of key used to uniquely identify an event</typeparam>
+            <typeparam name="TAggregate">The type of <see cref="T:Neuroglia.Data.IAggregateRoot`1"/> to add a new <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> for</typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IAggregateRoot"/>s managed by the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> to add</typeparam>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="lifetime">The lifetime of the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
         </member>
-        <member name="P:Neuroglia.Data.EventSourcing.IEvent`1.Id">
+        <member name="M:Neuroglia.Data.EventSourcing.IServiceCollectionExtensions.AddEventSourcingRepository(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Type,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
             <summary>
-            Gets the id of the managed event
+            Adds and configures a new <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="aggregateType">The type of <see cref="T:Neuroglia.Data.IAggregateRoot`1"/> to add a new <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> for</param>
+            <param name="keyType">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IAggregateRoot"/>s managed by the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> to add</param>
+            <param name="lifetime">The lifetime of the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.IEventMetadata">
+            <summary>
+            Defines the fundamentals of an object that holds <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> data
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.IEventMetadata.Id">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>'s id
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.IEventMetadata.Type">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>'s type
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.IEventMetadata.Data">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>'s data
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.IEventMetadata.Metadata">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>'s metadata
             </summary>
         </member>
         <member name="T:Neuroglia.Data.EventSourcing.IEventStream">
@@ -115,43 +431,286 @@
             Gets the date and time at which the last event has been created
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.IEventStream.ToListAsync(System.Threading.CancellationToken)">
+        <member name="P:Neuroglia.Data.EventSourcing.IEventStream.Current">
             <summary>
-            Converts the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to a new <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:Neuroglia.Data.EventSourcing.IEvent">events</see>
-            </summary>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.EventSourcing.IEvent">events</see> the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> is made out of</returns>
-        </member>
-        <member name="T:Neuroglia.Data.EventSourcing.IEventStream`1">
-            <summary>
-            Defines the fundamentals of an object used to describe a stream of <see cref="T:Neuroglia.Data.IDomainEvent"/>s
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> at the current position
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.IEventStream`1.ToListAsync(System.Threading.CancellationToken)">
+        <member name="T:Neuroglia.Data.EventSourcing.ISnapshot">
             <summary>
-            Converts the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream`1"/> to a new <see cref="T:System.Collections.Generic.IEnumerable`1"/> of <see cref="T:Neuroglia.Data.EventSourcing.IEvent`1">events</see>
+            Defines the fundamentals of an <see cref="T:Neuroglia.Data.IAggregateRoot"/> snapshot
             </summary>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.EventSourcing.IEvent`1">events</see> the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream`1"/> is made out of</returns>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISnapshot.Version">
+            <summary>
+            Gets the version of the <see cref="T:Neuroglia.Data.EventSourcing.ISnapshot"/>'s <see cref="T:Neuroglia.Data.IAggregateRoot"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISnapshot.Data">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.ISnapshot"/>'s <see cref="T:Neuroglia.Data.IAggregateRoot"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISnapshot.Metadata">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.ISnapshot"/>'s metadata
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.ISnapshot`1">
+            <summary>
+            Defines the fundamentals of an <see cref="T:Neuroglia.Data.IAggregateRoot"/> snapshot
+            </summary>
+            <typeparam name="TAggregate">The type of the snapshot <see cref="T:Neuroglia.Data.IAggregateRoot"/></typeparam>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISnapshot`1.Data">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.ISnapshot"/>'s <see cref="T:Neuroglia.Data.IAggregateRoot"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.ISourcedEvent">
+            <summary>
+            Defines the fundamentals of an object used to describe a managed event
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISourcedEvent.Id">
+            <summary>
+            Gets the id of the managed event
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISourcedEvent.Sequence">
+            <summary>
+            Gets the sequence of the managed event
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISourcedEvent.CreatedAt">
+            <summary>
+            Gets the date and time at which the managed event has been created
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISourcedEvent.Type">
+            <summary>
+            Gets the type of the managed event
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISourcedEvent.Data">
+            <summary>
+            Gets the data of the managed event
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.ISourcedEvent.Metadata">
+            <summary>
+            Gets the metadata of the managed event
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.Aggregator`1">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.IAggregator`1"/> interface
+            </summary>
+            <typeparam name="TAggregate">The type of aggregates produced by the <see cref="T:Neuroglia.Data.EventSourcing.Aggregator`1"/></typeparam>
+        </member>
+        <member name="F:Neuroglia.Data.EventSourcing.Aggregator`1.DefaultAggregationMethodName">
+            <summary>
+            Gets the default name of aggregation methods
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Aggregator`1.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Aggregator`1"/>
+            </summary>
+            <param name="aggregationMethodName">The name of aggregation methods</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Aggregator`1.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Aggregator`1"/> using <see cref="F:Neuroglia.Data.EventSourcing.Aggregator`1.DefaultAggregationMethodName"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Aggregator`1.Aggregators">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IReadOnlyDictionary`2"/> containing all available <see cref="T:Neuroglia.Data.EventSourcing.IEventAggregator"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Aggregator`1.Aggregate(System.Collections.Generic.IEnumerable{Neuroglia.Data.IDomainEvent})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Aggregator`1.Aggregate(`0,System.Collections.Generic.IEnumerable{Neuroglia.Data.IDomainEvent})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Aggregator`1.CreateAggregateInstance">
+            <summary>
+            Creates a new aggregate instance
+            </summary>
+            <returns>A new aggregate instance</returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.AggregatorFactory">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.IAggregatorFactory"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.AggregatorFactory.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.AggregatorFactory"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.AggregatorFactory.Aggregators">
+            <summary>
+            Gets a <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/> containing all available <see cref="T:Neuroglia.Data.EventSourcing.IAggregator"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.AggregatorFactory.CreateAggregator``1">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.AggregatorFactory.CreateAggregator(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.EventAggregator`2">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.IEventAggregator"/> interface
+            </summary>
+            <typeparam name="TAggregate">The type of aggregate to handle</typeparam>
+            <typeparam name="TEvent">The type of <see cref="T:Neuroglia.Data.IDomainEvent"/>s to aggregate</typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventAggregator`2.#ctor(System.Reflection.MethodInfo)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.EventAggregator`2"/>
+            </summary>
+            <param name="aggregationMethod">The aggregation <see cref="T:System.Reflection.MethodInfo"/></param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.EventAggregator`2.AggregationMethod">
+            <summary>
+            Gets the aggregation <see cref="T:System.Reflection.MethodInfo"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventAggregator`2.Aggregate(`0,`1)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.EventAggregator`2.Neuroglia#Data#EventSourcing#IEventAggregator#Aggregate(System.Object,Neuroglia.Data.IDomainEvent)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2">
+            <summary>
+            Represents an <see cref="T:Neuroglia.Data.IRepository`2"/> implementation that uses an <see cref="T:Neuroglia.Data.EventSourcing.IEventStore"/> to persist data
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.#ctor(Microsoft.Extensions.Options.IOptions{Neuroglia.Data.EventSourcing.Configuration.EventSourcingRepositoryOptions{`0,`1}},System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{Neuroglia.Data.EventSourcing.Services.EventSourcingRepository{`0,`1}},Neuroglia.Data.EventSourcing.IEventStore,Neuroglia.Data.EventSourcing.IAggregatorFactory)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/>
+            </summary>
+            <param name="options">The service used to access the current <see cref="T:Neuroglia.Data.EventSourcing.Configuration.EventSourcingRepositoryOptions`2"/></param>
+            <param name="serviceProvider">The current <see cref="T:System.IServiceProvider"/></param>
+            <param name="logger">The service used to perform logging</param>
+            <param name="eventStore">The <see cref="T:Neuroglia.Data.EventSourcing.IEventStore"/> used to persist data managed by the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/></param>
+            <param name="aggregatorFactory">The service used to aggregate <see cref="T:Neuroglia.Data.IDomainEvent"/>s</param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.Options">
+            <summary>
+            Gets the options used to configure the <see cref="T:Neuroglia.Data.EventSourcing.Configuration.EventSourcingRepositoryOptions`2"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.ServiceProvider">
+            <summary>
+            Gets the current <see cref="T:System.IServiceProvider"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.EventStore">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.EventSourcing.IEventStore"/> used to persist data managed by the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.Mediator">
+            <summary>
+            Gets the service used to mediate calls
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.Aggregator">
+            <summary>
+            Gets the service used to aggregate <see cref="T:Neuroglia.Data.IDomainEvent"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.StreamPrefix">
+            <summary>
+            Gets the prefix for all streams managed by the <see cref="T:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.ContainsAsync(`1,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.FindAsync(`1,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.FindAsync(System.Object[],System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.AddAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.UpdateAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.RemoveAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.ToListAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.AsQueryable">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.SaveChangesAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.GetStreamIdFor(`1)">
+            <summary>
+            Gets the id of the stream that corresponds to the specified aggregate key
+            </summary>
+            <param name="key">The key of the aggregate to get the stream id for</param>
+            <returns>The id of the stream that corresponds to the specified aggregate key</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.GetSnapshotStreamIdFor(`1)">
+            <summary>
+            Gets the id of the snapshot stream that corresponds to the specified aggregate key
+            </summary>
+            <param name="key">The key of the aggregate to get the snapshot stream id for</param>
+            <returns>The id of the stream that corresponds to the specified aggregate key</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.GetSnapshotAsync(`1,System.Threading.CancellationToken)">
+            <summary>
+            Gets the snapshot of the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/>
+            </summary>
+            <param name="key">The key of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> to find</param>
+            <param name="cancellation">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The snapshot of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> with the specified key</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Services.EventSourcingRepository`2.TrySnapshotAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Attempts to snapshot the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/>
+            </summary>
+            <param name="aggregate">The <see cref="T:Neuroglia.Data.IAggregateRoot"/> to create a new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/> for</param>
+            <param name="cancellation">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A boolean indicating whether or not a new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/> has been created</returns>
         </member>
         <member name="T:Neuroglia.Data.EventSourcing.IAggregator">
             <summary>
-            Defines the fundamentals of a service used to aggregate <see cref="T:Neuroglia.Data.IDomainEvent"/>s
+            Defines the fundamentals of a service used to aggregate <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.IAggregator.Aggregate(System.Collections.Generic.IEnumerable{Neuroglia.Data.EventSourcing.IEvent})">
+        <member name="M:Neuroglia.Data.EventSourcing.IAggregator.Aggregate(System.Collections.Generic.IEnumerable{Neuroglia.Data.IDomainEvent})">
             <summary>
-            Aggregates the specified <see cref="T:Neuroglia.Data.EventSourcing.IEvent"/>s
+            Aggregates the specified <see cref="T:Neuroglia.Data.IDomainEvent"/>s
             </summary>
-            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.EventSourcing.IEvent"/>s to aggregate</param>
+            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.IDomainEvent"/>s to aggregate</param>
             <returns>The resulting aggregate</returns>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.IAggregator.Aggregate(System.Object,System.Collections.Generic.IEnumerable{Neuroglia.Data.EventSourcing.IEvent})">
+        <member name="M:Neuroglia.Data.EventSourcing.IAggregator.Aggregate(System.Object,System.Collections.Generic.IEnumerable{Neuroglia.Data.IDomainEvent})">
             <summary>
-            Aggregates the specified <see cref="T:Neuroglia.Data.EventSourcing.IEvent"/>s
+            Aggregates the specified <see cref="T:Neuroglia.Data.IDomainEvent"/>s
             </summary>
             <param name="state">The current state of the aggregate</param>
-            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.EventSourcing.IEvent"/>s to aggregate</param>
+            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.IDomainEvent"/>s to aggregate</param>
             <returns>The resulting aggregate</returns>
         </member>
         <member name="T:Neuroglia.Data.EventSourcing.IAggregator`1">
@@ -160,19 +719,19 @@
             </summary>
             <typeparam name="TAggregate">The type of the expected aggregate</typeparam>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.IAggregator`1.Aggregate(System.Collections.Generic.IEnumerable{Neuroglia.Data.EventSourcing.IEvent})">
+        <member name="M:Neuroglia.Data.EventSourcing.IAggregator`1.Aggregate(System.Collections.Generic.IEnumerable{Neuroglia.Data.IDomainEvent})">
             <summary>
-            Aggregates the specified <see cref="T:Neuroglia.Data.EventSourcing.IEvent"/>s
+            Aggregates the specified <see cref="T:Neuroglia.Data.IDomainEvent"/>s
             </summary>
-            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.EventSourcing.IEvent"/>s to aggregate</param>
+            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.IDomainEvent"/>s to aggregate</param>
             <returns>The resulting aggregate</returns>
         </member>
-        <member name="M:Neuroglia.Data.EventSourcing.IAggregator`1.Aggregate(`0,System.Collections.Generic.IEnumerable{Neuroglia.Data.EventSourcing.IEvent})">
+        <member name="M:Neuroglia.Data.EventSourcing.IAggregator`1.Aggregate(`0,System.Collections.Generic.IEnumerable{Neuroglia.Data.IDomainEvent})">
             <summary>
-            Aggregates the specified <see cref="T:Neuroglia.Data.EventSourcing.IEvent"/>s
+            Aggregates the specified <see cref="T:Neuroglia.Data.IDomainEvent"/>s
             </summary>
             <param name="state">The current state of the aggregate</param>
-            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.EventSourcing.IEvent"/>s to aggregate</param>
+            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.IDomainEvent"/>s to aggregate</param>
             <returns>The resulting aggregate</returns>
         </member>
         <member name="T:Neuroglia.Data.EventSourcing.IAggregatorFactory">
@@ -194,52 +753,265 @@
             <param name="aggregateType">The type of aggregates produced by the resulting <see cref="T:Neuroglia.Data.EventSourcing.IAggregator"/></param>
             <returns>A new <see cref="T:Neuroglia.Data.EventSourcing.IAggregator"/></returns>
         </member>
-        <member name="T:Neuroglia.Data.IEventSourcingRepository`1">
+        <member name="T:Neuroglia.Data.EventSourcing.IEventAggregator">
             <summary>
-            Defines the fundamentals of an <see cref="T:Neuroglia.Data.IRepository`2"/> that uses event sourcing to store the <see cref="T:Neuroglia.Data.IDomainEvent"/>s of the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/> type
+            Defines the fundamentals of a service used to aggregate <see cref="T:Neuroglia.Data.IDomainEvent"/>s
             </summary>
-            <typeparam name="TAggregate">The type of <see cref="T:Neuroglia.Data.IAggregateRoot"/> managed by the <see cref="T:Neuroglia.Data.IEventSourcingRepository`2"/></typeparam>
         </member>
-        <member name="M:Neuroglia.Data.IEventSourcingRepository`1.GetStreamAsync(System.Object,System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.EventSourcing.IEventAggregator.Aggregate(System.Object,Neuroglia.Data.IDomainEvent)">
+            <summary>
+            Aggregates the specified <see cref="T:Neuroglia.Data.IDomainEvent"/>
+            </summary>
+            <param name="aggregate">The aggregate to apply the specified <see cref="T:Neuroglia.Data.IDomainEvent"/> to</param>
+            <param name="e">The <see cref="T:Neuroglia.Data.IDomainEvent"/> to apply</param>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.IEventStore">
+            <summary>
+            Defines the fundamentals of a service used to store <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.StreamExistsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Determines whether or not the specified stream exists
+            </summary>
+            <param name="streamId">The id of the stream to check of existence</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A boolean indicating whether or not the specified stream exists</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.GetStreamAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Gets the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/>'s <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/>
             </summary>
-            <param name="streamId"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Neuroglia.Data.IEventSourcingRepository`1.FindAsync(System.Object,System.Int64,System.Threading.CancellationToken)">
-            <summary>
-            Finds the <see cref="T:Neuroglia.Data.IAggregateRoot"/> with the specified key and version
-            </summary>
-            <param name="streamId">The key of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> to find</param>
-            <param name="version">The version of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> to find</param>
+            <param name="streamId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to fetch</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>The <see cref="T:Neuroglia.Data.IAggregateRoot"/> with the specified key and version, if any</returns>
+            <returns>The <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> with the specified key</returns>
         </member>
-        <member name="T:Neuroglia.Data.IEventSourcingRepository`2">
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.AppendToStreamAsync(System.String,System.Collections.Generic.IEnumerable{Neuroglia.Data.EventSourcing.IEventMetadata},System.Int64,System.Threading.CancellationToken)">
             <summary>
-            Defines the fundamentals of an <see cref="T:Neuroglia.Data.IRepository`2"/> that uses event sourcing to store the <see cref="T:Neuroglia.Data.IDomainEvent"/>s of the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/> type
+            Appends events to the specified stream
             </summary>
-            <typeparam name="TAggregate">The type of <see cref="T:Neuroglia.Data.IAggregateRoot"/> managed by the <see cref="T:Neuroglia.Data.IEventSourcingRepository`2"/></typeparam>
-            <typeparam name="TKey">The type of key used to uniquely identify the <see cref="T:Neuroglia.Data.IAggregateRoot"/>s managed by the <see cref="T:Neuroglia.Data.IEventSourcingRepository`2"/></typeparam>
-        </member>
-        <member name="M:Neuroglia.Data.IEventSourcingRepository`2.GetStreamAsync(`1,System.Threading.CancellationToken)">
-            <summary>
-            Gets the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/>'s <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/>
-            </summary>
-            <param name="streamId"></param>
-            <param name="cancellationToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Neuroglia.Data.IEventSourcingRepository`2.FindAsync(`1,System.Int64,System.Threading.CancellationToken)">
-            <summary>
-            Finds the <see cref="T:Neuroglia.Data.IAggregateRoot"/> with the specified key and version
-            </summary>
-            <param name="key">The key of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> to find</param>
-            <param name="version">The version of the <see cref="T:Neuroglia.Data.IAggregateRoot"/> to find</param>
+            <param name="streamId">The id of the stream to append events to</param>
+            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the events to append to the specified stream</param>
+            <param name="expectedVersion">The expected version of the stream to append events to</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>The <see cref="T:Neuroglia.Data.IAggregateRoot"/> with the specified key and version, if any</returns>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.AppendToStreamAsync(System.String,System.Collections.Generic.IEnumerable{Neuroglia.Data.EventSourcing.IEventMetadata},System.Threading.CancellationToken)">
+            <summary>
+            Appends events to the specified stream
+            </summary>
+            <param name="streamId">The id of the stream to append events to</param>
+            <param name="events">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the events to append to the specified stream</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.ReadEventsForwardAsync(System.String,System.Int64,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Reads the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of the specified <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> in a forward fashion
+            </summary>
+            <param name="streamId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to get the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of</param>
+            <param name="offset">The number of the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> to start reading the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> from</param>
+            <param name="length">The amount of <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s to read the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> is made out of</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.ReadEventsForwardAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Reads the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of the specified <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> in a forward fashion
+            </summary>
+            <param name="streamId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to get the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of</param>
+            <param name="offset">The number of the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> to start reading the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> from</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> is made out of</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.ReadAllEventsForwardAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Reads all the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of the specified <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> in a forward fashion
+            </summary>
+            <param name="streamId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to get the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> is made out of</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.ReadEventsBackwardAsync(System.String,System.Int64,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Reads the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of the specified <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> in a backward fashion
+            </summary>
+            <param name="streamId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to get the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of</param>
+            <param name="offset">The number of the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> to start reading the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> from</param>
+            <param name="length">The amount of <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s to read the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> is made out of</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.ReadEventsBackwardAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Reads the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of the specified <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> in a backward fashion
+            </summary>
+            <param name="streamId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to get the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of</param>
+            <param name="offset">The number of the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> to start reading the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> from</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> is made out of</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.ReadAllEventsBackwardAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Reads all the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of the specified <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> in a backward fashion
+            </summary>
+            <param name="streamId">The id of the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> to get the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s of</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/>s the <see cref="T:Neuroglia.Data.EventSourcing.IEventStream"/> is made out of</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.SubscribeToStreamAsync(System.String,System.Action{Neuroglia.Data.EventSourcing.ISubscriptionOptionsBuilder},System.Func{System.IServiceProvider,Neuroglia.Data.EventSourcing.ISourcedEvent,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary>
+            Subscribes to the specified event stream
+            </summary>
+            <param name="streamId">The id of the stream to subscribe to</param>
+            <param name="handler">A <see cref="T:System.Func`3"/> used to handle the subscription</param>
+            <param name="setup">An <see cref="T:System.Action`1"/> used to setup the subscription options</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The id of the resulting subscription</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.SubscribeToStreamAsync(System.String,System.Func{System.IServiceProvider,Neuroglia.Data.EventSourcing.ISourcedEvent,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary>
+            Subscribes to the specified event stream
+            </summary>
+            <param name="streamId">The id of the stream to subscribe to</param>
+            <param name="handler">A <see cref="T:System.Func`3"/> used to handle the subscription</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The id of the resulting subscription</returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.UnsubscribeFrom(System.String)">
+            <summary>
+            Unsubscribes from the specified subscription
+            </summary>
+            <param name="subscriptionId">The id of the subscription to unsubscribe from</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.TruncateStreamAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Truncates the specified stream
+            </summary>
+            <param name="streamId">The id of the stream to truncate</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.TruncateStreamAsync(System.String,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Truncates the specified stream
+            </summary>
+            <param name="streamId">The id of the stream to truncate</param>
+            <param name="beforeVersion">The version before which to truncate the stream</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.IEventStore.DeleteStreamAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Deletes the specified stream
+            </summary>
+            <param name="streamId">The id of the stream to delete</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.Snapshot">
+            <summary>
+            Represents the snapshot envelope of an <see cref="T:Neuroglia.Data.IAggregateRoot"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Snapshot.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Snapshot.#ctor(Neuroglia.Data.IAggregateRoot,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/>
+            </summary>
+            <param name="data">The <see cref="T:Neuroglia.Data.IAggregateRoot"/> to snapshot</param>
+            <param name="metadata">The metadata of the <see cref="T:Neuroglia.Data.EventSourcing.Snapshot"/> to create</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Snapshot.#ctor(Neuroglia.Data.IAggregateRoot)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/>
+            </summary>
+            <param name="data">The <see cref="T:Neuroglia.Data.IAggregateRoot"/> to snapshot</param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Snapshot.Version">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Snapshot.Data">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Snapshot.Metadata">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Snapshot.CreateFor``1(``0)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/> for the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/>
+            </summary>
+            <param name="aggregate">The <see cref="T:Neuroglia.Data.IAggregateRoot"/> to create a new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/> for</param>
+            <returns>A new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/> of the specified <see cref="T:Neuroglia.Data.IAggregateRoot"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.Snapshot`1">
+            <summary>
+            Represents the snapshot envelope of an <see cref="T:Neuroglia.Data.IAggregateRoot"/>
+            </summary>
+            <typeparam name="TAggregate">The type of the snapshot <see cref="T:Neuroglia.Data.IAggregateRoot"/></typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Snapshot`1.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Snapshot`1.#ctor(`0,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/>
+            </summary>
+            <param name="data">The <see cref="T:Neuroglia.Data.IAggregateRoot"/> to snapshot</param>
+            <param name="metadata">The metadata of the <see cref="T:Neuroglia.Data.EventSourcing.Snapshot"/> to create</param>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.Snapshot`1.#ctor(`0)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.Snapshot`1"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.Snapshot`1.Data">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.EventSourcing.SourcedEvent">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.EventSourcing.ISourcedEvent"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.SourcedEvent.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.SourcedEvent"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.EventSourcing.SourcedEvent.#ctor(System.Guid,System.Int64,System.DateTimeOffset,System.String,System.Object,System.Object)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.EventSourcing.SourcedEvent"/>
+            </summary>
+            <param name="id">The id used to uniquely identity the <see cref="T:Neuroglia.Data.EventSourcing.SourcedEvent"/></param>
+            <param name="sequence">The <see cref="T:Neuroglia.Data.EventSourcing.SourcedEvent"/>'s sequence</param>
+            <param name="createdAt">The date and time at which the <see cref="T:Neuroglia.Data.EventSourcing.SourcedEvent"/> has been created</param>
+            <param name="type">The type of the described event</param>
+            <param name="data">The data of the described event</param>
+            <param name="metadata">The metadata of the described event</param>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.SourcedEvent.Id">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.SourcedEvent.Sequence">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.SourcedEvent.CreatedAt">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.SourcedEvent.Type">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.SourcedEvent.Data">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.EventSourcing.SourcedEvent.Metadata">
+            <inheritdoc/>
         </member>
     </members>
 </doc>

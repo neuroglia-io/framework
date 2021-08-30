@@ -14,7 +14,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
 
     [TestCaseOrderer("Xunit.PriorityTestCaseOrderer", "Neuroglia.Xunit")]
     public sealed class MongoRepositoryTests
-       : IDisposable
+        : IDisposable
     {
 
         public MongoRepositoryTests()

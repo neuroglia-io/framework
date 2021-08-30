@@ -22,13 +22,13 @@ namespace Neuroglia.Data.EventSourcing
     /// <summary>
     /// Defines the fundamentals of an object used to describe a managed event
     /// </summary>
-    public interface IEvent
+    public interface ISourcedEvent
     {
 
         /// <summary>
         /// Gets the id of the managed event
         /// </summary>
-        object Id { get; }
+        Guid Id { get; }
 
         /// <summary>
         /// Gets the sequence of the managed event
@@ -54,22 +54,6 @@ namespace Neuroglia.Data.EventSourcing
         /// Gets the metadata of the managed event
         /// </summary>
         object Metadata { get; }
-
-    }
-
-    /// <summary>
-    /// Defines the fundamentals of an object used to describe a managed event
-    /// </summary>
-    /// <typeparam name="TKey">The type of key used to uniquely identify an event</typeparam>
-    public interface IEvent<TKey>
-        : IEvent
-        where TKey : IEquatable<TKey>
-    {
-
-        /// <summary>
-        /// Gets the id of the managed event
-        /// </summary>
-        new TKey Id { get; }
 
     }
 

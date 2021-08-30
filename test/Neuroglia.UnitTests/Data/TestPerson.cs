@@ -32,8 +32,7 @@ namespace Neuroglia.UnitTests.Data
         {
             if (this.FirstName == firstName)
                 return false;
-            this.LastModified = DateTimeOffset.Now;
-            this.FirstName = firstName;
+            this.On(this.RegisterEvent(new TestPersonFirstNameChangedDomainEvent(this.Id, firstName)));
             return true;
         }
 
@@ -42,8 +41,7 @@ namespace Neuroglia.UnitTests.Data
         {
             if (this.LastName == lastName)
                 return false;
-            this.LastModified = DateTimeOffset.Now;
-            this.LastName = lastName;
+            this.On(this.RegisterEvent(new TestPersonLastNameChangedDomainEvent(this.Id, lastName)));
             return true;
         }
 
@@ -53,6 +51,18 @@ namespace Neuroglia.UnitTests.Data
             this.CreatedAt = e.CreatedAt;
             this.LastModified = e.CreatedAt;
             this.FirstName = e.FirstName;
+            this.LastName = e.LastName;
+        }
+
+        protected void On(TestPersonFirstNameChangedDomainEvent e)
+        {
+            this.LastModified = DateTimeOffset.Now;
+            this.FirstName = e.FirstName;
+        }
+
+        protected void On(TestPersonLastNameChangedDomainEvent e)
+        {
+            this.LastModified = DateTimeOffset.Now;
             this.LastName = e.LastName;
         }
 

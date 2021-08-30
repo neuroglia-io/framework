@@ -735,6 +735,25 @@
             <param name="timeSpan">The <see cref="T:System.TimeSpan"/> to format</param>
             <returns>The parsed <see cref="T:System.TimeSpan"/></returns>
         </member>
+        <member name="T:Neuroglia.ITransaction">
+            <summary>
+            Defines the fundamentals of a transaction
+            </summary>
+        </member>
+        <member name="M:Neuroglia.ITransaction.CommitAsync(System.Threading.CancellationToken)">
+            <summary>
+            Commits the changes made in the transaction's scope
+            </summary>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.ITransaction.RollbackAsync(System.Threading.CancellationToken)">
+            <summary>
+            Rollbacks the changes made in the transaction's scope
+            </summary>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
         <member name="T:Neuroglia.IValueObject">
             <summary>
             Defines the fundamentals of a value object

@@ -30,6 +30,14 @@ namespace Neuroglia.Data
         /// <summary>
         /// Initializes a new <see cref="Entity{TKey}"/>
         /// </summary>
+        protected Entity()
+        {
+            
+        }
+
+        /// <summary>
+        /// Initializes a new <see cref="Entity{TKey}"/>
+        /// </summary>
         /// <param name="id">The <see cref="IEntity"/>'s unique key</param>
         protected Entity(TKey id)
         {
@@ -49,6 +57,13 @@ namespace Neuroglia.Data
         public virtual int Version { get; protected set; }
 
         object IIdentifiable.Id => this.Id;
+
+        void IEntity.SetVersion(int version)
+        {
+            if (this.Version < 0)
+                throw new ArgumentOutOfRangeException(nameof(version));
+            this.Version = version;
+        }
 
     }
 

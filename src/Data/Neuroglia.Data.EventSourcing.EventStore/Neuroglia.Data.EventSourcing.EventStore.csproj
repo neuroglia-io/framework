@@ -8,9 +8,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework data event sourcing eventstore</PackageTags>
-    <Version>2.0.0.25</Version>
-    <AssemblyVersion>2.0.0.25</AssemblyVersion>
-    <FileVersion>2.0.0.25</FileVersion>
+    <Version>2.0.0.26</Version>
+    <AssemblyVersion>2.0.0.26</AssemblyVersion>
+    <FileVersion>2.0.0.26</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -21,19 +21,12 @@
 
   <PropertyGroup>
     <DocumentationFile>Neuroglia.Data.EventSourcing.EventStore.xml</DocumentationFile>
+    <RootNamespace>Neuroglia.Data.EventSourcing</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EventStore.Client" Version="21.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Serialization\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Serialization\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
     <ProjectReference Include="..\Neuroglia.Data.EventSourcing\Neuroglia.Data.EventSourcing.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
   
   <ItemGroup>
@@ -45,6 +38,11 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="21.2.0" />
+    <PackageReference Include="EventStore.Client.Grpc.Streams" Version="21.2.0" />
   </ItemGroup>
 
 </Project>

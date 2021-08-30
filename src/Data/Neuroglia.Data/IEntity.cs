@@ -41,6 +41,12 @@ namespace Neuroglia.Data
         /// </summary>
         int Version { get; }
 
+        /// <summary>
+        /// Sets the <see cref="IEntity"/>'s version
+        /// </summary>
+        /// <param name="version">The <see cref="IEntity"/>'s version</param>
+        void SetVersion(int version);
+
     }
 
     /// <summary>
