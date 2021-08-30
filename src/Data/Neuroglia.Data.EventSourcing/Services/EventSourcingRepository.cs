@@ -19,7 +19,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neuroglia.Data.EventSourcing.Configuration;
 using Neuroglia.Mediation;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,21 +107,21 @@ namespace Neuroglia.Data.EventSourcing.Services
         /// <inheritdoc/>
         public override async Task<TAggregate> FindAsync(TKey key, CancellationToken cancellationToken = default)
         {
-            TAggregate aggregate = await this.GetSnapshotAsync(key, cancellationToken);
+            TAggregate aggregate = (await this.GetSnapshotAsync(key, cancellationToken))?.Data;
             IEnumerable<ISourcedEvent> sourcedEvents;
             if (aggregate == null)
             {
                 sourcedEvents = await this.EventStore.ReadAllEventsForwardAsync(this.GetStreamIdFor(key), cancellationToken);
                 if (sourcedEvents == null)
                     return null;
-                aggregate = this.Aggregator.Aggregate(sourcedEvents.Select(e => e.AsDomainEvent()));
+                aggregate = this.Aggregator.Aggregate(sourcedEvents.Select(e => e.Data).OfType<IDomainEvent>());
             }   
             else
             {
                 sourcedEvents = await this.EventStore.ReadEventsForwardAsync(this.GetStreamIdFor(key), aggregate.Version, cancellationToken);
                 if (sourcedEvents == null)
                     return null;
-                aggregate = this.Aggregator.Aggregate(aggregate, sourcedEvents.Select(e => e.AsDomainEvent()));
+                aggregate = this.Aggregator.Aggregate(aggregate, sourcedEvents.Select(e => e.Data).OfType<IDomainEvent>());
             }
             return aggregate;
         }
@@ -217,13 +216,12 @@ namespace Neuroglia.Data.EventSourcing.Services
         /// <param name="key">The key of the <see cref="IAggregateRoot"/> to find</param>
         /// <param name="cancellation">A <see cref="CancellationToken"/></param>
         /// <returns>The snapshot of the <see cref="IAggregateRoot"/> with the specified key</returns>
-        protected virtual async Task<TAggregate> GetSnapshotAsync(TKey key, CancellationToken cancellation = default)
+        protected virtual async Task<ISnapshot<TAggregate>> GetSnapshotAsync(TKey key, CancellationToken cancellation = default)
         {
             ISourcedEvent sourcedEvent = await this.EventStore.ReadSingleEventBackwardAsync(this.GetSnapshotStreamIdFor(key), EventStreamPosition.End, cancellation);
             if (sourcedEvent == null)
                 return null;
-            Snapshot<TAggregate> snapshot = ((JObject)sourcedEvent.Data).ToObject<Snapshot<TAggregate>>();
-            return snapshot.Data;
+            return (Snapshot<TAggregate>)sourcedEvent.Data;
         }
 
         /// <summary>
@@ -234,11 +232,20 @@ namespace Neuroglia.Data.EventSourcing.Services
         /// <returns>A boolean indicating whether or not a new <see cref="Snapshot{TAggregate}"/> has been created</returns>
         protected virtual async Task<bool> TrySnapshotAsync(TAggregate aggregate, CancellationToken cancellation = default)
         {
-            if (!this.Options.SnapshotFrequency.HasValue
-                || aggregate.Version % this.Options.SnapshotFrequency.Value != 0)
+            if (!this.Options.SnapshotFrequency.HasValue)
                     return false;
-            Snapshot<TAggregate> snapshot = Snapshot<TAggregate>.CreateFor(aggregate);
-            await this.EventStore.AppendToStreamAsync(this.GetSnapshotStreamIdFor(aggregate.Id), new EventMetadata[] { new("snapshot", snapshot) }, cancellation);
+            ISnapshot snapshot = await this.GetSnapshotAsync(aggregate.Id, cancellation);
+            if (snapshot == null)
+            {
+                if (aggregate.Version < this.Options.SnapshotFrequency.Value)
+                    return false;
+            }
+            else if (snapshot.Version + this.Options.SnapshotFrequency.Value > aggregate.Version)
+            {
+                return false;
+            }
+            snapshot = Snapshot.CreateFor(aggregate);
+            await this.EventStore.AppendToStreamAsync(this.GetSnapshotStreamIdFor(aggregate.Id), new EventMetadata[] { new("snapshot", snapshot) }, EventStreamPosition.End, cancellation);
             return true;
         }
 

@@ -459,6 +459,9 @@
             Gets a <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/> containing all active <see cref="T:Neuroglia.Data.EventSourcing.EventStore.EventStoreSubscription"/>s
             </summary>
         </member>
+        <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.StreamExistsAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="M:Neuroglia.Data.EventSourcing.ESEventStore.GetStreamAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>

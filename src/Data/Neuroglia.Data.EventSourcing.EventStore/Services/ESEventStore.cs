@@ -93,6 +93,14 @@ namespace Neuroglia.Data.EventSourcing
         protected virtual ConcurrentDictionary<string, EventStoreSubscription> Subscriptions { get; } = new();
 
         /// <inheritdoc/>
+        public virtual async Task<bool> StreamExistsAsync(string streamId, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(streamId))
+                throw new ArgumentNullException(nameof(streamId));
+            return (await this.GetStreamAsync(streamId, cancellationToken)) != null;
+        }
+
+        /// <inheritdoc/>
         public virtual async Task<IEventStream> GetStreamAsync(string streamId, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(streamId))
@@ -109,7 +117,7 @@ namespace Neuroglia.Data.EventSourcing
                 return null;
             }
             ResolvedEvent firstEvent = await readResult.FirstAsync(cancellationToken);
-            readResult = this.EventStoreClient.ReadStreamAsync(Direction.Forwards, streamId, StreamPosition.Start, cancellationToken: cancellationToken);
+            readResult = this.EventStoreClient.ReadStreamAsync(Direction.Backwards, streamId, StreamPosition.End, cancellationToken: cancellationToken);
             ResolvedEvent lastEvent = await readResult.FirstAsync(cancellationToken);
             return new EventStream(this, streamId, lastEvent.Event.EventNumber.ToInt64() + 1, firstEvent.Event.Created, lastEvent.Event.Created, await this.UnwrapsStoredEventAsync(firstEvent, cancellationToken));
         }
@@ -121,15 +129,22 @@ namespace Neuroglia.Data.EventSourcing
                 throw new ArgumentNullException(nameof(streamId));
             if (events == null || !events.Any())
                 throw new ArgumentNullException(nameof(events));
-            StreamRevision streamRevision = expectedVersion <= 0 ? StreamRevision.FromInt64(expectedVersion) : StreamRevision.FromInt64(expectedVersion - 1);
             IEnumerable<EventData> eventDataCollection = await this.GenerateEventsDataAsync(events, cancellationToken);
-            await EventStoreClient.AppendToStreamAsync(streamId, streamRevision, eventDataCollection, cancellationToken: cancellationToken);
+            if (expectedVersion < 0)
+                await EventStoreClient.AppendToStreamAsync(streamId, StreamState.Any, eventDataCollection, cancellationToken: cancellationToken);
+            else
+                await EventStoreClient.AppendToStreamAsync(streamId, StreamRevision.FromInt64(expectedVersion - 1), eventDataCollection, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>
         public virtual async Task AppendToStreamAsync(string streamId, IEnumerable<IEventMetadata> events, CancellationToken cancellationToken = default)
         {
-            await this.AppendToStreamAsync(streamId, events, StreamState.NoStream.ToInt64(), cancellationToken);
+            if (string.IsNullOrWhiteSpace(streamId))
+                throw new ArgumentNullException(nameof(streamId));
+            if (events == null || !events.Any())
+                throw new ArgumentNullException(nameof(events));
+            IEnumerable<EventData> eventDataCollection = await this.GenerateEventsDataAsync(events, cancellationToken);
+            await EventStoreClient.AppendToStreamAsync(streamId, StreamRevision.None, eventDataCollection, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -373,8 +388,12 @@ namespace Neuroglia.Data.EventSourcing
             List<EventData> eventDataList = new(events.Count());
             foreach (IEventMetadata e in events)
             {
-                byte[] rawData = e.Data == null ? Array.Empty<byte>() : await this.Serializer.SerializeAsync(e.Data, cancellationToken);
-                byte[] rawMetadata = e.Metadata == null ? Array.Empty<byte>() : await this.Serializer.SerializeAsync(e.Metadata, cancellationToken);
+                byte[] rawData = await this.Serializer.SerializeAsync(e.Data, cancellationToken);
+                JObject metadata = new();
+                if(e.Metadata != null)
+                    metadata = JObject.FromObject(e.Metadata);
+                metadata.Add(EventSourcingDefaults.Metadata.RuntimeTypeName, JToken.FromObject(e.Data.GetType().AssemblyQualifiedName));
+                byte[] rawMetadata = await this.Serializer.SerializeAsync(metadata, cancellationToken);
                 eventDataList.Add(new EventData(Uuid.FromGuid(e.Id), e.Type, rawData, rawMetadata));
             }
             return eventDataList;
@@ -389,7 +408,10 @@ namespace Neuroglia.Data.EventSourcing
         protected virtual async Task<ISourcedEvent> UnwrapsStoredEventAsync(ResolvedEvent resolvedEvent, CancellationToken cancellationToken = default)
         {
             JObject metadata = await this.Serializer.DeserializeAsync<JObject>(resolvedEvent.Event.Metadata.ToArray(), cancellationToken);
-            object data = await this.Serializer.DeserializeAsync(resolvedEvent.Event.Data.ToArray(), typeof(JObject), cancellationToken);
+            if (!metadata.TryGetValue(EventSourcingDefaults.Metadata.RuntimeTypeName, out JToken runtimeTypeToken))
+                throw new InvalidOperationException($"Failed to determine the runtime type of the specified resolved event: the required '{EventSourcingDefaults.Metadata.RuntimeTypeName}' metadata has not been set");
+            Type runtimeType = Type.GetType(runtimeTypeToken.Value<string>(), true);
+            object data = await this.Serializer.DeserializeAsync(resolvedEvent.Event.Data.ToArray(), runtimeType, cancellationToken);
             return new SourcedEvent(resolvedEvent.Event.EventId.ToGuid(), resolvedEvent.Event.EventNumber.ToInt64(), resolvedEvent.Event.Created, resolvedEvent.Event.EventType, data, metadata);
         }
 

@@ -29,6 +29,14 @@ namespace Neuroglia.Data.EventSourcing
     {
 
         /// <summary>
+        /// Determines whether or not the specified stream exists
+        /// </summary>
+        /// <param name="streamId">The id of the stream to check of existence</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A boolean indicating whether or not the specified stream exists</returns>
+        Task<bool> StreamExistsAsync(string streamId, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets the specified <see cref="IAggregateRoot"/>'s <see cref="IEventStream"/>
         /// </summary>
         /// <param name="streamId">The id of the <see cref="IEventStream"/> to fetch</param>

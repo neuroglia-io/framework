@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using System;
 
 namespace Neuroglia.Data.EventSourcing
@@ -35,9 +34,7 @@ namespace Neuroglia.Data.EventSourcing
         {
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
-            JObject metadata = new();
-            metadata.Add(EventSourcingDefaults.Metadata.RuntimeTypeName, e.GetType().AssemblyQualifiedName);
-            return new EventMetadata(e.GetTypeName(), e, metadata);
+            return new EventMetadata(e.GetTypeName(), e);
         }
 
         /// <summary>

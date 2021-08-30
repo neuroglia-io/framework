@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Neuroglia.Data.EventSourcing;
 using Neuroglia.Data.EventSourcing.Configuration;
 using Neuroglia.Data.EventSourcing.Services;
@@ -9,6 +10,7 @@ using Neuroglia.UnitTests.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -26,6 +28,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             {
                 JsonSerializerSettings settings = new();
                 settings.ContractResolver = new NonPublicSetterContractResolver();
+                settings.ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor;
                 return settings;
             };
             ServiceCollection services = new();
@@ -145,20 +148,24 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
         [Fact, Priority(6)]
         public async Task Snapshot()
         {
-            //act
+            //arrange
             var aggregate = await this.Repository.FindAsync(AggregateId.Value);
-            for (int i = 0; i < EventSourcingRepositoryOptions.DefaultSnapshotFrequency / 2; i++)
+            var snapshotStreamId = $"{nameof(TestPerson).ToLower()}-snapshots-{AggregateId.Value.ToString().Replace("-", "")}";
+            //act
+
+            for (int i = 0; i < EventSourcingRepositoryOptions.DefaultSnapshotFrequency; i++)
             {
                 aggregate.SetFirstName($"Fake First Name {i}");
                 aggregate.SetLastName($"Fake Last Name {i}");
+                await this.Repository.UpdateAsync(aggregate);
+                await this.Repository.SaveChangesAsync();
             }
-            await this.Repository.UpdateAsync(aggregate);
-            await this.Repository.SaveChangesAsync();
-            var stream = await this.EventStore.GetStreamAsync($"{nameof(TestPerson).ToLower()}-snapshots-{AggregateId.Value.ToString().Replace("-", "")}");
+
+            var stream = await this.EventStore.GetStreamAsync(snapshotStreamId);
 
             //assert
             stream.Should().NotBeNull();
-            stream.Length.Should().Be(1);
+            stream.Length.Should().Be(2);
         }
 
         [Fact, Priority(7)]
@@ -171,6 +178,49 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             //assert
             TestPerson aggregate = await this.Repository.FindAsync(AggregateId.Value);
             aggregate.Should().BeNull();
+        }
+
+        [Fact, Priority(8)]
+        public async Task Benchmark()
+        {
+            //arrange
+            var repositoryWithSnapshots = ActivatorUtilities.CreateInstance<EventSourcingRepository<TestPerson, Guid>>(this.ServiceScope.ServiceProvider);
+            var aggregate = new TestPerson("Fake First Name ", "Fake Last Name");
+            aggregate = await repositoryWithSnapshots.AddAsync(aggregate);
+            await repositoryWithSnapshots.SaveChangesAsync();
+            var aggregate1Id = aggregate.Id;
+            for (int i = 0; i < 10; i++)
+            {
+                aggregate.SetFirstName($"Fake First Name {i}");
+                aggregate = await repositoryWithSnapshots.UpdateAsync(aggregate);
+                await repositoryWithSnapshots.SaveChangesAsync();
+            }
+            var repositoryWithoutSnapshots = ActivatorUtilities.CreateInstance<EventSourcingRepository<TestPerson, Guid>>(this.ServiceScope.ServiceProvider, Options.Create(new EventSourcingRepositoryOptions<TestPerson, Guid>() { SnapshotFrequency = null }));
+            aggregate = new TestPerson("Fake First Name ", "Fake Last Name");
+            aggregate = await repositoryWithoutSnapshots.AddAsync(aggregate);
+            await repositoryWithoutSnapshots.SaveChangesAsync();
+            var aggregate2Id = aggregate.Id;
+            for (int i = 0; i < 10; i++)
+            {
+                aggregate.SetFirstName($"Fake First Name {i}");
+                aggregate = await repositoryWithoutSnapshots.UpdateAsync(aggregate);
+                await repositoryWithoutSnapshots.SaveChangesAsync();
+            }
+
+            //act
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            await repositoryWithSnapshots.FindAsync(aggregate1Id);
+            stopwatch.Stop();
+            var durationWithSnapshots = stopwatch.Elapsed;
+
+            stopwatch.Restart();
+            await repositoryWithoutSnapshots.FindAsync(aggregate2Id);
+            stopwatch.Stop();
+            var durationWithoutSnapshots = stopwatch.Elapsed;
+
+            //assert
+            durationWithSnapshots.Should().BeLessThan(durationWithoutSnapshots);
         }
 
         public void Dispose()

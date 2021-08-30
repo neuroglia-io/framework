@@ -6,7 +6,6 @@ using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Containers;
 using Neuroglia.UnitTests.Data.Events;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Linq;
@@ -70,7 +69,7 @@ namespace Neuroglia.UnitTests.Cases.Data.EventSourcing
 
             //assert
             sourcedEvents.Should().HaveCount(events.Length);
-            sourcedEvents.First().Data.As<JObject>().ToObject<TestPersonCreatedDomainEvent>().Should().BeEquivalentTo(events.First().Data);
+            sourcedEvents.First().Data.As<TestPersonCreatedDomainEvent>().Should().BeEquivalentTo(events.First().Data);
 
             events = new EventMetadata[]
             {

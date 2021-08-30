@@ -73,9 +73,13 @@ namespace Neuroglia.Data.EventSourcing
         /// <inheritdoc/>
         public virtual async IAsyncEnumerator<ISourcedEvent> GetAsyncEnumerator(CancellationToken cancellationToken = default)
         {
-            this.Current = await this.EventStore.ReadSingleEventForwardAsync(this.Id.ToString(), this.Position, cancellationToken);
-            yield return this.Current;
-            this.Position++;
+            do
+            {
+                yield return this.Current;
+                this.Current = await this.EventStore.ReadSingleEventForwardAsync(this.Id.ToString(), this.Position + 1, cancellationToken);
+                this.Position++;
+            }
+            while (this.Current != null);
         }
 
     }
