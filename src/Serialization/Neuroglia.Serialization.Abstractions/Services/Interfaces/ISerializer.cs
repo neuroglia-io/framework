@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,9 +31,19 @@ namespace Neuroglia.Serialization
     {
 
         /// <summary>
-        /// Gets an <see cref="IEnumerable{T}"/> containing all content types that can be serialized and deserialized by the <see cref="ISerializer"/>
+        /// Gets an <see cref="IEnumerable{T}"/> containing all MIME types that can be serialized and deserialized by the <see cref="ISerializer"/>
         /// </summary>
-        IEnumerable<string> SupportedContentTypes { get; }
+        IEnumerable<string> SupportedMimeTypes { get; }
+
+        /// <summary>
+        /// Gets the <see cref="ISerializer"/>'s default MIME type
+        /// </summary>
+        string DefaultMimeType { get; }
+
+        /// <summary>
+        /// Gets the <see cref="ISerializer"/>'s default encoding
+        /// </summary>
+        Encoding DefaultEncoding { get; }
 
         /// <summary>
         /// Serializes a value to an output <see cref="Stream"/>

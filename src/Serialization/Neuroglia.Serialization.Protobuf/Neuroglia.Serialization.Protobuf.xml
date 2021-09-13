@@ -38,7 +38,10 @@
             Represents the default implementation of the <see cref="T:Neuroglia.Serialization.IProtobufSerializer"/> interface
             </summary>
         </member>
-        <member name="P:Neuroglia.Serialization.ProtobufSerializer.SupportedContentTypes">
+        <member name="P:Neuroglia.Serialization.ProtobufSerializer.SupportedMimeTypes">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Serialization.ProtobufSerializer.DefaultMimeType">
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Serialization.ProtobufSerializer.Deserialize(System.IO.Stream,System.Type)">

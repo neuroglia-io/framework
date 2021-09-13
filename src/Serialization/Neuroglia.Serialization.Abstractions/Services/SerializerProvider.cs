@@ -63,7 +63,7 @@ namespace Neuroglia.Serialization
         {
             if (string.IsNullOrWhiteSpace(contentType))
                 throw new ArgumentNullException(nameof(contentType));
-            return this.Serializers.Where(s => s.SupportedContentTypes.Contains(contentType));
+            return this.Serializers.Where(s => s.SupportedMimeTypes.Contains(contentType));
         }
 
         /// <inheritdoc/>

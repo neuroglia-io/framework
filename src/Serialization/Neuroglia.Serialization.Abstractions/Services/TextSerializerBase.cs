@@ -32,7 +32,13 @@ namespace Neuroglia.Serialization
     {
 
         /// <inheritdoc/>
-        public abstract IEnumerable<string> SupportedContentTypes { get; }
+        public abstract IEnumerable<string> SupportedMimeTypes { get; }
+
+        /// <inheritdoc/>
+        public abstract string DefaultMimeType { get; }
+
+        /// <inheritdoc/>
+        public virtual Encoding DefaultEncoding => Encoding.UTF8;
 
         /// <inheritdoc/>
         public abstract void Serialize(object value, Stream output, Type type);

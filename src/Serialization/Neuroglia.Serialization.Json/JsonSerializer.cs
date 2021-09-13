@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -43,7 +44,7 @@ namespace Neuroglia.Serialization
         }
 
         /// <inheritdoc/>
-        public override IEnumerable<string> SupportedContentTypes => new string[]
+        public override IEnumerable<string> SupportedMimeTypes => new string[]
         {
             "application/json",
             "application/x-javascript",
@@ -56,6 +57,9 @@ namespace Neuroglia.Serialization
         /// Gets the <see cref="JsonSerializerOptions"/> used to configure the underlying <see cref="System.Text.Json.JsonSerializer"/>
         /// </summary>
         protected JsonSerializerOptions Options { get; }
+
+        /// <inheritdoc/>
+        public override string DefaultMimeType => MediaTypeNames.Application.Json;
 
         /// <inheritdoc/>
         public override string Serialize(object value, Type type)

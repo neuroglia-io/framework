@@ -98,7 +98,10 @@
             </summary>
             <param name="settings">The service used to access the current <see cref="T:Newtonsoft.Json.JsonSerializerSettings"/></param>
         </member>
-        <member name="P:Neuroglia.Serialization.NewtonsoftJsonSerializer.SupportedContentTypes">
+        <member name="P:Neuroglia.Serialization.NewtonsoftJsonSerializer.SupportedMimeTypes">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Serialization.NewtonsoftJsonSerializer.DefaultMimeType">
             <inheritdoc/>
         </member>
         <member name="P:Neuroglia.Serialization.NewtonsoftJsonSerializer.Settings">

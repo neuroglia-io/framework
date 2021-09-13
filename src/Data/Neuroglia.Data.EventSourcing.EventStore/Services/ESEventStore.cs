@@ -133,7 +133,7 @@ namespace Neuroglia.Data.EventSourcing
             if (expectedVersion < 0)
                 await EventStoreClient.AppendToStreamAsync(streamId, StreamState.Any, eventDataCollection, cancellationToken: cancellationToken);
             else
-                await EventStoreClient.AppendToStreamAsync(streamId, StreamRevision.FromInt64(expectedVersion - 1), eventDataCollection, cancellationToken: cancellationToken);
+                await EventStoreClient.AppendToStreamAsync(streamId, StreamRevision.FromInt64(expectedVersion == 0 ? expectedVersion : expectedVersion - 1), eventDataCollection, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>

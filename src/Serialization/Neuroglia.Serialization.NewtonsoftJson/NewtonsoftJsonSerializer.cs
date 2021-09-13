@@ -19,6 +19,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -43,7 +44,7 @@ namespace Neuroglia.Serialization
         }
 
         /// <inheritdoc/>
-        public override IEnumerable<string> SupportedContentTypes => new string[]
+        public override IEnumerable<string> SupportedMimeTypes => new string[]
         {
             "application/json",
             "application/x-javascript",
@@ -51,6 +52,9 @@ namespace Neuroglia.Serialization
             "text/x-javascript",
             "text/x-json"
         };
+
+        /// <inheritdoc/>
+        public override string DefaultMimeType => MediaTypeNames.Application.Json;
 
         /// <summary>
         /// Gets the current <see cref="JsonSerializerSettings"/>

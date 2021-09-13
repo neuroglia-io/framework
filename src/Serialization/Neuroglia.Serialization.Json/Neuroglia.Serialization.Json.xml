@@ -221,13 +221,16 @@
             </summary>
             <param name="options">The <see cref="T:System.Text.Json.JsonSerializerOptions"/> used to configure the underlying <see cref="T:System.Text.Json.JsonSerializer"/></param>
         </member>
-        <member name="P:Neuroglia.Serialization.JsonSerializer.SupportedContentTypes">
+        <member name="P:Neuroglia.Serialization.JsonSerializer.SupportedMimeTypes">
             <inheritdoc/>
         </member>
         <member name="P:Neuroglia.Serialization.JsonSerializer.Options">
             <summary>
             Gets the <see cref="T:System.Text.Json.JsonSerializerOptions"/> used to configure the underlying <see cref="T:System.Text.Json.JsonSerializer"/>
             </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.JsonSerializer.DefaultMimeType">
+            <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Serialization.JsonSerializer.Serialize(System.Object,System.Type)">
             <inheritdoc/>

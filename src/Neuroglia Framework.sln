@@ -79,7 +79,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Templating.RazorL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.AspNetCore.JsonPatch", "AspNetCore\Neuroglia.AspNetCore.JsonPatch\Neuroglia.AspNetCore.JsonPatch.csproj", "{C49DA42D-9973-4541-95DE-AF7783428387}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Mediation.FluentValidation", "Mediation\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj", "{0E9FCC38-BE1E-46C8-BCF5-64ED369BDCBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mediation.FluentValidation", "Mediation\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj", "{0E9FCC38-BE1E-46C8-BCF5-64ED369BDCBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

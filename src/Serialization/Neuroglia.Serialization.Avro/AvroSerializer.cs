@@ -38,15 +38,18 @@ namespace Neuroglia.Serialization
             .Single(m => m.Name == nameof(Microsoft.Hadoop.Avro.AvroSerializer.Create) && m.GetParameters().Length == 1);
 
         /// <inheritdoc/>
-        public override IEnumerable<string> SupportedContentTypes => new string[] { "avro/binary", "avro/json", "application/avro", "application/avro+binary", "application/avro+json" };
+        public override IEnumerable<string> SupportedMimeTypes => new string[] { "avro/binary", "avro/json", "application/avro", "application/avro+binary", "application/avro+json" };
 
         /// <summary>
         /// Gets the <see cref="AvroSerializerSettings"/> used by underlying <see cref="IAvroSerializer{T}"/>
         /// </summary>
-        protected AvroSerializerSettings SerializerSettings => new AvroSerializerSettings() 
+        protected AvroSerializerSettings SerializerSettings => new() 
         {  
             Resolver = new AvroPublicMemberContractResolver()
         };
+
+        /// <inheritdoc/>
+        public override string DefaultMimeType => "application/avro";
 
         /// <inheritdoc/>
         public override void Serialize(object value, Stream output, Type type)

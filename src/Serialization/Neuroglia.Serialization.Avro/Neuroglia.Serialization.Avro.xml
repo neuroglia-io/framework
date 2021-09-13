@@ -9,13 +9,16 @@
             Represents an Avro implementation of the <see cref="T:Neuroglia.Serialization.IBinarySerializer"/> interface
             </summary>
         </member>
-        <member name="P:Neuroglia.Serialization.AvroSerializer.SupportedContentTypes">
+        <member name="P:Neuroglia.Serialization.AvroSerializer.SupportedMimeTypes">
             <inheritdoc/>
         </member>
         <member name="P:Neuroglia.Serialization.AvroSerializer.SerializerSettings">
             <summary>
             Gets the <see cref="T:Microsoft.Hadoop.Avro.AvroSerializerSettings"/> used by underlying <see cref="T:Microsoft.Hadoop.Avro.IAvroSerializer`1"/>
             </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.AvroSerializer.DefaultMimeType">
+            <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Serialization.AvroSerializer.Serialize(System.Object,System.IO.Stream,System.Type)">
             <inheritdoc/>

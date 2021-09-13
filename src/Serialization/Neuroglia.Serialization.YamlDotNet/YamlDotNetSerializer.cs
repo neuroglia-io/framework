@@ -44,7 +44,10 @@ namespace Neuroglia.Serialization
         }
 
         /// <inheritdoc/>
-        public override IEnumerable<string> SupportedContentTypes => new string[] { };
+        public override IEnumerable<string> SupportedMimeTypes => new string[] { "application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml" };
+
+        /// <inheritdoc/>
+        public override string DefaultMimeType => "application/yaml";
 
         /// <summary>
         /// Gets the underlying <see cref="IYamlDotNetSerializer"/>

@@ -32,12 +32,15 @@ namespace Neuroglia.Serialization
     {
 
         /// <inheritdoc/>
-        public override IEnumerable<string> SupportedContentTypes => new string[] 
+        public override IEnumerable<string> SupportedMimeTypes => new string[] 
         {
             "application/protobuf",
             "application/x-protobuf",
             "application/vnd.google.protobuf"
         };
+
+        /// <inheritdoc/>
+        public override string DefaultMimeType => "application/protobuf";
 
         /// <inheritdoc/>
         public override object Deserialize(Stream input, Type returnType)

@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,7 +32,13 @@ namespace Neuroglia.Serialization
     {
 
         /// <inheritdoc/>
-        public abstract IEnumerable<string> SupportedContentTypes { get; }
+        public abstract IEnumerable<string> SupportedMimeTypes { get; }
+
+        /// <inheritdoc/>
+        public abstract string DefaultMimeType { get; }
+
+        /// <inheritdoc/>
+        public virtual Encoding DefaultEncoding => Encoding.UTF8;
 
         /// <inheritdoc/>
         public abstract object Deserialize(Stream input, Type returnType);

@@ -23,7 +23,13 @@
             Represents the base class for all <see cref="T:Neuroglia.Serialization.IBinarySerializer"/> implementations
             </summary>
         </member>
-        <member name="P:Neuroglia.Serialization.BinarySerializerBase.SupportedContentTypes">
+        <member name="P:Neuroglia.Serialization.BinarySerializerBase.SupportedMimeTypes">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Serialization.BinarySerializerBase.DefaultMimeType">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Serialization.BinarySerializerBase.DefaultEncoding">
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Serialization.BinarySerializerBase.Deserialize(System.IO.Stream,System.Type)">
@@ -89,9 +95,19 @@
             Defines the fundamentals of a service used to serialize/deserialize objects
             </summary>
         </member>
-        <member name="P:Neuroglia.Serialization.ISerializer.SupportedContentTypes">
+        <member name="P:Neuroglia.Serialization.ISerializer.SupportedMimeTypes">
             <summary>
-            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all content types that can be serialized and deserialized by the <see cref="T:Neuroglia.Serialization.ISerializer"/>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all MIME types that can be serialized and deserialized by the <see cref="T:Neuroglia.Serialization.ISerializer"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.ISerializer.DefaultMimeType">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ISerializer"/>'s default MIME type
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Serialization.ISerializer.DefaultEncoding">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Serialization.ISerializer"/>'s default encoding
             </summary>
         </member>
         <member name="M:Neuroglia.Serialization.ISerializer.Serialize(System.Object,System.IO.Stream)">
@@ -420,7 +436,13 @@
             Represents the base class for all <see cref="T:Neuroglia.Serialization.ITextSerializer"/> implementations
             </summary>
         </member>
-        <member name="P:Neuroglia.Serialization.TextSerializerBase.SupportedContentTypes">
+        <member name="P:Neuroglia.Serialization.TextSerializerBase.SupportedMimeTypes">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Serialization.TextSerializerBase.DefaultMimeType">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Serialization.TextSerializerBase.DefaultEncoding">
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Serialization.TextSerializerBase.Serialize(System.Object,System.IO.Stream,System.Type)">
