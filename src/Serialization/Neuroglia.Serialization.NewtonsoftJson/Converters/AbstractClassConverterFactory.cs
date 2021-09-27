@@ -53,6 +53,8 @@ namespace Newtonsoft.Json
         {
             if (!objectType.IsAbstract)
             {
+                if (reader.TokenType == JsonToken.Null)
+                    return null;
                 JObject jObject = JObject.Load(reader);
                 object result = Activator.CreateInstance(objectType, true);
                 serializer.Populate(jObject.CreateReader(), result);

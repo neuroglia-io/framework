@@ -88,6 +88,8 @@ namespace Newtonsoft.Json
         {
             if (!objectType.TryGetCustomAttribute(out DiscriminatorAttribute discriminatorAttribute))
                 throw new NullReferenceException($"Failed to find the required '{nameof(DiscriminatorAttribute)}'");
+            if (reader.TokenType == JsonToken.Null)
+                return null;
             JObject jObject = JObject.Load(reader);
             string discriminatorValue = jObject.Property(this.DiscriminatorProperty.Name, StringComparison.InvariantCultureIgnoreCase).Value.ToString();
             if (!this.TypeMappings.TryGetValue(discriminatorValue.ToLower(), out Type derivedType))

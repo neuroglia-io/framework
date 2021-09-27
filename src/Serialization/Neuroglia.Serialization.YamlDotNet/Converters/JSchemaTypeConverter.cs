@@ -14,40 +14,36 @@
  * limitations under the License.
  *
  */
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using System;
 using YamlDotNet.Core;
-using YamlDotNet.Core.Events;
 
 namespace YamlDotNet.Serialization
 {
-
     /// <summary>
-    /// Represents the <see cref="IYamlTypeConverter"/> used to serialize and deserialize <see cref="Uri"/>s
+    /// Represents the <see cref="IYamlTypeConverter"/> used to serialize <see cref="JSchema"/>s
     /// </summary>
-    public class UriTypeConverter
-        : IYamlTypeConverter
+    public class JSchemaTypeConverter
+        : JTokenSerializer
     {
 
         /// <inheritdoc/>
-        public virtual bool Accepts(Type type)
+        public override bool Accepts(Type type)
         {
-            return typeof(Uri).IsAssignableFrom(type);
+            return type == typeof(JSchema);
         }
 
         /// <inheritdoc/>
-        public virtual object ReadYaml(IParser parser, Type type)
+        public override void WriteYaml(IEmitter emitter, object value, Type type)
         {
-            Scalar scalar = (Scalar)parser.Current;
-            parser.MoveNext();
-            return new Uri(scalar.Value, UriKind.RelativeOrAbsolute);
-        }
-
-        /// <inheritdoc/>
-        public virtual void WriteYaml(IEmitter emitter, object value, Type type)
-        {
-            if (value == null)
+            JSchema schema = value as JSchema;
+            if (schema == null)
                 return;
-            emitter.Emit(new Scalar(((Uri)value).ToString()));
+            string json = schema.ToString();
+            JToken jtoken = JsonConvert.DeserializeObject<JToken>(json);
+            this.WriteJToken(emitter, jtoken);
         }
 
     }

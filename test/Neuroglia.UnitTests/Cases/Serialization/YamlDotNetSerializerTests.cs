@@ -2,9 +2,15 @@
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema.Generation;
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using YamlDotNet.Core;
+using YamlDotNet.Serialization;
 
 namespace Neuroglia.UnitTests.Cases.Serialization
 {
@@ -15,7 +21,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
         public YamlDotNetSerializerTests()
         {
             ServiceCollection services = new ServiceCollection();
-            services.AddYamlDotNetSerializer(serializer => serializer.WithTypeConverter(new YamlDotNet.Serialization.UriTypeConverter()), deserializer => deserializer.WithTypeConverter(new YamlDotNet.Serialization.UriTypeConverter()));
+            services.AddYamlDotNetSerializer();
             this.Serializer = services.BuildServiceProvider().GetRequiredService<YamlDotNetSerializer>();
         }
 
@@ -60,6 +66,55 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             deserialized.Should().Be(toSerialize);
         }
 
+        [Fact]
+        public async Task SerializeAndDeserialize_JObject_ShouldWork()
+        {
+            //arrange
+            var toSerialize = JObject.FromObject(new { FirstName = "Fake First Name", LastName = "Fake Last Name" });
+
+            //act
+            var yaml = await this.Serializer.SerializeAsync(toSerialize);
+            var deserialized = await this.Serializer.DeserializeAsync<JObject>(yaml);
+
+            //assert
+            deserialized.Should().NotBeNull();
+            deserialized.Properties().Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public async Task SerializeAndDeserialize_JSchema_ShouldWork()
+        {
+            //arrange
+            var toSerialize = new JSchemaGenerator().Generate(typeof(TestAddress));
+
+            //act
+            var yaml = await this.Serializer.SerializeAsync(toSerialize);
+            var deserialized = await this.Serializer.DeserializeAsync<JSchema>(yaml);
+        }
+
     }
+
+    public class JSchemaTypeConverter
+        : JTokenSerializer
+    {
+
+        public override bool Accepts(Type type)
+        {
+            return type == typeof(JSchema);
+        }
+
+        public override void WriteYaml(IEmitter emitter, object value, Type type)
+        {
+            JSchema schema = value as JSchema;
+            if (schema == null)
+                return;
+            string json = schema.ToString();
+            JToken jtoken = JsonConvert.DeserializeObject<JToken>(json);
+            this.WriteJToken(emitter, jtoken);
+        }
+
+    }
+
+    
 
 }

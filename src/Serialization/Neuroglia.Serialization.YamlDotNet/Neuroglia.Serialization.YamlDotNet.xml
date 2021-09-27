@@ -139,6 +139,36 @@
         <member name="M:YamlDotNet.Serialization.JArrayDeserializer.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
             <inheritdoc/>
         </member>
+        <member name="T:YamlDotNet.Serialization.JSchemaDeserializer">
+            <summary>
+            Represents the <see cref="T:YamlDotNet.Serialization.IYamlTypeConverter"/> used to serialize <see cref="T:Newtonsoft.Json.Schema.JSchema"/>s
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.JSchemaDeserializer.#ctor(YamlDotNet.Serialization.INodeDeserializer)">
+            <summary>
+            Initializes a new <see cref="T:YamlDotNet.Serialization.JSchemaDeserializer"/>
+            </summary>
+            <param name="inner">The inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/></param>
+        </member>
+        <member name="P:YamlDotNet.Serialization.JSchemaDeserializer.Inner">
+            <summary>
+            Gets the inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/>
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.JSchemaDeserializer.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:YamlDotNet.Serialization.JSchemaTypeConverter">
+            <summary>
+            Represents the <see cref="T:YamlDotNet.Serialization.IYamlTypeConverter"/> used to serialize <see cref="T:Newtonsoft.Json.Schema.JSchema"/>s
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.JSchemaTypeConverter.Accepts(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:YamlDotNet.Serialization.JSchemaTypeConverter.WriteYaml(YamlDotNet.Core.IEmitter,System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
         <member name="T:YamlDotNet.Serialization.JTokenDeserializer">
             <summary>
             Represents an <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize <see cref="T:Newtonsoft.Json.Linq.JToken"/>s

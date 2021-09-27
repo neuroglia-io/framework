@@ -53,8 +53,10 @@ namespace YamlDotNet.Serialization
         /// </summary>
         /// <param name="emitter">The current <see cref="IEmitter"/></param>
         /// <param name="token">The <see cref="JToken"/> to serialize</param>
-        protected void WriteJToken(IEmitter emitter, JToken token)
+        protected virtual void WriteJToken(IEmitter emitter, JToken token)
         {
+            if (token == null)
+                return;
             switch (token)
             {
                 case JObject jobject:
@@ -64,13 +66,13 @@ namespace YamlDotNet.Serialization
                     this.WriteJArray(emitter, jarray);
                     break;
                 default:
-                    string scalar = token.Type switch
+                    Scalar scalar = token.Type switch
                     {
-                        JTokenType.Boolean => token.ToString().ToLower(),
-                        JTokenType.TimeSpan => Iso8601TimeSpan.Format(token.ToObject<TimeSpan>()),
-                        _ => token.ToString(),
+                        JTokenType.Boolean => new(token.ToString().ToLower()),
+                        JTokenType.TimeSpan => new(Iso8601TimeSpan.Format(token.ToObject<TimeSpan>())),
+                        _ => new(AnchorName.Empty, TagName.Empty, token.Value<string>(), ScalarStyle.SingleQuoted, true, true),
                     };
-                    emitter.Emit(new Scalar(scalar));
+                    emitter.Emit(scalar);
                     break;
             }
         }
@@ -80,7 +82,7 @@ namespace YamlDotNet.Serialization
         /// </summary>
         /// <param name="emitter">The current <see cref="IEmitter"/></param>
         /// <param name="array">The <see cref="JArray"/> to serialize</param>
-        protected void WriteJArray(IEmitter emitter, JArray array)
+        protected virtual void WriteJArray(IEmitter emitter, JArray array)
         {
             emitter.Emit(new SequenceStart(null, null, false, SequenceStyle.Block));
             foreach (JToken token in array)
@@ -95,7 +97,7 @@ namespace YamlDotNet.Serialization
         /// </summary>
         /// <param name="emitter">The current <see cref="IEmitter"/></param>
         /// <param name="jobject">The <see cref="JObject"/> to serialize</param>
-        protected void WriteJObject(IEmitter emitter, JObject jobject)
+        protected virtual void WriteJObject(IEmitter emitter, JObject jobject)
         {
             emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
             foreach (JProperty property in jobject.Properties())
@@ -110,7 +112,7 @@ namespace YamlDotNet.Serialization
         /// </summary>
         /// <param name="emitter">The current <see cref="IEmitter"/></param>
         /// <param name="jproperty">The <see cref="JProperty"/> to serialize</param>
-        protected void WriteJProperty(IEmitter emitter, JProperty jproperty)
+        protected virtual void WriteJProperty(IEmitter emitter, JProperty jproperty)
         {
             if (jproperty.Value == null
                 || jproperty.Value.Type == JTokenType.Null)

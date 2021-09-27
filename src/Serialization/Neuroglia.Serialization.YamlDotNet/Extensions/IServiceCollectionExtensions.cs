@@ -20,6 +20,7 @@ using System;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization.NodeDeserializers;
+using Yaml = YamlDotNet.Serialization;
 
 namespace Neuroglia.Serialization
 {
@@ -42,7 +43,10 @@ namespace Neuroglia.Serialization
             services.TryAddSingleton(provider =>
             {
                 SerializerBuilder builder = new SerializerBuilder()
-                    .WithNamingConvention(CamelCaseNamingConvention.Instance);
+                    .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                    .WithTypeConverter(new Yaml.UriTypeConverter())
+                    .WithTypeConverter(new JTokenSerializer())
+                    .WithTypeConverter(new JSchemaTypeConverter());
                 serializerConfiguration?.Invoke(builder);
                 return builder.Build();
             });
@@ -50,12 +54,16 @@ namespace Neuroglia.Serialization
             {
                 DeserializerBuilder builder = new DeserializerBuilder()
                     .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                    .WithTypeConverter(new Yaml.UriTypeConverter())
                     .WithNodeDeserializer(
                         inner => new AbstractTypeDeserializer(inner),
                         syntax => syntax.InsteadOf<ObjectNodeDeserializer>())
                     .WithNodeDeserializer(
                         inner => new JTokenDeserializer(inner),
                         syntax => syntax.InsteadOf<DictionaryNodeDeserializer>())
+                    .WithNodeDeserializer(
+                        inner => new JSchemaDeserializer(inner),
+                        syntax => syntax.InsteadOf<JTokenDeserializer>())
                     .WithObjectFactory(new NonPublicConstructorObjectFactory())
                     .IncludeNonPublicProperties();
                 deserializerConfiguration?.Invoke(builder);
