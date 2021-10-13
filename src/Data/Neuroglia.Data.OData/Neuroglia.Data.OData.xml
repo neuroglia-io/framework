@@ -4,101 +4,101 @@
         <name>Neuroglia.Data.OData</name>
     </assembly>
     <members>
-        <member name="T:Neuroglia.Data.OData.ODataExpressionTranslator`1">
+        <member name="T:Neuroglia.Data.ODataList`1">
+            <summary>
+            Represents an <see cref="T:System.Linq.IQueryable`1"/> used to wrap an OData set
+            </summary>
+            <typeparam name="T">The type of the elements the <see cref="T:Neuroglia.Data.ODataList`1"/> is made out of</typeparam>
+        </member>
+        <member name="M:Neuroglia.Data.ODataList`1.#ctor(System.Linq.IQueryProvider,System.Linq.Expressions.Expression)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.ODataList`1"/>
+            </summary>
+            <param name="provider">The <see cref="T:System.Linq.IQueryProvider"/> associated with the data source</param>
+            <param name="expression">The <see cref="T:System.Linq.Expressions.Expression"/> associated with this <see cref="T:Neuroglia.Data.ODataList`1"/> instance</param>
+        </member>
+        <member name="M:Neuroglia.Data.ODataList`1.#ctor(System.IServiceProvider)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.ODataList`1"/>
+            </summary>
+            <param name="serviceProvider">The current <see cref="T:System.IServiceProvider"/></param>
+        </member>
+        <member name="P:Neuroglia.Data.ODataList`1.ElementType">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.ODataList`1.Expression">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.Data.ODataList`1.Provider">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.ODataList`1.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.Services.ODataExpressionTranslator`1">
             <summary>
             Represents an <see cref="T:System.Linq.Expressions.ExpressionVisitor"/> used to translate an <see cref="T:System.Linq.Expressions.Expression"/> into an OData query
             </summary>
             <typeparam name="T">The type of element to query</typeparam>
         </member>
-        <member name="M:Neuroglia.Data.OData.ODataExpressionTranslator`1.#ctor(Simple.OData.Client.IODataClient)">
+        <member name="M:Neuroglia.Data.Services.ODataExpressionTranslator`1.#ctor(Simple.OData.Client.IODataClient)">
             <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.OData.ODataExpressionTranslator`1"/>
+            Initializes a new <see cref="T:Neuroglia.Data.Services.ODataExpressionTranslator`1"/>
             </summary>
             <param name="oDataClient">The service used to query ODATA endpoints</param>
         </member>
-        <member name="P:Neuroglia.Data.OData.ODataExpressionTranslator`1.ODataClient">
+        <member name="P:Neuroglia.Data.Services.ODataExpressionTranslator`1.ODataClient">
             <summary>
             Gets the service used to query ODATA endpoints
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.OData.ODataExpressionTranslator`1.SetupPipeline">
+        <member name="P:Neuroglia.Data.Services.ODataExpressionTranslator`1.SetupPipeline">
             <summary>
             Gets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:System.Action"/>s used to configure a translated OData query
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.OData.ODataExpressionTranslator`1.Translate(System.Linq.Expressions.Expression)">
+        <member name="M:Neuroglia.Data.Services.ODataExpressionTranslator`1.Translate(System.Linq.Expressions.Expression)">
             <summary>
             Translates the specified <see cref="T:System.Linq.Expressions.Expression"/> into an OData query
             </summary>
             <param name="expression">The <see cref="T:System.Linq.Expressions.Expression"/> to translate</param>
             <returns>A new <see cref="T:Simple.OData.Client.IBoundClient`1"/> that represents the translated OData query</returns>
         </member>
-        <member name="M:Neuroglia.Data.OData.ODataExpressionTranslator`1.VisitMethodCall(System.Linq.Expressions.MethodCallExpression)">
+        <member name="M:Neuroglia.Data.Services.ODataExpressionTranslator`1.VisitMethodCall(System.Linq.Expressions.MethodCallExpression)">
             <inheritdoc/>
         </member>
-        <member name="T:Neuroglia.Data.OData.ODataList`1">
-            <summary>
-            Represents an <see cref="T:System.Linq.IQueryable`1"/> used to wrap an OData set
-            </summary>
-            <typeparam name="T">The type of the elements the <see cref="T:Neuroglia.Data.OData.ODataList`1"/> is made out of</typeparam>
-        </member>
-        <member name="M:Neuroglia.Data.OData.ODataList`1.#ctor(System.Linq.IQueryProvider,System.Linq.Expressions.Expression)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.OData.ODataList`1"/>
-            </summary>
-            <param name="provider">The <see cref="T:System.Linq.IQueryProvider"/> associated with the data source</param>
-            <param name="expression">The <see cref="T:System.Linq.Expressions.Expression"/> associated with this <see cref="T:Neuroglia.Data.OData.ODataList`1"/> instance</param>
-        </member>
-        <member name="M:Neuroglia.Data.OData.ODataList`1.#ctor(System.IServiceProvider)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.OData.ODataList`1"/>
-            </summary>
-            <param name="serviceProvider">The current <see cref="T:System.IServiceProvider"/></param>
-        </member>
-        <member name="P:Neuroglia.Data.OData.ODataList`1.ElementType">
-            <inheritdoc/>
-        </member>
-        <member name="P:Neuroglia.Data.OData.ODataList`1.Expression">
-            <inheritdoc/>
-        </member>
-        <member name="P:Neuroglia.Data.OData.ODataList`1.Provider">
-            <inheritdoc/>
-        </member>
-        <member name="M:Neuroglia.Data.OData.ODataList`1.GetEnumerator">
-            <inheritdoc/>
-        </member>
-        <member name="T:Neuroglia.Data.OData.ODataQueryProvider`1">
+        <member name="T:Neuroglia.Data.Services.ODataQueryProvider`1">
             <summary>
             Represents an OData <see cref="T:System.Linq.IQueryProvider"/>
             </summary>
             <typeparam name="T">The type of element to query</typeparam>
         </member>
-        <member name="M:Neuroglia.Data.OData.ODataQueryProvider`1.#ctor(Simple.OData.Client.IODataClient)">
+        <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.#ctor(Simple.OData.Client.IODataClient)">
             <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.OData.ODataQueryProvider`1"/>
+            Initializes a new <see cref="T:Neuroglia.Data.Services.ODataQueryProvider`1"/>
             </summary>
             <param name="oDataClient">The service used to interact with OData</param>
         </member>
-        <member name="P:Neuroglia.Data.OData.ODataQueryProvider`1.ODataClient">
+        <member name="P:Neuroglia.Data.Services.ODataQueryProvider`1.ODataClient">
             <summary>
             Gets the service used to interact with OData
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.OData.ODataQueryProvider`1.ExpressionTranslator">
+        <member name="P:Neuroglia.Data.Services.ODataQueryProvider`1.ExpressionTranslator">
             <summary>
             Gets the service used to translate <see cref="T:System.Linq.Expressions.Expression"/>s to OData queries
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.OData.ODataQueryProvider`1.CreateQuery(System.Linq.Expressions.Expression)">
+        <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.CreateQuery(System.Linq.Expressions.Expression)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.OData.ODataQueryProvider`1.CreateQuery``1(System.Linq.Expressions.Expression)">
+        <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.CreateQuery``1(System.Linq.Expressions.Expression)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.OData.ODataQueryProvider`1.Execute(System.Linq.Expressions.Expression)">
+        <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.Execute(System.Linq.Expressions.Expression)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.OData.ODataQueryProvider`1.System#Linq#IQueryProvider#Execute``1(System.Linq.Expressions.Expression)">
+        <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.System#Linq#IQueryProvider#Execute``1(System.Linq.Expressions.Expression)">
             <inheritdoc/>
         </member>
     </members>

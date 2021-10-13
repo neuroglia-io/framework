@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Neuroglia.Data.OData;
+using Neuroglia.Data;
 using Neuroglia.UnitTests.Data;
 using Simple.OData.Client;
 using System;
