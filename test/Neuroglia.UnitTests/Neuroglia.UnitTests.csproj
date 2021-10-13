@@ -35,6 +35,7 @@
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.EventSourcing\Neuroglia.Data.EventSourcing.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.Kubernetes\Neuroglia.Data.Kubernetes.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.MongoDB\Neuroglia.Data.MongoDB.csproj" />
+    <ProjectReference Include="..\..\src\Data\Neuroglia.Data.OData\Neuroglia.Data.OData.csproj" />
     <ProjectReference Include="..\..\src\Mapping\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
     <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation.AspNetCore\Neuroglia.Mediation.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />

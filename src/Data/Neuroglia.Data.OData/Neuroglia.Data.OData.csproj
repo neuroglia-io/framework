@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<RootNamespace>Neuroglia.Data</RootNamespace>
+		<Company>Neuroglia SPRL</Company>
+		<Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
+		<Authors>Neuroglia SPRL</Authors>
+		<RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>neuroglia framework data odata</PackageTags>
+		<Version>2.0.0.28</Version>
+		<AssemblyVersion>2.0.0.28</AssemblyVersion>
+		<FileVersion>2.0.0.28</FileVersion>
+		<NeutralLanguage>en</NeutralLanguage>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageIcon>logo_white_on_blue_256.png</PackageIcon>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DocumentationFile>Neuroglia.Data.OData.xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
+	    <PackagePath></PackagePath>
+	    <Pack>True</Pack>
+	  </None>
+	  <None Include="..\..\..\LICENSE" Link="LICENSE">
+	    <PackagePath></PackagePath>
+	    <Pack>True</Pack>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	<PackageReference Include="Simple.OData.Client" Version="5.25.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	<ProjectReference Include="..\..\Core\Neuroglia.Core\Neuroglia.Core.csproj" />
+	</ItemGroup>
+
+</Project>
