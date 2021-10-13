@@ -21,6 +21,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 
 namespace Neuroglia.Data
 {
@@ -30,7 +31,7 @@ namespace Neuroglia.Data
     /// </summary>
     /// <typeparam name="T">The type of the elements the <see cref="ODataList{T}"/> is made out of</typeparam>
     public class ODataList<T>
-        : IQueryable<T>
+        : IAsyncQueryable<T>
         where T : class
     {
 
@@ -39,7 +40,7 @@ namespace Neuroglia.Data
         /// </summary>
         /// <param name="provider">The <see cref="IQueryProvider"/> associated with the data source</param>
         /// <param name="expression">The <see cref="System.Linq.Expressions.Expression"/> associated with this <see cref="ODataList{T}"/> instance</param>
-        public ODataList(IQueryProvider provider, Expression expression)
+        public ODataList(IAsyncQueryProvider provider, Expression expression)
         {
             Provider = provider;
             Expression = expression ?? Expression.Constant(this);
@@ -62,7 +63,9 @@ namespace Neuroglia.Data
         public Expression Expression { get; }
 
         /// <inheritdoc/>
-        public IQueryProvider Provider { get; }
+        public IAsyncQueryProvider Provider { get; }
+
+        IQueryProvider IQueryable.Provider => this.Provider;
 
         /// <inheritdoc/>
         public virtual IEnumerator<T> GetEnumerator()
@@ -75,6 +78,15 @@ namespace Neuroglia.Data
             return GetEnumerator();
         }
 
+        /// <inheritdoc/>
+        public async IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+        {
+            foreach (T elem in await this.Provider.ExecuteAsync<IEnumerable<T>>(this.Expression, cancellationToken))
+            {
+                yield return elem;
+            }
+        }
+    
     }
 
 }

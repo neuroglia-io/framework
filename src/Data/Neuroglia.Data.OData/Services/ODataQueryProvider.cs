@@ -14,11 +14,13 @@
  * limitations under the License.
  *
  */
+using Microsoft.Extensions.DependencyInjection;
 using Simple.OData.Client;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Neuroglia.Data.Services
@@ -28,24 +30,18 @@ namespace Neuroglia.Data.Services
     /// </summary>
     /// <typeparam name="T">The type of element to query</typeparam>
     public class ODataQueryProvider<T>
-        : IQueryProvider
+        : IAsyncQueryProvider
         where T : class
     {
 
         /// <summary>
         /// Initializes a new <see cref="ODataQueryProvider{T}"/>
         /// </summary>
-        /// <param name="oDataClient">The service used to interact with OData</param>
-        public ODataQueryProvider(IODataClient oDataClient)
+        /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
+        public ODataQueryProvider(IServiceProvider serviceProvider)
         {
-            ODataClient = oDataClient;
-            ExpressionTranslator = new(ODataClient);
+            ExpressionTranslator = ActivatorUtilities.CreateInstance<ODataExpressionTranslator<T>>(serviceProvider);
         }
-
-        /// <summary>
-        /// Gets the service used to interact with OData
-        /// </summary>
-        protected IODataClient ODataClient { get; }
 
         /// <summary>
         /// Gets the service used to translate <see cref="Expression"/>s to OData queries
@@ -84,6 +80,16 @@ namespace Neuroglia.Data.Services
                 task = Task.Run(async () => (object)await boundClient.FindEntryAsync().ConfigureAwait(false));
             task.Wait();
             return task.Result;
+        }
+
+        /// <inheritdoc/>
+        public virtual async Task<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken = default)
+        {
+            IBoundClient<T> boundClient = ExpressionTranslator.Translate(expression);
+            if (expression.Type.IsEnumerable())
+                return (TResult)await boundClient.FindEntriesAsync(cancellationToken).ConfigureAwait(false);
+            else
+                return (TResult)(object)await boundClient.FindEntryAsync(cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc/>

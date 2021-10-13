@@ -17,6 +17,7 @@ namespace Neuroglia.UnitTests.Cases.Data.OData
         {
             var services = new ServiceCollection();
             services.AddSingleton<IODataClient>(new ODataClient("https://services.odata.org/V4/OData/OData.svc/"));
+            services.AddPluralizer();
             this.ServiceProvider = services.BuildServiceProvider();
         }
 
@@ -26,7 +27,7 @@ namespace Neuroglia.UnitTests.Cases.Data.OData
         public void Where_ShouldWork()
         {
             //arrange
-            var list = new ODataList<PersonDetails>(this.ServiceProvider);
+            IQueryable<PersonDetails> list = new ODataList<PersonDetails>(this.ServiceProvider);
             Func<PersonDetails, bool> predicate = p => p.Age >= 21;
 
             //act
@@ -40,7 +41,7 @@ namespace Neuroglia.UnitTests.Cases.Data.OData
         public void OrderBy_ShouldWork()
         {
             //arrange
-            var list = new ODataList<PersonDetails>(this.ServiceProvider);
+            IQueryable<PersonDetails> list = new ODataList<PersonDetails>(this.ServiceProvider);
             Func<PersonDetails, byte> selector = p => p.Age;
 
             //act
@@ -54,7 +55,7 @@ namespace Neuroglia.UnitTests.Cases.Data.OData
         public void OrderByDescending_ShouldWork()
         {
             //arrange
-            var list = new ODataList<PersonDetails>(this.ServiceProvider);
+            IQueryable<PersonDetails> list = new ODataList<PersonDetails>(this.ServiceProvider);
             Func<PersonDetails, byte> selector = p => p.Age;
 
             //act
@@ -68,7 +69,7 @@ namespace Neuroglia.UnitTests.Cases.Data.OData
         public void Select_ShouldWork()
         {
             //arrange
-            var list = new ODataList<PersonDetails>(this.ServiceProvider);
+            IQueryable<PersonDetails> list = new ODataList<PersonDetails>(this.ServiceProvider);
             Func<PersonDetails, byte> selector = p => p.Age;
 
             //act
@@ -82,7 +83,7 @@ namespace Neuroglia.UnitTests.Cases.Data.OData
         public void Skip_ShouldWork()
         {
             //arrange
-            var list = new ODataList<PersonDetails>(this.ServiceProvider);
+            IQueryable<PersonDetails> list = new ODataList<PersonDetails>(this.ServiceProvider);
             int amount = 3;
 
             //act
@@ -96,7 +97,7 @@ namespace Neuroglia.UnitTests.Cases.Data.OData
         public void Take_ShouldWork()
         {
             //arrange
-            var list = new ODataList<PersonDetails>(this.ServiceProvider);
+            IQueryable<PersonDetails> list = new ODataList<PersonDetails>(this.ServiceProvider);
             int amount = 2;
 
             //act

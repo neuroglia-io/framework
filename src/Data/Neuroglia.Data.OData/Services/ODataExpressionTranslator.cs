@@ -35,15 +35,22 @@ namespace Neuroglia.Data.Services
         /// Initializes a new <see cref="ODataExpressionTranslator{T}"/>
         /// </summary>
         /// <param name="oDataClient">The service used to query ODATA endpoints</param>
-        public ODataExpressionTranslator(IODataClient oDataClient)
+        /// <param name="pluralizer">The service used to pluralize words</param>
+        public ODataExpressionTranslator(IODataClient oDataClient, IPluralizer pluralizer)
         {
-            ODataClient = oDataClient;
+            this.ODataClient = oDataClient;
+            this.Pluralizer = pluralizer;
         }
 
         /// <summary>
         /// Gets the service used to query ODATA endpoints
         /// </summary>
         protected IODataClient ODataClient { get; }
+
+        /// <summary>
+        /// Gets the service used to pluralize words
+        /// </summary>
+        protected IPluralizer Pluralizer { get; }
 
         /// <summary>
         /// Gets a <see cref="List{T}"/> containing the <see cref="Action"/>s used to configure a translated OData query
@@ -57,14 +64,14 @@ namespace Neuroglia.Data.Services
         /// <returns>A new <see cref="IBoundClient{T}"/> that represents the translated OData query</returns>
         public virtual IBoundClient<T> Translate(Expression expression)
         {
-            IBoundClient<T> query = ODataClient.For<T>();
-            Visit(expression);
-            SetupPipeline.Reverse();
+            IBoundClient<T> query = this.ODataClient.For<T>(this.Pluralizer.Pluralize(typeof(T).Name.Replace("Dto", "")));
+            this.Visit(expression);
+            this.SetupPipeline.Reverse();
             foreach (Action<IBoundClient<T>> setup in SetupPipeline)
             {
                 setup(query);
             }
-            SetupPipeline.Clear();
+            this.SetupPipeline.Clear();
             return query;
         }
 
@@ -107,7 +114,7 @@ namespace Neuroglia.Data.Services
                 default:
                     throw new NotSupportedException($"The specified method '{node.Method.Name}' is not supported");
             }
-            SetupPipeline.Add(setup);
+            this.SetupPipeline.Add(setup);
             return base.VisitMethodCall(node);
         }
 

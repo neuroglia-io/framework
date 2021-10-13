@@ -10,7 +10,7 @@
             </summary>
             <typeparam name="T">The type of the elements the <see cref="T:Neuroglia.Data.ODataList`1"/> is made out of</typeparam>
         </member>
-        <member name="M:Neuroglia.Data.ODataList`1.#ctor(System.Linq.IQueryProvider,System.Linq.Expressions.Expression)">
+        <member name="M:Neuroglia.Data.ODataList`1.#ctor(System.Linq.IAsyncQueryProvider,System.Linq.Expressions.Expression)">
             <summary>
             Initializes a new <see cref="T:Neuroglia.Data.ODataList`1"/>
             </summary>
@@ -35,21 +35,30 @@
         <member name="M:Neuroglia.Data.ODataList`1.GetEnumerator">
             <inheritdoc/>
         </member>
+        <member name="M:Neuroglia.Data.ODataList`1.GetAsyncEnumerator(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
         <member name="T:Neuroglia.Data.Services.ODataExpressionTranslator`1">
             <summary>
             Represents an <see cref="T:System.Linq.Expressions.ExpressionVisitor"/> used to translate an <see cref="T:System.Linq.Expressions.Expression"/> into an OData query
             </summary>
             <typeparam name="T">The type of element to query</typeparam>
         </member>
-        <member name="M:Neuroglia.Data.Services.ODataExpressionTranslator`1.#ctor(Simple.OData.Client.IODataClient)">
+        <member name="M:Neuroglia.Data.Services.ODataExpressionTranslator`1.#ctor(Simple.OData.Client.IODataClient,Neuroglia.Data.IPluralizer)">
             <summary>
             Initializes a new <see cref="T:Neuroglia.Data.Services.ODataExpressionTranslator`1"/>
             </summary>
             <param name="oDataClient">The service used to query ODATA endpoints</param>
+            <param name="pluralizer">The service used to pluralize words</param>
         </member>
         <member name="P:Neuroglia.Data.Services.ODataExpressionTranslator`1.ODataClient">
             <summary>
             Gets the service used to query ODATA endpoints
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Services.ODataExpressionTranslator`1.Pluralizer">
+            <summary>
+            Gets the service used to pluralize words
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Services.ODataExpressionTranslator`1.SetupPipeline">
@@ -73,16 +82,11 @@
             </summary>
             <typeparam name="T">The type of element to query</typeparam>
         </member>
-        <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.#ctor(Simple.OData.Client.IODataClient)">
+        <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.#ctor(System.IServiceProvider)">
             <summary>
             Initializes a new <see cref="T:Neuroglia.Data.Services.ODataQueryProvider`1"/>
             </summary>
-            <param name="oDataClient">The service used to interact with OData</param>
-        </member>
-        <member name="P:Neuroglia.Data.Services.ODataQueryProvider`1.ODataClient">
-            <summary>
-            Gets the service used to interact with OData
-            </summary>
+            <param name="serviceProvider">The current <see cref="T:System.IServiceProvider"/></param>
         </member>
         <member name="P:Neuroglia.Data.Services.ODataQueryProvider`1.ExpressionTranslator">
             <summary>
@@ -96,6 +100,9 @@
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.Execute(System.Linq.Expressions.Expression)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.ExecuteAsync``1(System.Linq.Expressions.Expression,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.System#Linq#IQueryProvider#Execute``1(System.Linq.Expressions.Expression)">
