@@ -11,7 +11,7 @@ namespace Neuroglia.UnitTests.Data
         public string Street { get; set; }
 
         [ProtoMember(2)]
-        public string PostalCode { get; set; }
+        public string ZipCode { get; set; }
 
         [ProtoMember(3)]
         public string City { get; set; }

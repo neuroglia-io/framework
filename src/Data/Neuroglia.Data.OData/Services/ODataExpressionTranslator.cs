@@ -22,6 +22,7 @@ using System.Linq.Expressions;
 
 namespace Neuroglia.Data.Services
 {
+
     /// <summary>
     /// Represents an <see cref="ExpressionVisitor"/> used to translate an <see cref="Expression"/> into an OData query
     /// </summary>
@@ -52,6 +53,26 @@ namespace Neuroglia.Data.Services
         /// </summary>
         protected IPluralizer Pluralizer { get; }
 
+        private string _CollectionName;
+        /// <summary>
+        /// Gets the name of the OData collection the queried entities belong to
+        /// </summary>
+        protected string CollectionName
+        {
+            get
+            {
+                if(string.IsNullOrWhiteSpace(this._CollectionName))
+                {
+                    if (typeof(T).TryGetCustomAttribute(out ODataEntityAttribute oDataEntityAttribute)
+                        && !string.IsNullOrWhiteSpace(oDataEntityAttribute.Collection))
+                        this._CollectionName = oDataEntityAttribute.Collection;
+                    else
+                        this._CollectionName = this.Pluralizer.Pluralize(typeof(T).Name.Replace("Dto", ""));
+                }
+                return this._CollectionName;
+            }
+        }
+
         /// <summary>
         /// Gets a <see cref="List{T}"/> containing the <see cref="Action"/>s used to configure a translated OData query
         /// </summary>
@@ -64,7 +85,7 @@ namespace Neuroglia.Data.Services
         /// <returns>A new <see cref="IBoundClient{T}"/> that represents the translated OData query</returns>
         public virtual IBoundClient<T> Translate(Expression expression)
         {
-            IBoundClient<T> query = this.ODataClient.For<T>(this.Pluralizer.Pluralize(typeof(T).Name.Replace("Dto", "")));
+            IBoundClient<T> query = this.ODataClient.For<T>(this.CollectionName);
             this.Visit(expression);
             this.SetupPipeline.Reverse();
             foreach (Action<IBoundClient<T>> setup in SetupPipeline)
@@ -81,11 +102,19 @@ namespace Neuroglia.Data.Services
             if (node.Arguments.Count != 2)
                 return base.VisitMethodCall(node);
             Action<IBoundClient<T>> setup;
+            UnaryExpression unary;
+            LambdaExpression lambda;
+            ConstantExpression constant;
             switch (node.Method.Name)
             {
+                case nameof(ODataQueryable.Expand):
+                    unary = (UnaryExpression)node.Arguments[1];
+                    lambda = (LambdaExpression)unary.Operand;
+                    setup = query => query.Expand((Expression<Func<T, object>>)Expression.Lambda(Expression.Convert(lambda, typeof(object)), lambda.Parameters));
+                    break;
                 case nameof(Queryable.OrderBy):
-                    UnaryExpression unary = (UnaryExpression)node.Arguments[1];
-                    LambdaExpression lambda = (LambdaExpression)unary.Operand;
+                    unary = (UnaryExpression)node.Arguments[1];
+                    lambda = (LambdaExpression)unary.Operand;
                     setup = query => query.OrderBy((Expression<Func<T, object>>)Expression.Lambda(Expression.Convert(lambda, typeof(object)), lambda.Parameters));
                     break;
                 case nameof(Queryable.OrderByDescending):
@@ -93,18 +122,18 @@ namespace Neuroglia.Data.Services
                     lambda = (LambdaExpression)unary.Operand;
                     setup = query => query.OrderByDescending((Expression<Func<T, object>>)Expression.Lambda(Expression.Convert(lambda, typeof(object)), lambda.Parameters));
                     break;
-                case nameof(Queryable.Where):
-                    unary = (UnaryExpression)node.Arguments[1];
-                    lambda = (LambdaExpression)unary.Operand;
-                    setup = query => query.Filter((Expression<Func<T, bool>>)lambda);
-                    break;
                 case nameof(Queryable.Skip):
-                    ConstantExpression constant = (ConstantExpression)node.Arguments[1];
+                    constant = (ConstantExpression)node.Arguments[1];
                     setup = query => query.Skip((int)constant.Value);
                     break;
                 case nameof(Queryable.Take):
                     constant = (ConstantExpression)node.Arguments[1];
                     setup = query => query.Top((int)constant.Value);
+                    break;
+                case nameof(Queryable.Where):
+                    unary = (UnaryExpression)node.Arguments[1];
+                    lambda = (LambdaExpression)unary.Operand;
+                    setup = query => query.Filter((Expression<Func<T, bool>>)lambda);
                     break;
                 case nameof(string.ToLower):
                 case nameof(string.ToLowerInvariant):

@@ -10,6 +10,8 @@
 
         public string PhoneNumber { get; set; }
 
+        public TestAddress Address { get; set; }
+
     }
 
 }

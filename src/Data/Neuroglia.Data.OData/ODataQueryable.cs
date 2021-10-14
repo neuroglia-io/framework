@@ -29,28 +29,28 @@ namespace Neuroglia.Data
     /// <summary>
     /// Represents an <see cref="IQueryable{T}"/> used to wrap an OData set
     /// </summary>
-    /// <typeparam name="T">The type of the elements the <see cref="ODataList{T}"/> is made out of</typeparam>
-    public class ODataList<T>
-        : IAsyncQueryable<T>
+    /// <typeparam name="T">The type of the elements the <see cref="ODataQueryable{T}"/> is made out of</typeparam>
+    public class ODataQueryable<T>
+        : IODataQueryable<T>
         where T : class
     {
 
         /// <summary>
-        /// Initializes a new <see cref="ODataList{T}"/>
+        /// Initializes a new <see cref="ODataQueryable{T}"/>
         /// </summary>
         /// <param name="provider">The <see cref="IQueryProvider"/> associated with the data source</param>
-        /// <param name="expression">The <see cref="System.Linq.Expressions.Expression"/> associated with this <see cref="ODataList{T}"/> instance</param>
-        public ODataList(IAsyncQueryProvider provider, Expression expression)
+        /// <param name="expression">The <see cref="System.Linq.Expressions.Expression"/> associated with this <see cref="ODataQueryable{T}"/> instance</param>
+        public ODataQueryable(IAsyncQueryProvider provider, Expression expression)
         {
-            Provider = provider;
-            Expression = expression ?? Expression.Constant(this);
+            this.Provider = provider;
+            this.Expression = expression ?? Expression.Constant(this);
         }
 
         /// <summary>
-        /// Initializes a new <see cref="ODataList{T}"/>
+        /// Initializes a new <see cref="ODataQueryable{T}"/>
         /// </summary>
         /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
-        public ODataList(IServiceProvider serviceProvider)
+        public ODataQueryable(IServiceProvider serviceProvider)
             : this(ActivatorUtilities.CreateInstance<ODataQueryProvider<T>>(serviceProvider), null)
         {
 
@@ -70,12 +70,12 @@ namespace Neuroglia.Data
         /// <inheritdoc/>
         public virtual IEnumerator<T> GetEnumerator()
         {
-            return Provider.Execute<IEnumerable<T>>(Expression).GetEnumerator();
+            return this.Provider.Execute<IEnumerable<T>>(this.Expression).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
 
         /// <inheritdoc/>
@@ -86,7 +86,7 @@ namespace Neuroglia.Data
                 yield return elem;
             }
         }
-    
+
     }
 
 }

@@ -19,7 +19,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             var toSerialize = new TestAddress()
             {
                 Street = "Fake Street",
-                PostalCode = "Fake Postal Code",
+                ZipCode = "Fake Postal Code",
                 City = "Fake City",
                 Country = "Fake Country"
             };
@@ -31,7 +31,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             //assert
             deserialized.Should().NotBeNull();
             deserialized.Street.Should().Be(toSerialize.Street);
-            deserialized.PostalCode.Should().Be(toSerialize.PostalCode);
+            deserialized.ZipCode.Should().Be(toSerialize.ZipCode);
             deserialized.City.Should().Be(toSerialize.City);
             deserialized.Country.Should().Be(toSerialize.Country);
         }
@@ -56,7 +56,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             deserialized.Should().NotBeNull();
             var address = deserialized.ToObject<TestAddress>();
             address.Street.Should().Be(toSerialize.Street);
-            address.PostalCode.Should().Be(toSerialize.PostalCode);
+            address.ZipCode.Should().Be(toSerialize.PostalCode);
             address.City.Should().Be(toSerialize.City);
             address.Country.Should().Be(toSerialize.Country);
         }

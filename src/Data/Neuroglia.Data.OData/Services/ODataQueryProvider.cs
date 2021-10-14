@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 
 namespace Neuroglia.Data.Services
 {
+
     /// <summary>
     /// Represents an OData <see cref="IQueryProvider"/>
     /// </summary>
@@ -40,7 +41,7 @@ namespace Neuroglia.Data.Services
         /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
         public ODataQueryProvider(IServiceProvider serviceProvider)
         {
-            ExpressionTranslator = ActivatorUtilities.CreateInstance<ODataExpressionTranslator<T>>(serviceProvider);
+            this.ExpressionTranslator = ActivatorUtilities.CreateInstance<ODataExpressionTranslator<T>>(serviceProvider);
         }
 
         /// <summary>
@@ -52,7 +53,7 @@ namespace Neuroglia.Data.Services
         public IQueryable CreateQuery(Expression expression)
         {
             Type elementType = expression.Type.GetEnumerableElementType();
-            Type listType = typeof(ODataList<>).MakeGenericType(elementType);
+            Type listType = typeof(ODataQueryable<>).MakeGenericType(elementType);
             try
             {
                 return (IQueryable)Activator.CreateInstance(listType, new object[] { this, expression });
@@ -66,13 +67,13 @@ namespace Neuroglia.Data.Services
         /// <inheritdoc/>
         public virtual IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
-            return (IQueryable<TElement>)new ODataList<T>(this, expression);
+            return (IQueryable<TElement>)new ODataQueryable<T>(this, expression);
         }
 
         /// <inheritdoc/>
         public virtual object Execute(Expression expression)
         {
-            IBoundClient<T> boundClient = ExpressionTranslator.Translate(expression);
+            IBoundClient<T> boundClient = this.ExpressionTranslator.Translate(expression);
             Task<object> task;
             if (expression.Type.IsEnumerable())
                 task = Task.Run(async () => (object)await boundClient.FindEntriesAsync().ConfigureAwait(false));
@@ -85,7 +86,7 @@ namespace Neuroglia.Data.Services
         /// <inheritdoc/>
         public virtual async Task<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken = default)
         {
-            IBoundClient<T> boundClient = ExpressionTranslator.Translate(expression);
+            IBoundClient<T> boundClient = this.ExpressionTranslator.Translate(expression);
             if (expression.Type.IsEnumerable())
                 return (TResult)await boundClient.FindEntriesAsync(cancellationToken).ConfigureAwait(false);
             else
@@ -95,7 +96,7 @@ namespace Neuroglia.Data.Services
         /// <inheritdoc/>
         TResult IQueryProvider.Execute<TResult>(Expression expression)
         {
-            return (TResult)Execute(expression);
+            return (TResult)this.Execute(expression);
         }
 
     }

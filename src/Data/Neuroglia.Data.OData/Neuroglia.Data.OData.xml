@@ -4,38 +4,64 @@
         <name>Neuroglia.Data.OData</name>
     </assembly>
     <members>
-        <member name="T:Neuroglia.Data.ODataList`1">
+        <member name="T:Neuroglia.Data.ODataEntityAttribute">
+            <summary>
+            Represents an <see cref="T:System.Attribute"/> used to mark a class as an OData entity
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.ODataEntityAttribute.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.ODataEntityAttribute"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.ODataEntityAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.ODataEntityAttribute"/>
+            </summary>
+            <param name="collection">The name of the collection the marked class belongs to</param>
+        </member>
+        <member name="P:Neuroglia.Data.ODataEntityAttribute.Collection">
+            <summary>
+            Gets/sets the name of the collection the marked class belongs to
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.IODataQueryable`1">
+            <summary>
+            Defines the fundamentals of an OData <see cref="T:System.Linq.IAsyncQueryable`1"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.ODataQueryable`1">
             <summary>
             Represents an <see cref="T:System.Linq.IQueryable`1"/> used to wrap an OData set
             </summary>
-            <typeparam name="T">The type of the elements the <see cref="T:Neuroglia.Data.ODataList`1"/> is made out of</typeparam>
+            <typeparam name="T">The type of the elements the <see cref="T:Neuroglia.Data.ODataQueryable`1"/> is made out of</typeparam>
         </member>
-        <member name="M:Neuroglia.Data.ODataList`1.#ctor(System.Linq.IAsyncQueryProvider,System.Linq.Expressions.Expression)">
+        <member name="M:Neuroglia.Data.ODataQueryable`1.#ctor(System.Linq.IAsyncQueryProvider,System.Linq.Expressions.Expression)">
             <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.ODataList`1"/>
+            Initializes a new <see cref="T:Neuroglia.Data.ODataQueryable`1"/>
             </summary>
             <param name="provider">The <see cref="T:System.Linq.IQueryProvider"/> associated with the data source</param>
-            <param name="expression">The <see cref="T:System.Linq.Expressions.Expression"/> associated with this <see cref="T:Neuroglia.Data.ODataList`1"/> instance</param>
+            <param name="expression">The <see cref="T:System.Linq.Expressions.Expression"/> associated with this <see cref="T:Neuroglia.Data.ODataQueryable`1"/> instance</param>
         </member>
-        <member name="M:Neuroglia.Data.ODataList`1.#ctor(System.IServiceProvider)">
+        <member name="M:Neuroglia.Data.ODataQueryable`1.#ctor(System.IServiceProvider)">
             <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.ODataList`1"/>
+            Initializes a new <see cref="T:Neuroglia.Data.ODataQueryable`1"/>
             </summary>
             <param name="serviceProvider">The current <see cref="T:System.IServiceProvider"/></param>
         </member>
-        <member name="P:Neuroglia.Data.ODataList`1.ElementType">
+        <member name="P:Neuroglia.Data.ODataQueryable`1.ElementType">
             <inheritdoc/>
         </member>
-        <member name="P:Neuroglia.Data.ODataList`1.Expression">
+        <member name="P:Neuroglia.Data.ODataQueryable`1.Expression">
             <inheritdoc/>
         </member>
-        <member name="P:Neuroglia.Data.ODataList`1.Provider">
+        <member name="P:Neuroglia.Data.ODataQueryable`1.Provider">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.ODataList`1.GetEnumerator">
+        <member name="M:Neuroglia.Data.ODataQueryable`1.GetEnumerator">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.ODataList`1.GetAsyncEnumerator(System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.ODataQueryable`1.GetAsyncEnumerator(System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="T:Neuroglia.Data.Services.ODataExpressionTranslator`1">
@@ -59,6 +85,11 @@
         <member name="P:Neuroglia.Data.Services.ODataExpressionTranslator`1.Pluralizer">
             <summary>
             Gets the service used to pluralize words
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Services.ODataExpressionTranslator`1.CollectionName">
+            <summary>
+            Gets the name of the OData collection the queried entities belong to
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Services.ODataExpressionTranslator`1.SetupPipeline">
@@ -107,6 +138,21 @@
         </member>
         <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.System#Linq#IQueryProvider#Execute``1(System.Linq.Expressions.Expression)">
             <inheritdoc/>
+        </member>
+        <member name="T:System.Linq.ODataQueryable">
+            <summary>
+            Defines extensions for <see cref="T:Neuroglia.Data.IODataQueryable`1"/> implementations
+            </summary>
+        </member>
+        <member name="M:System.Linq.ODataQueryable.Expand``2(Neuroglia.Data.IODataQueryable{``0},System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Specifies the related objects to expand in the query results
+            </summary>
+            <typeparam name="TSource">The type of the elements of source</typeparam>
+            <typeparam name="TProperty"> The type of the property returned by the propertySelector</typeparam>
+            <param name="source">The sequence for which to expand the specified property</param>
+            <param name="propertySelector">A function to extract a property from an element</param>
+            <returns>The configured <see cref="T:Neuroglia.Data.IODataQueryable`1"/></returns>
         </member>
     </members>
 </doc>
