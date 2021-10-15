@@ -30,6 +30,14 @@
             Defines the fundamentals of an OData <see cref="T:System.Linq.IAsyncQueryable`1"/>
             </summary>
         </member>
+        <member name="M:Neuroglia.Data.IODataQueryable.CountAsync(System.Linq.Expressions.LambdaExpression,System.Threading.CancellationToken)">
+            <summary>
+            Counts asynchronously the elements the <see cref="T:Neuroglia.Data.IODataQueryable"/> is made out of
+            </summary>
+            <param name="predicate">The <see cref="T:System.Linq.Expressions.LambdaExpression"/> of the predicate used to filter the elements to count</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The count of elements the <see cref="T:Neuroglia.Data.IODataQueryable"/> is made out of</returns>
+        </member>
         <member name="T:Neuroglia.Data.IODataQueryable`1">
             <summary>
             Defines the fundamentals of an OData <see cref="T:System.Linq.IAsyncQueryable`1"/>
@@ -147,6 +155,20 @@
         </member>
         <member name="M:Neuroglia.Data.Services.ODataQueryProvider`1.System#Linq#IQueryProvider#Execute``1(System.Linq.Expressions.Expression)">
             <inheritdoc/>
+        </member>
+        <member name="T:System.Linq.IQueryableExtensions">
+            <summary>
+            Defines extensions for <see cref="T:System.Linq.IQueryable"/>s
+            </summary>
+        </member>
+        <member name="M:System.Linq.IQueryableExtensions.CountAsync(System.Linq.IQueryable,System.Linq.Expressions.LambdaExpression,System.Threading.CancellationToken)">
+            <summary>
+            Counts asynchronously the elements the <see cref="T:System.Linq.IQueryable"/> is made out of
+            </summary>
+            <param name="queryable">The <see cref="T:System.Linq.IQueryable"/> to count the elements of</param>
+            <param name="predicate">The <see cref="T:System.Linq.Expressions.LambdaExpression"/> of the predicate used to filter the elements to count</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The count of elements in the <see cref="T:System.Linq.IQueryable"/></returns>
         </member>
         <member name="T:System.Linq.ODataQueryable">
             <summary>

@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework serialization protobuf</PackageTags>
-    <Version>2.0.0.32</Version>
-    <AssemblyVersion>2.0.0.32</AssemblyVersion>
-    <FileVersion>2.0.0.32</FileVersion>
+    <Version>2.0.0.33</Version>
+    <AssemblyVersion>2.0.0.33</AssemblyVersion>
+    <FileVersion>2.0.0.33</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

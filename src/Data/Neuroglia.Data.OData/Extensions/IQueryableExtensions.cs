@@ -16,6 +16,7 @@
  */
 using Neuroglia;
 using Neuroglia.Data;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
@@ -23,13 +24,15 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
+
     /// <summary>
     /// Defines extensions for <see cref="IQueryable"/>s
     /// </summary>
     public static class IQueryableExtensions
     {
 
-        private static readonly MethodInfo CountAsyncMethod = typeof(AsyncEnumerable).GetMethods().First(m => m.Name == nameof(AsyncEnumerable.CountAsync) && m.GetParameters().Length == 2);
+        private static readonly MethodInfo ToAsyncEnumerableMethod = typeof(AsyncEnumerable).GetMethods().First(m => m.Name == nameof(AsyncEnumerable.ToAsyncEnumerable) && m.GetParameters().First().ParameterType.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+        private static readonly MethodInfo CountAsyncMethod = typeof(AsyncEnumerable).GetMethods().First(m => m.Name == nameof(AsyncEnumerable.CountAsync) && m.GetParameters().Length == 3);
 
         /// <summary>
         /// Counts asynchronously the elements the <see cref="IQueryable"/> is made out of
@@ -45,8 +48,11 @@ namespace System.Linq
             MethodInfo method;
             if (queryable is IODataQueryable oDataQueryable)
                 return await oDataQueryable.CountAsync(predicate, cancellationToken);
+            object source = queryable;
+            if (!typeof(IAsyncEnumerable<>).MakeGenericType(queryable.ElementType).IsAssignableFrom(source.GetType()))
+                source = ToAsyncEnumerableMethod.MakeGenericMethod(queryable.ElementType).Invoke(null, new object[] { source });
             method = CountAsyncMethod.MakeGenericMethod(queryable.ElementType);
-            return (int)await method.InvokeAsync(null, new object[] { queryable, cancellationToken });
+            return (int)await method.InvokeAsync(null, new object[] { source, predicate.Compile(), cancellationToken });
         }
 
     }
