@@ -107,6 +107,11 @@ namespace Neuroglia.Data.Services
             ConstantExpression constant;
             switch (node.Method.Name)
             {
+                case nameof(Queryable.Count):
+                    unary = (UnaryExpression)node.Arguments[1];
+                    lambda = (LambdaExpression)unary.Operand;
+                    setup = query => query.Filter((Expression<Func<T, bool>>)lambda).Count();
+                    break;
                 case nameof(ODataQueryable.Expand):
                     unary = (UnaryExpression)node.Arguments[1];
                     lambda = (LambdaExpression)unary.Operand;

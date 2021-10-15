@@ -21,7 +21,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Neuroglia.Data
 {
@@ -34,6 +36,8 @@ namespace Neuroglia.Data
         : IODataQueryable<T>
         where T : class
     {
+
+        private static readonly MethodInfo CountMethod = typeof(Queryable).GetMethods().First(m => m.Name == nameof(Queryable.Count) && m.GetParameters().Length == 2);
 
         /// <summary>
         /// Initializes a new <see cref="ODataQueryable{T}"/>
@@ -68,6 +72,14 @@ namespace Neuroglia.Data
         IQueryProvider IQueryable.Provider => this.Provider;
 
         /// <inheritdoc/>
+        public virtual async Task<int> CountAsync(LambdaExpression predicate, CancellationToken cancellationToken = default)
+        {
+            MethodInfo method = CountMethod.MakeGenericMethod(typeof(T));
+            Expression expression = Expression.Call(null, method, this.Expression, Expression.Quote(predicate));
+            return await this.Provider.ExecuteAsync<int>(expression, cancellationToken);
+        }
+
+        /// <inheritdoc/>
         public virtual IEnumerator<T> GetEnumerator()
         {
             return this.Provider.Execute<IEnumerable<T>>(this.Expression).GetEnumerator();
@@ -86,7 +98,6 @@ namespace Neuroglia.Data
                 yield return elem;
             }
         }
-
     }
 
 }

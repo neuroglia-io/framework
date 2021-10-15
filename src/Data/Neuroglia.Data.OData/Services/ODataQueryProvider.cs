@@ -89,6 +89,8 @@ namespace Neuroglia.Data.Services
             IBoundClient<T> boundClient = this.ExpressionTranslator.Translate(expression);
             if (expression.Type.IsEnumerable())
                 return (TResult)await boundClient.FindEntriesAsync(cancellationToken).ConfigureAwait(false);
+            else if(expression.Type.IsValueType)
+                return await boundClient.FindScalarAsync<TResult>(cancellationToken).ConfigureAwait(false);
             else
                 return (TResult)(object)await boundClient.FindEntryAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -96,7 +98,16 @@ namespace Neuroglia.Data.Services
         /// <inheritdoc/>
         TResult IQueryProvider.Execute<TResult>(Expression expression)
         {
-            return (TResult)this.Execute(expression);
+            IBoundClient<T> boundClient = this.ExpressionTranslator.Translate(expression);
+            Task<TResult> task;
+            if (expression.Type.IsEnumerable())
+                task = Task.Run(async () => (TResult)await boundClient.FindEntriesAsync().ConfigureAwait(false));
+            else if (expression.Type.IsValueType)
+                task = Task.Run(async () => await boundClient.FindScalarAsync<TResult>().ConfigureAwait(false));
+            else
+                task = Task.Run(async () => (TResult)(object)await boundClient.FindEntryAsync().ConfigureAwait(false));
+            task.Wait();
+            return task.Result;
         }
 
     }

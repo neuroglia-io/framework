@@ -25,10 +25,16 @@
             Gets/sets the name of the collection the marked class belongs to
             </summary>
         </member>
+        <member name="T:Neuroglia.Data.IODataQueryable">
+            <summary>
+            Defines the fundamentals of an OData <see cref="T:System.Linq.IAsyncQueryable`1"/>
+            </summary>
+        </member>
         <member name="T:Neuroglia.Data.IODataQueryable`1">
             <summary>
             Defines the fundamentals of an OData <see cref="T:System.Linq.IAsyncQueryable`1"/>
             </summary>
+            <typeparam name="T">The type of element to query</typeparam>
         </member>
         <member name="T:Neuroglia.Data.ODataQueryable`1">
             <summary>
@@ -56,6 +62,9 @@
             <inheritdoc/>
         </member>
         <member name="P:Neuroglia.Data.ODataQueryable`1.Provider">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.ODataQueryable`1.CountAsync(System.Linq.Expressions.LambdaExpression,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Data.ODataQueryable`1.GetEnumerator">

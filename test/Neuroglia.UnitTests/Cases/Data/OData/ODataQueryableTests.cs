@@ -6,6 +6,7 @@ using Simple.OData.Client;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Neuroglia.UnitTests.Cases.Data.OData
@@ -23,6 +24,21 @@ namespace Neuroglia.UnitTests.Cases.Data.OData
         }
 
         IServiceProvider ServiceProvider { get; }
+
+        [Fact]
+        public async Task CountAsync_ShouldWork()
+        {
+            //arrange
+            IQueryable<PersonDetails> query = new ODataQueryable<PersonDetails>(this.ServiceProvider);
+            Expression<Func<PersonDetails, bool>> predicate = p => p.Age >= 28;
+
+            //act
+            var count = await query.CountAsync(predicate);
+
+            //assert
+            query.ToList().Where(predicate.Compile()).Count().Should().Be(count);
+            query.ToList().Count(predicate.Compile()).Should().Be(count);
+        }
 
         [Fact]
         public void Expand_ShouldWork()

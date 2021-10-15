@@ -15,6 +15,9 @@
  *
  */
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Neuroglia.Data
 {
@@ -22,8 +25,26 @@ namespace Neuroglia.Data
     /// <summary>
     /// Defines the fundamentals of an OData <see cref="IAsyncQueryable{T}"/>
     /// </summary>
+    public interface IODataQueryable
+        : IOrderedQueryable
+    {
+
+        /// <summary>
+        /// Counts asynchronously the elements the <see cref="IODataQueryable"/> is made out of
+        /// </summary>
+        /// <param name="predicate">The <see cref="LambdaExpression"/> of the predicate used to filter the elements to count</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>The count of elements the <see cref="IODataQueryable"/> is made out of</returns>
+        Task<int> CountAsync(LambdaExpression predicate, CancellationToken cancellationToken = default);
+
+    }
+
+    /// <summary>
+    /// Defines the fundamentals of an OData <see cref="IAsyncQueryable{T}"/>
+    /// </summary>
+    /// <typeparam name="T">The type of element to query</typeparam>
     public interface IODataQueryable<T>
-        : IAsyncQueryable<T>
+        : IODataQueryable, IAsyncQueryable<T>
     {
 
     }
