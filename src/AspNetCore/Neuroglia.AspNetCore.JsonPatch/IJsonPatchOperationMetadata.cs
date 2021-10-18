@@ -28,7 +28,7 @@ namespace Microsoft.AspNetCore.JsonPatch
         /// <summary>
         /// Gets the Json Patch operation type
         /// </summary>
-        string Type { get; }
+        string OperationType { get; }
 
         /// <summary>
         /// Gets the Json Patch operation path
@@ -36,7 +36,12 @@ namespace Microsoft.AspNetCore.JsonPatch
         string Path { get; }
 
         /// <summary>
-        /// Gets the type of the object referenced by the Json Patch value and that is expected by the operation's setter
+        /// Gets the type of the value expected by the operation's setter
+        /// </summary>
+        Type ValueType { get; }
+
+        /// <summary>
+        /// Gets the type of the value referenced by the JsonPatch operation and that the operation's setter expects
         /// </summary>
         Type ReferencedType { get; }
 

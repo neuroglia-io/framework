@@ -15,6 +15,7 @@
  *
  */
 using System;
+using System.Collections.Generic;
 
 namespace Microsoft.AspNetCore.JsonPatch
 {
@@ -28,6 +29,11 @@ namespace Microsoft.AspNetCore.JsonPatch
         /// Gets the described type
         /// </summary>
         Type Type { get; }
+
+        /// <summary>
+        /// Gets an <see cref="IReadOnlyCollection{T}"/> containing the <see cref="IJsonPatchOperationMetadata"/> that describe the type's Json Patch operations
+        /// </summary>
+        IReadOnlyCollection<IJsonPatchOperationMetadata> Operations { get; }
 
         /// <summary>
         /// Attempts to get the metadata of the specified Json Patch operation

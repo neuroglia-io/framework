@@ -57,7 +57,7 @@
             Defines the fundamentals of a service used to describe a Json Patch operation
             </summary>
         </member>
-        <member name="P:Microsoft.AspNetCore.JsonPatch.IJsonPatchOperationMetadata.Type">
+        <member name="P:Microsoft.AspNetCore.JsonPatch.IJsonPatchOperationMetadata.OperationType">
             <summary>
             Gets the Json Patch operation type
             </summary>
@@ -67,9 +67,14 @@
             Gets the Json Patch operation path
             </summary>
         </member>
+        <member name="P:Microsoft.AspNetCore.JsonPatch.IJsonPatchOperationMetadata.ValueType">
+            <summary>
+            Gets the type of the value expected by the operation's setter
+            </summary>
+        </member>
         <member name="P:Microsoft.AspNetCore.JsonPatch.IJsonPatchOperationMetadata.ReferencedType">
             <summary>
-            Gets the type of the object referenced by the Json Patch value and that is expected by the operation's setter
+            Gets the type of the value referenced by the JsonPatch operation and that the operation's setter expects
             </summary>
         </member>
         <member name="M:Microsoft.AspNetCore.JsonPatch.IJsonPatchOperationMetadata.ApplyTo(System.Object,System.Object)">
@@ -87,6 +92,11 @@
         <member name="P:Microsoft.AspNetCore.JsonPatch.IJsonPatchTypeMetadata.Type">
             <summary>
             Gets the described type
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.JsonPatch.IJsonPatchTypeMetadata.Operations">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> containing the <see cref="T:Microsoft.AspNetCore.JsonPatch.IJsonPatchOperationMetadata"/> that describe the type's Json Patch operations
             </summary>
         </member>
         <member name="M:Microsoft.AspNetCore.JsonPatch.IJsonPatchTypeMetadata.TryGetOperationMetadata(System.String,System.String,Microsoft.AspNetCore.JsonPatch.IJsonPatchOperationMetadata@)">
@@ -111,10 +121,13 @@
             <param name="path">The Json Patch operation path</param>
             <param name="member">The <see cref="T:System.Reflection.MemberInfo"/> used to apply the Json Patch operation</param>
         </member>
-        <member name="P:Microsoft.AspNetCore.JsonPatch.JsonPatchOperationMetadata.Type">
+        <member name="P:Microsoft.AspNetCore.JsonPatch.JsonPatchOperationMetadata.OperationType">
             <inheritdoc/>
         </member>
         <member name="P:Microsoft.AspNetCore.JsonPatch.JsonPatchOperationMetadata.Path">
+            <inheritdoc/>
+        </member>
+        <member name="P:Microsoft.AspNetCore.JsonPatch.JsonPatchOperationMetadata.ValueType">
             <inheritdoc/>
         </member>
         <member name="P:Microsoft.AspNetCore.JsonPatch.JsonPatchOperationMetadata.ReferencedType">
@@ -144,9 +157,7 @@
             <inheritdoc/>
         </member>
         <member name="P:Microsoft.AspNetCore.JsonPatch.JsonPatchTypeMetadata.Operations">
-            <summary>
-            Gets an <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> containing the <see cref="T:Microsoft.AspNetCore.JsonPatch.IJsonPatchOperationMetadata"/> that describe the type's Json Patch operations
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="M:Microsoft.AspNetCore.JsonPatch.JsonPatchTypeMetadata.TryGetOperationMetadata(System.String,System.String,Microsoft.AspNetCore.JsonPatch.IJsonPatchOperationMetadata@)">
             <inheritdoc/>

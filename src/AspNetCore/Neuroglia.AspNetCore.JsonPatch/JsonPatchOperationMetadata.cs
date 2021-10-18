@@ -15,10 +15,12 @@
  *
  */
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Microsoft.AspNetCore.JsonPatch
 {
+
     /// <summary>
     /// Represents the default implementation of the <see cref="IJsonPatchOperationMetadata"/> interface
     /// </summary>
@@ -38,19 +40,34 @@ namespace Microsoft.AspNetCore.JsonPatch
                 throw new ArgumentNullException(nameof(type));
             if (string.IsNullOrWhiteSpace(path))
                 throw new ArgumentNullException(nameof(path));
-            this.Type = type;
+            this.OperationType = type;
             this.Path = path;
             this.Member = member ?? throw new ArgumentNullException(nameof(member));
         }
 
         /// <inheritdoc/>
-        public virtual string Type { get; }
+        public virtual string OperationType { get; }
 
         /// <inheritdoc/>
         public virtual string Path { get; }
 
         /// <inheritdoc/>
-        public virtual Type ReferencedType { get; init; }
+        public virtual Type ValueType
+        {
+            get
+            {
+                return this.Member switch
+                {
+                    FieldInfo field => field.FieldType,
+                    PropertyInfo property => property.PropertyType,
+                    MethodInfo method => method.GetParameters().First().ParameterType,
+                    _ => throw new NotSupportedException($"The specified member type '{this.Member.MemberType}' is not supported"),
+                };
+            }
+        }
+
+        /// <inheritdoc/>
+        public Type ReferencedType { get; init; }
 
         /// <summary>
         /// Gets the <see cref="MemberInfo"/> used to apply the Json Patch operation

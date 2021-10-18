@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.JsonPatch.Adapters;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Data;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -91,9 +92,11 @@ namespace Microsoft.AspNetCore.JsonPatch
             object value = operation.value;
             if (operationMetadata.ReferencedType != null)
             {
-                IRepository repository = (IRepository)this.ServiceProvider.GetRequiredService(typeof(IRepository<>).MakeGenericType(operationMetadata.ReferencedType));
+                IRepository repository = (IRepository)this.ServiceProvider.GetRequiredService(typeof(IRepository<>).MakeGenericType(operationMetadata.ValueType));
                 value = await repository.FindAsync(value, cancellationToken);
             }
+            if (value is JObject jObject)
+                value = jObject.ToObject(operationMetadata.ValueType);
             operationMetadata.ApplyTo(target, value);
         }
 

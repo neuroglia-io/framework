@@ -29,7 +29,6 @@ namespace System.Linq
 
         private static readonly MethodInfo OrderByMethod = typeof(Queryable).GetMethods().Single(m => m.Name == nameof(Queryable.OrderBy) && m.GetParameters().Length == 2);
         private static readonly MethodInfo OrderByDescendingMethod = typeof(Queryable).GetMethods().Single(m => m.Name == nameof(Queryable.OrderByDescending) && m.GetParameters().Length == 2);
-        private static readonly MethodInfo WhereMethod = typeof(Queryable).GetMethods().First(m => m.Name == nameof(Queryable.Where) && m.GetParameters().Length == 2);
 
         /// <summary>
         /// Orders the <see cref="IQueryable"/> by the specified <see cref="PropertyPath"/>

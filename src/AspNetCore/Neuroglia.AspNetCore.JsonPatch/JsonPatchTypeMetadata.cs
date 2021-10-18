@@ -44,9 +44,7 @@ namespace Microsoft.AspNetCore.JsonPatch
         /// <inheritdoc/>
         public virtual Type Type { get; }
 
-        /// <summary>
-        /// Gets an <see cref="IReadOnlyCollection{T}"/> containing the <see cref="IJsonPatchOperationMetadata"/> that describe the type's Json Patch operations
-        /// </summary>
+        /// <inheritdoc/>
         public virtual IReadOnlyCollection<IJsonPatchOperationMetadata> Operations { get; }
 
         /// <inheritdoc/>
@@ -58,9 +56,9 @@ namespace Microsoft.AspNetCore.JsonPatch
                 throw new ArgumentNullException(nameof(path));
             operationMetadata = this.Operations
                 .FirstOrDefault(o => 
-                    o.Type.Equals(type, StringComparison.OrdinalIgnoreCase) 
-                    && (o.Path.Equals(path, StringComparison.OrdinalIgnoreCase)
-                    || o.Path.Equals($"/{path}", StringComparison.OrdinalIgnoreCase)));
+                    o.OperationType.Equals(type, StringComparison.OrdinalIgnoreCase) 
+                    && (path.Equals(o.Path, StringComparison.OrdinalIgnoreCase)
+                    || path.Equals($"/{o.Path}", StringComparison.OrdinalIgnoreCase)));
             return operationMetadata != null;
         }
 
