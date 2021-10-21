@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.JsonPatch.Operations;
 using Neuroglia.Data;
 using Neuroglia.UnitTests.Data.Events;
 using System;
+using System.Collections.Generic;
 
 namespace Neuroglia.UnitTests.Data
 {
@@ -27,6 +28,10 @@ namespace Neuroglia.UnitTests.Data
 
         public virtual string LastName { get; internal protected set; }
 
+        public virtual List<string> Addresses { get; } = new();
+
+        public virtual List<Guid> FriendsIds { get; } = new();
+
         [JsonPatchOperation(OperationType.Replace, nameof(FirstName))]
         public virtual bool SetFirstName(string firstName)
         {
@@ -43,6 +48,18 @@ namespace Neuroglia.UnitTests.Data
                 return false;
             this.On(this.RegisterEvent(new TestPersonLastNameChangedDomainEvent(this.Id, lastName)));
             return true;
+        }
+
+        [JsonPatchOperation(OperationType.Add, nameof(Addresses))]
+        public virtual void AddAddress(string address)
+        {
+            this.Addresses.Add(address);
+        }
+
+        [JsonPatchOperation(OperationType.Add, nameof(FriendsIds), ReferencedType = typeof(TestPerson))]
+        public virtual void AddFriend(TestPerson friend)
+        {
+            this.FriendsIds.Add(friend.Id);
         }
 
         protected void On(TestPersonCreatedDomainEvent e)

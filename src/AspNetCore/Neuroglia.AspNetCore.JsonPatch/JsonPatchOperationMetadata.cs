@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+using Neuroglia;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -43,6 +44,13 @@ namespace Microsoft.AspNetCore.JsonPatch
             this.OperationType = type;
             this.Path = path;
             this.Member = member ?? throw new ArgumentNullException(nameof(member));
+            this.ValueType = this.Member switch
+            {
+                FieldInfo field => field.FieldType,
+                PropertyInfo property => property.PropertyType,
+                MethodInfo method => method.GetParameters().First().ParameterType,
+                _ => throw new NotSupportedException($"The specified member type '{this.Member.MemberType}' is not supported"),
+            };
         }
 
         /// <inheritdoc/>
@@ -52,22 +60,10 @@ namespace Microsoft.AspNetCore.JsonPatch
         public virtual string Path { get; }
 
         /// <inheritdoc/>
-        public virtual Type ValueType
-        {
-            get
-            {
-                return this.Member switch
-                {
-                    FieldInfo field => field.FieldType,
-                    PropertyInfo property => property.PropertyType,
-                    MethodInfo method => method.GetParameters().First().ParameterType,
-                    _ => throw new NotSupportedException($"The specified member type '{this.Member.MemberType}' is not supported"),
-                };
-            }
-        }
+        public virtual Type ValueType { get; }
 
         /// <inheritdoc/>
-        public Type ReferencedType { get; init; }
+        public virtual Type ReferencedType { get; init; }
 
         /// <summary>
         /// Gets the <see cref="MemberInfo"/> used to apply the Json Patch operation

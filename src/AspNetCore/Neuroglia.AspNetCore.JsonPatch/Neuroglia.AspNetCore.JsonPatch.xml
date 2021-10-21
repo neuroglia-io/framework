@@ -184,23 +184,12 @@
             Gets the service used to provide <see cref="T:Microsoft.AspNetCore.JsonPatch.JsonPatchTypeMetadata"/>
             </summary>
         </member>
-        <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.ApplyPatchToAsync(Microsoft.AspNetCore.JsonPatch.JsonPatchDocument,System.Object,System.Threading.CancellationToken)">
-            <summary>
-            Applies a given <see cref="T:Microsoft.AspNetCore.JsonPatch.JsonPatchDocument"/> to the specified object
-            </summary>
-            <param name="patch"></param>
-            <param name="target">The object to apply the <see cref="T:Microsoft.AspNetCore.JsonPatch.JsonPatchDocument"/> to</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
-        </member>
-        <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.ApplyToAsync(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object,System.Threading.CancellationToken)">
+        <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.ApplyTo(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
             <summary>
             Applies a given <see cref="T:Microsoft.AspNetCore.JsonPatch.Operations.Operation"/> to the specified object
             </summary>
             <param name="operation">The <see cref="T:Microsoft.AspNetCore.JsonPatch.Operations.Operation"/> to apply</param>
             <param name="target">The object to apply the <see cref="T:Microsoft.AspNetCore.JsonPatch.Operations.Operation"/> to</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
         </member>
         <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.Add(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
             <inheritdoc/>

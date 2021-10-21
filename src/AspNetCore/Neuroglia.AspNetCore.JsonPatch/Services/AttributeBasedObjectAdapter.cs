@@ -55,32 +55,11 @@ namespace Microsoft.AspNetCore.JsonPatch
         protected IJsonPatchMetadataProvider MetadataProvider { get; }
 
         /// <summary>
-        /// Applies a given <see cref="JsonPatchDocument"/> to the specified object
-        /// </summary>
-        /// <param name="patch"></param>
-        /// <param name="target">The object to apply the <see cref="JsonPatchDocument"/> to</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>A new awaitable <see cref="Task"/></returns>
-        public virtual async Task ApplyPatchToAsync(JsonPatchDocument patch, object target, CancellationToken cancellationToken = default)
-        {
-            if (patch == null)
-                throw new ArgumentNullException(nameof(patch));
-            if (target == null)
-                throw new ArgumentNullException(nameof(target));
-            foreach (Operation operation in patch.Operations)
-            {
-                await this.ApplyToAsync(operation, target, cancellationToken);
-            }
-        }
-
-        /// <summary>
         /// Applies a given <see cref="Operation"/> to the specified object
         /// </summary>
         /// <param name="operation">The <see cref="Operation"/> to apply</param>
         /// <param name="target">The object to apply the <see cref="Operation"/> to</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>A new awaitable <see cref="Task"/></returns>
-        protected virtual async Task ApplyToAsync(Operation operation, object target, CancellationToken cancellationToken = default)
+        protected virtual void ApplyTo(Operation operation, object target)
         {
             if (operation == null)
                 throw new ArgumentNullException(nameof(operation));
@@ -93,7 +72,7 @@ namespace Microsoft.AspNetCore.JsonPatch
             if (operationMetadata.ReferencedType != null)
             {
                 IRepository repository = (IRepository)this.ServiceProvider.GetRequiredService(typeof(IRepository<>).MakeGenericType(operationMetadata.ValueType));
-                value = await repository.FindAsync(value, cancellationToken);
+                value = (repository.FindAsync(value)).ConfigureAwait(false).GetAwaiter().GetResult();
             }
             if (value is JObject jObject)
                 value = jObject.ToObject(operationMetadata.ValueType);
@@ -107,7 +86,7 @@ namespace Microsoft.AspNetCore.JsonPatch
                 throw new ArgumentNullException(nameof(operation));
             if (objectToApplyTo == null)
                 throw new ArgumentNullException(nameof(objectToApplyTo));
-            this.ApplyToAsync(operation, objectToApplyTo).RunSynchronously();
+            this.ApplyTo(operation, objectToApplyTo);
         }
 
         /// <inheritdoc/>
@@ -117,7 +96,7 @@ namespace Microsoft.AspNetCore.JsonPatch
                 throw new ArgumentNullException(nameof(operation));
             if (objectToApplyTo == null)
                 throw new ArgumentNullException(nameof(objectToApplyTo));
-            this.ApplyToAsync(operation, objectToApplyTo).RunSynchronously();
+            this.ApplyTo(operation, objectToApplyTo);
         }
 
         /// <inheritdoc/>
@@ -127,7 +106,7 @@ namespace Microsoft.AspNetCore.JsonPatch
                 throw new ArgumentNullException(nameof(operation));
             if (objectToApplyTo == null)
                 throw new ArgumentNullException(nameof(objectToApplyTo));
-            this.ApplyToAsync(operation, objectToApplyTo).RunSynchronously();
+            this.ApplyTo(operation, objectToApplyTo);
         }
 
         /// <inheritdoc/>
@@ -137,7 +116,7 @@ namespace Microsoft.AspNetCore.JsonPatch
                 throw new ArgumentNullException(nameof(operation));
             if (objectToApplyTo == null)
                 throw new ArgumentNullException(nameof(objectToApplyTo));
-            this.ApplyToAsync(operation, objectToApplyTo).RunSynchronously();
+            this.ApplyTo(operation, objectToApplyTo);
         }
 
         /// <inheritdoc/>
@@ -147,9 +126,7 @@ namespace Microsoft.AspNetCore.JsonPatch
                 throw new ArgumentNullException(nameof(operation));
             if (objectToApplyTo == null)
                 throw new ArgumentNullException(nameof(objectToApplyTo));
-            Task task  = this.ApplyToAsync(operation, objectToApplyTo);
-            if (!task.IsCompleted)
-                task.RunSynchronously();
+            this.ApplyTo(operation, objectToApplyTo);
         }
 
     }
