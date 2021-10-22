@@ -62,6 +62,12 @@ namespace Neuroglia.UnitTests.Data
             this.FriendsIds.Add(friend.Id);
         }
 
+        [JsonPatchOperation(OperationType.Remove, nameof(FriendsIds), ReferencedType = typeof(TestPerson))]
+        public virtual void RemoveFriend(TestPerson friend)
+        {
+            this.FriendsIds.Remove(friend.Id);
+        }
+
         protected void On(TestPersonCreatedDomainEvent e)
         {
             this.Id = e.AggregateId;

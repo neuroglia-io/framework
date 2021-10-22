@@ -17,11 +17,12 @@
 using Microsoft.AspNetCore.JsonPatch.Adapters;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.DependencyInjection;
+using Neuroglia;
 using Neuroglia.Data;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Linq;
+using System.Reflection;
 
 namespace Microsoft.AspNetCore.JsonPatch
 {
@@ -32,6 +33,8 @@ namespace Microsoft.AspNetCore.JsonPatch
     public class AttributeBasedObjectAdapter
         : IObjectAdapter
     {
+
+        private static readonly MethodInfo ElementAtMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ElementAt));
 
         /// <summary>
         /// Initializes a new <see cref="AttributeBasedObjectAdapter"/>
@@ -69,6 +72,14 @@ namespace Microsoft.AspNetCore.JsonPatch
             if (!typeMetadata.TryGetOperationMetadata(operation, out IJsonPatchOperationMetadata operationMetadata))
                 throw new InvalidOperationException($"Failed to find a Patch Operation of type '{operation.op}' at path '{operation.path}' for type '{target.GetType().Name}'");
             object value = operation.value;
+            if(operation.OperationType == OperationType.Remove)
+            {
+                string path = operation.path;
+                if (path.StartsWith("/"))
+                    path = path.Substring(1);
+                value = target.GetType().GetProperty(path).GetValue(target);
+                value = ElementAtMethod.MakeGenericMethod(value.GetType().GetEnumerableElementType()).Invoke(null, new object[] { value, (int)operation.value });
+            }
             if (operationMetadata.ReferencedType != null)
             {
                 IRepository repository = (IRepository)this.ServiceProvider.GetRequiredService(typeof(IRepository<>).MakeGenericType(operationMetadata.ValueType));

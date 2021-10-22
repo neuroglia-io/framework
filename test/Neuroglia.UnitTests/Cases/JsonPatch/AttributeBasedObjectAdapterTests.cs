@@ -36,7 +36,8 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
         public async Task ApplyPatchTo()
         {
             //arrange
-            var friendId = (await this.Persons.AddAsync(new("Fake First Name", "Fake Last Naùe"))).Id;
+            var friend1Id = (await this.Persons.AddAsync(new("Fake First Name", "Fake Last Naùe"))).Id;
+            var friend2Id = (await this.Persons.AddAsync(new("Fake First Name", "Fake Last Naùe"))).Id;
             var originalFirstName = "Fake First Name";
             var originalLastName = "Fake Last Name";
             var newFirstName = "New " + originalFirstName;
@@ -44,10 +45,12 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
             var newAddress = "New Address";
             var target = new TestPerson(originalFirstName, originalLastName);
             var patch = new JsonPatchDocument();
-            patch.Operations.Add(new Operation(OperationType.Replace.ToString(), nameof(TestPerson.FirstName), string.Empty, newFirstName));
-            patch.Operations.Add(new Operation(OperationType.Replace.ToString(), nameof(TestPerson.LastName), string.Empty, newLastName));
-            patch.Operations.Add(new Operation(OperationType.Add.ToString(), nameof(TestPerson.Addresses), string.Empty, newAddress));
-            patch.Operations.Add(new Operation(OperationType.Add.ToString(), nameof(TestPerson.FriendsIds), string.Empty, friendId));
+            patch.Operations.Add(new(OperationType.Replace.ToString(), nameof(TestPerson.FirstName), string.Empty, newFirstName));
+            patch.Operations.Add(new(OperationType.Replace.ToString(), nameof(TestPerson.LastName), string.Empty, newLastName));
+            patch.Operations.Add(new(OperationType.Add.ToString(), nameof(TestPerson.Addresses), string.Empty, newAddress));
+            patch.Operations.Add(new(OperationType.Add.ToString(), nameof(TestPerson.FriendsIds), string.Empty, friend1Id));
+            patch.Operations.Add(new(OperationType.Add.ToString(), nameof(TestPerson.FriendsIds), string.Empty, friend2Id));
+            patch.Operations.Add(new(OperationType.Remove.ToString(), nameof(TestPerson.FriendsIds), string.Empty, 1));
 
             //act
             patch.ApplyTo(target, this.Adapter);
@@ -56,7 +59,7 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
             target.FirstName.Should().Be(newFirstName);
             target.LastName.Should().Be(newLastName);
             target.Addresses.Should().Contain(newAddress);
-            target.FriendsIds.Should().Contain(friendId);
+            target.FriendsIds.Should().Contain(friend1Id);
         }
 
     }
