@@ -54,11 +54,11 @@ namespace Microsoft.AspNetCore.JsonPatch
                 throw new ArgumentNullException(nameof(type));
             if (string.IsNullOrWhiteSpace(path))
                 throw new ArgumentNullException(nameof(path));
+            string pathSegment = path.Split('/', StringSplitOptions.RemoveEmptyEntries).First();
             operationMetadata = this.Operations
                 .FirstOrDefault(o => 
                     o.OperationType.Equals(type, StringComparison.OrdinalIgnoreCase) 
-                    && (path.Equals(o.Path, StringComparison.OrdinalIgnoreCase)
-                    || path.Equals($"/{o.Path}", StringComparison.OrdinalIgnoreCase)));
+                    && pathSegment.Equals(o.Path, StringComparison.OrdinalIgnoreCase));
             return operationMetadata != null;
         }
 

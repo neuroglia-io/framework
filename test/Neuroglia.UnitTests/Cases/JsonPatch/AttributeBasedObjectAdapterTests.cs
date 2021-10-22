@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Caching;
 using Neuroglia.Data;
@@ -44,13 +43,13 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
             var newLastName = "New " + originalLastName;
             var newAddress = "New Address";
             var target = new TestPerson(originalFirstName, originalLastName);
-            var patch = new JsonPatchDocument();
-            patch.Operations.Add(new(OperationType.Replace.ToString(), nameof(TestPerson.FirstName), string.Empty, newFirstName));
-            patch.Operations.Add(new(OperationType.Replace.ToString(), nameof(TestPerson.LastName), string.Empty, newLastName));
-            patch.Operations.Add(new(OperationType.Add.ToString(), nameof(TestPerson.Addresses), string.Empty, newAddress));
-            patch.Operations.Add(new(OperationType.Add.ToString(), nameof(TestPerson.FriendsIds), string.Empty, friend1Id));
-            patch.Operations.Add(new(OperationType.Add.ToString(), nameof(TestPerson.FriendsIds), string.Empty, friend2Id));
-            patch.Operations.Add(new(OperationType.Remove.ToString(), nameof(TestPerson.FriendsIds), string.Empty, 1));
+            var patch = new JsonPatchDocument<TestPerson>();
+            patch.Replace(p => p.FirstName, newFirstName);
+            patch.Replace(p => p.LastName, newLastName);
+            patch.Add(p => p.Addresses, newAddress);
+            patch.Add(p => p.FriendsIds, friend1Id);
+            patch.Add(p => p.FriendsIds, friend2Id);
+            patch.Remove(p => p.FriendsIds, 1);
 
             //act
             patch.ApplyTo(target, this.Adapter);

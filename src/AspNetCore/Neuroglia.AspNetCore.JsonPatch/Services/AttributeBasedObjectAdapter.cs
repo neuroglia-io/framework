@@ -74,11 +74,11 @@ namespace Microsoft.AspNetCore.JsonPatch
             object value = operation.value;
             if(operation.OperationType == OperationType.Remove)
             {
-                string path = operation.path;
-                if (path.StartsWith("/"))
-                    path = path.Substring(1);
+                string[] pathComponents = operation.path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                string path = pathComponents[0];
+                int index = int.Parse(pathComponents.Last());
                 value = target.GetType().GetProperty(path).GetValue(target);
-                value = ElementAtMethod.MakeGenericMethod(value.GetType().GetEnumerableElementType()).Invoke(null, new object[] { value, (int)operation.value });
+                value = ElementAtMethod.MakeGenericMethod(value.GetType().GetEnumerableElementType()).Invoke(null, new object[] { value, index });
             }
             if (operationMetadata.ReferencedType != null)
             {
