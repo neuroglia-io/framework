@@ -8,9 +8,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework data event sourcing eventstore</PackageTags>
-    <Version>2.0.0.35</Version>
-    <AssemblyVersion>2.0.0.35</AssemblyVersion>
-    <FileVersion>2.0.0.35</FileVersion>
+    <Version>2.0.0.36</Version>
+    <AssemblyVersion>2.0.0.36</AssemblyVersion>
+    <FileVersion>2.0.0.36</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
