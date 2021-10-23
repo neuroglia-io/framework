@@ -20,7 +20,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
 
         public YamlDotNetSerializerTests()
         {
-            ServiceCollection services = new ServiceCollection();
+            ServiceCollection services = new();
             services.AddYamlDotNetSerializer();
             this.Serializer = services.BuildServiceProvider().GetRequiredService<YamlDotNetSerializer>();
         }
@@ -105,8 +105,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
 
         public override void WriteYaml(IEmitter emitter, object value, Type type)
         {
-            JSchema schema = value as JSchema;
-            if (schema == null)
+            if (value is not JSchema schema)
                 return;
             string json = schema.ToString();
             JToken jtoken = JsonConvert.DeserializeObject<JToken>(json);

@@ -38,7 +38,7 @@ namespace Neuroglia.Data.Services
             string csv = await reader.ReadToEndAsync();
             string[] csvLines = csv.Split(Environment.NewLine);
             string csvRow = csvLines[0];
-            string[] csvColumns = csvRow.Split(separator);
+            string[] csvColumns = csvRow.Split(options.ValueSeparator);
             foreach (string column in csvColumns)
             {
                 table.Columns.Add(column);
@@ -47,7 +47,7 @@ namespace Neuroglia.Data.Services
             {
                 DataRow row = table.NewRow();
                 csvRow = csvLines[rowIndex];
-                csvColumns = csvRow.Split(separator);
+                csvColumns = csvRow.Split(options.ValueSeparator);
                 for (int columnIndex = 0; columnIndex < table.Columns.Count; columnIndex++)
                 {
                     row.SetField(columnIndex, csvColumns[columnIndex]);
