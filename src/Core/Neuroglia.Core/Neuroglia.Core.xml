@@ -630,6 +630,11 @@
             Defines the fundamentals of an integration event, which is an event used to exchange information across domain boundaries
             </summary>
         </member>
+        <member name="T:Neuroglia.IMetadata">
+            <summary>
+            Defines the fundamentals of an object used to hold metadata
+            </summary>
+        </member>
         <member name="T:Neuroglia.IntegrationEvent">
             <summary>
             Represents the default implementation of an <see cref="T:Neuroglia.IIntegrationEvent"/>
@@ -757,6 +762,11 @@
         <member name="T:Neuroglia.IValueObject">
             <summary>
             Defines the fundamentals of a value object
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Metadata">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.IMetadata"/> interface
             </summary>
         </member>
         <member name="T:Neuroglia.OperationResult">

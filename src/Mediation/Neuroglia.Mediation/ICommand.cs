@@ -16,13 +16,17 @@
  */
 namespace Neuroglia.Mediation
 {
+
     /// <summary>
     /// Defines the fundamentals of a CQRS command
     /// </summary>
     public interface ICommand
     {
 
-
+        /// <summary>
+        /// Gets the <see cref="IMetadata"/> used to describe the <see cref="ICommand"/>'s context
+        /// </summary>
+        IMetadata Context { get; }
 
     }
 

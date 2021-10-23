@@ -14,29 +14,21 @@
  * limitations under the License.
  *
  */
-namespace Neuroglia.Mediation
+using Neuroglia.Data.Services;
+
+namespace Neuroglia.Data
 {
 
     /// <summary>
-    /// Represents the default implementation of the <see cref="ICommand{TResult}"/> interface
+    /// Defines the fundamentals of an object used to configure an <see cref="ICsvReader"/>
     /// </summary>
-    public abstract class Command
-        : ICommand<IOperationResult>
+    public interface ICsvDocumentOptions
     {
 
-        IMetadata ICommand.Context { get; } = new Metadata();
-
-    }
-
-    /// <summary>
-    /// Represents the default implementation of the <see cref="ICommand{TResult, T}"/> interface
-    /// </summary>
-    /// <typeparam name="T">The type of result wrapped by the resulting <see cref="IOperationResult{TResult}"/></typeparam>
-    public abstract class Command<T>
-        : ICommand<IOperationResult<T>, T>
-    {
-
-        IMetadata ICommand.Context { get; } = new Metadata();
+        /// <summary>
+        /// Gets the value separator char
+        /// </summary>
+        char ValueSeparator { get; }
 
     }
 

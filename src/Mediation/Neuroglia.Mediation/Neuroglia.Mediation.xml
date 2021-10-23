@@ -377,6 +377,11 @@
             Defines the fundamentals of a CQRS command
             </summary>
         </member>
+        <member name="P:Neuroglia.Mediation.ICommand.Context">
+            <summary>
+            Gets the <see cref="T:Neuroglia.IMetadata"/> used to describe the <see cref="T:Neuroglia.Mediation.ICommand"/>'s context
+            </summary>
+        </member>
         <member name="T:Neuroglia.Mediation.ICommand`1">
             <summary>
             Defines the fundamentals of a CQRS command 
