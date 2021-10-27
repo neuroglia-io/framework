@@ -42,6 +42,8 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
             var newFirstName = "New " + originalFirstName;
             var newLastName = "New " + originalLastName;
             var newAddress = "New Address";
+            var newBirthday = DateTimeOffset.Now;
+            var newContactTel = "+32474769395";
             var target = new TestPerson(originalFirstName, originalLastName);
             var patch = new JsonPatchDocument<TestPerson>();
             patch.Replace(p => p.FirstName, newFirstName);
@@ -50,6 +52,9 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
             patch.Add(p => p.FriendsIds, friend1Id);
             patch.Add(p => p.FriendsIds, friend2Id);
             patch.Remove(p => p.FriendsIds, 1);
+            patch.Replace(p => p.Birthday, newBirthday);
+            patch.Add(p => p.Contacts, new TestContact() { Tel = "0474769395" });
+            patch.Replace(p => p.Contacts[0].Tel, newContactTel);
 
             //act
             patch.ApplyTo(target, this.Adapter);
@@ -59,6 +64,8 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
             target.LastName.Should().Be(newLastName);
             target.Addresses.Should().Contain(newAddress);
             target.FriendsIds.Should().Contain(friend1Id);
+            target.Birthday.Should().Be(newBirthday.DateTime);
+            target.Contacts[0].Tel.Should().Be(newContactTel);
         }
 
     }

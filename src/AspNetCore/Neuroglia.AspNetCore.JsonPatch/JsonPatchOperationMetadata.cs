@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Neuroglia;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -83,7 +82,12 @@ namespace Microsoft.AspNetCore.JsonPatch
                     field.SetValue(target, value);
                     break;
                 case MethodInfo method:
-                    method.Invoke(target, new object[] { value });
+                    object[] args;
+                    if (value is Tuple<int, JsonPatchDocument> tuple)
+                        args = new object[] { tuple.Item1, tuple.Item2 };
+                    else
+                        args = new object[] { value };
+                    method.Invoke(target, args);
                     break;
                 case PropertyInfo property:
                     property.SetValue(target, value);

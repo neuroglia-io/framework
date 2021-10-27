@@ -72,21 +72,56 @@ namespace Microsoft.AspNetCore.JsonPatch
             if (!typeMetadata.TryGetOperationMetadata(operation, out IJsonPatchOperationMetadata operationMetadata))
                 throw new InvalidOperationException($"Failed to find a Patch Operation of type '{operation.op}' at path '{operation.path}' for type '{target.GetType().Name}'");
             object value = operation.value;
-            if(operation.OperationType == OperationType.Remove)
+            string[] pathComponents = operation.path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            string indexComponent = pathComponents.FirstOrDefault(c => c.IsNumeric());
+            bool hasIndexComponent = !string.IsNullOrWhiteSpace(indexComponent);
+            bool hasSubPathComponent = hasIndexComponent ? pathComponents.Last() != indexComponent : false;
+            string path = pathComponents[0];
+            PropertyInfo property = target.GetType().GetProperty(path);
+            if ((property.PropertyType.IsEnumerable()
+                && operationMetadata.ReferencedType == null)
+                || pathComponents.Length > 1)
             {
-                string[] pathComponents = operation.path.Split('/', StringSplitOptions.RemoveEmptyEntries);
-                string path = pathComponents[0];
-                int index = int.Parse(pathComponents.Last());
-                value = target.GetType().GetProperty(path).GetValue(target);
-                value = ElementAtMethod.MakeGenericMethod(value.GetType().GetEnumerableElementType()).Invoke(null, new object[] { value, index });
+                Type elementType = property.PropertyType.GetEnumerableElementType();
+                if((operation.OperationType == OperationType.Remove
+                    || operation.OperationType == OperationType.Replace)
+                    && hasIndexComponent)
+                {
+                    int index = int.Parse(indexComponent);
+                    if(hasSubPathComponent)
+                    {
+                        JsonPatchDocument patch = new JsonPatchDocument();
+                        patch.Operations.Add(new("replace", pathComponents.Last(), null, value));
+                        value = new Tuple<int, JsonPatchDocument>(index, patch);
+                    }
+                    else
+                    {
+                        value = property.GetValue(target);
+                        value = ElementAtMethod.MakeGenericMethod(value.GetType().GetEnumerableElementType()).Invoke(null, new object[] { value, index });
+                    }
+                }
+                else if(value != null
+                    && !elementType.IsAssignableFrom(value.GetType()))
+                {
+                    value = JToken.FromObject(value).ToObject(elementType);
+                }
+            }
+            else if (operationMetadata.ReferencedType == null
+                && value != null
+                && !property.PropertyType.IsAssignableFrom(value.GetType()))
+            {
+                value = JToken.FromObject(value).ToObject(property.PropertyType);
             }
             if (operationMetadata.ReferencedType != null)
             {
+                Type valueType = property.PropertyType;
+                if (valueType != typeof(string) && valueType.IsEnumerable())
+                    valueType = valueType.GetEnumerableElementType();
+                if (value != null && !valueType.IsAssignableFrom(value.GetType()))
+                    value = JToken.FromObject(value).ToObject(valueType);
                 IRepository repository = (IRepository)this.ServiceProvider.GetRequiredService(typeof(IRepository<>).MakeGenericType(operationMetadata.ValueType));
                 value = (repository.FindAsync(value)).ConfigureAwait(false).GetAwaiter().GetResult();
             }
-            if (value is JObject jObject)
-                value = jObject.ToObject(operationMetadata.ValueType);
             operationMetadata.ApplyTo(target, value);
         }
 

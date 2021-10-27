@@ -791,6 +791,9 @@
         <member name="P:Neuroglia.OperationResult.Returned">
             <inheritdoc/>
         </member>
+        <member name="P:Neuroglia.OperationResult.Data">
+            <inheritdoc/>
+        </member>
         <member name="P:Neuroglia.OperationResult.Succeeded">
             <inheritdoc/>
         </member>
@@ -830,9 +833,6 @@
             Initializes a new <see cref="T:Neuroglia.OperationResult"/>
             </summary>
             <param name="data">The data returned by the operation</param>
-        </member>
-        <member name="P:Neuroglia.OperationResult`1.Returned">
-            <inheritdoc/>
         </member>
         <member name="P:Neuroglia.OperationResult`1.Data">
             <inheritdoc/>
@@ -1053,6 +1053,22 @@
             <typeparam name="TEnum">The type of the enumeration to get the flags of</typeparam>
             <param name="flags">The flags to get the values of</param>
             <returns>An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing all the enum values contained by the specifed flags value</returns>
+        </member>
+        <member name="M:Neuroglia.EnumHelper.GetField``1(``0)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.FieldInfo"/> that corresponds to the specified enum value
+            </summary>
+            <typeparam name="TEnum">The type of the enumeration to get a <see cref="T:System.Reflection.FieldInfo"/> of</typeparam>
+            <param name="value">The enum value to get the <see cref="T:System.Reflection.FieldInfo"/> of</param>
+            <returns>The <see cref="T:System.Reflection.FieldInfo"/> that corresponds to the specified enum value</returns>
+        </member>
+        <member name="M:Neuroglia.EnumHelper.GetDisplayName``1(``0)">
+            <summary>
+            Gets the display name of the specified enum value
+            </summary>
+            <typeparam name="TEnum">The type of the enumeration to get the display name for</typeparam>
+            <param name="value">The value to get the display name for</param>
+            <returns>The display name of the specified enum value</returns>
         </member>
         <member name="T:Neuroglia.Parser">
             <summary>
