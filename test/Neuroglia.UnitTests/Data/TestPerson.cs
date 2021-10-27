@@ -37,6 +37,8 @@ namespace Neuroglia.UnitTests.Data
 
         public virtual List<TestContact> Contacts { get; protected set; } = new();
 
+        public virtual List<TestPersonTrait> Traits { get; protected set; } = new();
+
         [JsonPatchOperation(OperationType.Replace, nameof(FirstName))]
         public virtual bool SetFirstName(string firstName)
         {
@@ -85,11 +87,25 @@ namespace Neuroglia.UnitTests.Data
             this.Contacts.Add(contact);
         }
 
-        [JsonPatchOperation(OperationType.Replace, nameof(Contacts))]
-        public virtual void UpdateContact(int at, JsonPatchDocument patch)
+        [JsonPatchOperation(OperationType.Replace, nameof(Contacts) + "/" + nameof(TestContact.Tel))]
+        public virtual void UpdateContactTelephoneNumber(int at, string tel)
         {
             TestContact contact = this.Contacts.ElementAt(at);
-            patch.ApplyTo(contact);
+            contact.Tel = tel;
+        }
+
+        [JsonPatchOperation(OperationType.Replace, nameof(Traits) + "/" + nameof(TestPersonTrait.Name))]
+        public virtual void SetPreferenceName(Guid id, string name)
+        {
+            TestPersonTrait trait = this.Traits.First(t => t.Id == id);
+            trait.Name = name;
+        }
+
+        [JsonPatchOperation(OperationType.Replace, nameof(Traits) + "/" + nameof(TestPersonTrait.Value))]
+        public virtual void SetPreferenceValue(Guid id, decimal value)
+        {
+            TestPersonTrait trait = this.Traits.First(t => t.Id == id);
+            trait.Value = value;
         }
 
         protected void On(TestPersonCreatedDomainEvent e)
@@ -115,10 +131,19 @@ namespace Neuroglia.UnitTests.Data
 
     }
 
-    public class TestContact
+    public class TestPersonTrait
+        : Entity<Guid>
     {
 
-        public virtual string Tel { get; set; }
+        public TestPersonTrait()
+            : base(Guid.NewGuid())
+        {
+
+        }
+
+        public virtual string Name { get; set; }
+
+        public virtual decimal Value { get; set; }
 
     }
 

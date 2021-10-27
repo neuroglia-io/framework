@@ -19,15 +19,15 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
             IServiceCollection services = new ServiceCollection();
             services.AddLogging();
             services.AddSingleton<IJsonPatchMetadataProvider, JsonPatchMetadataProvider>();
-            services.AddSingleton<AttributeBasedObjectAdapter>();
+            services.AddSingleton<AggregateObjectAdapter>();
             services.AddMemoryDistributedCache();
             services.AddDistributedCacheRepository<TestPerson, Guid>(ServiceLifetime.Singleton);
             IServiceProvider provider = services.BuildServiceProvider();
             this.Persons = provider.GetRequiredService<IRepository<TestPerson>>();
-            this.Adapter = provider.GetRequiredService<AttributeBasedObjectAdapter>();
+            this.Adapter = provider.GetRequiredService<AggregateObjectAdapter>();
         }
 
-        AttributeBasedObjectAdapter Adapter { get; }
+        AggregateObjectAdapter Adapter { get; }
 
         IRepository<TestPerson> Persons { get; }
 
@@ -44,7 +44,12 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
             var newAddress = "New Address";
             var newBirthday = DateTimeOffset.Now;
             var newContactTel = "+32474769395";
+            var newTraitName = "New Trait Name";
+            var newTraitValue = 69.99m;
             var target = new TestPerson(originalFirstName, originalLastName);
+            target.Traits.Add(new TestPersonTrait());
+            target.Traits.Add(new TestPersonTrait());
+            target.Traits.Add(new TestPersonTrait());
             var patch = new JsonPatchDocument<TestPerson>();
             patch.Replace(p => p.FirstName, newFirstName);
             patch.Replace(p => p.LastName, newLastName);
@@ -55,6 +60,8 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
             patch.Replace(p => p.Birthday, newBirthday);
             patch.Add(p => p.Contacts, new TestContact() { Tel = "0474769395" });
             patch.Replace(p => p.Contacts[0].Tel, newContactTel);
+            patch.Replace(p => p.Traits[1].Name, newTraitName);
+            patch.Replace(p => p.Traits[2].Value, newTraitValue);
 
             //act
             patch.ApplyTo(target, this.Adapter);
@@ -66,6 +73,8 @@ namespace Neuroglia.UnitTests.Cases.JsonPatch
             target.FriendsIds.Should().Contain(friend1Id);
             target.Birthday.Should().Be(newBirthday.DateTime);
             target.Contacts[0].Tel.Should().Be(newContactTel);
+            target.Traits[1].Name.Should().Be(newTraitName);
+            target.Traits[2].Value.Should().Be(newTraitValue);
         }
 
     }

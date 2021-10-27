@@ -47,7 +47,7 @@ namespace Microsoft.AspNetCore.JsonPatch
             {
                 FieldInfo field => field.FieldType,
                 PropertyInfo property => property.PropertyType,
-                MethodInfo method => method.GetParameters().First().ParameterType,
+                MethodInfo method => method.GetParameters().Length == 1 ? method.GetParameters().First().ParameterType : method.GetParameters().Last().ParameterType,
                 _ => throw new NotSupportedException($"The specified member type '{this.Member.MemberType}' is not supported"),
             };
         }
@@ -83,7 +83,7 @@ namespace Microsoft.AspNetCore.JsonPatch
                     break;
                 case MethodInfo method:
                     object[] args;
-                    if (value is Tuple<int, JsonPatchDocument> tuple)
+                    if (value is Tuple<object, object> tuple)
                         args = new object[] { tuple.Item1, tuple.Item2 };
                     else
                         args = new object[] { value };

@@ -30,18 +30,18 @@ namespace Microsoft.AspNetCore.JsonPatch
     /// <summary>
     /// Represents a reflection-based implementation of the <see cref="IObjectAdapter"/> interface, which allows patching using methods instead of properties
     /// </summary>
-    public class AttributeBasedObjectAdapter
+    public class AggregateObjectAdapter
         : IObjectAdapter
     {
 
         private static readonly MethodInfo ElementAtMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ElementAt));
 
         /// <summary>
-        /// Initializes a new <see cref="AttributeBasedObjectAdapter"/>
+        /// Initializes a new <see cref="AggregateObjectAdapter"/>
         /// </summary>
         /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
         /// <param name="metadataProvider">The service used to provide <see cref="JsonPatchTypeMetadata"/></param>
-        public AttributeBasedObjectAdapter(IServiceProvider serviceProvider, IJsonPatchMetadataProvider metadataProvider)
+        public AggregateObjectAdapter(IServiceProvider serviceProvider, IJsonPatchMetadataProvider metadataProvider)
         {
             this.ServiceProvider = serviceProvider;
             this.MetadataProvider = metadataProvider;
@@ -90,9 +90,17 @@ namespace Microsoft.AspNetCore.JsonPatch
                     int index = int.Parse(indexComponent);
                     if(hasSubPathComponent)
                     {
-                        JsonPatchDocument patch = new JsonPatchDocument();
-                        patch.Operations.Add(new("replace", pathComponents.Last(), null, value));
-                        value = new Tuple<int, JsonPatchDocument>(index, patch);
+                        object key = index;
+                        if(typeof(IIdentifiable).IsAssignableFrom(elementType))
+                        {
+                            object child = property.GetValue(target);
+                            child = ElementAtMethod.MakeGenericMethod(child.GetType().GetEnumerableElementType()).Invoke(null, new object[] { child, index });
+                            key = ((IIdentifiable)child).Id;
+                        }
+                        if (value != null
+                            && !operationMetadata.ValueType.IsAssignableFrom(value.GetType()))
+                            value = JToken.FromObject(value).ToObject(operationMetadata.ValueType);
+                        value = Tuple.Create(key, value);
                     }
                     else
                     {
