@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+using Neuroglia;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,11 +55,21 @@ namespace Microsoft.AspNetCore.JsonPatch
                 throw new ArgumentNullException(nameof(type));
             if (string.IsNullOrWhiteSpace(path))
                 throw new ArgumentNullException(nameof(path));
-            string pathSegment = path.Split('/', StringSplitOptions.RemoveEmptyEntries).First();
+            string operationPath = path;
+            if (operationPath.StartsWith('/'))
+                operationPath = operationPath.Substring(1);
+            string[] components = operationPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string component in components)
+            {
+                if (component == "-")
+                    operationPath = operationPath.Replace("/-", string.Empty);
+                else if (component.IsNumeric())
+                    operationPath = operationPath.Replace($"/{component}", string.Empty);
+            }
             operationMetadata = this.Operations
                 .FirstOrDefault(o => 
                     o.OperationType.Equals(type, StringComparison.OrdinalIgnoreCase) 
-                    && pathSegment.Equals(o.Path, StringComparison.OrdinalIgnoreCase));
+                    && operationPath.Equals(o.Path, StringComparison.OrdinalIgnoreCase));
             return operationMetadata != null;
         }
 

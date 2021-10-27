@@ -22,7 +22,7 @@ namespace Microsoft.AspNetCore.JsonPatch
     /// <summary>
     /// Represents an attribute used to mark a method
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class JsonPatchOperationAttribute
         : Attribute
     {

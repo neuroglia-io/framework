@@ -61,14 +61,25 @@ namespace Neuroglia
         /// <inheritdoc/>
         public virtual string Code { get; protected set; }
 
-        private readonly List<Error> _Errors = new();
+        private List<Error> _Errors = new();
         /// <inheritdoc/>
-        public virtual IReadOnlyCollection<Error> Errors => this._Errors.AsReadOnly();
+        public virtual IEnumerable<Error> Errors
+        {
+            get
+            {
+                return this._Errors.AsReadOnly();
+            }
+            protected set
+            {
+                this._Errors = value.ToList();
+            }
+        }
 
         /// <inheritdoc/>
-        public virtual bool Returned => false;
+        public virtual bool Returned => this.Data != null;
 
-        object IOperationResult.Data => default;
+        /// <inheritdoc/>
+        public virtual object Data { get; protected set; }
 
         /// <inheritdoc/>
         public virtual bool Succeeded => !this.Errors.Any();
@@ -139,12 +150,17 @@ namespace Neuroglia
         }
 
         /// <inheritdoc/>
-        public override bool Returned => this.Data != null;
-
-        /// <inheritdoc/>
-        public virtual T Data { get; }
-
-        object IOperationResult.Data => this.Data;
+        public virtual new T Data
+        {
+            get
+            {
+                return (T)base.Data;
+            }
+            protected set
+            {
+                base.Data = value;
+            }
+        }
 
         /// <summary>
         /// Adds an error to the <see cref="OperationResult{T}"/>

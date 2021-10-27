@@ -17,6 +17,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -150,6 +151,35 @@ namespace Neuroglia
             where TEnum : Enum
         {
             return GetFlags(flags, typeof(TEnum)).OfType<TEnum>();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="FieldInfo"/> that corresponds to the specified enum value
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration to get a <see cref="FieldInfo"/> of</typeparam>
+        /// <param name="value">The enum value to get the <see cref="FieldInfo"/> of</param>
+        /// <returns>The <see cref="FieldInfo"/> that corresponds to the specified enum value</returns>
+        public static FieldInfo GetField<TEnum>(TEnum value)
+            where TEnum : Enum
+        {
+            return typeof(TEnum).GetField(Enum.GetName(typeof(TEnum), value));
+        }
+
+        /// <summary>
+        /// Gets the display name of the specified enum value
+        /// </summary>
+        /// <typeparam name="TEnum">The type of the enumeration to get the display name for</typeparam>
+        /// <param name="value">The value to get the display name for</param>
+        /// <returns>The display name of the specified enum value</returns>
+        public static string GetDisplayName<TEnum>(TEnum value)
+            where TEnum : Enum
+        {
+            string name = Enum.GetName(typeof(TEnum), value);
+            FieldInfo field = GetField(value);
+            if (field.TryGetCustomAttribute(out DisplayAttribute dispplayAttribute)
+                && !string.IsNullOrWhiteSpace(dispplayAttribute.GetName()))
+                name = dispplayAttribute.Name;
+            return name;
         }
 
     }
