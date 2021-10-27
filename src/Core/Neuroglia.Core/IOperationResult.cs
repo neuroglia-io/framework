@@ -33,7 +33,7 @@ namespace Neuroglia
         /// <summary>
         /// Gets an <see cref="IEnumerable{T}"/> containing the <see cref="Error"/>s that have occured during the operation's execution
         /// </summary>
-        IReadOnlyCollection<Error> Errors { get; }
+        IEnumerable<Error> Errors { get; }
 
         /// <summary>
         /// Gets a boolean indicating whether or not the operation has been successfully executed

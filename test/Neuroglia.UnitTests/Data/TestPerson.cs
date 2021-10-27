@@ -4,6 +4,7 @@ using Neuroglia.Data;
 using Neuroglia.UnitTests.Data.Events;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Neuroglia.UnitTests.Data
 {
@@ -31,6 +32,12 @@ namespace Neuroglia.UnitTests.Data
         public virtual List<string> Addresses { get; } = new();
 
         public virtual List<Guid> FriendsIds { get; } = new();
+
+        public virtual DateTime Birthday { get; protected set; }
+
+        public virtual List<TestContact> Contacts { get; protected set; } = new();
+
+        public virtual List<TestPersonTrait> Traits { get; protected set; } = new();
 
         [JsonPatchOperation(OperationType.Replace, nameof(FirstName))]
         public virtual bool SetFirstName(string firstName)
@@ -68,6 +75,39 @@ namespace Neuroglia.UnitTests.Data
             this.FriendsIds.Remove(friend.Id);
         }
 
+        [JsonPatchOperation(OperationType.Replace, nameof(Birthday))]
+        public virtual void SetBirthday(DateTime birthDay)
+        {
+            this.Birthday= birthDay;
+        }
+
+        [JsonPatchOperation(OperationType.Add, nameof(Contacts))]
+        public virtual void AddContact(TestContact contact)
+        {
+            this.Contacts.Add(contact);
+        }
+
+        [JsonPatchOperation(OperationType.Replace, nameof(Contacts) + "/" + nameof(TestContact.Tel))]
+        public virtual void UpdateContactTelephoneNumber(int at, string tel)
+        {
+            TestContact contact = this.Contacts.ElementAt(at);
+            contact.Tel = tel;
+        }
+
+        [JsonPatchOperation(OperationType.Replace, nameof(Traits) + "/" + nameof(TestPersonTrait.Name))]
+        public virtual void SetPreferenceName(Guid id, string name)
+        {
+            TestPersonTrait trait = this.Traits.First(t => t.Id == id);
+            trait.Name = name;
+        }
+
+        [JsonPatchOperation(OperationType.Replace, nameof(Traits) + "/" + nameof(TestPersonTrait.Value))]
+        public virtual void SetPreferenceValue(Guid id, decimal value)
+        {
+            TestPersonTrait trait = this.Traits.First(t => t.Id == id);
+            trait.Value = value;
+        }
+
         protected void On(TestPersonCreatedDomainEvent e)
         {
             this.Id = e.AggregateId;
@@ -88,6 +128,22 @@ namespace Neuroglia.UnitTests.Data
             this.LastModified = DateTimeOffset.Now;
             this.LastName = e.LastName;
         }
+
+    }
+
+    public class TestPersonTrait
+        : Entity<Guid>
+    {
+
+        public TestPersonTrait()
+            : base(Guid.NewGuid())
+        {
+
+        }
+
+        public virtual string Name { get; set; }
+
+        public virtual decimal Value { get; set; }
 
     }
 
