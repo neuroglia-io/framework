@@ -194,7 +194,7 @@ namespace Neuroglia.Data
         /// <param name="value">The unsupported value</param>
         /// <param name="supportedValues">An array containing the supported values</param>
         /// <returns>A new <see cref="DomainException"/> thrown when an unsupported value has been supplied for the specified argument</returns>
-        public static DomainException ArgumentIsUnsupportedValue(string argumentName, object value, params object[] supportedValues)
+        public static DomainArgumentException ArgumentIsUnsupportedValue(string argumentName, object value, params object[] supportedValues)
         {
             return new DomainArgumentException(StringExtensions.Format(LocalizedResources.exception_domain_argumentisunsupportedvalue, argumentName, value, string.Join(", ", supportedValues)), argumentName);
         }
