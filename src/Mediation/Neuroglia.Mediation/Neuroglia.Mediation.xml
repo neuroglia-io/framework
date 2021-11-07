@@ -556,6 +556,11 @@
             Represents the default implementation of the <see cref="T:Neuroglia.Mediation.IMediator"/> interface
             </summary>
         </member>
+        <member name="F:Neuroglia.Mediation.Mediator.ActivitySourceName">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Mediation.Mediator"/>'s <see cref="T:System.Diagnostics.ActivitySource"/> name
+            </summary>
+        </member>
         <member name="M:Neuroglia.Mediation.Mediator.#ctor(System.IServiceProvider)">
             <summary>
             Initializes a new <see cref="T:Neuroglia.Mediation.Mediator"/>

@@ -162,48 +162,48 @@
         <member name="M:Microsoft.AspNetCore.JsonPatch.JsonPatchTypeMetadata.TryGetOperationMetadata(System.String,System.String,Microsoft.AspNetCore.JsonPatch.IJsonPatchOperationMetadata@)">
             <inheritdoc/>
         </member>
-        <member name="T:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter">
+        <member name="T:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter">
             <summary>
             Represents a reflection-based implementation of the <see cref="T:Microsoft.AspNetCore.JsonPatch.Adapters.IObjectAdapter"/> interface, which allows patching using methods instead of properties
             </summary>
         </member>
-        <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.#ctor(System.IServiceProvider,Microsoft.AspNetCore.JsonPatch.IJsonPatchMetadataProvider)">
+        <member name="M:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter.#ctor(System.IServiceProvider,Microsoft.AspNetCore.JsonPatch.IJsonPatchMetadataProvider)">
             <summary>
-            Initializes a new <see cref="T:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter"/>
+            Initializes a new <see cref="T:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter"/>
             </summary>
             <param name="serviceProvider">The current <see cref="T:System.IServiceProvider"/></param>
             <param name="metadataProvider">The service used to provide <see cref="T:Microsoft.AspNetCore.JsonPatch.JsonPatchTypeMetadata"/></param>
         </member>
-        <member name="P:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.ServiceProvider">
+        <member name="P:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter.ServiceProvider">
             <summary>
             Gets the current <see cref="T:System.IServiceProvider"/>
             </summary>
         </member>
-        <member name="P:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.MetadataProvider">
+        <member name="P:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter.MetadataProvider">
             <summary>
             Gets the service used to provide <see cref="T:Microsoft.AspNetCore.JsonPatch.JsonPatchTypeMetadata"/>
             </summary>
         </member>
-        <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.ApplyTo(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
+        <member name="M:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter.ApplyTo(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
             <summary>
             Applies a given <see cref="T:Microsoft.AspNetCore.JsonPatch.Operations.Operation"/> to the specified object
             </summary>
             <param name="operation">The <see cref="T:Microsoft.AspNetCore.JsonPatch.Operations.Operation"/> to apply</param>
             <param name="target">The object to apply the <see cref="T:Microsoft.AspNetCore.JsonPatch.Operations.Operation"/> to</param>
         </member>
-        <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.Add(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
+        <member name="M:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter.Add(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
             <inheritdoc/>
         </member>
-        <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.Copy(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
+        <member name="M:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter.Copy(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
             <inheritdoc/>
         </member>
-        <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.Move(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
+        <member name="M:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter.Move(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
             <inheritdoc/>
         </member>
-        <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.Remove(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
+        <member name="M:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter.Remove(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
             <inheritdoc/>
         </member>
-        <member name="M:Microsoft.AspNetCore.JsonPatch.AttributeBasedObjectAdapter.Replace(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
+        <member name="M:Microsoft.AspNetCore.JsonPatch.AggregateObjectAdapter.Replace(Microsoft.AspNetCore.JsonPatch.Operations.Operation,System.Object)">
             <inheritdoc/>
         </member>
         <member name="T:Microsoft.AspNetCore.JsonPatch.IJsonPatchMetadataProvider">

@@ -17,6 +17,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Extensions.DiagnosticSources;
 using Neuroglia.Data.MongoDB;
 using System;
 using System.Threading;
@@ -24,6 +25,7 @@ using System.Threading.Tasks;
 
 namespace Neuroglia.Data
 {
+
     /// <summary>
     /// Represents the default implementation of the <see cref="IMongoDbContext"/> interface
     /// </summary>
@@ -41,7 +43,9 @@ namespace Neuroglia.Data
         {
             this.Logger = loggerFactory.CreateLogger(this.GetType());
             this.Options = options.Value;
-            this.Client = new MongoClient(this.Options.ConnectionString);
+            MongoClientSettings clientSettings = MongoClientSettings.FromConnectionString(this.Options.ConnectionString);
+            clientSettings.ClusterConfigurator = builder => builder.Subscribe(new DiagnosticsActivityEventSubscriber());
+            this.Client = new MongoClient(clientSettings);
             this.Database = this.Client.GetDatabase(this.Options.DatabaseName);
             this.Pluralizer = pluralizer;
         }

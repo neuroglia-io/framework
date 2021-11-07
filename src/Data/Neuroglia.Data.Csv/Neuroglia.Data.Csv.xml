@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Data.Csv</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Data.CsvDocumentOptions">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.ICsvDocumentOptions"/> interface
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.CsvDocumentOptions.ValueSeparator">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.ICsvDocumentOptions">
+            <summary>
+            Defines the fundamentals of an object used to configure an <see cref="T:Neuroglia.Data.Services.ICsvReader"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.ICsvDocumentOptions.ValueSeparator">
+            <summary>
+            Gets the value separator char
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.Services.CsvReader">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.Services.ICsvReader"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Services.CsvReader.ReadFromAsync(System.IO.Stream,Neuroglia.Data.ICsvDocumentOptions,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.Services.ICsvReader">
+            <summary>
+            Defines the fundamentals of a service used to read Comma Separated Values (CSV)
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Services.ICsvReader.ReadFromAsync(System.IO.Stream,Neuroglia.Data.ICsvDocumentOptions,System.Threading.CancellationToken)">
+            <summary>
+            Reads a new <see cref="T:System.Data.DataTable"/> from the specified <see cref="T:System.IO.Stream"/>
+            </summary>
+            <param name="stream">The <see cref="T:System.IO.Stream"/> to read a new <see cref="T:System.Data.DataTable"/> from</param>
+            <param name="options">The options used to configure the <see cref="T:Neuroglia.Data.Services.ICsvReader"/></param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Data.DataTable"/></returns>
+        </member>
+    </members>
+</doc>

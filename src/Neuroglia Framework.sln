@@ -83,7 +83,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mediation.FluentV
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.OData", "Data\Neuroglia.Data.OData\Neuroglia.Data.OData.csproj", "{14DC1ECB-816A-400F-9267-6D0C153B075C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.Csv", "Data\Neuroglia.Data.Csv\Neuroglia.Data.Csv.csproj", "{68FEAB5D-6ED9-407C-A139-F755096496C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Csv", "Data\Neuroglia.Data.Csv\Neuroglia.Data.Csv.csproj", "{68FEAB5D-6ED9-407C-A139-F755096496C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Mediation.Extensions.OpenTelemetry", "Mediation\Neuroglia.Mediation.Extensions.OpenTelemetry\Neuroglia.Mediation.Extensions.OpenTelemetry.csproj", "{296FC929-0D0D-4709-8A2D-78FC777C3808}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -211,6 +213,10 @@ Global
 		{68FEAB5D-6ED9-407C-A139-F755096496C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68FEAB5D-6ED9-407C-A139-F755096496C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68FEAB5D-6ED9-407C-A139-F755096496C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{296FC929-0D0D-4709-8A2D-78FC777C3808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{296FC929-0D0D-4709-8A2D-78FC777C3808}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{296FC929-0D0D-4709-8A2D-78FC777C3808}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{296FC929-0D0D-4709-8A2D-78FC777C3808}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -255,6 +261,7 @@ Global
 		{0E9FCC38-BE1E-46C8-BCF5-64ED369BDCBD} = {826BD3F7-5B83-41AA-A032-A749EA58A38F}
 		{14DC1ECB-816A-400F-9267-6D0C153B075C} = {673DB177-2599-4F86-894C-0C90E6925C36}
 		{68FEAB5D-6ED9-407C-A139-F755096496C5} = {673DB177-2599-4F86-894C-0C90E6925C36}
+		{296FC929-0D0D-4709-8A2D-78FC777C3808} = {826BD3F7-5B83-41AA-A032-A749EA58A38F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}
