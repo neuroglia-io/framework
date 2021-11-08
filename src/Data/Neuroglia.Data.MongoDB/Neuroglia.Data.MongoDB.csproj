@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework data mongo mongodb</PackageTags>
-    <Version>2.0.0.41</Version>
-    <AssemblyVersion>2.0.0.41</AssemblyVersion>
-    <FileVersion>2.0.0.41</FileVersion>
+    <Version>2.0.0.42</Version>
+    <AssemblyVersion>2.0.0.42</AssemblyVersion>
+    <FileVersion>2.0.0.42</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -25,7 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.14.0-beta1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.2" />
     <PackageReference Include="MongoDB.Driver.Core.Extensions.DiagnosticSources" Version="1.1.0" />
   </ItemGroup>
 
