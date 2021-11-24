@@ -34,7 +34,7 @@ namespace Microsoft.AspNetCore.JsonPatch
         : IObjectAdapter
     {
 
-        private static readonly MethodInfo ElementAtMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ElementAt));
+        private static readonly MethodInfo ElementAtMethod = typeof(Enumerable).GetMethods().SingleOrDefault(m => m.Name == nameof(Enumerable.ElementAt) && m.GetParameters().Length == 2 && m.GetParameters()[1].ParameterType == typeof(int));
 
         /// <summary>
         /// Initializes a new <see cref="AggregateObjectAdapter"/>

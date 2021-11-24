@@ -17,6 +17,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Neuroglia.Mapping
@@ -27,6 +28,13 @@ namespace Neuroglia.Mapping
     public class Mapper
         : IMapper
     {
+
+        /// <summary>
+        /// Gets the <see cref="Mapper"/>'s <see cref="ActivitySource"/> name
+        /// </summary>
+        public const string ActivitySourceName = "Neuroglia.Mapping.Diagnostics.ActivitySource";
+
+        private static readonly ActivitySource _ActivitySource = new(ActivitySourceName);
 
         /// <summary>
         /// Initializes a new <see cref="Mapper"/>
@@ -45,6 +53,9 @@ namespace Neuroglia.Mapping
         /// <inheritdoc/>
         public virtual TDestination Map<TDestination>(object source)
         {
+            using Activity activity = _ActivitySource.StartActivity($"{(source is null ? "null" : source.GetType().Name)} => {typeof(TDestination).Name}");
+            activity?.AddTag("mapping.source_type", source?.GetType().Name);
+            activity?.AddTag("mapping.destination_type", typeof(TDestination).Name);
             TDestination result = this.InnerMapper.Map<TDestination>(source);
             return result;
         }
@@ -52,6 +63,9 @@ namespace Neuroglia.Mapping
         /// <inheritdoc/>
         public virtual TDestination Map<TDestination>(object source, Action<IMappingOperationOptions> configuration)
         {
+            using Activity activity = _ActivitySource.StartActivity($"{(source is null ? "null" : source.GetType().Name)} => {typeof(TDestination).Name}");
+            activity?.AddTag("mapping.source_type", source?.GetType().Name);
+            activity?.AddTag("mapping.destination_type", typeof(TDestination).Name);
             TDestination result = this.InnerMapper.Map<TDestination>(source, this.BuildMappingOperationOptions(configuration));
             return result;
         }
@@ -59,6 +73,9 @@ namespace Neuroglia.Mapping
         /// <inheritdoc/>
         public virtual TDestination Map<TSource, TDestination>(TSource source)
         {
+            using Activity activity = _ActivitySource.StartActivity($"{(source is null ? "null" : source.GetType().Name)} => {typeof(TDestination).Name}");
+            activity?.AddTag("mapping.source_type", source?.GetType().Name);
+            activity?.AddTag("mapping.destination_type", typeof(TDestination).Name);
             TDestination result = this.InnerMapper.Map<TSource, TDestination>(source);
             return result;
         }
@@ -66,6 +83,9 @@ namespace Neuroglia.Mapping
         /// <inheritdoc/>
         public virtual TDestination Map<TSource, TDestination>(TSource source, Action<IMappingOperationOptions<TSource, TDestination>> configuration)
         {
+            using Activity activity = _ActivitySource.StartActivity($"{typeof(TSource).Name} => {typeof(TDestination).Name}");
+            activity?.AddTag("mapping.source_type", typeof(TSource).Name);
+            activity?.AddTag("mapping.destination_type", typeof(TDestination).Name);
             TDestination result = this.InnerMapper.Map(source, this.BuildMappingOperationOptions(configuration));
             return result;
         }
@@ -73,6 +93,9 @@ namespace Neuroglia.Mapping
         /// <inheritdoc/>
         public virtual TDestination Map<TSource, TDestination>(TSource source, TDestination destination)
         {
+            using Activity activity = _ActivitySource.StartActivity($"{typeof(TSource).Name} => {typeof(TDestination).Name}");
+            activity?.AddTag("mapping.source_type", typeof(TSource).Name);
+            activity?.AddTag("mapping.destination_type", typeof(TDestination).Name);
             TDestination result = this.InnerMapper.Map(source, destination);
             return result;
         }
@@ -80,6 +103,9 @@ namespace Neuroglia.Mapping
         /// <inheritdoc/>
         public virtual TDestination Map<TSource, TDestination>(TSource source, TDestination destination, Action<IMappingOperationOptions<TSource, TDestination>> configuration)
         {
+            using Activity activity = _ActivitySource.StartActivity($"{typeof(TSource).Name} => {typeof(TDestination).Name}");
+            activity?.AddTag("mapping.source_type", typeof(TSource).Name);
+            activity?.AddTag("mapping.destination_type", typeof(TDestination).Name);
             TDestination result = this.InnerMapper.Map(source, destination, this.BuildMappingOperationOptions(configuration));
             return result;
         }
@@ -87,6 +113,9 @@ namespace Neuroglia.Mapping
         /// <inheritdoc/>
         public virtual object Map(object source, Type sourceType, Type destinationType)
         {
+            using Activity activity = _ActivitySource.StartActivity($"{sourceType.Name} => {destinationType.Name}");
+            activity?.AddTag("mapping.source_type", sourceType.Name);
+            activity?.AddTag("mapping.destination_type", destinationType.Name);
             object result = this.InnerMapper.Map(source, sourceType, destinationType);
             return result;
         }
@@ -94,6 +123,9 @@ namespace Neuroglia.Mapping
         /// <inheritdoc/>
         public virtual object Map(object source, Type sourceType, Type destinationType, Action<IMappingOperationOptions> configuration)
         {
+            using Activity activity = _ActivitySource.StartActivity($"{sourceType.Name} => {destinationType.Name}");
+            activity?.AddTag("mapping.source_type", sourceType.Name);
+            activity?.AddTag("mapping.destination_type", destinationType.Name);
             object result = this.InnerMapper.Map(source, sourceType, destinationType, this.BuildMappingOperationOptions(configuration));
             return result;
         }

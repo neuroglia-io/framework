@@ -234,6 +234,11 @@
             Represents the default AutoMapper implementation of the <see cref="T:Neuroglia.Mapping.IMapper"/> interface
             </summary>
         </member>
+        <member name="F:Neuroglia.Mapping.Mapper.ActivitySourceName">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Mapping.Mapper"/>'s <see cref="T:System.Diagnostics.ActivitySource"/> name
+            </summary>
+        </member>
         <member name="M:Neuroglia.Mapping.Mapper.#ctor(AutoMapper.IMapper)">
             <summary>
             Initializes a new <see cref="T:Neuroglia.Mapping.Mapper"/>

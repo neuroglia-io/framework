@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Microsoft.AspNetCore.JsonPatch</RootNamespace>
     <Company>Neuroglia SPRL</Company>
     <Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="5.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

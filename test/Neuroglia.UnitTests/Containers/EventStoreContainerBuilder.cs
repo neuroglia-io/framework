@@ -1,5 +1,6 @@
 ﻿using DotNet.Testcontainers.Containers.Builders;
 using DotNet.Testcontainers.Containers.WaitStrategies;
+using System;
 
 namespace Neuroglia.UnitTests.Containers
 {
@@ -13,7 +14,7 @@ namespace Neuroglia.UnitTests.Containers
             if (Container != null)
                 return Container;
             Container = new TestcontainersBuilder<EventStoreContainer>()
-                .WithName("event-store")
+                .WithName($"event-store-{Guid.NewGuid().ToString("N")}")
                 .WithImage("eventstore/eventstore:latest")
                 .WithPortBinding(EventStoreContainer.PublicPort1, true)
                 .WithPortBinding(EventStoreContainer.PublicPort2, true)

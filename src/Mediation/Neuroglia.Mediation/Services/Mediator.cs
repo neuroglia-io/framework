@@ -32,7 +32,7 @@ namespace Neuroglia.Mediation
     {
 
         /// <summary>
-        /// Gets the <see cref="Mediator"/>'s <see cref="System.Diagnostics.ActivitySource"/> name
+        /// Gets the <see cref="Mediator"/>'s <see cref="ActivitySource"/> name
         /// </summary>
         public const string ActivitySourceName = "Neuroglia.Mediation.Diagnostics.ActivitySource";
 

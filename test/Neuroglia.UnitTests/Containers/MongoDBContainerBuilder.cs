@@ -1,5 +1,6 @@
 ﻿using DotNet.Testcontainers.Containers.Builders;
 using DotNet.Testcontainers.Containers.WaitStrategies;
+using System;
 
 namespace Neuroglia.UnitTests.Containers
 {
@@ -14,7 +15,7 @@ namespace Neuroglia.UnitTests.Containers
             if (Container != null)
                 return Container;
             Container = new TestcontainersBuilder<MongoDBContainer>()
-                .WithName("mongo")
+                .WithName($"mongo-{Guid.NewGuid().ToString("N")}")
                 .WithImage("mongo:latest")
                 .WithPortBinding(MongoDBContainer.PublicPort, true)
                 .WithEnvironment("MONGO_INITDB_ROOT_USERNAME", MongoDBContainer.DefaultUsername)

@@ -23,6 +23,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             services.AddLogging();
             services.AddDbContext<TestDbContext>(options => options.UseNpgsql(PostgreSQLContainerBuilder.Build().ConnectionString));
             services.AddEFCoreRepositories<TestDbContext>();
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             this.ServiceScope = services.BuildServiceProvider().CreateScope();
             this.DbContext = this.ServiceScope.ServiceProvider.GetRequiredService<TestDbContext>();
             this.Repository = this.ServiceScope.ServiceProvider.GetRequiredService<EFCoreRepository<TestPerson, Guid, TestDbContext>>();
