@@ -2,13 +2,12 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<RootNamespace>Neuroglia.Data</RootNamespace>
 		<Company>Neuroglia SPRL</Company>
 		<Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
 		<Authors>Neuroglia SPRL</Authors>
 		<RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>neuroglia framework data odata</PackageTags>
+		<PackageTags>neuroglia framework data</PackageTags>
 		<Version>2.0.1</Version>
 		<AssemblyVersion>2.0.1</AssemblyVersion>
 		<FileVersion>2.0.1</FileVersion>
@@ -18,30 +17,27 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageIcon>logo_white_on_blue_256.png</PackageIcon>
 		<IsPackable>true</IsPackable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<DocumentationFile>Neuroglia.Data.OData.xml</DocumentationFile>
+		<DocumentationFile>Neuroglia.Data.Expressions.JQ.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
-	    <PackagePath></PackagePath>
-	    <Pack>True</Pack>
-	  </None>
-	  <None Include="..\..\..\LICENSE" Link="LICENSE">
-	    <PackagePath></PackagePath>
-	    <Pack>True</Pack>
-	  </None>
+		<None Include="..\..\..\assets\img\logo_white_on_blue_256.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<None Include="..\..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-	<PackageReference Include="Simple.OData.Client" Version="5.25.0" />
-	<PackageReference Include="System.Linq.Async" Version="5.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Neuroglia.Data\Neuroglia.Data.csproj" />
+	  <ProjectReference Include="..\Neuroglia.Data.Expressions\Neuroglia.Data.Expressions.csproj" />
 	</ItemGroup>
 
 </Project>
