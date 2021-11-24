@@ -88,9 +88,9 @@ namespace Neuroglia.UnitTests.Data
         }
 
         [JsonPatchOperation(OperationType.Replace, nameof(Contacts) + "/" + nameof(TestContact.Tel))]
-        public virtual void UpdateContactTelephoneNumber(int at, string tel)
+        public virtual void UpdateContactTelephoneNumber(Guid contactId, string tel)
         {
-            TestContact contact = this.Contacts.ElementAt(at);
+            TestContact contact = this.Contacts.First(c => c.Id == contactId);
             contact.Tel = tel;
         }
 
