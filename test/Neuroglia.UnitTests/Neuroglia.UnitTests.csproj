@@ -12,6 +12,7 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -37,6 +38,7 @@
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.MongoDB\Neuroglia.Data.MongoDB.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.OData\Neuroglia.Data.OData.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data\Neuroglia.Data.csproj" />
+    <ProjectReference Include="..\..\src\Eventing\Neuroglia.Eventing.CloudEvents\Neuroglia.Eventing.CloudEvents.csproj" />
     <ProjectReference Include="..\..\src\Mapping\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
     <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation.AspNetCore\Neuroglia.Mediation.AspNetCore.csproj" />
     <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />

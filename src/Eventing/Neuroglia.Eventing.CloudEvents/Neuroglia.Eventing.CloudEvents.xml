@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Eventing.CloudEvents</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Eventing.Configuration.CloudEventBusOptions">
+            <summary>
+            Represents the options used to configure a <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Configuration.CloudEventBusOptions.BrokerUri">
+            <summary>
+            Gets/sets the <see cref="T:CloudNative.CloudEvents.CloudEvent"/> broker <see cref="T:System.Uri"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Configuration.CloudEventBusOptions.QueueCapacity">
+            <summary>
+            Gets/sets the capacity of the <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/>'s outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s queue. Null defines an outbounded queue.
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Eventing.Configuration.CloudEventBusOptionsBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Eventing.Configuration.ICloudEventBusOptionsBuilder"/> interface
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Configuration.CloudEventBusOptionsBuilder.Options">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Eventing.Configuration.CloudEventBusOptions"/> to configure
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.Configuration.CloudEventBusOptionsBuilder.WithBrokerUri(System.Uri)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Eventing.Configuration.CloudEventBusOptionsBuilder.WithQueueCapacity(System.Nullable{System.Int32})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Eventing.Configuration.CloudEventBusOptionsBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Eventing.Configuration.ICloudEventBusOptionsBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build <see cref="T:Neuroglia.Eventing.Configuration.CloudEventBusOptions"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.Configuration.ICloudEventBusOptionsBuilder.WithBrokerUri(System.Uri)">
+            <summary>
+            Configures the <see cref="T:Neuroglia.Eventing.ICloudEventBus"/>'s broker <see cref="T:System.Uri"/>
+            </summary>
+            <param name="uri">The <see cref="T:Neuroglia.Eventing.ICloudEventBus"/>'s broker <see cref="T:System.Uri"/></param>
+            <returns>The configured <see cref="T:Neuroglia.Eventing.Configuration.ICloudEventBusOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Eventing.Configuration.ICloudEventBusOptionsBuilder.WithQueueCapacity(System.Nullable{System.Int32})">
+            <summary>
+            Configures the <see cref="T:Neuroglia.Eventing.ICloudEventBus"/> outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/> queue
+            </summary>
+            <param name="capacity">The capacity of the outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/> queue. Null specifies an unbounded queue</param>
+            <returns>The configured <see cref="T:Neuroglia.Eventing.Configuration.ICloudEventBusOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Eventing.Configuration.ICloudEventBusOptionsBuilder.Build">
+            <summary>
+            Builds a <see cref="T:Neuroglia.Eventing.Configuration.CloudEventBusOptions"/>
+            </summary>
+            <returns>New <see cref="T:Neuroglia.Eventing.Configuration.CloudEventBusOptions"/></returns>
+        </member>
+        <member name="T:Neuroglia.Eventing.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.IServiceCollectionExtensions.AddCloudEventBus(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Neuroglia.Eventing.Configuration.ICloudEventBusOptionsBuilder})">
+            <summary>
+            Adds a new <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="setup">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Eventing.Services.CloudEventBus">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Eventing.ICloudEventBus"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{Neuroglia.Eventing.Services.CloudEventBus},Microsoft.Extensions.Options.IOptions{Neuroglia.Eventing.Configuration.CloudEventBusOptions},CloudNative.CloudEvents.CloudEventFormatter,System.Reactive.Subjects.Subject{CloudNative.CloudEvents.CloudEvent},System.Net.Http.HttpClient)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/>
+            </summary>
+            <param name="serviceProvider">The current <see cref="T:System.IServiceProvider"/></param>
+            <param name="logger">The service used to perform logging</param>
+            <param name="options">The service used to access the current <see cref="T:Neuroglia.Eventing.Configuration.CloudEventBusOptions"/></param>
+            <param name="formatter">The service used to format <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s</param>
+            <param name="stream">The <see cref="T:System.Reactive.Subjects.Subject`1"/> used to observe consumed <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s</param>
+            <param name="httpClient">The <see cref="T:System.Net.Http.HttpClient"/> used to publish <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s</param>
+        </member>
+        <member name="P:Neuroglia.Eventing.Services.CloudEventBus.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Services.CloudEventBus.Options">
+            <summary>
+            Gets the current <see cref="T:Neuroglia.Eventing.Configuration.CloudEventBusOptions"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Services.CloudEventBus.Formatter">
+            <summary>
+            Gets the service used to format <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Services.CloudEventBus.Stream">
+            <summary>
+            Gets the <see cref="T:System.Reactive.Subjects.Subject`1"/> used to observe consumed <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Services.CloudEventBus.HttpClient">
+            <summary>
+            Gets the <see cref="T:System.Net.Http.HttpClient"/> used to publish <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Services.CloudEventBus.Outbox">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.IRepository`2"/> used to manage pending outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Services.CloudEventBus.Queue">
+            <summary>
+            Gets the <see cref="T:System.Threading.Channels.Channel`1"/> used to enqueue outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Services.CloudEventBus.CancellationTokenSource">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/>'s <see cref="P:Neuroglia.Eventing.Services.CloudEventBus.CancellationTokenSource"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.ExecuteAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.PublishAsync(CloudNative.CloudEvents.CloudEvent,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.Subscribe(System.IObserver{CloudNative.CloudEvents.CloudEvent})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.EnqueueAsync(CloudNative.CloudEvents.CloudEvent,System.Threading.CancellationToken)">
+            <summary>
+            Enqueues the specified <see cref="T:CloudNative.CloudEvents.CloudEvent"/>
+            </summary>
+            <param name="e">The <see cref="T:CloudNative.CloudEvents.CloudEvent"/> to enqueue</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.DequeueAndPublishPendingEventsAsync">
+            <summary>
+            Dequeues and publishes pending outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s
+            </summary>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.Dispose(System.Boolean)">
+            <summary>
+            Disposes of the <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/>
+            </summary>
+            <param name="disposing">A boolean indicating whether or not the <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/> is being disposed of</param>
+        </member>
+        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Eventing.Services.CloudEventOutboxEntry">
+            <summary>
+            Represents a <see cref="T:CloudNative.CloudEvents.CloudEvent"/> outbox entry
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.Services.CloudEventOutboxEntry.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Eventing.Services.CloudEventOutboxEntry"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.Services.CloudEventOutboxEntry.#ctor(System.String,System.Byte[],System.Net.Mime.ContentType)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Eventing.Services.CloudEventOutboxEntry"/>
+            </summary>
+            <param name="id">The id of the outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/></param>
+            <param name="data">The data of the outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/></param>
+            <param name="contentType">The outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/>'s <see cref="T:System.Net.Mime.ContentType"/></param>
+        </member>
+        <member name="P:Neuroglia.Eventing.Services.CloudEventOutboxEntry.Data">
+            <summary>
+            Gets the data of the outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.Services.CloudEventOutboxEntry.ContentType">
+            <summary>
+            Gets the <see cref="T:CloudNative.CloudEvents.CloudEvent"/>'s <see cref="T:System.Net.Mime.ContentType"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Eventing.ICloudEventBus">
+            <summary>
+            Defines the fundamentals of a service used to publish and subscribe to <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.ICloudEventBus.PublishAsync(CloudNative.CloudEvents.CloudEvent,System.Threading.CancellationToken)">
+            <summary>
+            Publishes the specified <see cref="T:CloudNative.CloudEvents.CloudEvent"/>
+            </summary>
+            <param name="e">The <see cref="T:CloudNative.CloudEvents.CloudEvent"/> to publish</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+    </members>
+</doc>
