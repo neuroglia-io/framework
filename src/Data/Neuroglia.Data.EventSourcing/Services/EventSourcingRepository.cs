@@ -247,7 +247,7 @@ namespace Neuroglia.Data.EventSourcing.Services
         protected virtual async Task<bool> TrySnapshotAsync(TAggregate aggregate, CancellationToken cancellation = default)
         {
             if (!this.Options.SnapshotFrequency.HasValue)
-                    return false;
+                return false;
             ISnapshot snapshot = await this.GetSnapshotAsync(aggregate.Id, cancellation);
             if (snapshot == null)
             {

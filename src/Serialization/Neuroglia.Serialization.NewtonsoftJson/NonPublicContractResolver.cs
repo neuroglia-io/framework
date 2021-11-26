@@ -30,9 +30,13 @@ namespace Newtonsoft.Json.Serialization
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             JsonProperty result = base.CreateProperty(member, memberSerialization);
-            PropertyInfo property = member as PropertyInfo;
-            result.Writable |= property != null && property.CanWrite;
-            result.Ignored |= property == null || !property.CanRead;
+            switch (member)
+            {
+                case PropertyInfo property:
+                    result.Writable |= property.CanWrite;
+                    result.Ignored |= !property.CanRead;
+                    break;
+            }
             return result;
         }
 

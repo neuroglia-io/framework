@@ -40,6 +40,8 @@ namespace Neuroglia.Data
 
         private readonly List<IDomainEvent> _PendingEvents = new();
         /// <inheritdoc/>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
         public virtual IReadOnlyCollection<IDomainEvent> PendingEvents => this._PendingEvents;
 
         /// <summary>
