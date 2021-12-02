@@ -49,7 +49,7 @@ namespace System.Text.Json.Serialization
         /// <summary>
         /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing the <see cref="MemberInfo"/> mappings of the specifed abstract type concretions
         /// </summary>
-        protected Dictionary<Type, Dictionary<string, MemberInfo>> MemberMappings { get; }
+        protected Dictionary<Type, Dictionary<string, MemberInfo>> MemberMappings { get; } = new();
 
         /// <inheritdoc/>
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
