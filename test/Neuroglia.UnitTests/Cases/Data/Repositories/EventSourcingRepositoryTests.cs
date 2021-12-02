@@ -109,7 +109,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
         {
             //arrange
             var aggregate = await this.Repository.FindAsync(AggregateId.Value);
-            var originalVersion = aggregate.Version;
+            var originalVersion = aggregate.StateVersion;
             var newFirstName = "Updated Fake First Name";
             var newLastName = "Updated Fake Last Name";
             aggregate.SetFirstName(newFirstName);
@@ -122,12 +122,12 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             aggregate.Should().NotBeNull();
             aggregate.FirstName.Should().Be(newFirstName);
             aggregate.LastName.Should().Be(newLastName);
-            aggregate.Version.Should().BeGreaterThan(originalVersion);
+            aggregate.StateVersion.Should().BeGreaterThan(originalVersion);
             aggregate = await this.Repository.FindAsync(AggregateId.Value);
             aggregate.Should().NotBeNull();
             aggregate.FirstName.Should().Be(newFirstName);
             aggregate.LastName.Should().Be(newLastName);
-            aggregate.Version.Should().BeGreaterThan(originalVersion);
+            aggregate.StateVersion.Should().BeGreaterThan(originalVersion);
         }
 
         [Fact, Priority(4)]

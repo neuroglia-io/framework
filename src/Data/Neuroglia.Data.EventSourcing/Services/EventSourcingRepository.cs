@@ -118,7 +118,7 @@ namespace Neuroglia.Data.EventSourcing.Services
             }   
             else
             {
-                sourcedEvents = await this.EventStore.ReadEventsForwardAsync(this.GetStreamIdFor(key), aggregate.Version, cancellationToken);
+                sourcedEvents = await this.EventStore.ReadEventsForwardAsync(this.GetStreamIdFor(key), aggregate.StateVersion, cancellationToken);
                 if (sourcedEvents == null)
                     return null;
                 aggregate = this.Aggregator.Aggregate(aggregate, sourcedEvents.Select(e => e.Data).OfType<IDomainEvent>());
@@ -163,8 +163,8 @@ namespace Neuroglia.Data.EventSourcing.Services
             if (!aggregate.PendingEvents.Any())
                 return aggregate;
             IEnumerable<IDomainEvent> events = aggregate.PendingEvents.ToList();
-            await this.EventStore.AppendToStreamAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetMetadata()), aggregate.Version, cancellationToken);
-            aggregate.SetVersion(aggregate.Version + events.Count());
+            await this.EventStore.AppendToStreamAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetMetadata()), aggregate.StateVersion, cancellationToken);
+            aggregate.SetVersion(aggregate.StateVersion + events.Count());
             aggregate.ClearPendingEvents();
             await this.TrySnapshotAsync(aggregate, cancellationToken);
             if (this.Mediator != null)
@@ -251,10 +251,10 @@ namespace Neuroglia.Data.EventSourcing.Services
             ISnapshot snapshot = await this.GetSnapshotAsync(aggregate.Id, cancellation);
             if (snapshot == null)
             {
-                if (aggregate.Version < this.Options.SnapshotFrequency.Value)
+                if (aggregate.StateVersion < this.Options.SnapshotFrequency.Value)
                     return false;
             }
-            else if (snapshot.Version + this.Options.SnapshotFrequency.Value > aggregate.Version)
+            else if (snapshot.Version + this.Options.SnapshotFrequency.Value > aggregate.StateVersion)
             {
                 return false;
             }

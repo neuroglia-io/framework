@@ -77,7 +77,7 @@ namespace Microsoft.AspNetCore.JsonPatch
             bool hasIndexComponent = !string.IsNullOrWhiteSpace(indexComponent);
             bool hasSubPathComponent = hasIndexComponent ? pathComponents.Last() != indexComponent : false;
             string path = pathComponents[0];
-            PropertyInfo property = target.GetType().GetProperty(path);
+            PropertyInfo property = target.GetType().GetProperty(path, BindingFlags.Default | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase);
             if ((property.PropertyType.IsEnumerable()
                 && operationMetadata.ReferencedType == null)
                 || pathComponents.Length > 1)

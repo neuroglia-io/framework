@@ -94,7 +94,7 @@ namespace Neuroglia.Data.EventSourcing
                 aggregator.Aggregate(aggregate, e);
             }
             if (aggregate is IAggregateRoot aggregateRoot)
-                aggregateRoot.SetVersion(aggregateRoot.Version + events.Count());
+                aggregateRoot.SetVersion(aggregateRoot.StateVersion + events.Count());
             return aggregate;
         }
 

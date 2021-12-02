@@ -92,7 +92,7 @@ namespace System.Text.Json.Serialization
         /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
         {
-            System.Text.Json.JsonSerializer.Serialize(writer, (object)value, options);
+            JsonSerializer.Serialize(writer, (object)value, options);
         }
 
     }

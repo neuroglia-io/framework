@@ -17,6 +17,7 @@
 
 namespace Neuroglia
 {
+
     /// <summary>
     /// Represents the base class for all Data Transfer Objects (DTOs)
     /// </summary>
@@ -26,6 +27,5 @@ namespace Neuroglia
 
 
     }
-
 
 }

@@ -46,6 +46,16 @@ namespace Neuroglia
         /// </summary>
         public virtual DateTimeOffset CreatedAt { get; set; }
 
+        /// <summary>
+        /// Gets/sets the date and time the entity has last been modified
+        /// </summary>
+        public virtual DateTimeOffset LastModified { get; set; }
+
+        /// <summary>
+        /// Gets/sets the entity's state version
+        /// </summary>
+        public virtual int StateVersion { get; set; }
+
     }
 
 

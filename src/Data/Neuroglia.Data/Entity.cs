@@ -54,15 +54,15 @@ namespace Neuroglia.Data
         public virtual DateTimeOffset LastModified { get; protected set; }
 
         /// <inheritdoc/>
-        public virtual int Version { get; protected set; }
+        public virtual int StateVersion { get; protected set; }
 
         object IIdentifiable.Id => this.Id;
 
         void IEntity.SetVersion(int version)
         {
-            if (this.Version < 0)
+            if (this.StateVersion < 0)
                 throw new ArgumentOutOfRangeException(nameof(version));
-            this.Version = version;
+            this.StateVersion = version;
         }
 
     }

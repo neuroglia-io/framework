@@ -40,7 +40,7 @@ namespace Neuroglia.Data.EventSourcing
         /// <param name="metadata">The metadata of the <see cref="Snapshot"/> to create</param>
         protected Snapshot(IAggregateRoot data, object metadata)
         {
-            this.Version = data.Version;
+            this.Version = data.StateVersion;
             this.Data = data;
             this.Metadata = metadata;
         }

@@ -39,7 +39,7 @@ namespace Neuroglia.Data
         /// <summary>
         /// Gets the entity's version
         /// </summary>
-        int Version { get; }
+        int StateVersion { get; }
 
         /// <summary>
         /// Sets the <see cref="IEntity"/>'s version
