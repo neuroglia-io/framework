@@ -74,8 +74,6 @@ namespace Microsoft.AspNetCore.JsonPatch
         {
             if (target == null)
                 throw new ArgumentNullException(nameof(target));
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
             switch (this.Member)
             {
                 case FieldInfo field:

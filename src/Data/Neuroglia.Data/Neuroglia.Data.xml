@@ -569,7 +569,7 @@
         <member name="P:Neuroglia.Data.Entity`1.LastModified">
             <inheritdoc/>
         </member>
-        <member name="P:Neuroglia.Data.Entity`1.Version">
+        <member name="P:Neuroglia.Data.Entity`1.StateVersion">
             <inheritdoc/>
         </member>
         <member name="T:Neuroglia.Data.IServiceCollectionExtensions">
@@ -658,7 +658,7 @@
             Gets the date and time at which the <see cref="T:Neuroglia.Data.IEntity"/> has last been modified
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.IEntity.Version">
+        <member name="P:Neuroglia.Data.IEntity.StateVersion">
             <summary>
             Gets the entity's version
             </summary>

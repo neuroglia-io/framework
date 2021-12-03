@@ -78,6 +78,16 @@
             Gets/sets the date and time the entity has been created at
             </summary>
         </member>
+        <member name="P:Neuroglia.EntityDto`1.LastModified">
+            <summary>
+            Gets/sets the date and time the entity has last been modified
+            </summary>
+        </member>
+        <member name="P:Neuroglia.EntityDto`1.StateVersion">
+            <summary>
+            Gets/sets the entity's state version
+            </summary>
+        </member>
         <member name="T:Neuroglia.Enumeration">
             <summary>
             Represents the base class for all enumeration classes

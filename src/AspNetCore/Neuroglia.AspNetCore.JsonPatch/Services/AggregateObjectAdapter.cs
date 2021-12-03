@@ -21,6 +21,7 @@ using Neuroglia;
 using Neuroglia.Data;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Dynamic;
 using System.Linq;
 using System.Reflection;
 
@@ -79,6 +80,7 @@ namespace Microsoft.AspNetCore.JsonPatch
             string path = pathComponents[0];
             PropertyInfo property = target.GetType().GetProperty(path, BindingFlags.Default | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase);
             if ((property.PropertyType.IsEnumerable()
+                && !typeof(ExpandoObject).IsAssignableFrom(property.PropertyType)
                 && operationMetadata.ReferencedType == null)
                 || pathComponents.Length > 1)
             {
@@ -125,10 +127,17 @@ namespace Microsoft.AspNetCore.JsonPatch
                 Type valueType = property.PropertyType;
                 if (valueType != typeof(string) && valueType.IsEnumerable())
                     valueType = valueType.GetEnumerableElementType();
-                if (value != null && !valueType.IsAssignableFrom(value.GetType()))
-                    value = JToken.FromObject(value).ToObject(valueType);
-                IRepository repository = (IRepository)this.ServiceProvider.GetRequiredService(typeof(IRepository<>).MakeGenericType(operationMetadata.ValueType));
-                value = (repository.FindAsync(value)).ConfigureAwait(false).GetAwaiter().GetResult();
+                if (value == null)
+                {
+                    operationMetadata.ApplyTo(target, value);
+                }
+                else
+                {
+                    if (!valueType.IsAssignableFrom(value.GetType()))
+                        value = JToken.FromObject(value).ToObject(valueType);
+                    IRepository repository = (IRepository)this.ServiceProvider.GetRequiredService(typeof(IRepository<>).MakeGenericType(operationMetadata.ValueType));
+                    value = (repository.FindAsync(value)).ConfigureAwait(false).GetAwaiter().GetResult();
+                }
             }
             operationMetadata.ApplyTo(target, value);
         }
