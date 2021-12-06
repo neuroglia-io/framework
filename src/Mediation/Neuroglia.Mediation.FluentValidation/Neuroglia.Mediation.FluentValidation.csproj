@@ -10,9 +10,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework mediation fluent validation</PackageTags>
-    <Version>2.0.1.4</Version>
-    <AssemblyVersion>2.0.1.4</AssemblyVersion>
-    <FileVersion>2.0.1.4</FileVersion>
+    <Version>2.0.1.5</Version>
+    <AssemblyVersion>2.0.1.5</AssemblyVersion>
+    <FileVersion>2.0.1.5</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="10.3.4" />
+    <PackageReference Include="FluentValidation" Version="10.3.5" />
   </ItemGroup>
 
 </Project>
