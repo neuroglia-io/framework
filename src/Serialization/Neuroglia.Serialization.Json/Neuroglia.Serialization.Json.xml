@@ -64,6 +64,44 @@
         <member name="M:System.Text.Json.Serialization.AbstractClassConverterFactory.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
             <inheritdoc/>
         </member>
+        <member name="T:System.Text.Json.Serialization.DerivedTypeConverter`1">
+            <summary>
+            Represents a <see cref="T:System.Text.Json.Serialization.JsonConverter`1"/> used to convert derived types
+            </summary>
+            <typeparam name="T">The abstract type to convert to a concrete type</typeparam>
+        </member>
+        <member name="M:System.Text.Json.Serialization.DerivedTypeConverter`1.#ctor">
+            <summary>
+            Initializes a new <see cref="T:System.Text.Json.Serialization.DerivedTypeConverter`1"/>
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.DerivedTypeConverter`1.MemberMappings">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the <see cref="T:System.Reflection.MemberInfo"/> mappings of the specifed abstract type concretions
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.DerivedTypeConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Text.Json.Serialization.DerivedTypeConverter`1.Write(System.Text.Json.Utf8JsonWriter,`0,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Text.Json.Serialization.DerivedTypeConverterFactory">
+            <summary>
+            Represents a <see cref="T:System.Text.Json.Serialization.JsonConverterFactory"/> used to create and manage <see cref="T:System.Text.Json.Serialization.DerivedTypeConverter`1"/> instances
+            </summary>
+        </member>
+        <member name="P:System.Text.Json.Serialization.DerivedTypeConverterFactory.Converters">
+            <summary>
+            Gets a <see cref="T:System.Collections.Concurrent.ConcurrentDictionary`2"/> containing all registered <see cref="T:System.Text.Json.Serialization.DerivedTypeConverter`1"/> instances
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.DerivedTypeConverterFactory.CanConvert(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Text.Json.Serialization.DerivedTypeConverterFactory.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
         <member name="T:System.Text.Json.Serialization.StringEnumConverter`1">
             <summary>
             Represents the <see cref="T:System.Text.Json.Serialization.JsonConverter`1"/> used to convert from and to <see cref="T:System.Enum"/>s
