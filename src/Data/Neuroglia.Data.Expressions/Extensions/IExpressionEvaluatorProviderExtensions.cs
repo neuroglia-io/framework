@@ -15,6 +15,8 @@
  *
  */
 
+using System.Collections;
+
 namespace Neuroglia.Data.Expressions
 {
 
@@ -44,7 +46,25 @@ namespace Neuroglia.Data.Expressions
                     && expression.IsRuntimeExpression())
                     value = evaluator.Evaluate(expression, data);
                 else if (!property.Value.GetType().IsValueType())
-                    value = evaluator.Evaluate(property.Value, data);
+                {
+                    if (property.Value is IEnumerable inputElements)
+                    {
+                        var outputElements = new List<IDictionary<string, object>>();
+                        foreach(var inputElement in inputElements)
+                        {
+                            var outputElement = evaluator.Evaluate(inputElement, data) as IDictionary<string, object>;
+                            if (outputElement == null)
+                                continue;
+                            outputElements.Add(outputElement);
+                        }
+                        value = outputElements;
+                    }
+                    else
+                    {
+                        value = evaluator.Evaluate(property.Value, data);
+                    }
+                }
+                    
                 outputProperties.Add(property.Key, value!);
             }
             return outputProperties.ToExpandoObject();
