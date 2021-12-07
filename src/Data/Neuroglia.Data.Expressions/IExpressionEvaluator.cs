@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 
 namespace Neuroglia.Data.Expressions
 {
@@ -37,8 +36,26 @@ namespace Neuroglia.Data.Expressions
         /// </summary>
         /// <param name="expression">The serverless workflow expression to evaluate</param>
         /// <param name="data">The data to evaluate the specified expression against</param>
-        /// <returns>A new <see cref="JToken"/> that represents the resolved serverless workflow expression's value</returns>
-        JToken? Evaluate(string expression, JToken data);
+        /// <param name="expectedType">The expected data type</param>
+        /// <returns>A new <see cref="object"/> that represents the resolved serverless workflow expression's value</returns>
+        object? Evaluate(string expression, object data, Type expectedType);
+
+        /// <summary>
+        /// Evaluates the value of the specified serverless workflow expression
+        /// </summary>
+        /// <param name="expression">The serverless workflow expression to evaluate</param>
+        /// <param name="data">The data to evaluate the specified expression against</param>
+        /// <returns>A new <see cref="object"/> that represents the resolved serverless workflow expression's value</returns>
+        object? Evaluate(string expression, object data);
+
+        /// <summary>
+        /// Evaluates the value of the specified serverless workflow expression
+        /// </summary>
+        /// <typeparam name="T">The expected type of data</typeparam>
+        /// <param name="expression">The serverless workflow expression to evaluate</param>
+        /// <param name="data">The data to evaluate the specified expression against</param>
+        /// <returns>A new <see cref="object"/> that represents the resolved serverless workflow expression's value</returns>
+        T? Evaluate<T>(string expression, object data);
 
     }
 

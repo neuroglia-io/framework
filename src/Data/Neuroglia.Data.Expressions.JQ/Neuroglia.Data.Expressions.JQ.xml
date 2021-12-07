@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Data.Expressions.JQ</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Data.Expressions.JQ.Configuration.IJQExpressionEvaluatorOptionsBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build <see cref="T:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptions"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.Configuration.IJQExpressionEvaluatorOptionsBuilder.UseSerializer``1">
+            <summary>
+            Configures the <see cref="T:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator"/> to use the specified <see cref="T:Neuroglia.Serialization.IJsonSerializer"/> type
+            </summary>
+            <typeparam name="TSerializer">The type of <see cref="T:Neuroglia.Serialization.IJsonSerializer"/> to use</typeparam>
+            <returns>The configured <see cref="T:Neuroglia.Data.Expressions.JQ.Configuration.IJQExpressionEvaluatorOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.Configuration.IJQExpressionEvaluatorOptionsBuilder.Build">
+            <summary>
+            Builds the <see cref="T:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptions"/>
+            </summary>
+            <returns>New <see cref="T:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptions"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptions">
+            <summary>
+            Represents the options used to configure a <see cref="T:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptions.SerializerType">
+            <summary>
+            Gets/sets the type of <see cref="T:Neuroglia.Serialization.IJsonSerializer"/> to use. Defaults to <see cref="T:Neuroglia.Serialization.NewtonsoftJsonSerializer"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptionsBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.Expressions.JQ.Configuration.IJQExpressionEvaluatorOptionsBuilder"/> interface
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptionsBuilder.Options">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptions"/> to configure
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptionsBuilder.UseSerializer``1">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptionsBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.Expressions.JQ.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.IServiceCollectionExtensions.AddJQExpressionEvaluator(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Neuroglia.Data.Expressions.JQ.Configuration.IJQExpressionEvaluatorOptionsBuilder},Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="setup">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator"/></param>
+            <param name="lifetime">The service's lifetime. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.IServiceCollectionExtensions.AddJQExpressionEvaluator(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="lifetime">The service's lifetime. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator">
+            <summary>
+            Represents the default, JQ implementation of the <see cref="T:Neuroglia.Data.Expressions.IExpressionEvaluator"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.#ctor(Microsoft.Extensions.Logging.ILogger{Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator},Microsoft.Extensions.Options.IOptions{Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptions},Neuroglia.Serialization.ISerializerProvider)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator"/>
+            </summary>
+            <param name="logger">The service used to perform logging</param>
+            <param name="options">The service used to access the current <see cref="T:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptions"/></param>
+            <param name="serializerProvider">The service used to provide <see cref="T:Neuroglia.Serialization.ISerializer"/>s</param>
+        </member>
+        <member name="P:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Options">
+            <summary>
+            Gets the service used to access the current <see cref="T:Neuroglia.Data.Expressions.JQ.Configuration.JQExpressionEvaluatorOptions"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.JsonSerializer">
+            <summary>
+            Gets the service used to serialize and deserialize json
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Supports(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate(System.String,System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate``1(System.String,System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate(System.String,System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.BuildJQExpression(System.String)">
+            <summary>
+            Builds a jq compliant expression from the specified expression
+            </summary>
+            <param name="expression">The expression to build a jq compliant expression for</param>
+            <returns>A new jq compliant expression built from the specified expression</returns>
+        </member>
+    </members>
+</doc>

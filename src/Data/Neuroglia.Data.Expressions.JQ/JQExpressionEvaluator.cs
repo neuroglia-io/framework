@@ -14,8 +14,10 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Neuroglia.Data.Expressions.JQ.Configuration;
+using Neuroglia.Serialization;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -29,37 +31,68 @@ namespace Neuroglia.Data.Expressions.JQ
         : IExpressionEvaluator
     {
 
+        /// <summary>
+        /// Initializes a new <see cref="JQExpressionEvaluator"/>
+        /// </summary>
+        /// <param name="logger">The service used to perform logging</param>
+        /// <param name="options">The service used to access the current <see cref="JQExpressionEvaluatorOptions"/></param>
+        /// <param name="serializerProvider">The service used to provide <see cref="ISerializer"/>s</param>
+        public JQExpressionEvaluator(ILogger<JQExpressionEvaluator> logger, IOptions<JQExpressionEvaluatorOptions> options, ISerializerProvider serializerProvider)
+        {
+            this.Logger = logger;
+            this.Options = options.Value;
+            this.JsonSerializer = (IJsonSerializer)serializerProvider.GetSerializer(this.Options.SerializerType);
+            if (this.JsonSerializer == null)
+                throw new NullReferenceException($"Failed to find an {nameof(IJsonSerializer)} implementation of type '{this.Options.SerializerType}'");
+        }
+
+        /// <summary>
+        /// Gets the service used to perform logging
+        /// </summary>
+        protected ILogger Logger { get; }
+
+        /// <summary>
+        /// Gets the service used to access the current <see cref="JQExpressionEvaluatorOptions"/>
+        /// </summary>
+        protected JQExpressionEvaluatorOptions Options { get; }
+
+        /// <summary>
+        /// Gets the service used to serialize and deserialize json
+        /// </summary>
+        protected IJsonSerializer JsonSerializer { get; }
+
         /// <inheritdoc/>
         public virtual bool Supports(string language)
         {
-            if(string.IsNullOrWhiteSpace(language))
+            if (string.IsNullOrWhiteSpace(language))
                 throw new ArgumentNullException(nameof(language));
             return language.Equals("jq", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <inheritdoc/>
-        public virtual JToken? Evaluate(string expression, JToken data)
+        public virtual object? Evaluate(string expression, object data, Type expectedType)
         {
-            expression = expression.Trim();
-            if (expression.StartsWith("${"))
-                expression = expression[2..^1].Trim();
+            if (string.IsNullOrWhiteSpace(expression))
+                throw new ArgumentNullException(nameof(expression));
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+            string json = this.JsonSerializer.Serialize(data);
+            string jqExpression = this.BuildJQExpression(expression);
             string fileName;
             string args;
             using Process process = new();
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 fileName = "cmd.exe";
-                args = @$"/c echo {data.ToString(Formatting.None)} | jq ""{this.EscapeJson(expression)}""";
+                args = @$"/c echo {json} | jq.exe ""{jqExpression}""";
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 fileName = "bash";
-                args = @$"-c ""echo '{this.EscapeJson(data.ToString(Formatting.None))}' | jq '{this.EscapeJson(expression)}'""";
+                args = @$"-c ""echo '{json}' | jq '{jqExpression}'""";
             }
             else
-            {
                 throw new PlatformNotSupportedException();
-            }
             process.StartInfo.FileName = fileName;
             process.StartInfo.Arguments = args;
             process.StartInfo.UseShellExecute = false;
@@ -70,26 +103,45 @@ namespace Neuroglia.Data.Expressions.JQ
             string error = process.StandardError.ReadToEnd();
             process.WaitForExit();
             if (process.ExitCode != 0)
-                throw new Exception($"An error occured while evaluting the specified expression:{Environment.NewLine}Details: {error}");
+            {
+                this.Logger.LogError("An error occured while evaluting the specified expression: {error}", error);
+                throw new Exception($"An error occured while evaluting the specified expression: {error}");
+            }
             if (string.IsNullOrWhiteSpace(output))
                 return null;
             else
-                return JToken.Parse(output);
+                return this.JsonSerializer.Deserialize(output, expectedType);
+        }
+
+        /// <inheritdoc/>
+        public virtual T? Evaluate<T>(string expression, object data)
+        {
+            return (T?)this.Evaluate(expression, data, typeof(T));
+        }
+
+        /// <inheritdoc/>
+        public virtual object? Evaluate(string expression, object data)
+        {
+            return this.Evaluate(expression, data, typeof(object));
         }
 
         /// <summary>
-        /// Escapes doubles quotes in the supplied json
+        /// Builds a jq compliant expression from the specified expression
         /// </summary>
-        /// <param name="json">The json string to escape</param>
-        /// <returns>The escaped json</returns>
-        protected virtual string EscapeJson(string json)
+        /// <param name="expression">The expression to build a jq compliant expression for</param>
+        /// <returns>A new jq compliant expression built from the specified expression</returns>
+        protected virtual string BuildJQExpression(string expression)
         {
-            if (!json.Contains(@"\"""))
-                json = json.Replace("\"", @"\""");
-            if (!json.Contains("^&"))
-                json = json.Replace("&", "^&");
-            return json;
+            string jqExpression = expression.Trim();
+            if (jqExpression.StartsWith("${"))
+                jqExpression = jqExpression[2..^1].Trim();
+            if (!jqExpression.Contains(@"\"""))
+                jqExpression = jqExpression.Replace("\"", @"\""");
+            if (!jqExpression.Contains("^&"))
+                jqExpression = jqExpression.Replace("&", "^&");
+            return jqExpression;
         }
+
 
     }
 

@@ -212,6 +212,81 @@
         <member name="M:Neuroglia.Error.ToString">
             <inheritdoc/>
         </member>
+        <member name="T:Neuroglia.AsyncObservableExtensions">
+            <summary>
+            Defines extensions for <see cref="T:System.IObservable`1"/>
+            </summary>
+            <remarks>Original source: <see href="https://github.com/dotnet/reactive/issues/459#issuecomment-357735068">davidnemeti post</see></remarks>
+        </member>
+        <member name="M:Neuroglia.AsyncObservableExtensions.SubscribeAsync``1(System.IObservable{``0},System.Func{``0,System.Threading.Tasks.Task},System.Func{System.Exception,System.Threading.Tasks.Task},System.Func{System.Threading.Tasks.Task})">
+            <summary>
+            Subscribes to the specified <see cref="T:System.IObservable`1"/>
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="onNextAsync">Action to invoke for each element in the observable sequence.</param>
+            <param name="onErrorAsync">Action to invoke upon exceptional termination of the observable sequence.</param>
+            <param name="onCompletedAsync">Action to invoke upon graceful termination of the observable sequence.</param>
+            <returns><see cref="T:System.IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
+        </member>
+        <member name="M:Neuroglia.AsyncObservableExtensions.SubscribeAsync``1(System.IObservable{``0},System.Func{``0,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary>
+            Subscribes to the specified <see cref="T:System.IObservable`1"/>
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="onNextAsync">Action to invoke for each element in the observable sequence.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+        </member>
+        <member name="M:Neuroglia.AsyncObservableExtensions.SubscribeAsync``1(System.IObservable{``0},System.Func{``0,System.Threading.Tasks.Task},System.Func{System.Exception,System.Threading.Tasks.Task},System.Func{System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary>
+            Subscribes to the specified <see cref="T:System.IObservable`1"/>
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="onNextAsync">Action to invoke for each element in the observable sequence.</param>
+            <param name="onErrorAsync">Action to invoke upon exceptional termination of the observable sequence.</param>
+            <param name="onCompletedAsync">Action to invoke upon graceful termination of the observable sequence.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+        </member>
+        <member name="M:Neuroglia.AsyncObservableExtensions.SubscribeAsyncConcurrent``1(System.IObservable{``0},System.Func{``0,System.Threading.Tasks.Task})">
+            <summary>
+            Subscribes to the specified <see cref="T:System.IObservable`1"/> concurrently
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="onNextAsync">Action to invoke for each element in the observable sequence.</param>
+            <returns><see cref="T:System.IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
+        </member>
+        <member name="M:Neuroglia.AsyncObservableExtensions.SubscribeAsyncConcurrent``1(System.IObservable{``0},System.Func{``0,System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary>
+            Subscribes to the specified <see cref="T:System.IObservable`1"/> concurrently
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="onNextAsync">Action to invoke for each element in the observable sequence.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+        </member>
+        <member name="M:Neuroglia.AsyncObservableExtensions.SubscribeAsyncConcurrent``1(System.IObservable{``0},System.Func{``0,System.Threading.Tasks.Task},System.Int32)">
+            <summary>
+            Subscribes to the specified <see cref="T:System.IObservable`1"/> concurrently
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="onNextAsync">Action to invoke for each element in the observable sequence.</param>
+            <param name="maxConcurrent">The maximum amount of concurrent threads.</param>
+            <returns><see cref="T:System.IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
+        </member>
+        <member name="M:Neuroglia.AsyncObservableExtensions.SubscribeAsyncConcurrent``1(System.IObservable{``0},System.Func{``0,System.Threading.Tasks.Task},System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Subscribes to the specified <see cref="T:System.IObservable`1"/> concurrently
+            </summary>
+            <typeparam name="T">The type of the elements in the source sequence.</typeparam>
+            <param name="source">The source sequence.</param>
+            <param name="onNextAsync">Action to invoke for each element in the observable sequence.</param>
+            <param name="maxConcurrent">The maximum amount of concurrent threads.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+        </member>
         <member name="T:Neuroglia.DurationExtensions">
             <summary>
             Defines extensions for <see cref="T:Iso8601DurationHelper.Duration"/>s
@@ -304,6 +379,13 @@
             <typeparam name="T">The type of values wrapped by the <see cref="T:System.Collections.Generic.IDictionary`2"/> to create</typeparam>
             <param name="source">The object to transform</param>
             <returns>A <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the specified object's property name/value pairs</returns>
+        </member>
+        <member name="M:Neuroglia.ObjectExtensions.ToExpandoObject(System.Object)">
+            <summary>
+            Converts the object to a new <see cref="T:System.Dynamic.ExpandoObject"/>
+            </summary>
+            <param name="obj">The object to convert</param>
+            <returns>A new <see cref="T:System.Dynamic.ExpandoObject"/></returns>
         </member>
         <member name="T:Neuroglia.ParameterInfoExtensions">
             <summary>

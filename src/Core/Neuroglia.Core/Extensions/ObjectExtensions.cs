@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 
 namespace Neuroglia
 {
@@ -39,6 +40,27 @@ namespace Neuroglia
                     dictionary.Add(property.Name, (T)value);
             }
             return dictionary;
+        }
+
+        /// <summary>
+        /// Converts the object to a new <see cref="ExpandoObject"/>
+        /// </summary>
+        /// <param name="obj">The object to convert</param>
+        /// <returns>A new <see cref="ExpandoObject"/></returns>
+        public static ExpandoObject ToExpandoObject(this object obj)
+        {
+            if (obj == null)
+                throw new ArgumentNullException(nameof(obj));
+            if (obj is not ExpandoObject expandoObject)
+            {
+                expandoObject = new();
+                var expandoDictionary = (IDictionary<string, object>)expandoObject;
+                foreach (var kvp in obj.ToDictionary())
+                {
+                    expandoDictionary.Add(kvp.Key, kvp.Value);
+                }
+            }
+            return expandoObject;
         }
 
         private static bool IsOfType<T>(object value)
