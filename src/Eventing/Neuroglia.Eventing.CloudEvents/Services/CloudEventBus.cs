@@ -28,7 +28,7 @@ namespace Neuroglia.Eventing.Services
         /// <param name="formatter">The service used to format <see cref="CloudEvent"/>s</param>
         /// <param name="stream">The <see cref="Subject{T}"/> used to observe consumed <see cref="CloudEvent"/>s</param>
         /// <param name="httpClient">The <see cref="System.Net.Http.HttpClient"/> used to publish <see cref="CloudEvent"/>s</param>
-        public CloudEventBus(IServiceProvider serviceProvider, ILogger<CloudEventBus> logger, IOptions<CloudEventBusOptions> options, CloudEventFormatter formatter, Subject<CloudEvent> stream, HttpClient httpClient)
+        public CloudEventBus(IServiceProvider serviceProvider, ILogger<CloudEventBus> logger, IOptions<CloudEventBusOptions> options, CloudEventFormatter formatter, ISubject<CloudEvent> stream, HttpClient httpClient)
         {
             this.Logger = logger;
             this.Options = options.Value;
@@ -56,7 +56,7 @@ namespace Neuroglia.Eventing.Services
         /// <summary>
         /// Gets the <see cref="Subject{T}"/> used to observe consumed <see cref="CloudEvent"/>s
         /// </summary>
-        protected Subject<CloudEvent> Stream { get; }
+        protected ISubject<CloudEvent> Stream { get; }
 
         /// <summary>
         /// Gets the <see cref="System.Net.Http.HttpClient"/> used to publish <see cref="CloudEvent"/>s

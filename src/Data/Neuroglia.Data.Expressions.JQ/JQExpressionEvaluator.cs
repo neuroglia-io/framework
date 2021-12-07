@@ -142,7 +142,6 @@ namespace Neuroglia.Data.Expressions.JQ
             return jqExpression;
         }
 
-
     }
 
 }

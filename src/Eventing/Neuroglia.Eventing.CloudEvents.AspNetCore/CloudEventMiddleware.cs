@@ -28,7 +28,7 @@ namespace Neuroglia.Eventing
         protected RequestDelegate Next { get; }
 
         /// <inheritdoc/>
-        public async Task InvokeAsync(HttpContext context, CloudEventFormatter formatter, ISubject<CloudEvent> cloudEventStream)
+        public async Task InvokeAsync(HttpContext context, CloudEventFormatter formatter, ISubject<CloudEvent> stream)
         {
             if(!context.Request.IsCloudEvent())
             {
@@ -36,7 +36,7 @@ namespace Neuroglia.Eventing
                 return;
             }
             var e = await context.Request.ToCloudEventAsync(formatter, Array.Empty<CloudEventAttribute>());
-            cloudEventStream.OnNext(e);
+            stream.OnNext(e);
         }
 
     }

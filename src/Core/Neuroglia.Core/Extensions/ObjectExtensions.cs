@@ -19,6 +19,8 @@ namespace Neuroglia
         /// <returns>A <see cref="IDictionary{TKey, TValue}"/> containing the specified object's property name/value pairs</returns>
         public static IDictionary<string, object> ToDictionary(this object source)
         {
+            if (source is IDictionary<string, object> dictionary)
+                return dictionary;
             return source.ToDictionary<object>();
         }
 

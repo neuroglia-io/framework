@@ -81,7 +81,7 @@
             Represents the default implementation of the <see cref="T:Neuroglia.Eventing.ICloudEventBus"/> interface
             </summary>
         </member>
-        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{Neuroglia.Eventing.Services.CloudEventBus},Microsoft.Extensions.Options.IOptions{Neuroglia.Eventing.Configuration.CloudEventBusOptions},CloudNative.CloudEvents.CloudEventFormatter,System.Reactive.Subjects.Subject{CloudNative.CloudEvents.CloudEvent},System.Net.Http.HttpClient)">
+        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{Neuroglia.Eventing.Services.CloudEventBus},Microsoft.Extensions.Options.IOptions{Neuroglia.Eventing.Configuration.CloudEventBusOptions},CloudNative.CloudEvents.CloudEventFormatter,System.Reactive.Subjects.ISubject{CloudNative.CloudEvents.CloudEvent},System.Net.Http.HttpClient)">
             <summary>
             Initializes a new <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/>
             </summary>

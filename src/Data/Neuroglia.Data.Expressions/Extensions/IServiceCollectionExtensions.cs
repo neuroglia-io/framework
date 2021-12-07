@@ -44,36 +44,4 @@ namespace Neuroglia.Data.Expressions
 
     }
 
-    public static class IExpressionEvaluatorProviderExtensions
-    {
-
-        public static object? Evaluate(this IExpressionEvaluator evaluator, object obj, object data, Type expectedType)
-        {
-            var inputProperties = obj.ToDictionary();
-            var outputProperties = new Dictionary<string, object>();
-            foreach (var property in inputProperties)
-            {
-                var value = property.Value;
-                if (property.Value is string expression
-                    && expression.IsRuntimeExpression())
-                    value = evaluator.Evaluate(expression, data);
-                else if (!property.Value.GetType().IsValueType())
-                    value = evaluator.Evaluate(property.Value, data);
-                outputProperties.Add(property.Key, value!);
-            }
-            return outputProperties.ToExpandoObject();
-        }
-
-        public static T? Evaluate<T>(this IExpressionEvaluator evaluator, object obj, object data)
-        {
-            return (T?)evaluator.Evaluate(obj, data, typeof(T));
-        }
-
-        public static object? Evaluate(this IExpressionEvaluator evaluator, object obj, object data)
-        {
-            return evaluator.Evaluate(obj, data, typeof(object));
-        }
-
-    }
-
 }
