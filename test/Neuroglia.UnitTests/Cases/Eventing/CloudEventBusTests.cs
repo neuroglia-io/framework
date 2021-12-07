@@ -127,7 +127,7 @@ namespace Neuroglia.UnitTests.Cases.Eventing
             CloudEventBusFactory.ConfigureServices(services);
             var provider = services.BuildServiceProvider();
             var cloudEventBus = provider.GetRequiredService<CloudEventBus>();
-            var stream = provider.GetRequiredService<Subject<CloudEvent>>();
+            var stream = provider.GetRequiredService<ISubject<CloudEvent>>();
             var e = CloudEventFactory.Create();
 
             //act

@@ -56,7 +56,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Expressions
             var expectedResult = new { foo = bar, bar = "foo", baz = baz.ToExpandoObject() };
 
             //act
-            var result = evaluator.Evaluate<ExpandoObject>(obj, data);
+            var result = evaluator.Evaluate(obj, data);
 
             //assert
             result.Should().BeEquivalentTo(expectedResult.ToExpandoObject());

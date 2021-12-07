@@ -47,6 +47,7 @@ namespace Neuroglia.UnitTests.Factories
                 .AddHttpMessageHandler(() => new TestHttpMessageHandler());
             services.AddSingleton<ICloudEventBus>(provider => provider.GetRequiredService<CloudEventBus>());
             services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<CloudEventBus>());
+            services.AddCloudEventBus(provider => provider.WithBrokerUri(new("https://webhook.site/6ddc1d0a-562b-4e20-bfdc-36293957dab1")));
         }
 
     }
