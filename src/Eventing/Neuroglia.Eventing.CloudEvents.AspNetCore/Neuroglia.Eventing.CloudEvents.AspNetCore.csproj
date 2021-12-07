@@ -2,13 +2,12 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<RootNamespace>Neuroglia.Mediation</RootNamespace>
 		<Company>Neuroglia SPRL</Company>
 		<Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
 		<Authors>Neuroglia SPRL</Authors>
 		<RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>neuroglia framework mediation opentelemetry instrumentation</PackageTags>
+		<PackageTags>neuroglia framework cloudevent asp core</PackageTags>
 		<Version>2.0.1.7</Version>
 		<AssemblyVersion>2.0.1.7</AssemblyVersion>
 		<FileVersion>2.0.1.7</FileVersion>
@@ -18,10 +17,13 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageIcon>logo_white_on_blue_256.png</PackageIcon>
 		<IsPackable>true</IsPackable>
+		<RootNamespace>Neuroglia.Eventing</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<DocumentationFile>Neuroglia.Mediation.Extensions.OpenTelemetry.xml</DocumentationFile>
+		<DocumentationFile>Neuroglia.Eventing.CloudEvents.AspNetCore.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -36,11 +38,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="OpenTelemetry.Api" Version="1.1.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
+	  <PackageReference Include="CloudNative.CloudEvents" Version="2.1.1" />
+	  <PackageReference Include="CloudNative.CloudEvents.AspNetCore" Version="2.1.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+	  <PackageReference Include="System.Reactive" Version="5.0.0" />
 	</ItemGroup>
 
 </Project>
