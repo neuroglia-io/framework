@@ -45,7 +45,7 @@ namespace Neuroglia.Data.Expressions
                 if (property.Value is string expression
                     && expression.IsRuntimeExpression())
                     value = evaluator.Evaluate(expression, data);
-                else if (!property.Value.GetType().IsValueType())
+                else if (!property.Value.GetType().IsPrimitiveType())
                 {
                     if (property.Value is IEnumerable inputElements)
                     {

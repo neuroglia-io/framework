@@ -136,9 +136,9 @@ namespace Neuroglia
         /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
         public static IDisposable SubscribeAsyncConcurrent<T>(this IObservable<T> source, Func<T, Task> onNextAsync, int maxConcurrent)
         {
-            return source
+            return Observable.Merge(source
                 .Select(number => Observable.FromAsync(() => onNextAsync(number)))
-                .Merge(maxConcurrent)
+, maxConcurrent)
                 .Subscribe();
         }
 
@@ -152,9 +152,9 @@ namespace Neuroglia
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         public static void SubscribeAsyncConcurrent<T>(this IObservable<T> source, Func<T, Task> onNextAsync, int maxConcurrent, CancellationToken cancellationToken)
         {
-            source
+            Observable.Merge(source
                 .Select(number => Observable.FromAsync(() => onNextAsync(number)))
-                .Merge(maxConcurrent)
+, maxConcurrent)
                 .Subscribe(cancellationToken);
         }
 

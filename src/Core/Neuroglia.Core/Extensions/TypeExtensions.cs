@@ -88,11 +88,11 @@ namespace Neuroglia
         }
 
         /// <summary>
-        /// Gets a boolean indicating whether or not the type is a system value-type (includes <see cref="Guid"/>, <see cref="string"/>, <see cref="DateTime"/> and array types)
+        /// Gets a boolean indicating whether or not the type is a primitive type (includes value types, <see cref="Guid"/>, <see cref="string"/>, <see cref="DateTime"/> and array types)
         /// </summary>
-        /// <param name="extended"></param>
-        /// <returns></returns>
-        public static bool IsValueType(this Type extended)
+        /// <param name="extended">The type to check</param>
+        /// <returns>A boolean indicating whether or not the type is a primitive type</returns>
+        public static bool IsPrimitiveType(this Type extended)
         {
             if (extended.IsValueType)
             {
