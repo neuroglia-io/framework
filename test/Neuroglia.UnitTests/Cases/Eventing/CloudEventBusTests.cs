@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Neuroglia.Data;
+using Neuroglia.Eventing;
 using Neuroglia.Eventing.Services;
 using Neuroglia.UnitTests.Factories;
 using Neuroglia.UnitTests.Services;

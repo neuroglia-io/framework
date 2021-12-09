@@ -2,7 +2,7 @@
 using Neuroglia.Data;
 using System.Net.Mime;
 
-namespace Neuroglia.Eventing.Services
+namespace Neuroglia.Eventing
 {
     /// <summary>
     /// Represents a <see cref="CloudEvent"/> outbox entry
@@ -16,7 +16,8 @@ namespace Neuroglia.Eventing.Services
         /// </summary>
         protected CloudEventOutboxEntry()
         {
-
+            this.Data = null!;
+            this.ContentType = null!;
         }
 
         /// <summary>
@@ -28,8 +29,8 @@ namespace Neuroglia.Eventing.Services
         public CloudEventOutboxEntry(string id, byte[] data, ContentType contentType)
             : base(id)
         {
-            this.Data = data;
-            this.ContentType = contentType?.ToString();
+            Data = data;
+            ContentType = contentType.ToString();
         }
 
         /// <summary>
