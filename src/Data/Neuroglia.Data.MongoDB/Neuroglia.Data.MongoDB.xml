@@ -18,26 +18,53 @@
             <param name="configurationAction">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Data.IMongoDbContext"/></param>
             <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
         </member>
-        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddMongoRepository``3(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddMongoClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,MongoDB.Driver.MongoClientSettings,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:MongoDB.Driver.IMongoClient"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="clientSettings">The <see cref="T:MongoDB.Driver.MongoClientSettings"/> to use</param>
+            <param name="lifetime">The lifetime of the <see cref="T:MongoDB.Driver.IMongoClient"/> to add and configure. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddMongoClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{MongoDB.Driver.MongoClientSettings},Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:MongoDB.Driver.IMongoClient"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:MongoDB.Driver.MongoClientSettings"/> to use</param>
+            <param name="lifetime">The lifetime of the <see cref="T:MongoDB.Driver.IMongoClient"/> to add and configure. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddMongoDatabase(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:MongoDB.Driver.IMongoDatabase"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="databaseName">The name of the <see cref="T:MongoDB.Driver.IMongoDatabase"/> to add and configure.</param>
+            <param name="lifetime">The lifetime of the <see cref="T:MongoDB.Driver.IMongoDatabase"/> to add and configure. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddMongoRepository``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Neuroglia.Data.MongoRepositoryOptions},Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
             <summary>
             Adds and configures a MongoDb implementation of the <see cref="T:Neuroglia.Data.IRepository`2"/> interface
             </summary>
             <typeparam name="TEntity">The type of entity managed by the repository to add</typeparam>
             <typeparam name="TKey">The type of key used to uniquely identify entities managed by the repository to add</typeparam>
-            <typeparam name="TDbContext">The type of <see cref="T:Neuroglia.Data.IMongoDbContext"/> the repository to add belongs to</typeparam>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
-            <param name="lifetime">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> of the <see cref="T:Neuroglia.Data.MongoRepository`3"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Data.MongoRepository`2"/></param>
+            <param name="lifetime">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> of the <see cref="T:Neuroglia.Data.MongoRepository`2"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
             <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
         </member>
-        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddMongoRepository(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Type,System.Type,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+        <member name="M:Neuroglia.Data.IServiceCollectionExtensions.AddMongoRepository(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type,System.Type,System.Action{Neuroglia.Data.MongoRepositoryOptions},Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
             <summary>
-            Adds and configures a new <see cref="T:Neuroglia.Data.MongoRepository`3"/>
+            Adds and configures a new <see cref="T:Neuroglia.Data.MongoRepository`2"/>
             </summary>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
-            <param name="lifetime">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> of the <see cref="T:Neuroglia.Data.MongoRepository`3"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
+            <param name="lifetime">The <see cref="T:Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> of the <see cref="T:Neuroglia.Data.MongoRepository`2"/> to add. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped"/></param>
             <param name="entityType">The type of entity to store</param>
             <param name="keyType">The type of key used to uniquely identify entities to store</param>
-            <param name="contextType">The type of <see cref="T:Neuroglia.Data.IMongoDbContext"/> the <see cref="T:Neuroglia.Data.MongoRepository`3"/> to add belongs to</param>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Data.MongoRepository`2"/></param>
             <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
         </member>
         <member name="T:Neuroglia.Data.IMongoDbContext">
@@ -155,70 +182,98 @@
             </summary>
             <typeparam name="TDbContext">The type of <see cref="T:Neuroglia.Data.IMongoDbContext"/> to configure</typeparam>
         </member>
-        <member name="T:Neuroglia.Data.MongoRepository`3">
+        <member name="T:Neuroglia.Data.MongoRepository`2">
             <summary>
             Represents the default <see href="https://www.mongodb.com/">MongoDB</see> implementation of the <see cref="T:Neuroglia.Data.IRepository`2"/> interface
             </summary>
             <typeparam name="TEntity">The type of entities managed by the repository</typeparam>
             <typeparam name="TKey">The type of key used to uniquely identify entities managed by the repository</typeparam>
-            <typeparam name="TContext">The type of <see cref="T:Neuroglia.Data.IMongoDbContext"/> the repository belongs to</typeparam>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,`2)">
+        <member name="M:Neuroglia.Data.MongoRepository`2.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Options.IOptions{Neuroglia.Data.MongoRepositoryOptions{`0,`1}},Neuroglia.Data.IPluralizer,MongoDB.Driver.IMongoDatabase)">
             <summary>
-            Initializes a new <see cref="T:Neuroglia.Data.MongoRepository`3"/>
+            Initializes a new <see cref="T:Neuroglia.Data.MongoRepository`2"/>
             </summary>
             <param name="loggerFactory">The service used to create <see cref="T:Microsoft.Extensions.Logging.ILogger"/>s</param>
-            <param name="dbContext">The <see cref="T:Neuroglia.Data.IMongoDbContext"/> the <see cref="T:Neuroglia.Data.MongoRepository`3"/> belongs to</param>
+            <param name="pluralizer">The service used to pluralize words</param>
+            <param name="database">The <see cref="T:MongoDB.Driver.IMongoDatabase"/> the <see cref="T:Neuroglia.Data.MongoRepository`2"/> belongs to</param>
+            <param name="options">The service used to access the <see cref="T:Neuroglia.Data.MongoRepository`2"/>'s options</param>
         </member>
-        <member name="P:Neuroglia.Data.MongoRepository`3.Logger">
+        <member name="P:Neuroglia.Data.MongoRepository`2.Logger">
             <summary>
             Gets the service used to perform logging
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.MongoRepository`3.DbContext">
+        <member name="P:Neuroglia.Data.MongoRepository`2.Options">
             <summary>
-            Gets the <see cref="T:Neuroglia.Data.IMongoDbContext"/> the <see cref="T:Neuroglia.Data.MongoRepository`3"/> belongs to
+            Gets the options used to configure the <see cref="T:Neuroglia.Data.MongoRepository`2"/>
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.MongoRepository`3.Collection">
+        <member name="P:Neuroglia.Data.MongoRepository`2.Pluralizer">
+            <summary>
+            Gets the service used to pluralize words
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.MongoRepository`2.Database">
+            <summary>
+            Gets the service used to interact with the MongoDB database the <see cref="T:Neuroglia.Data.MongoRepository`2"/> belongs to
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.MongoRepository`2.Collection">
             <summary>
             Gets the underlying <see cref="T:MongoDB.Driver.IMongoCollection`1"/>
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.MongoRepository`3.PendingAggregates">
+        <member name="P:Neuroglia.Data.MongoRepository`2.PendingAggregates">
             <summary>
             Gets a <see cref="T:System.Collections.Generic.List`1"/> containing all <see cref="T:Neuroglia.Data.IAggregateRoot"/>s pending the publication of their <see cref="T:Neuroglia.Data.IDomainEvent"/>s
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.ContainsAsync(`1,System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.MongoRepository`2.ContainsAsync(`1,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.FindAsync(System.Object[],System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.MongoRepository`2.FindAsync(System.Object[],System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.FindAsync(`1,System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.MongoRepository`2.FindAsync(`1,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.AddAsync(`0,System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.MongoRepository`2.AddAsync(`0,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.UpdateAsync(`0,System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.MongoRepository`2.UpdateAsync(`0,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.RemoveAsync(`0,System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.MongoRepository`2.RemoveAsync(`0,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.RemoveAsync(`1,System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.MongoRepository`2.RemoveAsync(`1,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.ToListAsync(System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.MongoRepository`2.ToListAsync(System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.SaveChangesAsync(System.Threading.CancellationToken)">
+        <member name="M:Neuroglia.Data.MongoRepository`2.SaveChangesAsync(System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.MongoRepository`3.AsQueryable">
+        <member name="M:Neuroglia.Data.MongoRepository`2.AsQueryable">
             <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.MongoRepositoryOptions">
+            <summary>
+            Represents the options used to configure an <see cref="T:Neuroglia.Data.MongoRepository`2"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.MongoRepositoryOptions.CollectionSettings">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.MongoRepository`2"/>'s <see cref="T:MongoDB.Driver.MongoCollectionSettings"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.MongoRepositoryOptions`2">
+            <summary>
+            Represents the options used to configure an <see cref="T:Neuroglia.Data.MongoRepository`2"/>
+            </summary>
+            <typeparam name="TEntity">The type of entities managed by the repository</typeparam>
+            <typeparam name="TKey">The type of key used to uniquely identify entities managed by the repository</typeparam>
         </member>
         <member name="T:Neuroglia.Data.MongoDB.CollectionBuilder`1">
             <summary>

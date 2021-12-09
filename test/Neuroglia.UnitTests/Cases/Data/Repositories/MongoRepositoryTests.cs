@@ -21,20 +21,16 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
         {
             ServiceCollection services = new();
             services.AddLogging();
-            services.AddMongoDbContext<TestMongoDbContext>(builder => builder
-                .UseDatabase("test")
-                .UseConnectionString(MongoDBContainerBuilder.Build().ConnectionString));
-            services.AddMongoRepository<TestPerson, Guid, TestMongoDbContext>();
+            services.AddMongoClient(MongoClientSettings.FromConnectionString(MongoDBContainerBuilder.Build().ConnectionString));
+            services.AddMongoDatabase("fakedb");
+            services.AddMongoRepository<TestPerson, Guid>();
             this.ServiceScope = services.BuildServiceProvider().CreateScope();
-            this.DbContext = this.ServiceScope.ServiceProvider.GetRequiredService<TestMongoDbContext>();
-            this.Repository = this.ServiceScope.ServiceProvider.GetRequiredService<MongoRepository<TestPerson, Guid, TestMongoDbContext>>();
+            this.Repository = this.ServiceScope.ServiceProvider.GetRequiredService<MongoRepository<TestPerson, Guid>>();
         }
 
         IServiceScope ServiceScope { get; }
 
-        TestMongoDbContext DbContext { get; }
-
-        MongoRepository<TestPerson, Guid, TestMongoDbContext> Repository { get; }
+        MongoRepository<TestPerson, Guid> Repository { get; }
 
         static Guid? EntityId;
 
@@ -45,7 +41,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             var firstName = "Fake First Name";
             var lastName = "Fake Last Name";
             var entity = new TestPerson(firstName, lastName);
-            await this.DbContext.EnsureCreatedAsync();
+       
 
             //act
             entity = await this.Repository.AddAsync(entity);
@@ -56,7 +52,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             entity.Should().NotBeNull();
             entity.FirstName.Should().Be(firstName);
             entity.LastName.Should().Be(lastName);
-            entity = await this.DbContext.Collection<TestPerson>().AsQueryable().FirstOrDefaultAsync();
+            entity = this.Repository.AsQueryable().FirstOrDefault();
             entity.Should().NotBeNull();
             entity.FirstName.Should().Be(firstName);
             entity.LastName.Should().Be(lastName);
@@ -80,7 +76,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
 
             //assert
             entity.Should().NotBeNull();
-            TestPerson fromcontext = await this.DbContext.Collection<TestPerson>().AsQueryable().FirstOrDefaultAsync();
+            TestPerson fromcontext = this.Repository.AsQueryable().FirstOrDefault();
             entity.Should().NotBeNull();
             entity.Id.Should().Be(fromcontext.Id);
             entity.FirstName.Should().Be(fromcontext.FirstName);
@@ -104,7 +100,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             entity.Should().NotBeNull();
             entity.FirstName.Should().Be(newFirstName);
             entity.LastName.Should().Be(newLastName);
-            entity = await this.DbContext.Collection<TestPerson>().AsQueryable().FirstOrDefaultAsync();
+            entity = this.Repository.AsQueryable().FirstOrDefault();
             entity.Should().NotBeNull();
             entity.FirstName.Should().Be(newFirstName);
             entity.LastName.Should().Be(newLastName);
@@ -138,7 +134,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             await this.Repository.SaveChangesAsync();
 
             //assert
-            TestPerson entity = await this.DbContext.Collection<TestPerson>().AsQueryable().FirstOrDefaultAsync();
+            TestPerson entity = this.Repository.AsQueryable().FirstOrDefault();
             entity.Should().BeNull();
         }
 

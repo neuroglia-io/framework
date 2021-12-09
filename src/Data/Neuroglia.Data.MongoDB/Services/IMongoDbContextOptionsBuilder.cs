@@ -14,11 +14,10 @@
  * limitations under the License.
  *
  */
-using MongoDB.Driver;
-using System;
 
 namespace Neuroglia.Data.MongoDB
 {
+
     /// <summary>
     /// Defines the fundamentals of a service used to build <see cref="MongoDbContextOptions"/>
     /// </summary>

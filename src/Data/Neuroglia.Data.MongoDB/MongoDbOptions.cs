@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using MongoDB.Driver;
 
 namespace Neuroglia.Data
 {
@@ -28,17 +27,17 @@ namespace Neuroglia.Data
         /// <summary>
         /// Gets/sets the connection string used to connect to the remote MongDB
         /// </summary>
-        public string ConnectionString { get; set; }
+        public virtual string ConnectionString { get; set; }
 
         /// <summary>
         /// Gets/sets the name of the database to connect to
         /// </summary>
-        public string DatabaseName { get; set; }
+        public virtual string DatabaseName { get; set; }
 
         /// <summary>
         /// Gets/sets the default <see cref="MongoCollectionSettings"/>
         /// </summary>
-        public MongoCollectionSettings DefaultCollectionSettings { get; set; }
+        public virtual MongoCollectionSettings DefaultCollectionSettings { get; set; } = new();
 
     }
 

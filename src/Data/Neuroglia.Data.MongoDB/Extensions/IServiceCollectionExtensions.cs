@@ -50,40 +50,88 @@ namespace Neuroglia.Data
         }
 
         /// <summary>
+        /// Adds and configures a new <see cref="IMongoClient"/>
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+        /// <param name="clientSettings">The <see cref="MongoClientSettings"/> to use</param>
+        /// <param name="lifetime">The lifetime of the <see cref="IMongoClient"/> to add and configure. Defaults to <see cref="ServiceLifetime.Scoped"/></param>
+        /// <returns>The configured <see cref="IServiceCollection"/></returns>
+        public static IServiceCollection AddMongoClient(this IServiceCollection services, MongoClientSettings clientSettings, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        {
+            services.AddPluralizer();
+            services.TryAdd(new ServiceDescriptor(typeof(IMongoClient), provider => new MongoClient(clientSettings), lifetime));
+            return services;
+        }
+
+        /// <summary>
+        /// Adds and configures a new <see cref="IMongoClient"/>
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+        /// <param name="configurationAction">An <see cref="Action{T}"/> used to configure the <see cref="MongoClientSettings"/> to use</param>
+        /// <param name="lifetime">The lifetime of the <see cref="IMongoClient"/> to add and configure. Defaults to <see cref="ServiceLifetime.Scoped"/></param>
+        /// <returns>The configured <see cref="IServiceCollection"/></returns>
+        public static IServiceCollection AddMongoClient(this IServiceCollection services, Action<MongoClientSettings> configurationAction, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        {
+            var clientSettings = new MongoClientSettings();
+            configurationAction(clientSettings);
+            return services.AddMongoClient(clientSettings, lifetime);
+        }
+
+        /// <summary>
+        /// Adds and configures a new <see cref="IMongoDatabase"/>
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+        /// <param name="databaseName">The name of the <see cref="IMongoDatabase"/> to add and configure.</param>
+        /// <param name="lifetime">The lifetime of the <see cref="IMongoDatabase"/> to add and configure. Defaults to <see cref="ServiceLifetime.Scoped"/></param>
+        /// <returns>The configured <see cref="IServiceCollection"/></returns>
+        public static IServiceCollection AddMongoDatabase(this IServiceCollection services, string databaseName, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        {
+            if(string.IsNullOrWhiteSpace(databaseName))
+                throw new ArgumentNullException(nameof(databaseName));
+            services.Add(new ServiceDescriptor(typeof(IMongoDatabase), provider => provider.GetRequiredService<IMongoClient>().GetDatabase(databaseName), lifetime));
+            return services;
+        }
+
+        /// <summary>
         /// Adds and configures a MongoDb implementation of the <see cref="IRepository{TEntity, TKey}"/> interface
         /// </summary>
         /// <typeparam name="TEntity">The type of entity managed by the repository to add</typeparam>
         /// <typeparam name="TKey">The type of key used to uniquely identify entities managed by the repository to add</typeparam>
-        /// <typeparam name="TDbContext">The type of <see cref="IMongoDbContext"/> the repository to add belongs to</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the <see cref="MongoRepository{TEntity, TKey, TContext}"/> to add. Defaults to <see cref="ServiceLifetime.Scoped"/></param>
+        /// <param name="configurationAction">An <see cref="Action{T}"/> used to configure the <see cref="MongoRepository{TEntity, TKey}"/></param>
+        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the <see cref="MongoRepository{TEntity, TKey}"/> to add. Defaults to <see cref="ServiceLifetime.Scoped"/></param>
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddMongoRepository<TEntity, TKey, TDbContext>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        public static IServiceCollection AddMongoRepository<TEntity, TKey>(this IServiceCollection services, Action<MongoRepositoryOptions> configurationAction = null,  ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TEntity : class, IIdentifiable<TKey>
             where TKey : IEquatable<TKey>
-            where TDbContext : class, IMongoDbContext
         {
-            return services.AddMongoRepository(typeof(TEntity), typeof(TKey), typeof(TDbContext), lifetime);
+            return services.AddMongoRepository(typeof(TEntity), typeof(TKey), configurationAction, lifetime);
         }
 
         /// <summary>
-        /// Adds and configures a new <see cref="MongoRepository{TEntity, TKey, TContext}"/>
+        /// Adds and configures a new <see cref="MongoRepository{TEntity, TKey}"/>
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the <see cref="MongoRepository{TEntity, TKey, TContext}"/> to add. Defaults to <see cref="ServiceLifetime.Scoped"/></param>
+        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the <see cref="MongoRepository{TEntity, TKey}"/> to add. Defaults to <see cref="ServiceLifetime.Scoped"/></param>
         /// <param name="entityType">The type of entity to store</param>
         /// <param name="keyType">The type of key used to uniquely identify entities to store</param>
-        /// <param name="contextType">The type of <see cref="IMongoDbContext"/> the <see cref="MongoRepository{TEntity, TKey, TContext}"/> to add belongs to</param>
+        /// <param name="configurationAction">An <see cref="Action{T}"/> used to configure the <see cref="MongoRepository{TEntity, TKey}"/></param>
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
-        private static IServiceCollection AddMongoRepository(this IServiceCollection services, Type entityType, Type keyType, Type contextType, ServiceLifetime lifetime)
+        private static IServiceCollection AddMongoRepository(this IServiceCollection services, Type entityType, Type keyType, Action<MongoRepositoryOptions> configurationAction = null, ServiceLifetime lifetime = ServiceLifetime.Scoped)
         {
             if (entityType == null)
                 throw new ArgumentNullException(nameof(entityType));
+            if (!typeof(IIdentifiable).IsAssignableFrom(entityType))
+                throw new ArgumentException($"Type '{entityType.Name}' is not an implementation of the '{nameof(IIdentifiable)}' interface", nameof(entityType));
+            var identifiableType = entityType.GetGenericType(typeof(IIdentifiable<>));
+            var expectedKeyType = identifiableType.GetGenericArguments()[0];
             if (keyType == null)
                 throw new ArgumentNullException(nameof(keyType));
-            if (contextType == null)
-                throw new ArgumentNullException(nameof(contextType));
-            Type implementationType = typeof(MongoRepository<,,>).MakeGenericType(entityType, keyType, contextType);
+            if (!expectedKeyType.IsAssignableFrom(keyType))
+                throw new ArgumentException($"Type '{entityType.Name}' expects a key of type '{expectedKeyType.Name}'", nameof(keyType));
+            Type implementationType = typeof(MongoRepository<,>).MakeGenericType(entityType, keyType);
+            if (configurationAction != null)
+                services.Configure(configurationAction);
             services.TryAdd(new ServiceDescriptor(implementationType, implementationType, lifetime));
             services.TryAdd(new ServiceDescriptor(typeof(IRepository<,>).MakeGenericType(entityType, keyType), provider => provider.GetRequiredService(implementationType), lifetime));
             services.TryAdd(new ServiceDescriptor(typeof(IRepository<>).MakeGenericType(entityType), provider => provider.GetRequiredService(implementationType), lifetime));

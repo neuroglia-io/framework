@@ -31,24 +31,26 @@ namespace Neuroglia.Data
     /// </summary>
     /// <typeparam name="TEntity">The type of entities managed by the repository</typeparam>
     /// <typeparam name="TKey">The type of key used to uniquely identify entities managed by the repository</typeparam>
-    /// <typeparam name="TContext">The type of <see cref="IMongoDbContext"/> the repository belongs to</typeparam>
-    public class MongoRepository<TEntity, TKey, TContext>
+    public class MongoRepository<TEntity, TKey>
         : RepositoryBase<TEntity, TKey>
         where TEntity : class, IIdentifiable<TKey>
         where TKey : IEquatable<TKey>
-        where TContext : class, IMongoDbContext
     {
 
         /// <summary>
-        /// Initializes a new <see cref="MongoRepository{TDocument, TKey, TDbContext}"/>
+        /// Initializes a new <see cref="MongoRepository{TDocument, TKey}"/>
         /// </summary>
         /// <param name="loggerFactory">The service used to create <see cref="ILogger"/>s</param>
-        /// <param name="dbContext">The <see cref="IMongoDbContext"/> the <see cref="MongoRepository{TDocument, TKey, TDbContext}"/> belongs to</param>
-        public MongoRepository(ILoggerFactory loggerFactory, TContext dbContext)
+        /// <param name="pluralizer">The service used to pluralize words</param>
+        /// <param name="database">The <see cref="IMongoDatabase"/> the <see cref="MongoRepository{TDocument, TKey}"/> belongs to</param>
+        /// <param name="options">The service used to access the <see cref="MongoRepository{TEntity, TKey}"/>'s options</param>
+        public MongoRepository(ILoggerFactory loggerFactory, IOptions<MongoRepositoryOptions<TEntity, TKey>> options, IPluralizer pluralizer, IMongoDatabase database)
         {
             this.Logger = loggerFactory.CreateLogger(this.GetType());
-            this.DbContext = dbContext;
-            this.Collection = this.DbContext.Collection<TEntity>();
+            this.Options = options.Value;
+            this.Pluralizer = pluralizer;
+            this.Database = database;
+            this.Collection = this.Database.GetCollection<TEntity>(this.Pluralizer.Pluralize(typeof(TEntity).Name), this.Options.CollectionSettings);
         }
 
         /// <summary>
@@ -57,9 +59,19 @@ namespace Neuroglia.Data
         protected ILogger Logger { get; }
 
         /// <summary>
-        /// Gets the <see cref="IMongoDbContext"/> the <see cref="MongoRepository{TDocument, TKey, TDbContext}"/> belongs to
+        /// Gets the options used to configure the <see cref="MongoRepository{TEntity, TKey}"/>
         /// </summary>
-        protected TContext DbContext { get; }
+        protected MongoRepositoryOptions Options { get; }
+
+        /// <summary>
+        /// Gets the service used to pluralize words
+        /// </summary>
+        public IPluralizer Pluralizer { get; }
+
+        /// <summary>
+        /// Gets the service used to interact with the MongoDB database the <see cref="MongoRepository{TEntity, TKey}"/> belongs to
+        /// </summary>
+        protected IMongoDatabase Database { get; }
 
         /// <summary>
         /// Gets the underlying <see cref="IMongoCollection{TDocument}"/>
