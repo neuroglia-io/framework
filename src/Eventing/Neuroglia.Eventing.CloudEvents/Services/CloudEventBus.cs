@@ -134,44 +134,45 @@ namespace Neuroglia.Eventing.Services
         /// <returns>A new awaitable <see cref="Task"/></returns>
         protected virtual async Task DequeueAndPublishPendingEventsAsync()
         {
-            try
-            {
+           
                 do
                 {
-                    CloudEvent e = await this.Queue.Reader.ReadAsync(this.CancellationTokenSource.Token);
-                    if (e == null)
-                        continue;
-                    bool published = false;
-                    var buffer = this.Formatter.EncodeStructuredModeMessage(e, out ContentType contentType);
-                    ByteArrayContent content = new(buffer.ToArray());
-                    content.Headers.ContentType = new(contentType.MediaType);
-                    using HttpRequestMessage request = new(HttpMethod.Post, "") { Content = content };
-                    do
+                    try
                     {
-                        try
-                        {
-                            using HttpResponseMessage response = await this.HttpClient.SendAsync(request, this.CancellationTokenSource.Token);
-                            response.EnsureSuccessStatusCode();
-                        }
-                        catch(Exception ex)
-                        {
+                        CloudEvent e = await this.Queue.Reader.ReadAsync(this.CancellationTokenSource.Token);
+                        if (e == null)
                             continue;
+                        bool published = false;
+                        var buffer = this.Formatter.EncodeStructuredModeMessage(e, out ContentType contentType);
+                        ByteArrayContent content = new(buffer.ToArray());
+                        content.Headers.ContentType = new(contentType.MediaType);
+                        using HttpRequestMessage request = new(HttpMethod.Post, "") { Content = content };
+                        do
+                        {
+                            try
+                            {
+                                using HttpResponseMessage response = await this.HttpClient.SendAsync(request, this.CancellationTokenSource.Token);
+                                response.EnsureSuccessStatusCode();
+                            }
+                            catch(Exception ex)
+                            {
+                                continue;
+                            }
+                            published = true;
                         }
-                        published = true;
+                        while (!this.CancellationTokenSource.IsCancellationRequested && !published);
+                        if (this.Outbox != null)
+                        {
+                            await this.Outbox.RemoveAsync(e.Id!, this.CancellationTokenSource.Token);
+                            await this.Outbox.SaveChangesAsync(this.CancellationTokenSource.Token);
+                        }
                     }
-                    while (!this.CancellationTokenSource.IsCancellationRequested && !published);
-                    if (this.Outbox != null)
+                    catch (Exception ex)
                     {
-                        await this.Outbox.RemoveAsync(e.Id!, this.CancellationTokenSource.Token);
-                        await this.Outbox.SaveChangesAsync(this.CancellationTokenSource.Token);
+                        this.Logger.LogError("An error occured while dequeuing and publishing pending cloud events: {ex}", ex.ToString());
                     }
                 }
                 while (!this.CancellationTokenSource.IsCancellationRequested);
-            }
-            catch(Exception ex)
-            {
-
-            }
         }
 
         private bool _Disposed;
@@ -184,7 +185,7 @@ namespace Neuroglia.Eventing.Services
             if (!this._Disposed)
             {
                 if (disposing)
-                    this.CancellationTokenSource.Dispose();
+                    this.CancellationTokenSource?.Dispose();
                 this._Disposed = true;
             }
         }
