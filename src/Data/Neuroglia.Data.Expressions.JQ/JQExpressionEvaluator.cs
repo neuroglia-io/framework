@@ -89,7 +89,7 @@ namespace Neuroglia.Data.Expressions.JQ
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 fileName = "bash";
-                args = @$"-c ""echo '{json}' | jq '{jqExpression}'""";
+                args = @$"-c ""echo '{this.EscapeDoubleQuotes(json)}' | jq '{jqExpression}'""";
             }
             else
                 throw new PlatformNotSupportedException();
@@ -140,6 +140,18 @@ namespace Neuroglia.Data.Expressions.JQ
             if (!jqExpression.Contains("^&"))
                 jqExpression = jqExpression.Replace("&", "^&");
             return jqExpression;
+        }
+
+        /// <summary>
+        /// Escapes double quotes in the specified string
+        /// </summary>
+        /// <param name="input">The string for which to escape double quotes</param>
+        /// <returns>The string with escaped double quotes</returns>
+        protected virtual string EscapeDoubleQuotes(string input)
+        {
+            if (!input.Contains(@"\"""))
+                input = input.Replace("\"", @"\""");
+            return input;
         }
 
     }
