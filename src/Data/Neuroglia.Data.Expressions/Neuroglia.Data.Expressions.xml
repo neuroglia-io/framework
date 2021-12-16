@@ -26,12 +26,12 @@
         <member name="M:Neuroglia.Data.Expressions.ExpressionEvaluatorProvider.GetEvaluators(System.String)">
             <inheritdoc/>
         </member>
-        <member name="T:Neuroglia.Data.Expressions.IExpressionEvaluatorProviderExtensions">
+        <member name="T:Neuroglia.Data.Expressions.IExpressionEvaluatorExtensions">
             <summary>
             Defines extensions for <see cref="T:Neuroglia.Data.Expressions.IExpressionEvaluator"/>s
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.Expressions.IExpressionEvaluatorProviderExtensions.Evaluate(Neuroglia.Data.Expressions.IExpressionEvaluator,System.Object,System.Object)">
+        <member name="M:Neuroglia.Data.Expressions.IExpressionEvaluatorExtensions.Evaluate(Neuroglia.Data.Expressions.IExpressionEvaluator,System.Object,System.Object)">
             <summary>
             Evaluates an object against the specified data
             </summary>

@@ -16,6 +16,7 @@
  */
 
 using System.Collections;
+using System.Dynamic;
 
 namespace Neuroglia.Data.Expressions
 {
@@ -23,7 +24,7 @@ namespace Neuroglia.Data.Expressions
     /// <summary>
     /// Defines extensions for <see cref="IExpressionEvaluator"/>s
     /// </summary>
-    public static class IExpressionEvaluatorProviderExtensions
+    public static class IExpressionEvaluatorExtensions
     {
 
         /// <summary>
@@ -35,8 +36,15 @@ namespace Neuroglia.Data.Expressions
         /// <returns>The result of the input object's evaluation</returns>
         public static object? Evaluate(this IExpressionEvaluator evaluator, object obj, object data)
         {
-            if(evaluator == null)
+            if (evaluator == null)
                 throw new ArgumentNullException(nameof(evaluator));
+            if (obj.GetType().IsPrimitiveType())
+            {
+                if (obj is string expression)
+                    return evaluator.Evaluate(expression, data);
+                else
+                    return obj;
+            }
             var inputProperties = obj.ToDictionary();
             var outputProperties = new Dictionary<string, object>();
             foreach (var property in inputProperties)
@@ -47,12 +55,19 @@ namespace Neuroglia.Data.Expressions
                     value = evaluator.Evaluate(expression, data);
                 else if (!property.Value.GetType().IsPrimitiveType())
                 {
-                    if (property.Value is IEnumerable inputElements)
+                    if (property.Value is IDictionary<string, object> expando)
                     {
-                        var outputElements = new List<IDictionary<string, object>>();
-                        foreach(var inputElement in inputElements)
+                        foreach (var kvp in expando.ToList())
                         {
-                            var outputElement = evaluator.Evaluate(inputElement, data) as IDictionary<string, object>;
+                            expando[kvp.Key] = evaluator.Evaluate(kvp.Value, data)!;
+                        }
+                    }
+                    else if (property.Value is IEnumerable inputElements)
+                    {
+                        var outputElements = new List<ExpandoObject>();
+                        foreach (var inputElement in inputElements)
+                        {
+                            var outputElement = evaluator.Evaluate(inputElement, data) as ExpandoObject;
                             if (outputElement == null)
                                 continue;
                             outputElements.Add(outputElement);
@@ -64,7 +79,7 @@ namespace Neuroglia.Data.Expressions
                         value = evaluator.Evaluate(property.Value, data);
                     }
                 }
-                    
+
                 outputProperties.Add(property.Key, value!);
             }
             return outputProperties.ToExpandoObject();
