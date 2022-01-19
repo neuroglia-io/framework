@@ -10,9 +10,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework mediation asp core</PackageTags>
-    <Version>2.0.1.16</Version>
-    <AssemblyVersion>2.0.1.16</AssemblyVersion>
-    <FileVersion>2.0.1.16</FileVersion>
+    <Version>2.0.1.17</Version>
+    <AssemblyVersion>2.0.1.17</AssemblyVersion>
+    <FileVersion>2.0.1.17</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
