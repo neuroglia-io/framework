@@ -70,6 +70,7 @@ namespace YamlDotNet.Serialization
                     {
                         JTokenType.Boolean => new(token.ToString().ToLower()),
                         JTokenType.TimeSpan => new(Iso8601TimeSpan.Format(token.ToObject<TimeSpan>())),
+                        JTokenType.Uri => new(token.Value<Uri>().OriginalString),
                         _ => new(AnchorName.Empty, TagName.Empty, token.Value<string>(), ScalarStyle.SingleQuoted, true, true),
                     };
                     emitter.Emit(scalar);

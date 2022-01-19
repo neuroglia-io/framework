@@ -70,7 +70,12 @@ namespace Neuroglia.UnitTests.Cases.Serialization
         public async Task SerializeAndDeserialize_JObject_ShouldWork()
         {
             //arrange
-            var toSerialize = JObject.FromObject(new { FirstName = "Fake First Name", LastName = "Fake Last Name" });
+            var toSerialize = JObject.FromObject(new 
+            {
+                FirstName = "Fake First Name", 
+                LastName = "Fake Last Name",
+                UriProperty = new Uri("#/definitions/SchemaDefinitionPointer", UriKind.RelativeOrAbsolute)
+            });
 
             //act
             var yaml = await this.Serializer.SerializeAsync(toSerialize);
