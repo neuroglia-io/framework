@@ -10,9 +10,9 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework data kubernetes k8s</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <Version>2.0.1.17</Version>
-    <AssemblyVersion>2.0.1.17</AssemblyVersion>
-    <FileVersion>2.0.1.17</FileVersion>
+    <Version>2.0.1.18</Version>
+    <AssemblyVersion>2.0.1.18</AssemblyVersion>
+    <FileVersion>2.0.1.18</FileVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
