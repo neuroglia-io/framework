@@ -4,6 +4,34 @@
         <name>Neuroglia.Eventing.CloudEvents</name>
     </assembly>
     <members>
+        <member name="T:Neuroglia.Eventing.CloudEventOutboxEntry">
+            <summary>
+            Represents a <see cref="T:CloudNative.CloudEvents.CloudEvent"/> outbox entry
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.CloudEventOutboxEntry.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Eventing.CloudEventOutboxEntry"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.CloudEventOutboxEntry.#ctor(System.String,System.Byte[],System.Net.Mime.ContentType)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Eventing.CloudEventOutboxEntry"/>
+            </summary>
+            <param name="id">The id of the outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/></param>
+            <param name="data">The data of the outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/></param>
+            <param name="contentType">The outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/>'s <see cref="T:System.Net.Mime.ContentType"/></param>
+        </member>
+        <member name="P:Neuroglia.Eventing.CloudEventOutboxEntry.Data">
+            <summary>
+            Gets the data of the outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.CloudEventOutboxEntry.ContentType">
+            <summary>
+            Gets the <see cref="T:CloudNative.CloudEvents.CloudEvent"/>'s <see cref="T:System.Net.Mime.ContentType"/>
+            </summary>
+        </member>
         <member name="T:Neuroglia.Eventing.Configuration.CloudEventBusOptions">
             <summary>
             Represents the options used to configure a <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/>
@@ -163,34 +191,6 @@
         </member>
         <member name="M:Neuroglia.Eventing.Services.CloudEventBus.Dispose">
             <inheritdoc/>
-        </member>
-        <member name="T:Neuroglia.Eventing.Services.CloudEventOutboxEntry">
-            <summary>
-            Represents a <see cref="T:CloudNative.CloudEvents.CloudEvent"/> outbox entry
-            </summary>
-        </member>
-        <member name="M:Neuroglia.Eventing.Services.CloudEventOutboxEntry.#ctor">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Eventing.Services.CloudEventOutboxEntry"/>
-            </summary>
-        </member>
-        <member name="M:Neuroglia.Eventing.Services.CloudEventOutboxEntry.#ctor(System.String,System.Byte[],System.Net.Mime.ContentType)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Eventing.Services.CloudEventOutboxEntry"/>
-            </summary>
-            <param name="id">The id of the outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/></param>
-            <param name="data">The data of the outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/></param>
-            <param name="contentType">The outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/>'s <see cref="T:System.Net.Mime.ContentType"/></param>
-        </member>
-        <member name="P:Neuroglia.Eventing.Services.CloudEventOutboxEntry.Data">
-            <summary>
-            Gets the data of the outbound <see cref="T:CloudNative.CloudEvents.CloudEvent"/>
-            </summary>
-        </member>
-        <member name="P:Neuroglia.Eventing.Services.CloudEventOutboxEntry.ContentType">
-            <summary>
-            Gets the <see cref="T:CloudNative.CloudEvents.CloudEvent"/>'s <see cref="T:System.Net.Mime.ContentType"/>
-            </summary>
         </member>
         <member name="T:Neuroglia.Eventing.ICloudEventBus">
             <summary>

@@ -8,9 +8,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework xunit testing</PackageTags>
-    <Version>2.0.1.18</Version>
-    <AssemblyVersion>2.0.1.18</AssemblyVersion>
-    <FileVersion>2.0.1.18</FileVersion>
+    <Version>2.0.1.19</Version>
+    <AssemblyVersion>2.0.1.19</AssemblyVersion>
+    <FileVersion>2.0.1.19</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

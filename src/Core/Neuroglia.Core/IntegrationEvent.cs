@@ -29,7 +29,7 @@ namespace Neuroglia
         public virtual Guid AggregateId { get; set; }
 
         /// <inheritdoc/>
-        public virtual DateTime CreatedAt { get; set; }
+        public virtual DateTimeOffset CreatedAt { get; set; }
 
     }
 

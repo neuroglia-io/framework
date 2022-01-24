@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Eventing.CloudEvents.AspNetCore</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Eventing.CloudEventMiddleware">
+            <summary>
+            Represents the <see cref="T:Microsoft.AspNetCore.Http.RequestDelegate"/> used to handle <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.CloudEventMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Eventing.CloudEventMiddleware"/>
+            </summary>
+            <param name="next">The next <see cref="T:Microsoft.AspNetCore.Http.RequestDelegate"/> in the pipeline</param>
+        </member>
+        <member name="P:Neuroglia.Eventing.CloudEventMiddleware.Next">
+            <summary>
+            Gets the next <see cref="T:Microsoft.AspNetCore.Http.RequestDelegate"/> in the pipeline
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.CloudEventMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext,CloudNative.CloudEvents.CloudEventFormatter,System.Reactive.Subjects.ISubject{CloudNative.CloudEvents.CloudEvent})">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Eventing.IApplicationBuilderExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Eventing.IApplicationBuilderExtensions.UseCloudEvents(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Configures the <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/> to use the <see cref="T:Neuroglia.Eventing.CloudEventMiddleware"/>
+            </summary>
+            <param name="app">The <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/> to configure</param>
+            <returns>The configured <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/></returns>
+        </member>
+    </members>
+</doc>

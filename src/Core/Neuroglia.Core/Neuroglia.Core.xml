@@ -4,6 +4,24 @@
         <name>Neuroglia.Core</name>
     </assembly>
     <members>
+        <member name="T:Neuroglia.AsyncLock">
+            <summary>
+            Represents an object used to lock aynschronous processes
+            </summary>
+            <remarks>Code based on <see href="https://medium.com/swlh/async-lock-mechanism-on-asynchronous-programing-d43f15ad0b3"/></remarks>
+        </member>
+        <member name="M:Neuroglia.AsyncLock.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.AsyncLock"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.AsyncLock.LockAsync(System.Threading.CancellationToken)">
+            <summary>
+            Locks asynchronously
+            </summary>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new object which releases the lock upon disposal</returns>
+        </member>
         <member name="T:Neuroglia.DataTransferObjectTypeAttribute">
             <summary>
             Represents an <see cref="T:System.Attribute"/> used to specify the Data Transfer Object of an entity

@@ -117,5 +117,12 @@
             <param name="expression">The expression to build a jq compliant expression for</param>
             <returns>A new jq compliant expression built from the specified expression</returns>
         </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.EscapeDoubleQuotes(System.String)">
+            <summary>
+            Escapes double quotes in the specified string
+            </summary>
+            <param name="input">The string for which to escape double quotes</param>
+            <returns>The string with escaped double quotes</returns>
+        </member>
     </members>
 </doc>
