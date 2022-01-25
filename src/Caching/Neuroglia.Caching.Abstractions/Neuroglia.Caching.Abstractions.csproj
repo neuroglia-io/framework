@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia caching abstractions</PackageTags>
-    <Version>2.0.1.19</Version>
-    <AssemblyVersion>2.0.1.19</AssemblyVersion>
-    <FileVersion>2.0.1.19</FileVersion>
+    <Version>2.0.1.20</Version>
+    <AssemblyVersion>2.0.1.20</AssemblyVersion>
+    <FileVersion>2.0.1.20</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
