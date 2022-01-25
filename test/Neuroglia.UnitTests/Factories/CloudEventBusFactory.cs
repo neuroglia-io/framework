@@ -38,15 +38,12 @@ namespace Neuroglia.UnitTests.Factories
                 options.BrokerUri = new("https://webhook.site/df070939-36f0-49d9-828c-4f182206d852");
             });
             services.AddSingleton<CloudEventFormatter, JsonEventFormatter>();
-            services.TryAddSingleton<Subject<CloudEvent>>();
             services.AddHttpClient<CloudEventBus>((provider, http) =>
             {
                 CloudEventBusOptions options = provider.GetRequiredService<IOptions<CloudEventBusOptions>>().Value;
                 http.BaseAddress = options.BrokerUri;
             })
                 .AddHttpMessageHandler(() => new TestHttpMessageHandler());
-            services.AddSingleton<ICloudEventBus>(provider => provider.GetRequiredService<CloudEventBus>());
-            services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<CloudEventBus>());
             services.AddCloudEventBus(provider => provider.WithBrokerUri(new("https://webhook.site/6ddc1d0a-562b-4e20-bfdc-36293957dab1")));
         }
 

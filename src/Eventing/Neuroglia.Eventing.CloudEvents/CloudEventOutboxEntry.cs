@@ -14,7 +14,7 @@ namespace Neuroglia.Eventing
         /// <summary>
         /// Initializes a new <see cref="CloudEventOutboxEntry"/>
         /// </summary>
-        protected CloudEventOutboxEntry()
+        public CloudEventOutboxEntry()
         {
             this.Data = null!;
             this.ContentType = null!;
