@@ -31,13 +31,14 @@ namespace Neuroglia.Eventing
             var options = builder.Build();
             services.TryAddSingleton(Options.Create(options));
             services.TryAddSingleton<ISubject<CloudEvent>, Subject<CloudEvent>>();
-            services.AddHttpClient<CloudEventBus>((provider, http) =>
+            services.AddHttpClient(nameof(CloudEventBus), (provider, http) =>
             {
                 CloudEventBusOptions options = provider.GetRequiredService<IOptions<CloudEventBusOptions>>().Value;
                 http.BaseAddress = options.BrokerUri;
             })
                 .SetHandlerLifetime(TimeSpan.FromMinutes(5))
                 .AddPolicyHandler(GetPolicy());
+            services.AddSingleton<CloudEventBus>();
             services.AddSingleton<ICloudEventBus>(provider => provider.GetRequiredService<CloudEventBus>());
             services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<CloudEventBus>());
             return services;

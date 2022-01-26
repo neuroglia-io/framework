@@ -27,14 +27,14 @@ namespace Neuroglia.Eventing.Services
         /// <param name="options">The service used to access the current <see cref="CloudEventBusOptions"/></param>
         /// <param name="formatter">The service used to format <see cref="CloudEvent"/>s</param>
         /// <param name="stream">The <see cref="Subject{T}"/> used to observe consumed <see cref="CloudEvent"/>s</param>
-        /// <param name="httpClient">The <see cref="System.Net.Http.HttpClient"/> used to publish <see cref="CloudEvent"/>s</param>
-        public CloudEventBus(IServiceProvider serviceProvider, ILogger<CloudEventBus> logger, IOptions<CloudEventBusOptions> options, CloudEventFormatter formatter, ISubject<CloudEvent> stream, HttpClient httpClient)
+        /// <param name="httpClientFactory">The service used to create <see cref="System.Net.Http.HttpClient"/>s</param>
+        public CloudEventBus(IServiceProvider serviceProvider, ILogger<CloudEventBus> logger, IOptions<CloudEventBusOptions> options, CloudEventFormatter formatter, ISubject<CloudEvent> stream, IHttpClientFactory httpClientFactory)
         {
             this.Logger = logger;
             this.Options = options.Value;
             this.Formatter = formatter;
             this.Stream = stream;
-            this.HttpClient = httpClient;
+            this.HttpClient = httpClientFactory.CreateClient(nameof(CloudEventBus));
             this.Outbox = serviceProvider.GetService<IRepository<CloudEventOutboxEntry, string>>();
         }
 

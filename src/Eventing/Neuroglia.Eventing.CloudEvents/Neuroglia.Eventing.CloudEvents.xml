@@ -109,7 +109,7 @@
             Represents the default implementation of the <see cref="T:Neuroglia.Eventing.ICloudEventBus"/> interface
             </summary>
         </member>
-        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{Neuroglia.Eventing.Services.CloudEventBus},Microsoft.Extensions.Options.IOptions{Neuroglia.Eventing.Configuration.CloudEventBusOptions},CloudNative.CloudEvents.CloudEventFormatter,System.Reactive.Subjects.ISubject{CloudNative.CloudEvents.CloudEvent},System.Net.Http.HttpClient)">
+        <member name="M:Neuroglia.Eventing.Services.CloudEventBus.#ctor(System.IServiceProvider,Microsoft.Extensions.Logging.ILogger{Neuroglia.Eventing.Services.CloudEventBus},Microsoft.Extensions.Options.IOptions{Neuroglia.Eventing.Configuration.CloudEventBusOptions},CloudNative.CloudEvents.CloudEventFormatter,System.Reactive.Subjects.ISubject{CloudNative.CloudEvents.CloudEvent},System.Net.Http.IHttpClientFactory)">
             <summary>
             Initializes a new <see cref="T:Neuroglia.Eventing.Services.CloudEventBus"/>
             </summary>
@@ -118,7 +118,7 @@
             <param name="options">The service used to access the current <see cref="T:Neuroglia.Eventing.Configuration.CloudEventBusOptions"/></param>
             <param name="formatter">The service used to format <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s</param>
             <param name="stream">The <see cref="T:System.Reactive.Subjects.Subject`1"/> used to observe consumed <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s</param>
-            <param name="httpClient">The <see cref="T:System.Net.Http.HttpClient"/> used to publish <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s</param>
+            <param name="httpClientFactory">The service used to create <see cref="T:System.Net.Http.HttpClient"/>s</param>
         </member>
         <member name="P:Neuroglia.Eventing.Services.CloudEventBus.Logger">
             <summary>
