@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using YamlDotNet.Core;
@@ -51,6 +52,33 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             deserialized.Country.Should().Be(toSerialize.Country);
         }
 
+        [Theory]
+        [MemberData(nameof(SerializeJTokenTypes))]
+        public async Task SerializeAndDeserialize_JTokenTypes_ShouldWork(JToken token)
+        {
+            //arrange
+            var toSerialize = token;
+
+            //act
+            var buffer = await this.Serializer.SerializeAsync(toSerialize);
+            var deserialized = await this.Serializer.DeserializeAsync<JToken>(buffer);
+
+            //assert
+            deserialized.Should().NotBeNull();
+        }
+
+        public static IEnumerable<object[]> SerializeJTokenTypes => new List<object[]>
+        {
+            new object[] { JObject.FromObject(new { })},
+            new object[] { JValue.CreateNull() },
+            new object[] { JToken.FromObject(Guid.NewGuid()) },
+            new object[] { JToken.FromObject(DateTimeOffset.UtcNow) },
+            new object[] { JToken.FromObject(TimeSpan.FromSeconds(1)) },
+            new object[] { JToken.FromObject(1.25F) },
+            new object[] { JToken.FromObject(1.25D) },
+            new object[] { new Uri("#/definitions/SchemaDefinitionPointer", UriKind.RelativeOrAbsolute) }
+        };
+
         [Fact]
         public async Task SerializeAndDeserialize_Uri_ShouldWork()
         {
@@ -73,8 +101,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             var toSerialize = JObject.FromObject(new 
             {
                 FirstName = "Fake First Name", 
-                LastName = "Fake Last Name",
-                UriProperty = new Uri("#/definitions/SchemaDefinitionPointer", UriKind.RelativeOrAbsolute)
+                LastName = "Fake Last Name"
             });
 
             //act
