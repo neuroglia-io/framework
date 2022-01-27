@@ -68,11 +68,13 @@ namespace YamlDotNet.Serialization
                 default:
                     Scalar scalar = token.Type switch
                     {
-                        JTokenType.Boolean or JTokenType.Date => new(token.ToString().ToLower()),
+                        JTokenType.Boolean => new(token.ToString().ToLower()),
+                        JTokenType.Date => new(token.ToString()),
+                        JTokenType.Float => new(AnchorName.Empty, TagName.Empty, token.Value<string>(), ScalarStyle.Plain, true, false),
                         JTokenType.Guid => new(token.Value<Guid>().ToString()),
-                        JTokenType.TimeSpan => new(Iso8601TimeSpan.Format(token.ToObject<TimeSpan>())),
-                        JTokenType.Uri => new(token.Value<Uri>().OriginalString),
                         JTokenType.Null => new(string.Empty),
+                        JTokenType.TimeSpan => new(Iso8601TimeSpan.Format(token.ToObject<TimeSpan>())),
+                        JTokenType.Uri => new(AnchorName.Empty, TagName.Empty, token.Value<Uri>().OriginalString, ScalarStyle.Plain, true, true),
                         _ => new(AnchorName.Empty, TagName.Empty, token.Value<string>(), ScalarStyle.SingleQuoted, true, true),
                     };
                     emitter.Emit(scalar);
