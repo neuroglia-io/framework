@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using YamlDotNet.Core;
@@ -51,6 +52,35 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             deserialized.Country.Should().Be(toSerialize.Country);
         }
 
+        [Theory]
+        [MemberData(nameof(SerializeJTokenTypes))]
+        public async Task SerializeAndDeserialize_JTokenTypes_ShouldWork(JToken token, string expectedSerializedValue)
+        {
+            //arrange
+            var toSerialize = token;
+
+            //act
+            var buffer = await this.Serializer.SerializeAsync(toSerialize);
+            var deserialized = await this.Serializer.DeserializeAsync<JToken>(buffer);
+
+            //assert
+            deserialized.Should().NotBeNull();
+            Assert.Equal(expectedSerializedValue + "\r\n", buffer);
+        }
+
+        public static IEnumerable<object[]> SerializeJTokenTypes => new List<object[]>
+        {
+            new object[] { JObject.FromObject(new { }), "{}" },
+            new object[] { JValue.CreateNull(), "--- ''" },
+            new object[] { JToken.FromObject(Guid.Parse("864febab-99d4-49af-9fc8-a46c910bcc23")), "864febab-99d4-49af-9fc8-a46c910bcc23" },
+            new object[] { JToken.FromObject(DateTimeOffset.ParseExact("2022-01-27T11:18:23.9397185+00:00", "O", null)), "1/27/2022 11:18:23 AM +00:00" },
+            new object[] { JToken.FromObject(DateTime.ParseExact("2022-01-27T11:18:23.9397185+00:00", "O", null)), "1/27/2022 11:18:23 AM" },
+            new object[] { JToken.FromObject(TimeSpan.FromSeconds(1)), "PT1S" },
+            new object[] { JToken.FromObject(1.25F), "1.25" },
+            new object[] { JToken.FromObject(1.25D), "1.25" },
+            new object[] { new Uri("#/definitions/SchemaDefinitionPointer", UriKind.RelativeOrAbsolute), "'#/definitions/SchemaDefinitionPointer'" }
+        };
+
         [Fact]
         public async Task SerializeAndDeserialize_Uri_ShouldWork()
         {
@@ -73,8 +103,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             var toSerialize = JObject.FromObject(new 
             {
                 FirstName = "Fake First Name", 
-                LastName = "Fake Last Name",
-                UriProperty = new Uri("#/definitions/SchemaDefinitionPointer", UriKind.RelativeOrAbsolute)
+                LastName = "Fake Last Name"
             });
 
             //act
