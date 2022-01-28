@@ -134,45 +134,46 @@ namespace Neuroglia.Eventing.Services
         /// <returns>A new awaitable <see cref="Task"/></returns>
         protected virtual async Task DequeueAndPublishPendingEventsAsync()
         {
-           
-                do
+
+            do
+            {
+                try
                 {
-                    try
+                    CloudEvent e = await this.Queue.Reader.ReadAsync(this.CancellationTokenSource.Token);
+                    if (e == null)
+                        continue;
+                    bool published = false;
+                    var buffer = this.Formatter.EncodeStructuredModeMessage(e, out ContentType contentType);
+                    ByteArrayContent content = new(buffer.ToArray());
+                    content.Headers.ContentType = new(contentType.MediaType);
+                    using HttpRequestMessage request = new(HttpMethod.Post, "") { Content = content };
+                    do
                     {
-                        CloudEvent e = await this.Queue.Reader.ReadAsync(this.CancellationTokenSource.Token);
-                        if (e == null)
+                        try
+                        {
+                            using HttpResponseMessage response = await this.HttpClient.SendAsync(request, this.CancellationTokenSource.Token);
+                            response.EnsureSuccessStatusCode();
+                        }
+                        catch (Exception ex)
+                        {
+                            this.Logger.LogError("An error occured while posting a cloud events to the broker: {ex}", ex.ToString());
                             continue;
-                        bool published = false;
-                        var buffer = this.Formatter.EncodeStructuredModeMessage(e, out ContentType contentType);
-                        ByteArrayContent content = new(buffer.ToArray());
-                        content.Headers.ContentType = new(contentType.MediaType);
-                        using HttpRequestMessage request = new(HttpMethod.Post, "") { Content = content };
-                        do
-                        {
-                            try
-                            {
-                                using HttpResponseMessage response = await this.HttpClient.SendAsync(request, this.CancellationTokenSource.Token);
-                                response.EnsureSuccessStatusCode();
-                            }
-                            catch(Exception ex)
-                            {
-                                continue;
-                            }
-                            published = true;
                         }
-                        while (!this.CancellationTokenSource.IsCancellationRequested && !published);
-                        if (this.Outbox != null)
-                        {
-                            await this.Outbox.RemoveAsync(e.Id!, this.CancellationTokenSource.Token);
-                            await this.Outbox.SaveChangesAsync(this.CancellationTokenSource.Token);
-                        }
+                        published = true;
                     }
-                    catch (Exception ex)
+                    while (!this.CancellationTokenSource.IsCancellationRequested && !published);
+                    if (this.Outbox != null)
                     {
-                        this.Logger.LogError("An error occured while dequeuing and publishing pending cloud events: {ex}", ex.ToString());
+                        await this.Outbox.RemoveAsync(e.Id!, this.CancellationTokenSource.Token);
+                        await this.Outbox.SaveChangesAsync(this.CancellationTokenSource.Token);
                     }
                 }
-                while (!this.CancellationTokenSource.IsCancellationRequested);
+                catch (Exception ex)
+                {
+                    this.Logger.LogError("An error occured while dequeuing and publishing pending cloud events: {ex}", ex.ToString());
+                }
+            }
+            while (!this.CancellationTokenSource.IsCancellationRequested);
         }
 
         private bool _Disposed;
