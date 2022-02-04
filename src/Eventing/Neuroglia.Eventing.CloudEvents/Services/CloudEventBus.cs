@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neuroglia.Data;
 using Neuroglia.Eventing.Configuration;
+using Polly;
 using System.Net.Mime;
 using System.Reactive.Subjects;
 using System.Threading.Channels;
@@ -134,7 +135,6 @@ namespace Neuroglia.Eventing.Services
         /// <returns>A new awaitable <see cref="Task"/></returns>
         protected virtual async Task DequeueAndPublishPendingEventsAsync()
         {
-
             do
             {
                 try
@@ -144,22 +144,27 @@ namespace Neuroglia.Eventing.Services
                         continue;
                     bool published = false;
                     var buffer = this.Formatter.EncodeStructuredModeMessage(e, out ContentType contentType);
-                    ByteArrayContent content = new(buffer.ToArray());
-                    content.Headers.ContentType = new(contentType.MediaType);
-                    using HttpRequestMessage request = new(HttpMethod.Post, "") { Content = content };
                     do
                     {
-                        try
+                        var retryPolicy = Policy.Handle<Exception>()
+                            .WaitAndRetryForeverAsync(retryAttempt => TimeSpan.FromSeconds(retryAttempt));
+                        await retryPolicy.ExecuteAsync(async () =>
                         {
-                            using HttpResponseMessage response = await this.HttpClient.SendAsync(request, this.CancellationTokenSource.Token);
-                            response.EnsureSuccessStatusCode();
-                        }
-                        catch (Exception ex)
-                        {
-                            this.Logger.LogError("An error occured while posting a cloud events to the broker: {ex}", ex.ToString());
-                            continue;
-                        }
-                        published = true;
+                            try
+                            {
+                                using ByteArrayContent content = new(buffer.ToArray());
+                                content.Headers.ContentType = new(contentType.MediaType);
+                                using HttpRequestMessage request = new(HttpMethod.Post, "") { Content = content };
+                                using HttpResponseMessage response = await this.HttpClient.SendAsync(request, this.CancellationTokenSource.Token);
+                                response.EnsureSuccessStatusCode();
+                                published = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                this.Logger.LogError("An error occured while posting a cloud events to the broker: {ex}", ex.ToString());
+                                throw;
+                            }
+                        });
                     }
                     while (!this.CancellationTokenSource.IsCancellationRequested && !published);
                     if (this.Outbox != null)

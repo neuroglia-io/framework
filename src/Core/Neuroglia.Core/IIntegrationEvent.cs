@@ -17,6 +17,7 @@
 
 namespace Neuroglia
 {
+
     /// <summary>
     /// Defines the fundamentals of an integration event, which is an event used to exchange information across domain boundaries
     /// </summary>
