@@ -1,89 +1,118 @@
-﻿/*
- * Copyright © 2021 Neuroglia SPRL. All rights reserved.
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-using Google.Protobuf.Reflection;
+﻿using ProtoBuf;
+using ProtoBuf.WellKnownTypes;
 using System;
 
 namespace Neuroglia.Serialization
 {
     /// <summary>
-    /// Represents an object used to describe a <see cref="ProtoObject"/> field
+    /// Describes a <see cref="ProtoObject"/>'s field
     /// </summary>
+    [ProtoContract]
     public class ProtoField
     {
 
         /// <summary>
         /// Initializes a new <see cref="ProtoField"/>
         /// </summary>
-        /// <param name="name">The <see cref="ProtoField"/>'s name</param>
-        /// <param name="tag">The <see cref="ProtoField"/>'s tag</param>
-        /// <param name="protobufType">The <see cref="ProtoField"/>'s protobuf type</param>
-        /// <param name="value">The <see cref="ProtoField"/>'s value</param>
-        public ProtoField(string name, int tag, FieldDescriptorProto.Type protobufType, object value)
+        protected ProtoField()
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException(nameof(name));
-            this.Name = name;
-            this.Tag = tag;
-            this.ProtobufType = protobufType;
-            this.RuntimeType = protobufType.ToRuntimeType();
-            this.Value = value;
+
         }
 
         /// <summary>
         /// Initializes a new <see cref="ProtoField"/>
         /// </summary>
-        /// <param name="name">The <see cref="ProtoField"/>'s name</param>
         /// <param name="tag">The <see cref="ProtoField"/>'s tag</param>
-        /// <param name="runtimeType">The <see cref="ProtoField"/>'s runtime type</param>
+        /// <param name="name">The <see cref="ProtoField"/>'s name</param>
         /// <param name="value">The <see cref="ProtoField"/>'s value</param>
-        public ProtoField(string name, int tag, Type runtimeType, object value)
+        public ProtoField(int tag, string name, object value)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentNullException(nameof(name));
-            this.Name = name;
             this.Tag = tag;
-            this.RuntimeType = runtimeType;
-            this.Value = value;
+            this.Name = name;
+            this.SetValue(value);
         }
-
-        /// <summary>
-        /// Gets the <see cref="ProtoField"/>'s name
-        /// </summary>
-        public virtual string Name { get; }
 
         /// <summary>
         /// Gets the <see cref="ProtoField"/>'s tag
         /// </summary>
-        public virtual int Tag { get; }
+        [ProtoMember(1)]
+        public virtual int Tag { get; protected set; }
 
         /// <summary>
-        /// Gets the <see cref="ProtoField"/>'s protobuf type
+        /// Gets the <see cref="ProtoField"/>'s name
         /// </summary>
-        public virtual FieldDescriptorProto.Type ProtobufType { get; }
+        [ProtoMember(2)]
+        public virtual string Name { get; protected set; }
 
         /// <summary>
-        /// Gets the <see cref="ProtoField"/>'s runtime type
+        /// Gets the <see cref="ProtoField"/>'s type
         /// </summary>
-        public virtual Type RuntimeType { get; }
+        [ProtoMember(3)]
+        public virtual ProtoType Type { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="ProtoField"/>'s serialized value
+        /// </summary>
+        [ProtoMember(4)]
+        public virtual byte[] Bytes { get; set; }
+
+        /// <summary>
+        /// Sets the <see cref="ProtoField"/>'s value
+        /// </summary>
+        /// <param name="value">The value to set</param>
+        public virtual void SetValue(object value)
+        {
+            this.Type = ProtobufHelper.GetProtoType(value?.GetType());
+            this.Bytes = ProtobufHelper.Serialize(ProtobufHelper.ConvertToProtoValue(value));
+        }
 
         /// <summary>
         /// Gets the <see cref="ProtoField"/>'s value
         /// </summary>
-        public virtual object Value { get; internal set; }
+        /// <returns>The <see cref="ProtoField"/>'s value</returns>
+        public virtual object GetValue()
+        {
+            var value = ProtobufHelper.Deserialize(this.Bytes, this.Type);
+            return value switch
+            {
+                Timestamp timestamp => timestamp.AsDateTime(),
+                Duration duration => duration.AsTimeSpan(),
+                ProtoArray array => array.ToObject(),
+                ProtoObject obj => obj.ToObject(),
+                _ => value
+            };
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ProtoField"/>'s value
+        /// </summary>
+        /// <param name="type">The expected type of value</param>
+        /// <returns>The <see cref="ProtoField"/>'s value</returns>
+        public virtual object GetValue(Type type)
+        {
+            if (type == null)
+                throw new ArgumentNullException(nameof(type));
+            var value = ProtobufHelper.Deserialize(this.Bytes, ProtobufHelper.GetRuntimeType(ProtobufHelper.GetProtoType(type)));
+            return value switch
+            {
+                string str => type == typeof(Guid) ? (object)Guid.Parse(str) : str,
+                Timestamp timestamp => type == typeof(DateTimeOffset) ? (object)new DateTimeOffset(timestamp.AsDateTime()) : timestamp.AsDateTime(),
+                Duration duration => duration.AsTimeSpan(),
+                ProtoArray array => array.ToObject(type),
+                ProtoObject obj => obj.ToObject(type),
+                _ => value
+            };
+        }
+
+        /// <summary>
+        /// Gets the <see cref="ProtoField"/>'s value
+        /// </summary>
+        /// <typeparam name="T">The expected type of value</typeparam>
+        /// <returns>The <see cref="ProtoField"/>'s value</returns>
+        public virtual T GetValue<T>()
+        {
+            return (T)this.GetValue(typeof(T));
+        }
 
         /// <inheritdoc/>
         public override string ToString()

@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 
 namespace Neuroglia
 {
+
     /// <summary>
     /// Defines extensions for <see cref="IObservable{T}"/>
     /// </summary>

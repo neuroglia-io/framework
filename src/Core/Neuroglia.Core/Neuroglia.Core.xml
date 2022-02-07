@@ -1380,6 +1380,52 @@
             <param name="right">A <see cref="T:Neuroglia.ValueObject"/> to compare</param>
             <returns>A boolean indicating whether or not the two specified values are equal</returns>
         </member>
+        <member name="T:System.Collections.ICollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:System.Collections.ICollection"/>s
+            </summary>
+        </member>
+        <member name="M:System.Collections.ICollectionExtensions.Add(System.Collections.ICollection,System.Object)">
+            <summary>
+            Adds the specified value to the <see cref="T:System.Collections.ICollection"/>
+            </summary>
+            <param name="collection">The <see cref="T:System.Collections.ICollection"/> to add a value to</param>
+            <param name="value">The value to add</param>
+        </member>
+        <member name="M:System.Collections.ICollectionExtensions.AddRange(System.Collections.ICollection,System.Collections.IEnumerable)">
+            <summary>
+            Adds the specified values to the <see cref="T:System.Collections.ICollection"/>
+            </summary>
+            <param name="collection">The <see cref="T:System.Collections.ICollection"/> to add values to</param>
+            <param name="values">The values to add</param>
+        </member>
+        <member name="T:System.Collections.IEnumerableExtensions">
+            <summary>
+            Defines extensions for <see cref="T:System.Collections.IEnumerable"/>s
+            </summary>
+        </member>
+        <member name="M:System.Collections.IEnumerableExtensions.OfType(System.Collections.IEnumerable,System.Type)">
+            <summary>
+            Filters the elements of the <see cref="T:System.Collections.IEnumerable"/> by type
+            </summary>
+            <param name="enumerable">The <see cref="T:System.Collections.IEnumerable"/> to filter</param>
+            <param name="type">The type to filter the <see cref="T:System.Collections.IEnumerable"/> by</param>
+            <returns>The filtered <see cref="T:System.Collections.IEnumerable"/></returns>
+        </member>
+        <member name="M:System.Collections.IEnumerableExtensions.ToArray(System.Collections.IEnumerable)">
+            <summary>
+            Converts the <see cref="T:System.Collections.IEnumerable"/> into a new array
+            </summary>
+            <param name="enumerable">The <see cref="T:System.Collections.IEnumerable"/> to convert</param>
+            <returns>A new array, made out of the <see cref="T:System.Collections.IEnumerable"/>'s values</returns>
+        </member>
+        <member name="M:System.Collections.IEnumerableExtensions.ToList(System.Collections.IEnumerable)">
+            <summary>
+            Converts the <see cref="T:System.Collections.IEnumerable"/> into a new <see cref="T:System.Collections.IList"/>
+            </summary>
+            <param name="enumerable">The <see cref="T:System.Collections.IEnumerable"/> to convert</param>
+            <returns>A new <see cref="T:System.Collections.IList"/>, made out of the <see cref="T:System.Collections.IEnumerable"/>'s values</returns>
+        </member>
         <member name="T:System.Linq.IQueryableExtensions">
             <summary>
             Defines extensions for <see cref="T:System.Linq.IQueryable"/>s
