@@ -68,7 +68,7 @@ namespace Neuroglia.Serialization
                 throw new ArgumentNullException(nameof(output));
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
-            using StreamWriter writer = new(output);
+            using StreamWriter writer = new(output, null, -1, true);
             this.Serializer.Serialize(writer, value, type);
         }
 
@@ -91,7 +91,7 @@ namespace Neuroglia.Serialization
                 throw new ArgumentNullException(nameof(input));
             if (returnType == null)
                 throw new ArgumentNullException(nameof(returnType));
-            using StreamReader reader = new(input);
+            using StreamReader reader = new(input, null, true, -1, true);
             return this.Deserializer.Deserialize(reader, returnType);
         }
 

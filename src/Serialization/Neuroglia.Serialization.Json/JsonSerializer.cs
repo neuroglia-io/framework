@@ -107,7 +107,7 @@ namespace Neuroglia.Serialization
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
             string json = await this.SerializeAsync(value, type, cancellationToken);
-            using StreamWriter writer = new(output);
+            using StreamWriter writer = new(output, null, -1, true);
             await writer.WriteAsync(json);
         }
 
@@ -118,7 +118,7 @@ namespace Neuroglia.Serialization
                 throw new ArgumentNullException(nameof(input));
             if (returnType == null)
                 throw new ArgumentNullException(nameof(returnType));
-            using StreamReader reader = new(input);
+            using StreamReader reader = new(input, null, true, -1, true);
             string json = reader.ReadToEnd();
             return this.Deserialize(json, returnType);
         }
