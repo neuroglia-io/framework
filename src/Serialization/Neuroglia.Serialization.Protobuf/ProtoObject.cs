@@ -165,13 +165,15 @@ namespace Neuroglia.Serialization
         {
             if (source == null)
                 return null;
+            if (source is ProtoObject proto)
+                return proto;
             if (source is IDictionary<string, object> mappings)
                 return new(mappings);
             var ignoreIfNotDecorated = false;
             if (source.GetType().TryGetCustomAttribute<DataContractAttribute>(out _)
                 || source.GetType().TryGetCustomAttribute<ProtoContractAttribute>(out _))
                 ignoreIfNotDecorated = true;
-            var proto = new ProtoObject();
+            proto = new();
             foreach (var property in source.GetType()
                 .GetProperties()
                 .Where(p => p.CanRead && p.GetGetMethod(true) != null)
