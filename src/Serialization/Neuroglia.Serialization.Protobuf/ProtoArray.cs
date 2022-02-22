@@ -53,10 +53,11 @@ namespace Neuroglia.Serialization
                     tokenType = typeof(ProtoObject);
                 valueToSerialize = tokens;
             }
+            var count = ((IEnumerable)valueToSerialize).Count();
             return new()
             {
                 ElementType = ProtobufHelper.GetProtoType(elementType),
-                Bytes = ProtobufHelper.Serialize(valueToSerialize)
+                Bytes = count < 1 ? Array.Empty<byte>() : ProtobufHelper.Serialize(valueToSerialize)
             };
         }
 
@@ -67,16 +68,19 @@ namespace Neuroglia.Serialization
             var enumerableType = typeof(List<>).MakeGenericType(elementType);
             var enumerable = (IEnumerable)ProtobufHelper.Deserialize(this.Bytes, enumerableType);
             var results = new List<object>();
-            foreach (var elem in enumerable)
+            if(enumerable != null)
             {
-                results.Add(elem switch
+                foreach (var elem in enumerable)
                 {
-                    Timestamp timestamp => timestamp.AsDateTime(),
-                    Duration duration => duration.AsTimeSpan(),
-                    ProtoArray array => array.ToObject(),
-                    ProtoObject obj => obj.ToObject(),
-                    _ => elem
-                });
+                    results.Add(elem switch
+                    {
+                        Timestamp timestamp => timestamp.AsDateTime(),
+                        Duration duration => duration.AsTimeSpan(),
+                        ProtoArray array => array.ToObject(),
+                        ProtoObject obj => obj.ToObject(),
+                        _ => elem
+                    });
+                }
             }
             return results;
         }

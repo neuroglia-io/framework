@@ -1,8 +1,10 @@
 ﻿using FluentAssertions;
 using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Data;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -110,6 +112,60 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             deserialized.Strings.Should().BeEquivalentTo(source.Strings);
             deserialized.DateTimes.Should().BeEquivalentTo(source.DateTimes);
             deserialized.ComplexTypes.Should().BeEquivalentTo(source.ComplexTypes);
+        }
+
+        [Fact]
+        public async Task SerializeAndDeserialize_NewtonsoftJson_ProtoObject_ShouldWork()
+        {
+            //arrange
+            var source = new TestData()
+            {
+                String = "StringPropertyValue",
+                Bool = true,
+                DateTime = DateTime.Now,
+                DateTimeOffset = DateTimeOffset.Now,
+                TimeSpan = TimeSpan.FromSeconds(3),
+                Guid = Guid.NewGuid(),
+                Strings = new()
+                {
+                    "Value1",
+                    "Value2",
+                    "Value3"
+                },
+                DateTimes = new()
+                {
+                    DateTime.Now,
+                    DateTime.UtcNow
+                },
+                ComplexType = new()
+                {
+                    String = "HellowWorld",
+                    Strings = new() { "1", "2", "3" }
+                }
+            };
+            var proto = ProtoObject.FromObject(source);
+
+            //act
+            var json = JsonConvert.SerializeObject(proto);
+
+            //assert
+            var deserialized = JsonConvert.DeserializeObject<TestData>(json);
+        }
+
+        [Fact]
+        public void ProtoObject_From_ExpandObject_Should_Work()
+        {
+            var json = JsonConvert.SerializeObject(new
+            {
+                id = 1,
+                name = "asd",
+                photoUrls = Array.Empty<object>(),
+                tags = Array.Empty<object>(),
+                status = "available"
+            });
+            var obj = JsonConvert.DeserializeObject<ExpandoObject>(json);
+            var proto = ProtoObject.FromObject(obj);
+            var res = proto.ToObject().ToExpandoObject();
         }
 
         class TestData

@@ -1404,6 +1404,13 @@
             Defines extensions for <see cref="T:System.Collections.IEnumerable"/>s
             </summary>
         </member>
+        <member name="M:System.Collections.IEnumerableExtensions.Count(System.Collections.IEnumerable)">
+            <summary>
+            Counts the amount of elements in the <see cref="T:System.Collections.IEnumerable"/>
+            </summary>
+            <param name="enumerable">The <see cref="T:System.Collections.IEnumerable"/> to count</param>
+            <returns>The amount of elements in the <see cref="T:System.Collections.IEnumerable"/></returns>
+        </member>
         <member name="M:System.Collections.IEnumerableExtensions.OfType(System.Collections.IEnumerable,System.Type)">
             <summary>
             Filters the elements of the <see cref="T:System.Collections.IEnumerable"/> by type

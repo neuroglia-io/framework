@@ -18,6 +18,26 @@ namespace Neuroglia.Serialization
     {
 
         /// <summary>
+        /// Initializes a new <see cref="ProtoObject"/>
+        /// </summary>
+        public ProtoObject()
+        {
+
+        }
+
+        /// <summary>
+        /// Innitializes a new <see cref="ProtoObject"/>
+        /// </summary>
+        /// <param name="properties">An <see cref="IDictionary{TKey, TValue}"/> containing the <see cref="ProtoObject"/>'s name/value property mappings</param>
+        public ProtoObject(IDictionary<string, object> properties)
+        {
+            foreach (var property in properties)
+            {
+                this.Set(property.Key, property.Value);
+            }
+        }
+
+        /// <summary>
         /// Gets a <see cref="List{T}"/> containing the <see cref="ProtoObject"/>'s fields
         /// </summary>
         [ProtoMember(1)]
@@ -145,6 +165,8 @@ namespace Neuroglia.Serialization
         {
             if (source == null)
                 return null;
+            if (source is IDictionary<string, object> mappings)
+                return new(mappings);
             var ignoreIfNotDecorated = false;
             if (source.GetType().TryGetCustomAttribute<DataContractAttribute>(out _)
                 || source.GetType().TryGetCustomAttribute<ProtoContractAttribute>(out _))

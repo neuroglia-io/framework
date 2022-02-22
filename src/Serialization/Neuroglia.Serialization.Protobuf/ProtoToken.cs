@@ -3,6 +3,7 @@ using System.Collections;
 
 namespace Neuroglia.Serialization
 {
+
     /// <summary>
     /// Represents a Protobuf token
     /// </summary>

@@ -21,15 +21,27 @@ using System.Reflection;
 
 namespace System.Collections
 {
+
     /// <summary>
     /// Defines extensions for <see cref="IEnumerable"/>s
     /// </summary>
     public static class IEnumerableExtensions
     {
 
+        static readonly MethodInfo CountMethod = typeof(Enumerable).GetMethods().First(m => m.Name == nameof(Enumerable.Count));
         static readonly MethodInfo OfTypeMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.OfType));
         static readonly MethodInfo ToArrayMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ToArray));
         static readonly MethodInfo ToListMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ToList));
+
+        /// <summary>
+        /// Counts the amount of elements in the <see cref="IEnumerable"/>
+        /// </summary>
+        /// <param name="enumerable">The <see cref="IEnumerable"/> to count</param>
+        /// <returns>The amount of elements in the <see cref="IEnumerable"/></returns>
+        public static int Count(this IEnumerable enumerable)
+        {
+            return (int)CountMethod.MakeGenericMethod(enumerable.GetType().GetEnumerableElementType()).Invoke(null, new object[] { enumerable });
+        }
 
         /// <summary>
         /// Filters the elements of the <see cref="IEnumerable"/> by type

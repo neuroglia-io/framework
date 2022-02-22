@@ -208,6 +208,17 @@
             Represents a Protobuf object
             </summary>
         </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Serialization.ProtoObject"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.ProtoObject.#ctor(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Innitializes a new <see cref="T:Neuroglia.Serialization.ProtoObject"/>
+            </summary>
+            <param name="properties">An <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the <see cref="T:Neuroglia.Serialization.ProtoObject"/>'s name/value property mappings</param>
+        </member>
         <member name="P:Neuroglia.Serialization.ProtoObject.Fields">
             <summary>
             Gets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:Neuroglia.Serialization.ProtoObject"/>'s fields
