@@ -2,6 +2,8 @@
 using ProtoBuf.WellKnownTypes;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 
 namespace Neuroglia.Serialization
@@ -90,6 +92,9 @@ namespace Neuroglia.Serialization
                 return ProtoType.Duration;
             if (typeToCheck == typeof(Guid))
                 return ProtoType.String;
+            if (typeToCheck == typeof(ExpandoObject)
+                || typeToCheck == typeof(IDictionary<string, object>))
+                return ProtoType.Object;
             if (typeToCheck.IsEnumerable())
                 return ProtoType.Array;
             return ProtoType.Object;
@@ -149,6 +154,8 @@ namespace Neuroglia.Serialization
                     return new Duration(timespan);
                 case Guid guid:
                     return guid.ToString();
+                case IDictionary<string, object> properties:
+                    return new ProtoObject(properties);
                 default:
                     if (value is IEnumerable)
                         return ProtoArray.FromObject(value);
