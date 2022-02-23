@@ -39,25 +39,20 @@ namespace Neuroglia.Serialization
                 return null;
             if (value is not IEnumerable enumerable)
                 throw new ArgumentException("The specified value is not enumerable", nameof(value));
-            var elementType = value.GetType().GetEnumerableElementType();
-            var valueToSerialize = value;
-            if (!elementType.IsPrimitiveType())
+            var tokens = new List<object>();
+            foreach(var elem in enumerable)
             {
-                var tokens = new List<object>();
-                foreach(var elem in enumerable)
-                {
-                    tokens.Add(ProtoToken.FromObject(elem));
-                }
-                var tokenType = tokens.FirstOrDefault()?.GetType();
-                if (tokenType == null)
-                    tokenType = typeof(ProtoObject);
-                valueToSerialize = tokens;
+                tokens.Add(ProtobufHelper.ConvertToProtoValue(elem));
             }
-            var count = ((IEnumerable)valueToSerialize).Count();
+            var tokenType = tokens.FirstOrDefault()?.GetType();
+            if (tokenType == null)
+                tokenType = typeof(ProtoObject);
+            var count = tokens.Count;
+            var toserialize = tokens.OfType(tokenType);
             return new()
             {
-                ElementType = ProtobufHelper.GetProtoType(elementType),
-                Bytes = count < 1 ? Array.Empty<byte>() : ProtobufHelper.Serialize(valueToSerialize)
+                ElementType = ProtobufHelper.GetProtoType(tokenType),
+                Bytes = count < 1 ? Array.Empty<byte>() : ProtobufHelper.Serialize(toserialize)
             };
         }
 

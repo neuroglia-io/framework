@@ -172,6 +172,11 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             var ex = JsonConvert.DeserializeObject<ExpandoObject>(json);
             proto = ProtoObject.FromObject(ex);
             res = proto.ToObject().ToExpandoObject();
+
+            json = @"{""id"":1,""name"":""parrot"",""photoUrls"":[""http://purplefieldstestimage1"",""http://purplefieldstestimage2""],""tags"":[],""status"":""available""}";
+            ex = JsonConvert.DeserializeObject<ExpandoObject>(json);
+            proto = ProtoObject.FromObject(ex);
+            res = proto.ToObject().ToExpandoObject();
         }
 
         class TestData
