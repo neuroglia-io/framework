@@ -17,6 +17,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Dynamic;
+using System.Linq;
 
 namespace Neuroglia.Serialization
 {

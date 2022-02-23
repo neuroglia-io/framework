@@ -9,15 +9,21 @@
             Represents the <see cref="T:Microsoft.AspNetCore.Http.RequestDelegate"/> used to handle <see cref="T:CloudNative.CloudEvents.CloudEvent"/>s
             </summary>
         </member>
-        <member name="M:Neuroglia.Eventing.CloudEventMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate)">
+        <member name="M:Neuroglia.Eventing.CloudEventMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.Extensions.Logging.ILogger{Neuroglia.Eventing.CloudEventMiddleware})">
             <summary>
             Initializes a new <see cref="T:Neuroglia.Eventing.CloudEventMiddleware"/>
             </summary>
             <param name="next">The next <see cref="T:Microsoft.AspNetCore.Http.RequestDelegate"/> in the pipeline</param>
+            <param name="logger">The service used to perform logging</param>
         </member>
         <member name="P:Neuroglia.Eventing.CloudEventMiddleware.Next">
             <summary>
             Gets the next <see cref="T:Microsoft.AspNetCore.Http.RequestDelegate"/> in the pipeline
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Eventing.CloudEventMiddleware.Logger">
+            <summary>
+            Gets the service used to perform logging
             </summary>
         </member>
         <member name="M:Neuroglia.Eventing.CloudEventMiddleware.InvokeAsync(Microsoft.AspNetCore.Http.HttpContext,CloudNative.CloudEvents.CloudEventFormatter,System.Reactive.Subjects.ISubject{CloudNative.CloudEvents.CloudEvent})">
