@@ -18,7 +18,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neuroglia.Data.Expressions.JQ.Configuration;
 using Neuroglia.Serialization;
+using Newtonsoft.Json.Linq;
+using System.Collections;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Runtime.InteropServices;
 
 namespace Neuroglia.Data.Expressions.JQ
@@ -122,7 +125,10 @@ namespace Neuroglia.Data.Expressions.JQ
         /// <inheritdoc/>
         public virtual object? Evaluate(string expression, object data)
         {
-            return this.Evaluate(expression, data, typeof(object));
+            var result = this.Evaluate(expression, data, typeof(object));
+            if (result is JToken jtoken)
+                result =  jtoken.ToObject();
+            return result;
         }
 
         /// <summary>
