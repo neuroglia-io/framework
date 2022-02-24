@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework serialization avro</PackageTags>
-    <Version>2.0.1.30</Version>
-    <AssemblyVersion>2.0.1.30</AssemblyVersion>
-    <FileVersion>2.0.1.30</FileVersion>
+    <Version>2.0.1.31</Version>
+    <AssemblyVersion>2.0.1.31</AssemblyVersion>
+    <FileVersion>2.0.1.31</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
