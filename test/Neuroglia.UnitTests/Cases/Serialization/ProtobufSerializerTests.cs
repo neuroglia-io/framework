@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -158,7 +157,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
         {
             var json = JsonConvert.SerializeObject(new
             {
-                id = 1,
+                id = 9222968140497182000,
                 name = "asd",
                 photoUrls = Array.Empty<object>(),
                 tags = Array.Empty<object>(),
@@ -166,17 +165,26 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             });
             var obj = JsonConvert.DeserializeObject<ExpandoObject>(json);
             var proto = ProtoObject.FromObject(obj);
-            var res = proto.ToObject().ToExpandoObject();
+            var result = proto.ToObject().ToExpandoObject();
+            json = JsonConvert.SerializeObject(proto);
 
-            json = @"{""id"":1,""category"":{""id"":1,""name"":""asd""},""name"":""asd"",""photoUrls"":[],""tags"":[],""status"":""available""}";
-            var ex = JsonConvert.DeserializeObject<ExpandoObject>(json);
-            proto = ProtoObject.FromObject(ex);
-            res = proto.ToObject().ToExpandoObject();
+            json = @"{""id"":9222968140497182000,""category"":{""id"":1,""name"":""asd""},""name"":""asd"",""photoUrls"":[],""tags"":[],""status"":""available""}";
+            var expando = JsonConvert.DeserializeObject<ExpandoObject>(json);
+            proto = ProtoObject.FromObject(expando);
+            result = proto.ToObject().ToExpandoObject();
+            json = JsonConvert.SerializeObject(proto);
 
-            json = @"{""id"":1,""name"":""parrot"",""photoUrls"":[""http://purplefieldstestimage1"",""http://purplefieldstestimage2""],""tags"":[],""status"":""available""}";
-            ex = JsonConvert.DeserializeObject<ExpandoObject>(json);
-            proto = ProtoObject.FromObject(ex);
-            res = proto.ToObject().ToExpandoObject();
+            json = @"{""id"":9222968140497182000,""name"":""parrot"",""photoUrls"":[""http://purplefieldstestimage1"",""http://purplefieldstestimage2""],""tags"":[],""status"":""available""}";
+            expando = JsonConvert.DeserializeObject<ExpandoObject>(json);
+            proto = ProtoObject.FromObject(expando);
+            result = proto.ToObject().ToExpandoObject();
+            json = JsonConvert.SerializeObject(proto);
+
+            json = @"{""name"":""OData"",""functionRef"":{""refName"":""odata"",""arguments"":{""key"":""0"",""queryOptions"":{""top"":1}}},""actionDataFilter"":{""toStateData"":""${ .product }""}}";
+            expando = JsonConvert.DeserializeObject<ExpandoObject>(json);
+            proto = ProtoObject.FromObject(expando);
+            json = JsonConvert.SerializeObject(proto);
+            json = JsonConvert.SerializeObject(proto.ToObject());
         }
 
         class TestData

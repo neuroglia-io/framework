@@ -1,6 +1,7 @@
 ﻿using ProtoBuf;
 using ProtoBuf.WellKnownTypes;
 using System;
+using System.Runtime.Serialization;
 
 namespace Neuroglia.Serialization
 {
@@ -62,8 +63,15 @@ namespace Neuroglia.Serialization
         /// <param name="value">The value to set</param>
         public virtual void SetValue(object value)
         {
-            this.Type = ProtobufHelper.GetProtoType(value?.GetType());
-            this.Bytes = ProtobufHelper.Serialize(ProtobufHelper.ConvertToProtoValue(value));
+            try
+            {
+                this.Type = ProtobufHelper.GetProtoType(value?.GetType());
+                this.Bytes = ProtobufHelper.Serialize(ProtobufHelper.ConvertToProtoValue(value));
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException($"An error occured while serializing the value of field with name '{this.Name}':{Environment.NewLine}{ex}");
+            }
         }
 
         /// <summary>
@@ -72,15 +80,22 @@ namespace Neuroglia.Serialization
         /// <returns>The <see cref="ProtoField"/>'s value</returns>
         public virtual object GetValue()
         {
-            var value = ProtobufHelper.Deserialize(this.Bytes, this.Type);
-            return value switch
+            try
             {
-                Timestamp timestamp => timestamp.AsDateTime(),
-                Duration duration => duration.AsTimeSpan(),
-                ProtoArray array => array.ToObject(),
-                ProtoObject obj => obj.ToObject(),
-                _ => value
-            };
+                var value = ProtobufHelper.Deserialize(this.Bytes, this.Type);
+                return value switch
+                {
+                    Timestamp timestamp => timestamp.AsDateTime(),
+                    Duration duration => duration.AsTimeSpan(),
+                    ProtoArray array => array.ToObject(),
+                    ProtoObject obj => obj.ToObject(),
+                    _ => value
+                };
+            }
+            catch(Exception ex)
+            {
+                throw new SerializationException($"An error occured while deserializing the value of field with name '{this.Name}':{Environment.NewLine}{ex}");
+            }
         }
 
         /// <summary>
@@ -92,16 +107,23 @@ namespace Neuroglia.Serialization
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
-            var value = ProtobufHelper.Deserialize(this.Bytes, ProtobufHelper.GetRuntimeType(ProtobufHelper.GetProtoType(type)));
-            return value switch
+            try
             {
-                string str => type == typeof(Guid) ? (object)Guid.Parse(str) : str,
-                Timestamp timestamp => type == typeof(DateTimeOffset) ? (object)new DateTimeOffset(timestamp.AsDateTime()) : timestamp.AsDateTime(),
-                Duration duration => duration.AsTimeSpan(),
-                ProtoArray array => array.ToObject(type),
-                ProtoObject obj => obj.ToObject(type),
-                _ => value
-            };
+                var value = ProtobufHelper.Deserialize(this.Bytes, ProtobufHelper.GetRuntimeType(ProtobufHelper.GetProtoType(type)));
+                return value switch
+                {
+                    string str => type == typeof(Guid) ? (object)Guid.Parse(str) : str,
+                    Timestamp timestamp => type == typeof(DateTimeOffset) ? (object)new DateTimeOffset(timestamp.AsDateTime()) : timestamp.AsDateTime(),
+                    Duration duration => duration.AsTimeSpan(),
+                    ProtoArray array => array.ToObject(type),
+                    ProtoObject obj => obj.ToObject(type),
+                    _ => value
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException($"An error occured while deserializing the value of field with name '{this.Name}':{Environment.NewLine}{ex}");
+            }
         }
 
         /// <summary>

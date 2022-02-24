@@ -52,7 +52,7 @@ namespace Neuroglia.Serialization
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
-            var field = this.Fields.FirstOrDefault(f => f.Name == name);
+            var field = this.Fields.FirstOrDefault(f => f.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (field == null)
                 this.Fields.Add(new(this.Fields.Count + 1, name, value));
             else
@@ -68,7 +68,7 @@ namespace Neuroglia.Serialization
         {
             if(string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
-            var field = this.Fields.FirstOrDefault(f => f.Name == name);
+            var field = this.Fields.FirstOrDefault(f => f.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (field == null)
                 throw new MissingMemberException($"Failed to find the field with the specified name '{name}'");
             return field.GetValue();
@@ -84,7 +84,7 @@ namespace Neuroglia.Serialization
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
-            var field = this.Fields.FirstOrDefault(f => f.Name == name);
+            var field = this.Fields.FirstOrDefault(f => f.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (field == null)
                 throw new MissingMemberException($"Failed to find the field with the specified name '{name}'");
             return field.GetValue(expectedType);
@@ -100,7 +100,7 @@ namespace Neuroglia.Serialization
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
-            var field = this.Fields.FirstOrDefault(f => f.Name == name);
+            var field = this.Fields.FirstOrDefault(f => f.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (field == null)
                 throw new MissingMemberException($"Failed to find the field with the specified name '{name}'");
             return field.GetValue<T>();
@@ -138,7 +138,7 @@ namespace Neuroglia.Serialization
                 .Where(p => p.CanRead && p.CanWrite)
                 .Where(p => ignoreIfNotDecorated ? p.TryGetCustomAttribute<DataMemberAttribute>(out _) || p.TryGetCustomAttribute<ProtoMemberAttribute>(out _) : true))
             {
-                var field = this.Fields.FirstOrDefault(f => f.Name == property.Name);
+                var field = this.Fields.FirstOrDefault(f => f.Name.Equals(property.Name,  StringComparison.OrdinalIgnoreCase));
                 if (field == null)
                     continue;
                 var value = field.GetValue(property.PropertyType);

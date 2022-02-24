@@ -337,6 +337,11 @@
             Represents an integer number
             </summary>
         </member>
+        <member name="F:Neuroglia.Serialization.ProtoType.Long">
+            <summary>
+            Represents an long number
+            </summary>
+        </member>
         <member name="F:Neuroglia.Serialization.ProtoType.Double">
             <summary>
             Represents a double, a float or a decimal

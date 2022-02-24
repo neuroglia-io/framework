@@ -73,13 +73,14 @@ namespace Neuroglia.Serialization
                 return ProtoType.String;
             if (typeToCheck == typeof(bool))
                 return ProtoType.Boolean;
+            if (typeToCheck == typeof(long)
+                || typeToCheck == typeof(ulong))
+                return ProtoType.Long;
             if (typeToCheck == typeof(byte)
                 || typeToCheck == typeof(byte)
                 || typeToCheck == typeof(sbyte)
                 || typeToCheck == typeof(uint)
-                || typeToCheck == typeof(int)
-                || typeToCheck == typeof(long)
-                || typeToCheck == typeof(ulong))
+                || typeToCheck == typeof(int))
                 return ProtoType.Integer;
             if (typeToCheck == typeof(float)
                 || typeToCheck == typeof(double)
@@ -114,6 +115,7 @@ namespace Neuroglia.Serialization
                 ProtoType.Boolean => typeof(bool),
                 ProtoType.Timestamp => typeof(Timestamp),
                 ProtoType.Duration => typeof(Duration),
+                ProtoType.Long => typeof(long),
                 ProtoType.Integer => typeof(int),
                 ProtoType.Double => typeof(double),
                 ProtoType.Array => typeof(ProtoArray),
