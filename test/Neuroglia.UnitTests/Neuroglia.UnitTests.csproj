@@ -45,6 +45,7 @@
     <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
     <ProjectReference Include="..\..\src\Mediation\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.Avro\Neuroglia.Serialization.Avro.csproj" />
+    <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.Dynamic\Neuroglia.Serialization.Dynamic.csproj" />
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.Json\Neuroglia.Serialization.Json.csproj" />
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
     <ProjectReference Include="..\..\src\Serialization\Neuroglia.Serialization.Protobuf\Neuroglia.Serialization.Protobuf.csproj" />

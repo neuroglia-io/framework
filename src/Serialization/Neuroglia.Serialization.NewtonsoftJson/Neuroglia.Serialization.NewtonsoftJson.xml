@@ -87,6 +87,18 @@
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
             <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
         </member>
+        <member name="T:Neuroglia.Serialization.JTokenExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Newtonsoft.Json.Linq.JToken"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Serialization.JTokenExtensions.ToObject(Newtonsoft.Json.Linq.JToken)">
+            <summary>
+            Converts the specified <see cref="T:Newtonsoft.Json.Linq.JToken"/> into a new object
+            </summary>
+            <param name="token"></param>
+            <returns>A new object</returns>
+        </member>
         <member name="T:Neuroglia.Serialization.NewtonsoftJsonSerializer">
             <summary>
             Represents the service used to serialize and deserialize JSON

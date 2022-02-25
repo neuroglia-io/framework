@@ -3,9 +3,6 @@ using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Data;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -54,8 +51,8 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             };
 
             //act
-            var buffer = await this.Serializer.SerializeAsync(ProtoObject.FromObject(toSerialize));
-            var deserialized = await this.Serializer.DeserializeAsync<ProtoObject>(buffer);
+            var buffer = await this.Serializer.SerializeAsync(DynamicObject.FromObject(toSerialize));
+            var deserialized = await this.Serializer.DeserializeAsync<DynamicObject>(buffer);
 
             //assert
             deserialized.Should().NotBeNull();
@@ -66,143 +63,69 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             address.Country.Should().Be(toSerialize.Country);
         }
 
-        [Fact]
-        public async Task SerializeAndDeserialize_ProtoObject_ShouldWork()
-        {
-            //arrange
-            var source = new TestData()
-            {
-                String = "StringPropertyValue",
-                Bool = true,
-                DateTime = DateTime.Now,
-                DateTimeOffset = DateTimeOffset.Now,
-                TimeSpan = TimeSpan.FromSeconds(3),
-                Guid = Guid.NewGuid(),
-                Strings = new()
-                {
-                    "Value1",
-                    "Value2",
-                    "Value3"
-                },
-                DateTimes = new()
-                {
-                    DateTime.Now,
-                    DateTime.UtcNow
-                },
-                ComplexType = new()
-                {
-                    String = "HellowWorld",
-                    Strings = new(){"1", "2", "3"}
-                }
-            };
+        //[Fact]
+        //public async Task SerializeAndDeserialize_NewtonsoftJson_ProtoObject_ShouldWork()
+        //{
+        //    //arrange
+        //    var source = new TestData()
+        //    {
+        //        String = "StringPropertyValue",
+        //        Bool = true,
+        //        DateTime = DateTime.Now,
+        //        DateTimeOffset = DateTimeOffset.Now,
+        //        TimeSpan = TimeSpan.FromSeconds(3),
+        //        Guid = Guid.NewGuid(),
+        //        Strings = new()
+        //        {
+        //            "Value1",
+        //            "Value2",
+        //            "Value3"
+        //        },
+        //        DateTimes = new()
+        //        {
+        //            DateTime.Now,
+        //            DateTime.UtcNow
+        //        },
+        //        ComplexType = new()
+        //        {
+        //            String = "HellowWorld",
+        //            Strings = new() { "1", "2", "3" }
+        //        }
+        //    };
+        //    var proto = DynamicObject.FromObject(source);
 
-            //act
-            var proto = ProtoObject.FromObject(source);
-            var bytes = await this.Serializer.SerializeAsync(proto);
-            proto = await this.Serializer.DeserializeAsync<ProtoObject>(bytes);
-            var deserialized = proto.ToObject<TestData>();
+        //    //act
+        //    var json = JsonConvert.SerializeObject(proto);
 
-            //assert
-            deserialized.String.Should().Be(source.String);
-            deserialized.Bool.Should().Be(source.Bool);
-            deserialized.DateTime.Should().Be(source.DateTime);
-            deserialized.DateTimeOffset.Should().Be(source.DateTimeOffset);
-            deserialized.TimeSpan.Should().Be(source.TimeSpan);
-            deserialized.Guid.Should().Be(source.Guid);
-            deserialized.ComplexType.Should().BeEquivalentTo(source.ComplexType);
-            deserialized.Strings.Should().BeEquivalentTo(source.Strings);
-            deserialized.DateTimes.Should().BeEquivalentTo(source.DateTimes);
-            deserialized.ComplexTypes.Should().BeEquivalentTo(source.ComplexTypes);
-        }
+        //    //assert
+        //    var deserialized = JsonConvert.DeserializeObject<TestData>(json);
+        //}
 
-        [Fact]
-        public async Task SerializeAndDeserialize_NewtonsoftJson_ProtoObject_ShouldWork()
-        {
-            //arrange
-            var source = new TestData()
-            {
-                String = "StringPropertyValue",
-                Bool = true,
-                DateTime = DateTime.Now,
-                DateTimeOffset = DateTimeOffset.Now,
-                TimeSpan = TimeSpan.FromSeconds(3),
-                Guid = Guid.NewGuid(),
-                Strings = new()
-                {
-                    "Value1",
-                    "Value2",
-                    "Value3"
-                },
-                DateTimes = new()
-                {
-                    DateTime.Now,
-                    DateTime.UtcNow
-                },
-                ComplexType = new()
-                {
-                    String = "HellowWorld",
-                    Strings = new() { "1", "2", "3" }
-                }
-            };
-            var proto = ProtoObject.FromObject(source);
+        //[Fact]
+        //public void ProtoObject_From_ExpandObject_Should_Work()
+        //{
+        //    var json = JsonConvert.SerializeObject(new
+        //    {
+        //        id = 1,
+        //        name = "asd",
+        //        photoUrls = Array.Empty<object>(),
+        //        tags = Array.Empty<object>(),
+        //        status = "available"
+        //    });
+        //    var obj = JsonConvert.DeserializeObject<ExpandoObject>(json);
+        //    var proto = DynamicObject.FromObject(obj);
+        //    var res = proto.ToObject().ToExpandoObject();
 
-            //act
-            var json = JsonConvert.SerializeObject(proto);
+        //    json = @"{""id"":1,""category"":{""id"":1,""name"":""asd""},""name"":""asd"",""photoUrls"":[],""tags"":[],""status"":""available""}";
+        //    var ex = JsonConvert.DeserializeObject<ExpandoObject>(json);
+        //    proto = DynamicObject.FromObject(ex);
+        //    res = proto.ToObject().ToExpandoObject();
 
-            //assert
-            var deserialized = JsonConvert.DeserializeObject<TestData>(json);
-        }
-
-        [Fact]
-        public void ProtoObject_From_ExpandObject_Should_Work()
-        {
-            var json = JsonConvert.SerializeObject(new
-            {
-                id = 1,
-                name = "asd",
-                photoUrls = Array.Empty<object>(),
-                tags = Array.Empty<object>(),
-                status = "available"
-            });
-            var obj = JsonConvert.DeserializeObject<ExpandoObject>(json);
-            var proto = ProtoObject.FromObject(obj);
-            var res = proto.ToObject().ToExpandoObject();
-
-            json = @"{""id"":1,""category"":{""id"":1,""name"":""asd""},""name"":""asd"",""photoUrls"":[],""tags"":[],""status"":""available""}";
-            var ex = JsonConvert.DeserializeObject<ExpandoObject>(json);
-            proto = ProtoObject.FromObject(ex);
-            res = proto.ToObject().ToExpandoObject();
-
-            json = @"{""id"":1,""name"":""parrot"",""photoUrls"":[""http://purplefieldstestimage1"",""http://purplefieldstestimage2""],""tags"":[],""status"":""available""}";
-            ex = JsonConvert.DeserializeObject<ExpandoObject>(json);
-            proto = ProtoObject.FromObject(ex);
-            res = proto.ToObject().ToExpandoObject();
-        }
-
-        class TestData
-        {
-
-            public string String { get; internal set; }
-
-            public bool Bool { get; internal set; }
-
-            public DateTime DateTime { get; internal set; }
-
-            public DateTimeOffset DateTimeOffset { get; internal set; }
-
-            public TimeSpan TimeSpan { get; internal set; }
-
-            public Guid Guid { get; internal set; }
-
-            public TestData ComplexType { get; internal set; }
-
-            public List<string> Strings { get; internal set; }
-
-            public List<DateTime> DateTimes { get; internal set; }
-
-            public List<TestData> ComplexTypes { get; internal set; }
-
-        }
+        //    json = @"{""id"":1,""name"":""parrot"",""photoUrls"":[""http://purplefieldstestimage1"",""http://purplefieldstestimage2""],""tags"":[],""status"":""available""}";
+        //    ex = JsonConvert.DeserializeObject<ExpandoObject>(json);
+        //    proto = DynamicObject.FromObject(ex);
+        //    res = proto.ToObject().ToExpandoObject();
+        //}
 
     }
 

@@ -95,7 +95,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Eventing", "Eventing", "{8F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Eventing.CloudEvents", "Eventing\Neuroglia.Eventing.CloudEvents\Neuroglia.Eventing.CloudEvents.csproj", "{705C16E1-E5FF-4C8C-B767-EF7729B1CDE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Eventing.CloudEvents.AspNetCore", "Eventing\Neuroglia.Eventing.CloudEvents.AspNetCore\Neuroglia.Eventing.CloudEvents.AspNetCore.csproj", "{14D8B998-6C21-4138-A924-ADC2D41F54E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Eventing.CloudEvents.AspNetCore", "Eventing\Neuroglia.Eventing.CloudEvents.AspNetCore\Neuroglia.Eventing.CloudEvents.AspNetCore.csproj", "{14D8B998-6C21-4138-A924-ADC2D41F54E8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Serialization.Dynamic", "Serialization\Neuroglia.Serialization.Dynamic\Neuroglia.Serialization.Dynamic.csproj", "{C10EA3A4-007D-4255-B27F-707426331735}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -243,6 +245,10 @@ Global
 		{14D8B998-6C21-4138-A924-ADC2D41F54E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14D8B998-6C21-4138-A924-ADC2D41F54E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14D8B998-6C21-4138-A924-ADC2D41F54E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C10EA3A4-007D-4255-B27F-707426331735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C10EA3A4-007D-4255-B27F-707426331735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C10EA3A4-007D-4255-B27F-707426331735}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C10EA3A4-007D-4255-B27F-707426331735}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -293,6 +299,7 @@ Global
 		{8FC00D8F-58D6-436F-94B6-AF0470FE7104} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{705C16E1-E5FF-4C8C-B767-EF7729B1CDE0} = {8FC00D8F-58D6-436F-94B6-AF0470FE7104}
 		{14D8B998-6C21-4138-A924-ADC2D41F54E8} = {8FC00D8F-58D6-436F-94B6-AF0470FE7104}
+		{C10EA3A4-007D-4255-B27F-707426331735} = {03BA8EDF-BB40-445E-90C4-815919223B54}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}
