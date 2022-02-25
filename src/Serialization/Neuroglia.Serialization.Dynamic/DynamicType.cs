@@ -46,6 +46,10 @@ namespace Neuroglia.Serialization
         /// </summary>
         Integer,
         /// <summary>
+        /// Represents an long number
+        /// </summary>
+        Long,
+        /// <summary>
         /// Represents a double, a float or a decimal
         /// </summary>
         Number,
