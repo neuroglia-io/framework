@@ -36,15 +36,7 @@ namespace Neuroglia.Serialization
             if (input == null || input.Length == 0)
                 return type.GetDefaultValue();
             using var stream = new MemoryStream(input);
-            try
-            {
-                return Serializer.Deserialize(type, stream);
-            }
-            catch(Exception ex)
-            {
-                throw;
-            }
-
+            return Serializer.Deserialize(type, stream);
         }
 
     }

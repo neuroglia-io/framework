@@ -65,6 +65,53 @@ namespace Neuroglia.Serialization
         public IDictionary<string, object> DynamicProperties => this.ToObject().ToDictionary();
 
         /// <summary>
+        /// Gets the value of the property with the specified name
+        /// </summary>
+        /// <param name="name">The name of the property to get the value of</param>
+        /// <returns>The value of the property with the specified name</returns>
+        public virtual object? Get(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+            var property = this.Properties.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (property == null)
+                throw new MissingMemberException($"Failed to find the property with the specified name '{name}'");
+            return property.GetValue();
+        }
+
+        /// <summary>
+        /// Gets the value of the property with the specified name
+        /// </summary>
+        /// <param name="name">The name of the property to get the value of</param>
+        /// <param name="expectedType">The expected type of the property's value</param>
+        /// <returns>The value of the property with the specified name</returns>
+        public virtual object? Get(string name, Type expectedType)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+            var property = this.Properties.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (property == null)
+                throw new MissingMemberException($"Failed to find the property with the specified name '{name}'");
+            return property.GetValue(expectedType);
+        }
+
+        /// <summary>
+        /// Gets the value of the property with the specified name
+        /// </summary>
+        /// <param name="name">The name of the property to get the value of</param>
+        /// <typeparam name="T">The expected type of the property's value</typeparam>
+        /// <returns>The value of the property with the specified name</returns>
+        public virtual T? Get<T>(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+            var property = this.Properties.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (property == null)
+                throw new MissingMemberException($"Failed to find the property with the specified name '{name}'");
+            return property.GetValue<T>();
+        }
+
+        /// <summary>
         /// Sets the property with the specified name
         /// </summary>
         /// <param name="name">The name of the property to set</param>
@@ -73,7 +120,7 @@ namespace Neuroglia.Serialization
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
-            var property = this.Properties.FirstOrDefault(f => f.Name == name);
+            var property = this.Properties.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (property == null)
                 this.Properties.Add(new(this.Properties.Count + 1, name, value));
             else
@@ -112,7 +159,7 @@ namespace Neuroglia.Serialization
                 .Where(p => p.CanRead && p.CanWrite)
                 .Where(p => ignoreIfNotDecorated ? p.TryGetCustomAttribute<DataMemberAttribute>(out _) || p.TryGetCustomAttribute<ProtoMemberAttribute>(out _) : true))
             {
-                var dynProperty = this.Properties.FirstOrDefault(f => f.Name == property.Name);
+                var dynProperty = this.Properties.FirstOrDefault(p => p.Name.Equals(property.Name, StringComparison.OrdinalIgnoreCase));
                 if (dynProperty == null)
                     continue;
                 var value = dynProperty.GetValue(property.PropertyType);

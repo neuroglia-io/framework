@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
 using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Data;
-using Newtonsoft.Json;
-using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -62,70 +60,6 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             address.City.Should().Be(toSerialize.City);
             address.Country.Should().Be(toSerialize.Country);
         }
-
-        //[Fact]
-        //public async Task SerializeAndDeserialize_NewtonsoftJson_ProtoObject_ShouldWork()
-        //{
-        //    //arrange
-        //    var source = new TestData()
-        //    {
-        //        String = "StringPropertyValue",
-        //        Bool = true,
-        //        DateTime = DateTime.Now,
-        //        DateTimeOffset = DateTimeOffset.Now,
-        //        TimeSpan = TimeSpan.FromSeconds(3),
-        //        Guid = Guid.NewGuid(),
-        //        Strings = new()
-        //        {
-        //            "Value1",
-        //            "Value2",
-        //            "Value3"
-        //        },
-        //        DateTimes = new()
-        //        {
-        //            DateTime.Now,
-        //            DateTime.UtcNow
-        //        },
-        //        ComplexType = new()
-        //        {
-        //            String = "HellowWorld",
-        //            Strings = new() { "1", "2", "3" }
-        //        }
-        //    };
-        //    var proto = DynamicObject.FromObject(source);
-
-        //    //act
-        //    var json = JsonConvert.SerializeObject(proto);
-
-        //    //assert
-        //    var deserialized = JsonConvert.DeserializeObject<TestData>(json);
-        //}
-
-        //[Fact]
-        //public void ProtoObject_From_ExpandObject_Should_Work()
-        //{
-        //    var json = JsonConvert.SerializeObject(new
-        //    {
-        //        id = 1,
-        //        name = "asd",
-        //        photoUrls = Array.Empty<object>(),
-        //        tags = Array.Empty<object>(),
-        //        status = "available"
-        //    });
-        //    var obj = JsonConvert.DeserializeObject<ExpandoObject>(json);
-        //    var proto = DynamicObject.FromObject(obj);
-        //    var res = proto.ToObject().ToExpandoObject();
-
-        //    json = @"{""id"":1,""category"":{""id"":1,""name"":""asd""},""name"":""asd"",""photoUrls"":[],""tags"":[],""status"":""available""}";
-        //    var ex = JsonConvert.DeserializeObject<ExpandoObject>(json);
-        //    proto = DynamicObject.FromObject(ex);
-        //    res = proto.ToObject().ToExpandoObject();
-
-        //    json = @"{""id"":1,""name"":""parrot"",""photoUrls"":[""http://purplefieldstestimage1"",""http://purplefieldstestimage2""],""tags"":[],""status"":""available""}";
-        //    ex = JsonConvert.DeserializeObject<ExpandoObject>(json);
-        //    proto = DynamicObject.FromObject(ex);
-        //    res = proto.ToObject().ToExpandoObject();
-        //}
 
     }
 

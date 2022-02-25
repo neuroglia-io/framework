@@ -81,15 +81,22 @@ namespace Neuroglia.Serialization
         /// <param name="value">The value to set</param>
         public virtual void SetValue(object? value)
         {
-            if(value == null)
+            try
             {
-                this.Type = DynamicType.Null;
-                this.Value = null!;
+                if (value == null)
+                {
+                    this.Type = DynamicType.Null;
+                    this.Value = null!;
+                }
+                else
+                {
+                    this.Type = DynamicHelper.GetDynamicType(value?.GetType());
+                    this.Value = Dynamic.FromObject(value!);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                this.Type = DynamicHelper.GetDynamicType(value?.GetType());
-                this.Value = Dynamic.FromObject(value!);
+                throw new SerializationException($"An error occured while serializing the value of property with name '{this.Name}':{Environment.NewLine}{ex}");
             }
         }
 
@@ -99,7 +106,14 @@ namespace Neuroglia.Serialization
         /// <returns>The <see cref="ProtoField"/>'s value</returns>
         public virtual object? GetValue()
         {
-            return this.Value?.ToObject();
+            try
+            {
+                return this.Value?.ToObject();
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException($"An error occured while deserializing the value of property with name '{this.Name}':{Environment.NewLine}{ex}");
+            }
         }
 
         /// <summary>
@@ -111,7 +125,15 @@ namespace Neuroglia.Serialization
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
-            return this.Value?.ToObject(type);
+            try
+            {
+                return this.Value?.ToObject(type);
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException($"An error occured while deserializing the value of property with name '{this.Name}':{Environment.NewLine}{ex}");
+            }
+     
         }
 
         /// <summary>
@@ -121,10 +143,17 @@ namespace Neuroglia.Serialization
         /// <returns>The <see cref="ProtoField"/>'s value</returns>
         public virtual T? GetValue<T>()
         {
-            if (this.Value == null)
-                return default;
-            else
-                return this.Value.ToObject<T>();
+            try
+            {
+                if (this.Value == null)
+                    return default;
+                else
+                    return this.Value.ToObject<T>();
+            }
+            catch (Exception ex)
+            {
+                throw new SerializationException($"An error occured while deserializing the value of property with name '{this.Name}':{Environment.NewLine}{ex}");
+            }
         }
 
         /// <inheritdoc/>
