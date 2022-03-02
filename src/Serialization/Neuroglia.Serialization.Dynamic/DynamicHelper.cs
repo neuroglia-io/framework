@@ -100,7 +100,7 @@ namespace Neuroglia.Serialization
                 DynamicType.Boolean => typeof(bool),
                 DynamicType.Timestamp => typeof(Timestamp),
                 DynamicType.Duration => typeof(Duration),
-                DynamicType.Integer => typeof(int),
+                DynamicType.Integer => typeof(long),
                 DynamicType.Number => typeof(double),
                 DynamicType.Array => typeof(DynamicArray),
                 DynamicType.Object => typeof(DynamicObject),
