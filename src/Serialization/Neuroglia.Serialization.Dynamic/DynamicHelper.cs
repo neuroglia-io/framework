@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+using Newtonsoft.Json.Linq;
 using ProtoBuf.WellKnownTypes;
 using System.Collections;
 using System.Dynamic;
@@ -79,7 +80,8 @@ namespace Neuroglia.Serialization
             if (typeToCheck == typeof(Guid))
                 return DynamicType.String;
             if (typeToCheck == typeof(ExpandoObject)
-                || typeToCheck == typeof(IDictionary<string, object>))
+                || typeToCheck == typeof(IDictionary<string, object>)
+                || typeToCheck == typeof(JObject))
                 return DynamicType.Object;
             if (typeToCheck.IsEnumerable())
                 return DynamicType.Array;
@@ -142,6 +144,8 @@ namespace Neuroglia.Serialization
                     return guid.ToString();
                 case IDictionary<string, object> properties:
                     return new DynamicObject(properties);
+                case JObject jobject:
+                    return new DynamicObject(jobject.ToObject<ExpandoObject>()!);
                 default:
                     if (value is IEnumerable)
                         return DynamicArray.FromObject(value)!;

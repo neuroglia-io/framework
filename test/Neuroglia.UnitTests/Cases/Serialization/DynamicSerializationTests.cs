@@ -1,9 +1,15 @@
 ﻿using FluentAssertions;
 using Neuroglia.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema.Generation;
 using ProtoBuf;
+using ProtoBuf.Meta;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -70,7 +76,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             protoValue = await this.ProtoSerializer.DeserializeAsync<DynamicObject>(bytes);
             dataToAssert.Add(protoValue.ToObject<TestData>());
 
-            var protoContainer = new TestContainer() { ProtoObject = Dynamic.FromObject(protoValue), ProtoArray = Dynamic.FromObject(source.DateTimes), ProtoValue = Dynamic.FromObject(source.TimeSpan)  };
+            var protoContainer = new TestContainer() { ProtoObject = Dynamic.FromObject(protoValue), ProtoArray = Dynamic.FromObject(source.DateTimes), ProtoValue = Dynamic.FromObject(source.TimeSpan), Boolean = false  };
             bytes = await this.ProtoSerializer.SerializeAsync(protoContainer);
             protoContainer = await this.ProtoSerializer.DeserializeAsync<TestContainer>(bytes);
             dataToAssert.Add(protoContainer.ProtoObject.ToObject<TestData>());
@@ -78,6 +84,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             //assert
             protoContainer.ProtoArray.ToObject<List<DateTime>>().Should().BeEquivalentTo(source.DateTimes);
             protoContainer.ProtoValue.ToObject<TimeSpan>().Should().Be(source.TimeSpan);
+            protoContainer.Boolean.Should().BeFalse();
             foreach (var data in dataToAssert)
             {
                 data.String.Should().Be(source.String);
@@ -91,6 +98,18 @@ namespace Neuroglia.UnitTests.Cases.Serialization
                 data.DateTimes.Should().BeEquivalentTo(source.DateTimes);
                 data.ComplexTypes.Should().BeEquivalentTo(source.ComplexTypes);
             }
+
+        }
+
+        [Fact]
+        public async Task SerializeAndDeserialize_Array_ToFrom_Newtonsoft_ShouldWork()
+        {
+            var json = @"[{""id"":0,""name"":""Bread"",""description"":""Whole grain bread"",""releaseDate"":""1992-01-01T00:00:00Z"",""discontinuedDate"":null,""rating"":{},""price"":2.5},{""id"":1,""name"":""Milk"",""description"":""Low fat milk"",""releaseDate"":""1995-10-01T00:00:00Z"",""discontinuedDate"":null,""rating"":{},""price"":3.5},{""id"":2,""name"":""Vint soda"",""description"":""Americana Variety - Mix of 6 flavors"",""releaseDate"":""2000-10-01T00:00:00Z"",""discontinuedDate"":null,""rating"":{},""price"":20.9},{""id"":3,""name"":""Havina Cola"",""description"":""The Original Key Lime Cola"",""releaseDate"":""2005-10-01T00:00:00Z"",""discontinuedDate"":""2006-10-01T00:00:00Z"",""rating"":{},""price"":19.9},{""id"":4,""name"":""Fruit Punch"",""description"":""Mango flavor, 8.3 Ounce Cans (Pack of 24)"",""releaseDate"":""2003-01-05T00:00:00Z"",""discontinuedDate"":null,""rating"":{},""price"":22.99},{""id"":5,""name"":""Cranberry Juice"",""description"":""16-Ounce Plastic Bottles (Pack of 12)"",""releaseDate"":""2006-08-04T00:00:00Z"",""discontinuedDate"":null,""rating"":{},""price"":22.8},{""id"":6,""name"":""Pink Lemonade"",""description"":""36 Ounce Cans (Pack of 3)"",""releaseDate"":""2006-11-05T00:00:00Z"",""discontinuedDate"":null,""rating"":{},""price"":18.8},{""id"":7,""name"":""DVD Player"",""description"":""1080P Upconversion DVD Player"",""releaseDate"":""2006-11-15T00:00:00Z"",""discontinuedDate"":null,""rating"":{},""price"":35.88},{""id"":8,""name"":""LCD HDTV"",""description"":""42 inch 1080p LCD with Built-in Blu-ray Disc Player"",""releaseDate"":""2008-05-08T00:00:00Z"",""discontinuedDate"":null,""rating"":{},""price"":1088.8},{""id"":9,""name"":""Lemonade"",""description"":""Classic, refreshing lemonade (Single bottle)"",""releaseDate"":""1970-01-01T00:00:00Z"",""discontinuedDate"":null,""rating"":{},""price"":1.01},{""id"":10,""name"":""Coffee"",""description"":""Bulk size can of instant coffee"",""releaseDate"":""1982-12-31T00:00:00Z"",""discontinuedDate"":null,""rating"":{},""price"":6.99}]";
+            var dyn = JsonConvert.DeserializeObject<Dynamic>(json);
+            var obj = dyn.ToObject();
+            var serialized = JsonConvert.SerializeObject(dyn);
+
+            serialized.Should().Be(json);
 
         }
 
@@ -108,6 +127,11 @@ namespace Neuroglia.UnitTests.Cases.Serialization
         class TestContainer
         {
 
+            public TestContainer()
+            {
+                this.Boolean = true;
+            }
+
             [ProtoMember(1)]
             public Dynamic ProtoObject { get; set; }
 
@@ -116,6 +140,10 @@ namespace Neuroglia.UnitTests.Cases.Serialization
 
             [ProtoMember(3)]
             public Dynamic ProtoValue { get; set; }
+
+            [ProtoMember(4)]
+            [DefaultValue(true)]
+            public bool Boolean { get; set; }
 
         }
 
