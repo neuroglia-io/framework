@@ -78,30 +78,33 @@
             <param name="language">The expression language to check</param>
             <returns>A boolean indicating whether or not the <see cref="T:Neuroglia.Data.Expressions.IExpressionEvaluator"/> supports the specified expression language</returns>
         </member>
-        <member name="M:Neuroglia.Data.Expressions.IExpressionEvaluator.Evaluate(System.String,System.Object,System.Type)">
+        <member name="M:Neuroglia.Data.Expressions.IExpressionEvaluator.Evaluate(System.String,System.Object,System.Type,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <summary>
             Evaluates the value of the specified serverless workflow expression
             </summary>
             <param name="expression">The serverless workflow expression to evaluate</param>
             <param name="data">The data to evaluate the specified expression against</param>
             <param name="expectedType">The expected data type</param>
+            <param name="args">An <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the arguments to use when performing the evaluation</param>
             <returns>A new <see cref="T:System.Object"/> that represents the resolved serverless workflow expression's value</returns>
         </member>
-        <member name="M:Neuroglia.Data.Expressions.IExpressionEvaluator.Evaluate(System.String,System.Object)">
+        <member name="M:Neuroglia.Data.Expressions.IExpressionEvaluator.Evaluate(System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <summary>
             Evaluates the value of the specified serverless workflow expression
             </summary>
             <param name="expression">The serverless workflow expression to evaluate</param>
             <param name="data">The data to evaluate the specified expression against</param>
+            <param name="args">An <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the arguments to use when performing the evaluation</param>
             <returns>A new <see cref="T:System.Object"/> that represents the resolved serverless workflow expression's value</returns>
         </member>
-        <member name="M:Neuroglia.Data.Expressions.IExpressionEvaluator.Evaluate``1(System.String,System.Object)">
+        <member name="M:Neuroglia.Data.Expressions.IExpressionEvaluator.Evaluate``1(System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <summary>
             Evaluates the value of the specified serverless workflow expression
             </summary>
             <typeparam name="T">The expected type of data</typeparam>
             <param name="expression">The serverless workflow expression to evaluate</param>
             <param name="data">The data to evaluate the specified expression against</param>
+            <param name="args">An <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the arguments to use when performing the evaluation</param>
             <returns>A new <see cref="T:System.Object"/> that represents the resolved serverless workflow expression's value</returns>
         </member>
         <member name="T:Neuroglia.Data.Expressions.IExpressionEvaluatorProvider">

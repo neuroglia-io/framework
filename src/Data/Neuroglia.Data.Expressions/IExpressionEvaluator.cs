@@ -37,16 +37,18 @@ namespace Neuroglia.Data.Expressions
         /// <param name="expression">The serverless workflow expression to evaluate</param>
         /// <param name="data">The data to evaluate the specified expression against</param>
         /// <param name="expectedType">The expected data type</param>
+        /// <param name="args">An <see cref="IDictionary{TKey, TValue}"/> containing the arguments to use when performing the evaluation</param>
         /// <returns>A new <see cref="object"/> that represents the resolved serverless workflow expression's value</returns>
-        object? Evaluate(string expression, object data, Type expectedType);
+        object? Evaluate(string expression, object data, Type expectedType, IDictionary<string, object>? args = null);
 
         /// <summary>
         /// Evaluates the value of the specified serverless workflow expression
         /// </summary>
         /// <param name="expression">The serverless workflow expression to evaluate</param>
         /// <param name="data">The data to evaluate the specified expression against</param>
+        /// <param name="args">An <see cref="IDictionary{TKey, TValue}"/> containing the arguments to use when performing the evaluation</param>
         /// <returns>A new <see cref="object"/> that represents the resolved serverless workflow expression's value</returns>
-        object? Evaluate(string expression, object data);
+        object? Evaluate(string expression, object data, IDictionary<string, object>? args = null);
 
         /// <summary>
         /// Evaluates the value of the specified serverless workflow expression
@@ -54,8 +56,9 @@ namespace Neuroglia.Data.Expressions
         /// <typeparam name="T">The expected type of data</typeparam>
         /// <param name="expression">The serverless workflow expression to evaluate</param>
         /// <param name="data">The data to evaluate the specified expression against</param>
+        /// <param name="args">An <see cref="IDictionary{TKey, TValue}"/> containing the arguments to use when performing the evaluation</param>
         /// <returns>A new <see cref="object"/> that represents the resolved serverless workflow expression's value</returns>
-        T? Evaluate<T>(string expression, object data);
+        T? Evaluate<T>(string expression, object data, IDictionary<string, object>? args = null);
 
     }
 

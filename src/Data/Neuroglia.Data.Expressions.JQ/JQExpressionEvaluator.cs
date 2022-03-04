@@ -73,31 +73,36 @@ namespace Neuroglia.Data.Expressions.JQ
         }
 
         /// <inheritdoc/>
-        public virtual object? Evaluate(string expression, object data, Type expectedType)
+        public virtual object? Evaluate(string expression, object data, Type expectedType, IDictionary<string, object>? args = null)
         {
             if (string.IsNullOrWhiteSpace(expression))
                 throw new ArgumentNullException(nameof(expression));
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
             string json = this.JsonSerializer.Serialize(data);
+            string jsonArgs = string.Empty;
             string jqExpression = this.BuildJQExpression(expression);
             string fileName;
-            string args;
+            string processArgs;
             using Process process = new();
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+                if(args != null)
+                    jsonArgs = string.Join(" ", args.Select(a => @$"--argsjson {a.Key} ""{this.EscapeDoubleQuotes(JToken.FromObject(a.Value).ToString(Newtonsoft.Json.Formatting.None))}"""));
                 fileName = "cmd.exe";
-                args = @$"/c echo {json} | jq.exe ""{jqExpression}""";
+                processArgs = @$"/c echo {json} | jq.exe ""{jqExpression}"" {jsonArgs}";
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
+                if (args != null)
+                    jsonArgs = string.Join(" ", args.Select(a => @$"--argsjson {a.Key} '{JToken.FromObject(a.Value).ToString(Newtonsoft.Json.Formatting.None)}'"));
                 fileName = "bash";
-                args = @$"-c ""echo '{this.EscapeDoubleQuotes(json)}' | jq '{jqExpression}'""";
+                processArgs = @$"-c ""echo '{this.EscapeDoubleQuotes(json)}' | jq '{jqExpression}' {jsonArgs}""";
             }
             else
                 throw new PlatformNotSupportedException();
             process.StartInfo.FileName = fileName;
-            process.StartInfo.Arguments = args;
+            process.StartInfo.Arguments = processArgs;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
@@ -117,15 +122,15 @@ namespace Neuroglia.Data.Expressions.JQ
         }
 
         /// <inheritdoc/>
-        public virtual T? Evaluate<T>(string expression, object data)
+        public virtual T? Evaluate<T>(string expression, object data, IDictionary<string, object>? args = null)
         {
-            return (T?)this.Evaluate(expression, data, typeof(T));
+            return (T?)this.Evaluate(expression, data, typeof(T), args);
         }
 
         /// <inheritdoc/>
-        public virtual object? Evaluate(string expression, object data)
+        public virtual object? Evaluate(string expression, object data, IDictionary<string, object>? args = null)
         {
-            var result = this.Evaluate(expression, data, typeof(object));
+            var result = this.Evaluate(expression, data, typeof(object), args);
             if (result is JToken jtoken)
                 result =  jtoken.ToObject();
             return result;

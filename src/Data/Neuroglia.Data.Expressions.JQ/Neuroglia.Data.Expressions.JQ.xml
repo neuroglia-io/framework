@@ -101,13 +101,13 @@
         <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Supports(System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate(System.String,System.Object,System.Type)">
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate(System.String,System.Object,System.Type,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate``1(System.String,System.Object)">
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate``1(System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate(System.String,System.Object)">
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate(System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <inheritdoc/>
         </member>
         <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.BuildJQExpression(System.String)">
