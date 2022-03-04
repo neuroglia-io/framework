@@ -95,7 +95,7 @@ namespace Neuroglia.Data.Expressions.JQ
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 if (args != null)
-                    jsonArgs = string.Join(" ", args.Select(a => @$"--argjson {a.Key} '{JToken.FromObject(a.Value).ToString(Newtonsoft.Json.Formatting.None)}'"));
+                    jsonArgs = string.Join(" ", args.Select(a => @$"--argjson {a.Key} '{this.EscapeDoubleQuotes(JToken.FromObject(a.Value).ToString(Newtonsoft.Json.Formatting.None))}'"));
                 fileName = "bash";
                 processArgs = @$"-c ""echo '{this.EscapeDoubleQuotes(json)}' | jq '{jqExpression}' {jsonArgs}""";
             }
