@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework mediation</PackageTags>
-    <Version>2.0.1.37</Version>
-    <AssemblyVersion>2.0.1.37</AssemblyVersion>
-    <FileVersion>2.0.1.37</FileVersion>
+    <Version>2.0.1.38</Version>
+    <AssemblyVersion>2.0.1.38</AssemblyVersion>
+    <FileVersion>2.0.1.38</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
