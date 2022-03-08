@@ -21,6 +21,7 @@ using System.Runtime.Serialization;
 
 namespace Neuroglia.Serialization
 {
+
     /// <summary>
     /// Represents a dynamic object
     /// </summary>
@@ -109,6 +110,76 @@ namespace Neuroglia.Serialization
             if (property == null)
                 throw new MissingMemberException($"Failed to find the property with the specified name '{name}'");
             return property.GetValue<T>();
+        }
+
+        /// <summary>
+        /// Attempts to get the value of the specified property
+        /// </summary>
+        /// <param name="name">The name of the property to get</param>
+        /// <param name="value">The value of the property, if any</param>
+        /// <returns>A boolean indicating whether or not the specified property is defined</returns>
+        public virtual bool TryGet(string name, out object value)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            value = null!;
+            try
+            {
+                value = this.Get(name)!;
+                return true;
+            }
+            catch(MissingMemberException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to get the value of the specified property
+        /// </summary>
+        /// <param name="name">The name of the property to get</param>
+        /// <param name="expectedType">The The expected type of value</param>
+        /// <param name="value">The value of the property, if any</param>
+        /// <returns>A boolean indicating whether or not the specified property is defined</returns>
+        public virtual bool TryGet(string name, Type expectedType, out object value)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            if (expectedType == null)
+                throw new ArgumentNullException(nameof(name));
+            value = null!;
+            try
+            {
+                value = this.Get(name, expectedType)!;
+                return true;
+            }
+            catch(MissingMemberException)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Attempts to get the value of the specified property
+        /// </summary>
+        /// <param name="name">The name of the property to get</param>
+        /// <param name="value">The value of the property, if any</param>
+        /// <typeparam name="T">The expected type of value</typeparam>
+        /// <returns>A boolean indicating whether or not the specified property is defined</returns>
+        public virtual bool TryGet<T>(string name, out T value)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            value = default!;
+            try
+            {
+                value = this.Get<T>(name)!;
+                return true;
+            }
+            catch(MissingMemberException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
