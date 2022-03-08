@@ -4,6 +4,26 @@
         <name>Neuroglia.Core</name>
     </assembly>
     <members>
+        <member name="T:Neuroglia.AsyncDuplexStreamingConnection`2">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.IAsyncDuplexStreamingConnection`2"/> interface
+            </summary>
+            <typeparam name="TOutbound">The type of outbound messages, meaning messages sent to the server</typeparam>
+            <typeparam name="TInbound">The type of inbound messages, meaning messages received from the server</typeparam>
+        </member>
+        <member name="M:Neuroglia.AsyncDuplexStreamingConnection`2.#ctor(Neuroglia.IAsyncStreamWriter{`0},Neuroglia.IAsyncStreamReader{`1})">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.AsyncDuplexStreamingConnection`2"/>
+            </summary>
+            <param name="outboundStream">The service used to write messages to the outbound stream</param>
+            <param name="inboundStream">The service used to read messages from the inbound stream</param>
+        </member>
+        <member name="P:Neuroglia.AsyncDuplexStreamingConnection`2.OutboundStream">
+            <inheritdoc/>
+        </member>
+        <member name="P:Neuroglia.AsyncDuplexStreamingConnection`2.InboundStream">
+            <inheritdoc/>
+        </member>
         <member name="T:Neuroglia.AsyncLock">
             <summary>
             Represents an object used to lock aynschronous processes
@@ -21,6 +41,54 @@
             </summary>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new object which releases the lock upon disposal</returns>
+        </member>
+        <member name="T:Neuroglia.AsyncStreamReader`1">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.IAsyncStreamReader`1"/> interface
+            </summary>
+            <typeparam name="T">The type of data to read</typeparam>
+        </member>
+        <member name="M:Neuroglia.AsyncStreamReader`1.#ctor(System.Collections.Generic.IAsyncEnumerable{`0})">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.AsyncStreamReader`1"/>
+            </summary>
+            <param name="stream">The <see cref="T:System.Collections.Generic.IAsyncEnumerable`1"/> to read</param>
+        </member>
+        <member name="P:Neuroglia.AsyncStreamReader`1.Stream">
+            <summary>
+            Gets the <see cref="T:System.Collections.Generic.IAsyncEnumerable`1"/> to read
+            </summary>
+        </member>
+        <member name="P:Neuroglia.AsyncStreamReader`1.Reader">
+            <summary>
+            Gets the <see cref="T:System.Collections.Generic.IAsyncEnumerator`1"/> used to enumerate the <see cref="T:System.Collections.Generic.IAsyncEnumerable`1"/> to read
+            </summary>
+        </member>
+        <member name="P:Neuroglia.AsyncStreamReader`1.Current">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.AsyncStreamReader`1.MoveNextAsync">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.AsyncStreamWriter`1">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.IAsyncStreamWriter`1"/> interface
+            </summary>
+            <typeparam name="T">The type of data to write</typeparam>
+        </member>
+        <member name="M:Neuroglia.AsyncStreamWriter`1.#ctor(System.Threading.Channels.ChannelWriter{`0})">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.AsyncStreamWriter`1"/>
+            </summary>
+            <param name="writer">The <see cref="T:System.Threading.Channels.ChannelWriter`1"/> used to write data to the stream</param>
+        </member>
+        <member name="P:Neuroglia.AsyncStreamWriter`1.Writer">
+            <summary>
+            Gets the <see cref="T:System.Threading.Channels.ChannelWriter`1"/> used to write data to the stream
+            </summary>
+        </member>
+        <member name="M:Neuroglia.AsyncStreamWriter`1.WriteAsync(`0,System.Threading.CancellationToken)">
+            <inheritdoc/>
         </member>
         <member name="T:Neuroglia.DataTransferObjectTypeAttribute">
             <summary>
@@ -711,6 +779,54 @@
             <param name="extended">The extended <see cref="T:System.Type"/></param>
             <param name="member">The <see cref="T:System.Reflection.MemberInfo"/> to get the declaring type of</param>
             <returns>The declaring type of the specified <see cref="T:System.Reflection.MemberInfo"/></returns>
+        </member>
+        <member name="T:Neuroglia.IAsyncDuplexStreamingConnection`2">
+            <summary>
+            Defines the fundamentals of an object used to describe and manage an async duplex streaming connection
+            </summary>
+            <typeparam name="TOutbound">The type of outbound messages, meaning messages sent to the server</typeparam>
+            <typeparam name="TInbound">The type of inbound messages, meaning messages received from the server</typeparam>
+        </member>
+        <member name="P:Neuroglia.IAsyncDuplexStreamingConnection`2.OutboundStream">
+            <summary>
+            Gets the service used to write messages to the outbound stream
+            </summary>
+        </member>
+        <member name="P:Neuroglia.IAsyncDuplexStreamingConnection`2.InboundStream">
+            <summary>
+            Gets the service used to read messages from the inbound stream
+            </summary>
+        </member>
+        <member name="T:Neuroglia.IAsyncStreamReader`1">
+            <summary>
+            Defines the fundamentals of a service used to read an <see cref="T:System.Collections.Generic.IAsyncEnumerable`1"/>
+            </summary>
+            <typeparam name="T">The type of data to read</typeparam>
+        </member>
+        <member name="P:Neuroglia.IAsyncStreamReader`1.Current">
+            <summary>
+            Gets the current message
+            </summary>
+        </member>
+        <member name="M:Neuroglia.IAsyncStreamReader`1.MoveNextAsync">
+            <summary>
+            Attempts to read the next message on the stream
+            </summary>
+            <returns>A new boolean indicating whether or not a message could be read from the stream. If false, the reader has reached the end of the stream.</returns>
+        </member>
+        <member name="T:Neuroglia.IAsyncStreamWriter`1">
+            <summary>
+            Defines the fundamentals of a service used to read data from an <see cref="T:System.Collections.Generic.IAsyncEnumerable`1"/>
+            </summary>
+            <typeparam name="T">The type of data to write</typeparam>
+        </member>
+        <member name="M:Neuroglia.IAsyncStreamWriter`1.WriteAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Writes a messages
+            </summary>
+            <param name="data">The data to write</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.ValueTask"/></returns>
         </member>
         <member name="T:Neuroglia.IDataTransferObject">
             <summary>
