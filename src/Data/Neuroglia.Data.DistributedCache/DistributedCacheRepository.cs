@@ -81,7 +81,7 @@ namespace Neuroglia.Data
         {
             get
             {
-                return typeof(TEntity).Name;
+                return typeof(TEntity).FullName;
             }
         }
 
