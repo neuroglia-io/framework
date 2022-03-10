@@ -59,17 +59,105 @@ namespace Neuroglia.Data.Flux
         public virtual IStore CreateStore()
         {
             var store = (IStore)ActivatorUtilities.CreateInstance(this.ServiceProvider, this.FluxOptions.StoreType);
-            var reducersPerState = new Dictionary<Type, List<IReducer>>();
-            foreach (var reducerDeclaringType in TypeCacheUtil.FindFilteredTypes("nflux-reducers", 
-                t => t.GetMethods().Any(m => m.TryGetCustomAttribute<ReducerAttribute>(out _)), this.FluxOptions.AssembliesToScan?.ToArray()))
+            if(this.FluxOptions.AutoRegisterFeatures)
+                this.ConfigureStoreFeatures(store);
+            if (this.FluxOptions.AutoRegisterEffects)
+                this.ConfigureStoreEffects(store);
+            if (this.FluxOptions.AutoRegisterMiddlewares)
+                this.ConfigureStoreMiddlewares(store);
+            this.FluxOptions.StoreSetup?.Invoke(store);
+            return store;
+        }
+
+        /// <summary>
+        /// Finds and configures <see cref="IFeature"/>s for the specified <see cref="IStore"/>
+        /// </summary>
+        /// <param name="store">The <see cref="IStore"/> to add <see cref="IFeature"/>s for</param>
+        protected virtual void ConfigureStoreFeatures(IStore store)
+        {
+            if (store == null)
+                throw new ArgumentNullException(nameof(store));
+            var reducersPerState = this.FindAndMapReducersPerState();
+            foreach (var featureType in TypeCacheUtil.FindFilteredTypes("nflux-features",
+              t => t.IsClass && !t.IsAbstract && !t.IsInterface && !t.IsGenericType && t.TryGetCustomAttribute<FeatureAttribute>(out _)))
             {
-                foreach(var reducerMethod in reducerDeclaringType.GetMethods()
-                    .Where(m => m.TryGetCustomAttribute<ReducerAttribute>(out _)))
+                var reducersPerFeature = new List<IReducer>();
+                foreach (var stateType in featureType.GetProperties()
+                    .Where(p => p.GetGetMethod(true) != null && p.GetSetMethod(true) != null)
+                    .Select(p => p.PropertyType))
                 {
-                    if(!reducerMethod.IsStatic)
+                    if (reducersPerState.TryGetValue(stateType, out var reducers))
+                        reducersPerFeature.AddRange(reducers);
+                }
+                AddFeatureMethod.MakeGenericMethod(featureType).Invoke(null, new object[] { store, reducersPerFeature.ToArray() });
+            }
+        }
+
+        /// <summary>
+        /// Finds and configures <see cref="IEffect"/>s for the specified <see cref="IStore"/>
+        /// </summary>
+        /// <param name="store">The <see cref="IStore"/> to add <see cref="IEffect"/>s for</param>
+        protected virtual void ConfigureStoreEffects(IStore store)
+        {
+            if (store == null)
+                throw new ArgumentNullException(nameof(store));
+            foreach (var effectDeclaringType in TypeCacheUtil.FindFilteredTypes("nflux-effects",
+                t => t.TryGetCustomAttribute< EffectAttribute>(out _) || t.GetMethods().Any(m => m.TryGetCustomAttribute<EffectAttribute>(out _)), this.FluxOptions.AssembliesToScan?.ToArray()))
+            {
+                foreach (var effectMethod in effectDeclaringType.GetMethods()
+                   .Where(m => (effectDeclaringType.TryGetCustomAttribute<EffectAttribute>(out _) && m.IsStatic && m.GetParameters().Length == 2 && m.GetParameters()[1].ParameterType == typeof(IEffectContext)) || m.TryGetCustomAttribute<EffectAttribute>(out _)))
+                {
+                    if(effectMethod.ReturnType != typeof(Task))
+                        throw new Exception($"The method '{effectMethod.Name}' in type '{effectMethod.DeclaringType!.FullName}' must return a task to be used as a Flux effect");
+                    if (!effectMethod.IsStatic)
+                        throw new Exception($"The method '{effectMethod.Name}' in type '{effectMethod.DeclaringType!.FullName}' must be static to be used as a Flux effect");
+                    if (effectMethod.GetParameters().Length != 2)
+                        throw new Exception($"The method '{effectMethod.Name}' in type '{effectMethod.DeclaringType!.FullName}' must declare exactly 2 parameters to be used as a Flux effect");
+                    var actionType = effectMethod.GetParameters()[0].ParameterType;
+                    var effectType = typeof(Effect<>).MakeGenericType(actionType);
+                    var effectLambda = this.BuildEffectLambda(actionType, effectMethod);
+                    var effectFunction = effectLambda.Compile();
+                    var effect = (IEffect)ActivatorUtilities.CreateInstance(this.ServiceProvider, effectType, effectFunction);
+                    store.AddEffect(effect);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds and configures <see cref="IMiddleware"/>s for the specified <see cref="IStore"/>
+        /// </summary>
+        /// <param name="store">The <see cref="IStore"/> to add <see cref="IMiddleware"/>s for</param>
+        protected virtual void ConfigureStoreMiddlewares(IStore store)
+        {
+            if (store == null)
+                throw new ArgumentNullException(nameof(store));
+            foreach (var middlewareType in TypeCacheUtil.FindFilteredTypes("nflux-middlewares",
+                 t => t.IsClass && !t.IsInterface && !t.IsAbstract && !t.IsGenericType && typeof(IMiddleware).IsAssignableFrom(t), this.FluxOptions.AssembliesToScan?.ToArray()))
+            {
+                var middleware = (IMiddleware)ActivatorUtilities.CreateInstance(this.ServiceProvider, middlewareType);
+                store.AddMiddleware(middleware);
+            }
+        }
+
+        /// <summary>
+        /// Finds and maps scanned <see cref="IReducer"/>s per state type
+        /// </summary>
+        /// <returns>A new <see cref="IDictionary{TKey, TValue}"/> containing scanned <see cref="IReducer"/>s mapped by type</returns>
+        protected virtual IDictionary<Type, List<IReducer>> FindAndMapReducersPerState()
+        {
+            var reducersPerState = new Dictionary<Type, List<IReducer>>();
+            foreach (var reducerDeclaringType in TypeCacheUtil.FindFilteredTypes("nflux-reducers",
+                t => t.TryGetCustomAttribute<ReducerAttribute>(out _) || t.GetMethods().Any(m => m.TryGetCustomAttribute<ReducerAttribute>(out _)), this.FluxOptions.AssembliesToScan?.ToArray()))
+            {
+                foreach (var reducerMethod in reducerDeclaringType.GetMethods()
+                    .Where(m => (reducerDeclaringType.TryGetCustomAttribute<ReducerAttribute>(out _) && m.IsStatic && m.GetParameters().Length == 2 && m.ReturnType == m.GetParameters()[0].ParameterType) || m.TryGetCustomAttribute<ReducerAttribute>(out _)))
+                {
+                    if (!reducerMethod.IsStatic)
                         throw new Exception($"The method '{reducerMethod.Name}' in type '{reducerMethod.DeclaringType!.FullName}' must be static to be used as a Flux reducer");
                     if (reducerMethod.GetParameters().Length != 2)
                         throw new Exception($"The method '{reducerMethod.Name}' in type '{reducerMethod.DeclaringType!.FullName}' must declare exactly 2 parameters to be used as a Flux reducer");
+                    if (reducerMethod.ReturnType != reducerMethod.GetParameters()[0].ParameterType)
+                        throw new Exception($"The method '{reducerMethod.Name}' in type '{reducerMethod.DeclaringType!.FullName}' must return a type matching its first parameter's to be used as a Flux reducer");
                     var stateType = reducerMethod.GetParameters()[0].ParameterType;
                     var actionType = reducerMethod.GetParameters()[1].ParameterType;
                     var reducerType = typeof(Reducer<,>).MakeGenericType(stateType, actionType);
@@ -82,44 +170,7 @@ namespace Neuroglia.Data.Flux
                         reducersPerState.Add(stateType, new() { reducer });
                 }
             }
-            foreach (var featureType in TypeCacheUtil.FindFilteredTypes("nflux-features",
-               t => t.IsClass && !t.IsAbstract && !t.IsInterface && !t.IsGenericType && t.TryGetCustomAttribute<FeatureAttribute>(out _)))
-            {
-                var reducersPerFeature = new List<IReducer>();
-                foreach (var stateType in featureType.GetProperties()
-                    .Where(p => p.GetGetMethod(true) != null && p.GetSetMethod(true) != null)
-                    .Select(p => p.PropertyType))
-                {
-                    if(reducersPerState.TryGetValue(stateType, out var reducers))
-                        reducersPerFeature.AddRange(reducers);
-                }
-                AddFeatureMethod.MakeGenericMethod(featureType).Invoke(null, new object[] { store, reducersPerFeature.ToArray() });
-            }
-            foreach (var effectDeclaringType in TypeCacheUtil.FindFilteredTypes("nflux-effects",
-                t => t.GetMethods().Any(m => m.TryGetCustomAttribute<EffectAttribute>(out _)), this.FluxOptions.AssembliesToScan?.ToArray()))
-            {
-                foreach (var effectMethod in effectDeclaringType.GetMethods()
-                   .Where(m => m.TryGetCustomAttribute<EffectAttribute>(out _)))
-                {
-                    if (!effectMethod.IsStatic)
-                        throw new Exception($"The method '{effectMethod.Name}' in type '{effectMethod.DeclaringType!.FullName}' must be static to be used as a Flux effect");
-                    if (effectMethod.GetParameters().Length != 1)
-                        throw new Exception($"The method '{effectMethod.Name}' in type '{effectMethod.DeclaringType!.FullName}' must declare exactly 1 parameters to be used as a Flux effect");
-                    var actionType = effectMethod.GetParameters()[0].ParameterType;
-                    var effectType = typeof(Effect<>).MakeGenericType(actionType);
-                    var effectLambda = this.BuildEffectLambda(actionType, effectMethod);
-                    var effectFunction = effectLambda.Compile();
-                    var effect = (IEffect)ActivatorUtilities.CreateInstance(this.ServiceProvider, effectType, effectFunction);
-                    store.AddEffect(effect);
-                }
-            }
-            foreach (var middlewareType in TypeCacheUtil.FindFilteredTypes("nflux-middlewares",
-                  t => t.IsClass && !t.IsInterface && !t.IsAbstract && !t.IsGenericType && typeof(IMiddleware).IsAssignableFrom(t), this.FluxOptions.AssembliesToScan?.ToArray()))
-            {
-                var middleware = (IMiddleware)ActivatorUtilities.CreateInstance(this.ServiceProvider, middlewareType);
-                store.AddMiddleware(middleware);
-            }
-            return store;
+            return reducersPerState;
         }
 
         /// <summary>
@@ -157,8 +208,9 @@ namespace Neuroglia.Data.Flux
             if (effectMethod == null)
                 throw new ArgumentNullException(nameof(effectMethod));
             var actionParam = Expression.Parameter(actionType, "action");
-            var methodCall = Expression.Call(null, effectMethod, actionParam);
-            var lambda = Expression.Lambda(methodCall, actionParam);
+            var contextParam = Expression.Parameter(typeof(IEffectContext), "context");
+            var methodCall = Expression.Call(null, effectMethod, actionParam, contextParam);
+            var lambda = Expression.Lambda(methodCall, actionParam, contextParam);
             return lambda;
         }
 

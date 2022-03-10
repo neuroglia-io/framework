@@ -18,14 +18,15 @@
 namespace Neuroglia.Data.Flux
 {
     /// <summary>
-    /// Represents the attribute used to mark a method or all the methods of a type as flux effect
+    /// Defines the fundamentals of an <see cref="IEffect"/> context
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
-    public class EffectAttribute
-        : Attribute
+    public interface IEffectContext
     {
 
-
+        /// <summary>
+        /// Gets the current <see cref="IDispatcher"/>
+        /// </summary>
+        IDispatcher Dispatcher { get; }
 
     }
 

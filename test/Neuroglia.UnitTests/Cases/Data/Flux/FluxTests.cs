@@ -39,7 +39,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Flux
             var actionCount = 24;
             var effectCount = -1;
             var action = new IncrementCountAction(actionCount);
-            var effect = new Effect<IncrementCountAction>(async action =>
+            var effect = new Effect<IncrementCountAction>(async (action, context) =>
             {
                 effectCount = action.Amount;
                 await Task.CompletedTask;

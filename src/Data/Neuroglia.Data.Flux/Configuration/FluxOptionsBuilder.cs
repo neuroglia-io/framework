@@ -43,6 +43,27 @@ namespace Neuroglia.Data.Flux.Configuration
         }
 
         /// <inheritdoc/>
+        public virtual IFluxOptionsBuilder AutoRegisterFeatures(bool autoRegister = true)
+        {
+            this.Options.AutoRegisterFeatures = autoRegister;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IFluxOptionsBuilder AutoRegisterEffects(bool autoRegister = true)
+        {
+            this.Options.AutoRegisterEffects = autoRegister;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IFluxOptionsBuilder AutoRegisterMiddlewares(bool autoRegister = true)
+        {
+            this.Options.AutoRegisterMiddlewares = autoRegister;
+            return this;
+        }
+
+        /// <inheritdoc/>
         public virtual IFluxOptionsBuilder UseDispatcher(Type dispatcherType)
         {
             if (dispatcherType == null)
@@ -79,6 +100,15 @@ namespace Neuroglia.Data.Flux.Configuration
         public virtual IFluxOptionsBuilder WithServiceLifetime(ServiceLifetime lifetime)
         {
             this.Options.ServiceLifetime = lifetime;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IFluxOptionsBuilder SetupStore(Action<IStore> setup)
+        {
+            if (setup == null)
+                throw new ArgumentNullException(nameof(setup));
+            this.Options.StoreSetup = setup;
             return this;
         }
 

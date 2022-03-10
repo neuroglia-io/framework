@@ -12,16 +12,16 @@ namespace Neuroglia.UnitTests.Data
 
         public const int Multiplier = 3;
 
-        public void OnDispatching(object action)
-        {
-            if (action is IncrementCountAction test)
-                ValueBeforeDispatch = test.Amount;
-        }
-
         public void OnDispatched(object action)
         {
             if (action is IncrementCountAction test)
                 ValueAfterDispatch = test.Amount;
+        }
+
+        public void OnDispatching(object action)
+        {
+            if (action is IncrementCountAction test)
+                ValueBeforeDispatch = test.Amount;
         }
 
     }

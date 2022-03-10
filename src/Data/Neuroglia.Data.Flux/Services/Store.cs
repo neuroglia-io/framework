@@ -158,8 +158,9 @@ namespace Neuroglia.Data.Flux
             var applyEffectTasks = new List<Task>();
             foreach (var effect in this.Effects)
             {
-                applyEffectTasks.Add(effect.ApplyAsync(action));
+                applyEffectTasks.Add(effect.ApplyAsync(action, new EffectContext(this.Dispatcher)));
             }
+            var exceptions = new List<Exception>();
             Task.Run(async () =>
             {
                 try
@@ -168,8 +169,10 @@ namespace Neuroglia.Data.Flux
                 }
                 catch(Exception ex)
                 {
-                    throw;
+                    exceptions.Add(ex);
                 }
+                if(exceptions.Any())
+                    throw new AggregateException(exceptions);
             });
         }
 

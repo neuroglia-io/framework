@@ -35,6 +35,27 @@ namespace Neuroglia.Data.Flux.Configuration
         IFluxOptionsBuilder ScanAssembly(Assembly assembly);
 
         /// <summary>
+        /// Configures the <see cref="IFluxOptionsBuilder"/> to automatically register scanned <see cref="IFeature"/>s and <see cref="IReducer"/>s
+        /// </summary>
+        /// <param name="autoRegister">A boolean indicating whether or not to automatically register scanned <see cref="IFeature"/>s and <see cref="IReducer"/>s</param>
+        /// <returns>The configured <see cref="IFluxOptionsBuilder"/></returns>
+        IFluxOptionsBuilder AutoRegisterFeatures(bool autoRegister = true);
+
+        /// <summary>
+        /// Configures the <see cref="IFluxOptionsBuilder"/> to automatically register scanned <see cref="IEffect"/>s
+        /// </summary>
+        /// <param name="autoRegister">A boolean indicating whether or not to automatically register scanned <see cref="IEffect"/>s</param>
+        /// <returns>The configured <see cref="IFluxOptionsBuilder"/></returns>
+        IFluxOptionsBuilder AutoRegisterEffects(bool autoRegister = true);
+
+        /// <summary>
+        /// Configures the <see cref="IFluxOptionsBuilder"/> to automatically register scanned <see cref="IMiddleware"/>s
+        /// </summary>
+        /// <param name="autoRegister">A boolean indicating whether or not to automatically register scanned <see cref="IMiddleware"/>s</param>
+        /// <returns>The configured <see cref="IFluxOptionsBuilder"/></returns>
+        IFluxOptionsBuilder AutoRegisterMiddlewares(bool autoRegister = true);
+
+        /// <summary>
         /// Configures the <see cref="IFluxOptionsBuilder"/> to use the specified <see cref="IDispatcher"/> type
         /// </summary>
         /// <param name="dispatcherType">The type of the <see cref="IDispatcher"/> to use</param>
@@ -54,6 +75,13 @@ namespace Neuroglia.Data.Flux.Configuration
         /// <param name="storeType">The type of the <see cref="IStore"/> to use</param>
         /// <returns>The configured <see cref="IFluxOptionsBuilder"/></returns>
         IFluxOptionsBuilder UseStore(Type storeType);
+
+        /// <summary>
+        /// Configures the <see cref="IFluxOptionsBuilder"/> to use the specified <see cref="Action{T}"/> to setup the <see cref="IStore"/>
+        /// </summary>
+        /// <param name="setup">An <see cref="Action{T}"/> used to setup the <see cref="IStore"/></param>
+        /// <returns>The configured <see cref="IFluxOptionsBuilder"/></returns>
+        IFluxOptionsBuilder SetupStore(Action<IStore> setup);
 
         /// <summary>
         /// Configures the lifetime of all Flux services

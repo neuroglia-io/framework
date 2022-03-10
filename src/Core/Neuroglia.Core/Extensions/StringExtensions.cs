@@ -59,10 +59,7 @@ namespace Neuroglia
                 _ => throw new NotSupportedException($"The specified {nameof(StringCase)} '{stringCase}' is not supported"),
             };
             byte[] data = new byte[4 * length];
-            using (RNGCryptoServiceProvider crypto = new())
-            {
-                crypto.GetBytes(data);
-            }
+            RandomNumberGenerator.Fill(data);
             StringBuilder result = new(length);
             for (int i = 0; i < length; i++)
             {
@@ -89,10 +86,7 @@ namespace Neuroglia
                 _ => throw new NotSupportedException($"The specified {nameof(StringCase)} '{stringCase}' is not supported"),
             };
             byte[] data = new byte[4 * length];
-            using (RNGCryptoServiceProvider crypto = new())
-            {
-                crypto.GetBytes(data);
-            }
+            RandomNumberGenerator.Fill(data);
             StringBuilder result = new(length);
             for (int i = 0; i < length; i++)
             {
@@ -112,10 +106,7 @@ namespace Neuroglia
         {
             char[] characters = NumericCharacters.ToCharArray();
             byte[] data = new byte[4 * length];
-            using (RNGCryptoServiceProvider crypto = new())
-            {
-                crypto.GetBytes(data);
-            }
+            RandomNumberGenerator.Fill(data);
             StringBuilder result = new(length);
             for (int i = 0; i < length; i++)
             {

@@ -8,7 +8,7 @@ namespace Neuroglia.UnitTests.Data
     {
 
         [Effect]
-        public static async Task IncrementCountEffect(IncrementCountAction increment)
+        public static async Task IncrementCountEffect(IncrementCountAction increment, IEffectContext context)
         {
             await Task.CompletedTask;
         }

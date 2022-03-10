@@ -17,6 +17,7 @@
 
 namespace Neuroglia.Data.Flux
 {
+
     /// <summary>
     /// Defines the fundamentals of an effect
     /// </summary>
@@ -34,9 +35,9 @@ namespace Neuroglia.Data.Flux
         /// Applies the effect to the specified action
         /// </summary>
         /// <param name="action">The action to apply the effect to</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <param name="context">The <see cref="IEffect"/> context</param>
         /// <returns>A new awaitable <see cref="Task"/></returns>
-        Task ApplyAsync(object action, CancellationToken cancellationToken = default);
+        Task ApplyAsync(object action, IEffectContext context);
 
     }
 
@@ -52,9 +53,9 @@ namespace Neuroglia.Data.Flux
         /// Applies the effect to the specified action
         /// </summary>
         /// <param name="action">The action to apply the effect to</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <param name="context">The <see cref="IEffect"/> context</param>
         /// <returns>A new awaitable <see cref="Task"/></returns>
-        Task ApplyAsync(TAction action, CancellationToken cancellationToken = default);
+        Task ApplyAsync(TAction action, IEffectContext context);
 
     }
 

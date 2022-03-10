@@ -17,6 +17,7 @@
 
 namespace Neuroglia.Data.Flux
 {
+
     /// <summary>
     /// Represents the default implementation of the <see cref="IEffect{TAction}"/> interface
     /// </summary>
@@ -29,7 +30,7 @@ namespace Neuroglia.Data.Flux
         /// Initializes a new <see cref="IEffect{TAction}"/>
         /// </summary>
         /// <param name="effectFunction">The effect <see cref="Func{T, TResult}"/></param>
-        public Effect(Func<TAction, Task> effectFunction)
+        public Effect(Func<TAction, IEffectContext, Task> effectFunction)
         {
             if(effectFunction == null)
                 throw new ArgumentNullException(nameof(effectFunction));
@@ -39,7 +40,7 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Gets the effect <see cref="Func{T, TResult}"/>
         /// </summary>
-        protected Func<TAction, Task> EffectFunction { get; }
+        protected Func<TAction, IEffectContext, Task> EffectFunction { get; }
 
         /// <inheritdoc/>
         public virtual bool AppliesTo(object action)
@@ -50,14 +51,14 @@ namespace Neuroglia.Data.Flux
         }
 
         /// <inheritdoc/>
-        public virtual async Task ApplyAsync(TAction action, CancellationToken cancellationToken = default)
+        public virtual async Task ApplyAsync(TAction action, IEffectContext context)
         {
-            await this.EffectFunction(action);
+            await this.EffectFunction(action, context);
         }
 
-        async Task IEffect.ApplyAsync(object action, CancellationToken cancellationToken)
+        async Task IEffect.ApplyAsync(object action, IEffectContext context)
         {
-            await this.ApplyAsync((TAction)action, cancellationToken).ConfigureAwait(false);
+            await this.ApplyAsync((TAction)action, context).ConfigureAwait(false);
         }
 
     }

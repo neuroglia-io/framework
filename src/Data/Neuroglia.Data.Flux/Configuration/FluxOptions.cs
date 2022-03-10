@@ -32,6 +32,21 @@ namespace Neuroglia.Data.Flux.Configuration
         public virtual List<Assembly> AssembliesToScan { get; set; } = new();
 
         /// <summary>
+        /// Gets/sets a boolean indicating whether or not to automatically register scanned <see cref="IFeature"/>s and <see cref="IReducer"/>s
+        /// </summary>
+        public virtual bool AutoRegisterFeatures { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets a boolean indicating whether or not to automatically register scanned <see cref="IEffect"/>s
+        /// </summary>
+        public virtual bool AutoRegisterEffects { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets a boolean indicating whether or not to automatically register scanned <see cref="IMiddleware"/>s
+        /// </summary>
+        public virtual bool AutoRegisterMiddlewares { get; set; } = false;
+
+        /// <summary>
         /// Gets/sets the type of <see cref="IDispatcher"/> to use
         /// </summary>
         public virtual Type DispatcherType { get; set; } = typeof(Dispatcher);
@@ -50,6 +65,11 @@ namespace Neuroglia.Data.Flux.Configuration
         /// Gets/sets the lifetime of all Flux services
         /// </summary>
         public virtual ServiceLifetime ServiceLifetime { get; set; }
+
+        /// <summary>
+        /// Gets/sets an <see cref="Action{T}"/> used to configure the Flux <see cref="IStore"/>
+        /// </summary>
+        public virtual Action<IStore>? StoreSetup { get; set; }
 
     }
 

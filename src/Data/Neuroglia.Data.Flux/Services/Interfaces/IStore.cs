@@ -41,7 +41,7 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Adds a new <see cref="IEffect"/> to the store
         /// </summary>
-        /// <param name="middleware">The <see cref="IEffect"/> to add</param>
+        /// <param name="effect">The <see cref="IEffect"/> to add</param>
         void AddEffect(IEffect effect);
 
         /// <summary>
