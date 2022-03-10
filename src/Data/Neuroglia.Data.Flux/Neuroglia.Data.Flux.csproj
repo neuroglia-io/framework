@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net6.0</TargetFramework>
+	<Company>Neuroglia SPRL</Company>
+	<Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
+	<Authors>Neuroglia SPRL</Authors>
+	<RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<PackageTags>neuroglia framework data flux</PackageTags>
+	<Version>2.0.1.40</Version>
+	<AssemblyVersion>2.0.1.40</AssemblyVersion>
+	<FileVersion>2.0.1.40</FileVersion>
+	<NeutralLanguage>en</NeutralLanguage>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	<PackageIcon>logo_white_on_blue_256.png</PackageIcon>
+	<IsPackable>true</IsPackable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+    <None Include="..\..\..\LICENSE" Link="LICENSE">
+      <PackagePath></PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Neuroglia.Core\Neuroglia.Core.csproj" />
+  </ItemGroup>
+
+</Project>
