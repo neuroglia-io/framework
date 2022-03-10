@@ -21,12 +21,28 @@ namespace Neuroglia.Data.Flux
     /// Represents the default implementation of the <see cref="IEffect{TAction}"/> interface
     /// </summary>
     /// <typeparam name="TAction">The type of action to apply the effect to</typeparam>
-    public abstract class Effect<TAction>
+    public class Effect<TAction>
         : IEffect<TAction>
     {
 
+        /// <summary>
+        /// Initializes a new <see cref="IEffect{TAction}"/>
+        /// </summary>
+        /// <param name="effectFunction">The effect <see cref="Func{T, TResult}"/></param>
+        public Effect(Func<TAction, Task> effectFunction)
+        {
+            if(effectFunction == null)
+                throw new ArgumentNullException(nameof(effectFunction));
+            this.EffectFunction = effectFunction;
+        }
+
+        /// <summary>
+        /// Gets the effect <see cref="Func{T, TResult}"/>
+        /// </summary>
+        protected Func<TAction, Task> EffectFunction { get; }
+
         /// <inheritdoc/>
-        public bool AppliesTo(object action)
+        public virtual bool AppliesTo(object action)
         {
             if(action == null)  
                throw new ArgumentNullException(nameof(action));
@@ -34,7 +50,10 @@ namespace Neuroglia.Data.Flux
         }
 
         /// <inheritdoc/>
-        public abstract Task ApplyAsync(TAction action, CancellationToken cancellationToken = default);
+        public virtual async Task ApplyAsync(TAction action, CancellationToken cancellationToken = default)
+        {
+            await this.EffectFunction(action);
+        }
 
         async Task IEffect.ApplyAsync(object action, CancellationToken cancellationToken)
         {

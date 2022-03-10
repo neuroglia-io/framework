@@ -162,7 +162,14 @@ namespace Neuroglia.Data.Flux
             }
             Task.Run(async () =>
             {
-                await Task.WhenAll(applyEffectTasks);
+                try
+                {
+                    await Task.WhenAll(applyEffectTasks);
+                }
+                catch(Exception ex)
+                {
+                    throw;
+                }
             });
         }
 

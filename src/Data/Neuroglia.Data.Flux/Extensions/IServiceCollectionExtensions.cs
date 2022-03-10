@@ -15,6 +15,8 @@
  *
  */
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Neuroglia.Data.Flux.Configuration;
 
 namespace Neuroglia.Data.Flux
 {
@@ -29,13 +31,27 @@ namespace Neuroglia.Data.Flux
         /// Adds and configures Flux services
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-        /// <param name="lifetime">The lifetime of Flux services. Defaults to <see cref="ServiceLifetime.Singleton"/></param>
+        /// <param name="setup">An <see cref="Action{T}"/> used to setup Flux</param>
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddFlux(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+        public static IServiceCollection AddFlux(this IServiceCollection services, Action<IFluxOptionsBuilder> setup)
         {
-
+            var builder = new FluxOptionsBuilder();
+            setup(builder);
+            var options = builder.Build();
+            services.AddSingleton(Options.Create(options));
+            services.Add(new(typeof(IDispatcher), options.DispatcherType, options.ServiceLifetime));
+            services.Add(new(typeof(IStoreFactory), options.StoreFactoryType, options.ServiceLifetime));
+            services.Add(new(typeof(IStore), provider => provider.GetRequiredService<IStoreFactory>().CreateStore(), options.ServiceLifetime));
             return services;
         }
+
+
+        /// <summary>
+        /// Adds and configures Flux services
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+        /// <returns>The configured <see cref="IServiceCollection"/></returns>
+        public static IServiceCollection AddFlux(this IServiceCollection services) => services.AddFlux(_ => { });
 
     }
 
