@@ -1,4 +1,5 @@
 ﻿using Neuroglia.Data.Flux;
+using System.Threading.Tasks;
 
 namespace Neuroglia.UnitTests.Data
 {
@@ -12,16 +13,23 @@ namespace Neuroglia.UnitTests.Data
 
         public const int Multiplier = 3;
 
-        public void OnDispatched(object action)
+        public TestFluxMiddleware(DispatchDelegate next)
         {
-            if (action is IncrementCountAction test)
-                ValueAfterDispatch = test.Amount;
+            this.Next = next;
         }
 
-        public void OnDispatching(object action)
+        protected DispatchDelegate Next { get; }
+
+        public virtual async Task<object> InvokeAsync(IActionContext context)
         {
-            if (action is IncrementCountAction test)
-                ValueBeforeDispatch = test.Amount;
+            var result = null as object;
+            if(context.Action is IncrementCountAction incrementCount)
+            {
+                ValueBeforeDispatch = incrementCount.Amount;
+                result = await this.Next(context);
+                ValueAfterDispatch = incrementCount.Amount;
+            }
+            return result;
         }
 
     }

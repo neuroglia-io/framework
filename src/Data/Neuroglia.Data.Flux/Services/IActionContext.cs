@@ -17,19 +17,26 @@
 
 namespace Neuroglia.Data.Flux
 {
-
     /// <summary>
-    /// Defines the fundamentals of a middleware
+    /// Defines the fundamentals of a Flux action context
     /// </summary>
-    public interface IMiddleware
+    public interface IActionContext
     {
 
         /// <summary>
-        /// Invokes the <see cref="IMiddleware"/>
+        /// Gets the current <see cref="IServiceProvider"/>
         /// </summary>
-        /// <param name="context">The <see cref="IActionContext"/> in which to invoke the <see cref="IMiddleware"/></param>
-        /// <returns>The result of the dispatched Flux action</returns>
-        Task<object> InvokeAsync(IActionContext context);
+        IServiceProvider Services { get; }
+
+        /// <summary>
+        /// Gets the current <see cref="IStore"/>
+        /// </summary>
+        IStore Store { get; }
+
+        /// <summary>
+        /// Gets/sets the Flux action to dispatch
+        /// </summary>
+        object Action { get; set; }
 
     }
 

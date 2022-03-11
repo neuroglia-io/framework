@@ -134,8 +134,7 @@ namespace Neuroglia.Data.Flux
             foreach (var middlewareType in TypeCacheUtil.FindFilteredTypes("nflux-middlewares",
                  t => t.IsClass && !t.IsInterface && !t.IsAbstract && !t.IsGenericType && typeof(IMiddleware).IsAssignableFrom(t), this.FluxOptions.AssembliesToScan?.ToArray()))
             {
-                var middleware = (IMiddleware)ActivatorUtilities.CreateInstance(this.ServiceProvider, middlewareType);
-                store.AddMiddleware(middleware);
+                store.AddMiddleware(middlewareType);
             }
         }
 

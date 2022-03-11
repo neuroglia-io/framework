@@ -15,6 +15,8 @@
  *
  */
 
+using Microsoft.Extensions.DependencyInjection;
+
 namespace Neuroglia.Data.Flux
 {
 
@@ -28,12 +30,19 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Initializes a new <see cref="IStore"/>
         /// </summary>
+        /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
         /// <param name="dispatcher">The service used to dispatch actions</param>
-        public Store(IDispatcher dispatcher)
+        public Store(IServiceProvider serviceProvider, IDispatcher dispatcher)
         {
+            this.ServiceProvider = serviceProvider;
             this.Dispatcher = dispatcher;
-            this.Dispatcher.Subscribe(this.Dispatch);
+            this.Dispatcher.SubscribeAsync(this.DispatchAsync);
         }
+
+        /// <summary>
+        /// Gets the current <see cref="IServiceProvider"/>
+        /// </summary>
+        protected IServiceProvider ServiceProvider { get; }
 
         /// <summary>
         /// Gets the service used to dispatch actions
@@ -51,9 +60,9 @@ namespace Neuroglia.Data.Flux
         protected List<IFeature> Features { get; } = new();
 
         /// <summary>
-        /// Gets a <see cref="List{T}"/> containing the <see cref="Store"/>'s <see cref="IMiddleware"/>s
+        /// Gets a <see cref="List{T}"/> containing the types of the <see cref="Store"/>'s <see cref="IMiddleware"/>s
         /// </summary>
-        protected List<IMiddleware> Middlewares { get; } = new();
+        protected List<Type> Middlewares { get; } = new();
 
         /// <summary>
         /// Gets a <see cref="List{T}"/> containing the <see cref="Store"/>'s <see cref="IEffect"/>s
@@ -77,11 +86,9 @@ namespace Neuroglia.Data.Flux
         }
 
         /// <inheritdoc/>
-        public virtual void AddMiddleware(IMiddleware middleware)
+        public virtual void AddMiddleware(Type middlewareType)
         {
-            if (middleware == null)
-                throw new ArgumentNullException(nameof(middleware));
-            this.Middlewares.Add(middleware);
+            this.Middlewares.Add(middlewareType);
         }
 
         /// <inheritdoc/>
@@ -102,51 +109,41 @@ namespace Neuroglia.Data.Flux
         /// Dispatches the specified action
         /// </summary>
         /// <param name="action">The action to dispatch</param>
-        protected virtual void Dispatch(object action)
+        protected virtual async Task DispatchAsync(object action)
         {
-            this.OnDispatching(action);
-            this.OnDispatch(action);
-            this.OnDispatched(action);
+            DispatchDelegate dispatch = async context =>
+            {
+                foreach (var feature in this.Features)
+                {
+                    if (feature.TryDispatch(action))
+                        return null;//await Task.FromResult(feature.State); //todo: feature should have a single state!!!
+                }
+                return (await Task.FromResult(null as object))!;
+            };
+            var context = new ActionContext(this.ServiceProvider, this, action);
+            var pipeline = this.Middlewares.AsEnumerable()
+                .Reverse()
+                .Aggregate(dispatch, (next, type) => this.InstanciateMiddleware(type, next).InvokeAsync);
+            await pipeline(context);
             this.OnApplyEffects(action);
         }
 
         /// <summary>
-        /// Executes right before dispatching an action
+        /// Creates a new instance of the specified <see cref="IMiddleware"/>
         /// </summary>
-        /// <param name="action">The action to dispatch</param>
-        protected virtual void OnDispatching(object action)
+        /// <param name="type">The type of <see cref="IMiddleware"/> to instanciate</param>
+        /// <param name="next">The next <see cref="DispatchDelegate"/> in the pipeline</param>
+        /// <returns>A new <see cref="IMiddleware"/></returns>
+        protected virtual IMiddleware InstanciateMiddleware(Type type, DispatchDelegate next)
         {
-            foreach (IMiddleware middleWare in this.Middlewares)
-            {
-                middleWare.OnDispatching(action);
-            }   
-        }
-
-        /// <summary>
-        /// Handles the dispatching of an action
-        /// </summary>
-        /// <param name="action">The action to dispatch</param>
-        protected virtual void OnDispatch(object action)
-        {
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
-            foreach(var feature in this.Features)
-            {
-                if (feature.TryDispatch(action))
-                    return;
-            }
-        }
-
-        /// <summary>
-        /// Executes right after the specified action has been dispacthed
-        /// </summary>
-        /// <param name="action">The action that has been dispatched</param>
-        protected virtual void OnDispatched(object action)
-        {
-            foreach (var middleWare in this.Middlewares)
-            {
-                middleWare.OnDispatched(action);
-            }
+            var constructor = type.GetConstructor(Array.Empty<Type>());
+            if (constructor != null)
+                return (IMiddleware)constructor.Invoke(Array.Empty<object>());
+            var parameters = new List<object>(1);
+            constructor = type.GetConstructors().First();
+            if (constructor.GetParameters().Any(p => p.ParameterType == typeof(DispatchDelegate)))
+                parameters.Add(next);
+            return (IMiddleware)ActivatorUtilities.CreateInstance(this.ServiceProvider, type, parameters.ToArray());
         }
 
         /// <summary>

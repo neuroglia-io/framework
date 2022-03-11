@@ -60,7 +60,7 @@ namespace Neuroglia.Data.Flux
         public static void AddMiddleware<TMiddleware>(this IStore store)
             where TMiddleware : IMiddleware
         {
-            store.AddMiddleware(Activator.CreateInstance<TMiddleware>());
+            store.AddMiddleware(typeof(TMiddleware));
         }
 
         /// <summary>

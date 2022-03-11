@@ -15,8 +15,9 @@ namespace Neuroglia.UnitTests.Cases.Data.Flux
         public void Flux_Feature_Should_Work()
         {
             //arrange
+            var serviceProvider = new ServiceCollection().BuildServiceProvider();
             var dispatcher = new Dispatcher();
-            var store = new Store(dispatcher);
+            var store = new Store(serviceProvider, dispatcher);
             var originalCount = 3;
             var incrementAmount = 7;
             var action = new IncrementCountAction(incrementAmount);
@@ -34,8 +35,9 @@ namespace Neuroglia.UnitTests.Cases.Data.Flux
         public async Task Flux_Effect_Should_Apply()
         {
             //arrange
+            var serviceProvider = new ServiceCollection().BuildServiceProvider();
             var dispatcher = new Dispatcher();
-            var store = new Store(dispatcher);
+            var store = new Store(serviceProvider, dispatcher);
             var actionCount = 24;
             var effectCount = -1;
             var action = new IncrementCountAction(actionCount);
@@ -58,8 +60,9 @@ namespace Neuroglia.UnitTests.Cases.Data.Flux
         public void Flux_Middleware_Should_Run()
         {
             //arrange
+            var serviceProvider = new ServiceCollection().BuildServiceProvider();
             var dispatcher = new Dispatcher();
-            var store = new Store(dispatcher);
+            var store = new Store(serviceProvider, dispatcher);
             var incrementAmount = 7;
             var action = new IncrementCountAction(incrementAmount);
             store.AddFeature<CounterFeature>(new Reducer<CounterState, IncrementCountAction>(CounterStateReducers.IncrementCounter));

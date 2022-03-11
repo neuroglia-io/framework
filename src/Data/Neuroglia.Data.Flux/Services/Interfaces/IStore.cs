@@ -35,8 +35,7 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Adds a new <see cref="IMiddleware"/> to the store
         /// </summary>
-        /// <param name="middleware">The <see cref="IMiddleware"/> to add</param>
-        void AddMiddleware(IMiddleware middleware);
+        void AddMiddleware(Type middlewareType);
 
         /// <summary>
         /// Adds a new <see cref="IEffect"/> to the store
