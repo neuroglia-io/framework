@@ -21,14 +21,13 @@ namespace Neuroglia.UnitTests.Cases.Data.Flux
             var originalCount = 3;
             var incrementAmount = 7;
             var action = new IncrementCountAction(incrementAmount);
-            var feature = new CounterFeature(new(originalCount));
-            store.AddFeature(feature, new Reducer<CounterState, IncrementCountAction>(CounterStateReducers.IncrementCounter));
+            store.AddFeature(new CounterFeature(new(originalCount)), new Reducer<CounterFeature, IncrementCountAction>(CounterStateReducers.IncrementCounter));
 
             //act
             dispatcher.Dispatch(action);
 
             //assert
-            feature.CounterState.Count.Should().Be(originalCount + incrementAmount);
+            store.GetFeature<CounterFeature>().State.Counter.Count.Should().Be(originalCount + incrementAmount);
         }
 
         [Fact]
@@ -65,36 +64,40 @@ namespace Neuroglia.UnitTests.Cases.Data.Flux
             var store = new Store(serviceProvider, dispatcher);
             var incrementAmount = 7;
             var action = new IncrementCountAction(incrementAmount);
-            store.AddFeature<CounterFeature>(new Reducer<CounterState, IncrementCountAction>(CounterStateReducers.IncrementCounter));
-            store.AddMiddleware<TestFluxMiddleware>();
+            store.AddFeature<CounterFeature>(new Reducer<CounterFeature, IncrementCountAction>(CounterStateReducers.IncrementCounter));
+            store.AddMiddleware<MultiplierFluxMiddleware>();
 
             //act
             dispatcher.Dispatch(action);
+            var feature = store.GetFeature<CounterFeature>();
 
             //assert
-            TestFluxMiddleware.ValueBeforeDispatch.Should().Be(incrementAmount);
-            TestFluxMiddleware.ValueAfterDispatch.Should().Be(incrementAmount);
+            feature.Should().NotBeNull();
+            feature.State.Counter.Count.Should().Be(incrementAmount * MultiplierFluxMiddleware.Multiplier);
         }
 
         [Fact]
-        public void Flux_Dependency_Injection_Should_Work()
+        public async Task Flux_Dependency_Injection_Should_Work()
         {
             //arrange
             var services = new ServiceCollection();
             services.AddFlux(flux => flux.ScanMarkupTypeAssembly<FluxTests>());
             var provider = services.BuildServiceProvider();
+            var dispatcher = provider.GetRequiredService<IDispatcher>();
             var store = provider.GetRequiredService<IStore>();
-            var feature = store.GetFeature<CounterFeature>();
-            var originalCount = feature.Value.CounterState.Count;
+            var originalCount = store.GetFeature<CounterFeature>().State.Counter.Count;
             var incrementAmount = 7;
             var action = new IncrementCountAction(incrementAmount);
-            var dispatcher = provider.GetRequiredService<IDispatcher>();
 
             //act
             dispatcher.Dispatch(action);
+            var feature = store.GetFeature<CounterFeature>();
+
+            await Task.Delay(1); //todo: why on earth Flux with DI is the only case where we have to wait a bit before getting the updated state???
 
             //assert
-            feature.Value.CounterState.Count.Should().Be(originalCount + incrementAmount);
+            feature.Should().NotBeNull();
+            feature.State.Counter.Count.Should().Be(originalCount + incrementAmount);
         }
 
     }

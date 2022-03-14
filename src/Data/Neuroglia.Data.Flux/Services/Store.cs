@@ -77,12 +77,12 @@ namespace Neuroglia.Data.Flux
         }
 
         /// <inheritdoc/>
-        public virtual void AddFeature<TFeature>(IFeature<TFeature> feature)
+        public virtual void AddFeature<TState>(IFeature<TState> feature)
         {
             if(feature == null)
                 throw new ArgumentNullException(nameof(feature));
             this.Features.Add(feature);
-            feature.Subscribe(this.OnNextFeature);
+            feature.Subscribe(this.OnNextState);
         }
 
         /// <inheritdoc/>
@@ -100,9 +100,9 @@ namespace Neuroglia.Data.Flux
         }
 
         /// <inheritdoc/>
-        public virtual IFeature<TFeature> GetFeature<TFeature>()
+        public virtual IFeature<TState> GetFeature<TState>()
         {
-            return (IFeature<TFeature>)this.Features.First(f => f.Value.GetType() == typeof(TFeature));
+            return (IFeature<TState>)this.Features.First(f => f.State.GetType() == typeof(TState));
         }
 
         /// <summary>
@@ -111,20 +111,16 @@ namespace Neuroglia.Data.Flux
         /// <param name="action">The action to dispatch</param>
         protected virtual async Task DispatchAsync(object action)
         {
-            DispatchDelegate dispatch = async context =>
-            {
-                foreach (var feature in this.Features)
-                {
-                    if (feature.TryDispatch(action))
-                        return null;//await Task.FromResult(feature.State); //todo: feature should have a single state!!!
-                }
-                return (await Task.FromResult(null as object))!;
-            };
-            var context = new ActionContext(this.ServiceProvider, this, action);
-            var pipeline = this.Middlewares.AsEnumerable()
+            var pipelineBuilder = (DispatchDelegate reducer) => this.Middlewares
+                .AsEnumerable()
                 .Reverse()
-                .Aggregate(dispatch, (next, type) => this.InstanciateMiddleware(type, next).InvokeAsync);
-            await pipeline(context);
+                .Aggregate(reducer, (next, type) => this.InstanciateMiddleware(type, next).InvokeAsync);                
+            var context = new ActionContext(this.ServiceProvider, this, action);
+            foreach (var feature in this.Features
+                .Where(f => f.ShouldReduceStateFor(action)))
+            {
+                await feature.ReduceStateAsync(context, pipelineBuilder);
+            }
             this.OnApplyEffects(action);
         }
 
@@ -176,9 +172,9 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Handles the next feature value
         /// </summary>
-        /// <typeparam name="TFeature">The type of <see cref="IFeature"/> to handle the next value for</typeparam>
+        /// <typeparam name="TState">The type of <see cref="IFeature"/> to handle the next value for</typeparam>
         /// <param name="feature">The next <see cref="IFeature"/> value</param>
-        protected virtual void OnNextFeature<TFeature>(TFeature feature)
+        protected virtual void OnNextState<TState>(TState feature)
         {
             this.Stream.OnNext(feature!);
         }

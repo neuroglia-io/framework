@@ -18,6 +18,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Neuroglia.Data.Flux.Configuration;
+using System.Collections;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -78,18 +80,12 @@ namespace Neuroglia.Data.Flux
             if (store == null)
                 throw new ArgumentNullException(nameof(store));
             var reducersPerState = this.FindAndMapReducersPerState();
-            foreach (var featureType in TypeCacheUtil.FindFilteredTypes("nflux-features",
+            foreach (var stateType in TypeCacheUtil.FindFilteredTypes("nflux-features",
               t => t.IsClass && !t.IsAbstract && !t.IsInterface && !t.IsGenericType && t.TryGetCustomAttribute<FeatureAttribute>(out _)))
             {
-                var reducersPerFeature = new List<IReducer>();
-                foreach (var stateType in featureType.GetProperties()
-                    .Where(p => p.GetGetMethod(true) != null && p.GetSetMethod(true) != null)
-                    .Select(p => p.PropertyType))
-                {
-                    if (reducersPerState.TryGetValue(stateType, out var reducers))
-                        reducersPerFeature.AddRange(reducers);
-                }
-                AddFeatureMethod.MakeGenericMethod(featureType).Invoke(null, new object[] { store, reducersPerFeature.ToArray() });
+                if (!reducersPerState.TryGetValue(stateType, out var reducersPerFeature))
+                    continue;
+                AddFeatureMethod.MakeGenericMethod(stateType).Invoke(null, new object[] { store, reducersPerFeature.OfType(typeof(IReducer<>).MakeGenericType(stateType)).ToArray() });
             }
         }
 

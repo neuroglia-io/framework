@@ -7,7 +7,7 @@ namespace Neuroglia.UnitTests.Data
     {
 
         [Reducer]
-        public static CounterState IncrementCounter(CounterState counter, IncrementCountAction increment) => new(counter.Count + increment.Amount);
+        public static CounterFeature IncrementCounter(CounterFeature counter, IncrementCountAction increment) => new(new CounterState(counter.Counter.Count + increment.Amount));
 
     }
 
