@@ -12,9 +12,9 @@ public class CounterFeature
 
     public CounterFeature(CounterState counterState)
     {
-        this.CounterState = counterState;
+        this.Counter = counterState;
     }
 
-    public CounterState CounterState { get; protected set; } = new();
+    public CounterState Counter { get; protected set; } = new();
 
 }
