@@ -28,6 +28,11 @@ namespace Neuroglia.Data.Flux.Configuration
     {
 
         /// <summary>
+        /// Gets the <see cref="IServiceCollection"/> to configure
+        /// </summary>
+        IServiceCollection Services { get; }
+
+        /// <summary>
         /// Configures the <see cref="IFluxOptionsBuilder"/> to scan the specified <see cref="Assembly"/> in order to find Flux components
         /// </summary>
         /// <param name="assembly">The <see cref="Assembly"/> to scan</param>
@@ -77,18 +82,42 @@ namespace Neuroglia.Data.Flux.Configuration
         IFluxOptionsBuilder UseStore(Type storeType);
 
         /// <summary>
-        /// Configures the <see cref="IFluxOptionsBuilder"/> to use the specified <see cref="Action{T}"/> to setup the <see cref="IStore"/>
-        /// </summary>
-        /// <param name="setup">An <see cref="Action{T}"/> used to setup the <see cref="IStore"/></param>
-        /// <returns>The configured <see cref="IFluxOptionsBuilder"/></returns>
-        IFluxOptionsBuilder SetupStore(Action<IStore> setup);
-
-        /// <summary>
         /// Configures the lifetime of all Flux services
         /// </summary>
         /// <param name="lifetime">The lifetime of all Flux services</param>
         /// <returns>The configures <see cref="IFluxOptionsBuilder"/></returns>
         IFluxOptionsBuilder WithServiceLifetime(ServiceLifetime lifetime);
+
+        /// <summary>
+        /// Configures the <see cref="IFluxOptionsBuilder"/> to use the specified <see cref="IFeature"/>
+        /// </summary>
+        /// <typeparam name="TState">The type of the state of the <see cref="IFeature"/> to use</typeparam>
+        /// <param name="state">The initial state of the <see cref="IFeature"/> to add</param>
+        /// <returns>The configured <see cref="IFluxOptionsBuilder"/></returns>
+        IFluxOptionsBuilder AddFeature<TState>(TState state);
+
+        /// <summary>
+        /// Configures the <see cref="IFluxOptionsBuilder"/> to use the specified <see cref="IFeature"/>
+        /// </summary>
+        /// <typeparam name="TState">The type of the state of the <see cref="IFeature"/> to use</typeparam>
+        /// <returns>The configured <see cref="IFluxOptionsBuilder"/></returns>
+        IFluxOptionsBuilder AddFeature<TState>()
+            where TState : new();
+
+        /// <summary>
+        /// Configures the <see cref="IFluxOptionsBuilder"/> to use the specified <see cref="IMiddleware"/>
+        /// </summary>
+        /// <typeparam name="TMiddleware">The type of <see cref="IMiddleware"/> to use</typeparam>
+        /// <returns>The configured <see cref="IFluxOptionsBuilder"/></returns>
+        IFluxOptionsBuilder AddMiddleware<TMiddleware>()
+            where TMiddleware : IMiddleware;
+
+        /// <summary>
+        /// Configures the <see cref="IFluxOptionsBuilder"/> to use the specified <see cref="IEffect"/>
+        /// </summary>
+        /// <param name="effect">The <see cref="IEffect"/> to add</param>
+        /// <returns>The configured <see cref="IFluxOptionsBuilder"/></returns>
+        IFluxOptionsBuilder AddEffect(IEffect effect);
 
         /// <summary>
         /// Builds new <see cref="FluxOptions"/>

@@ -61,13 +61,9 @@ namespace Neuroglia.Data.Flux
         public virtual IStore CreateStore()
         {
             var store = (IStore)ActivatorUtilities.CreateInstance(this.ServiceProvider, this.FluxOptions.StoreType);
-            if(this.FluxOptions.AutoRegisterFeatures)
-                this.ConfigureStoreFeatures(store);
-            if (this.FluxOptions.AutoRegisterEffects)
-                this.ConfigureStoreEffects(store);
-            if (this.FluxOptions.AutoRegisterMiddlewares)
-                this.ConfigureStoreMiddlewares(store);
-            this.FluxOptions.StoreSetup?.Invoke(store);
+            this.ConfigureStoreFeatures(store);
+            this.ConfigureStoreEffects(store);
+            this.ConfigureStoreMiddlewares(store);
             return store;
         }
 
@@ -79,6 +75,12 @@ namespace Neuroglia.Data.Flux
         {
             if (store == null)
                 throw new ArgumentNullException(nameof(store));
+            foreach(var feature in this.FluxOptions.Features)
+            {
+                store.AddFeature(feature);
+            }
+            if (!this.FluxOptions.AutoRegisterFeatures)
+                return;
             var reducersPerState = this.FindAndMapReducersPerState();
             foreach (var stateType in TypeCacheUtil.FindFilteredTypes("nflux-features",
               t => t.IsClass && !t.IsAbstract && !t.IsInterface && !t.IsGenericType && t.TryGetCustomAttribute<FeatureAttribute>(out _)))
@@ -97,6 +99,12 @@ namespace Neuroglia.Data.Flux
         {
             if (store == null)
                 throw new ArgumentNullException(nameof(store));
+            foreach (var effect in this.FluxOptions.Effects)
+            {
+                store.AddEffect(effect);
+            }
+            if (!this.FluxOptions.AutoRegisterEffects)
+                return;
             foreach (var effectDeclaringType in TypeCacheUtil.FindFilteredTypes("nflux-effects",
                 t => t.TryGetCustomAttribute< EffectAttribute>(out _) || t.GetMethods().Any(m => m.TryGetCustomAttribute<EffectAttribute>(out _)), this.FluxOptions.AssembliesToScan?.ToArray()))
             {
@@ -127,6 +135,12 @@ namespace Neuroglia.Data.Flux
         {
             if (store == null)
                 throw new ArgumentNullException(nameof(store));
+            foreach (var middlewareType in this.FluxOptions.Middlewares)
+            {
+                store.AddMiddleware(middlewareType);
+            }
+            if (!this.FluxOptions.AutoRegisterMiddlewares)
+                return;
             foreach (var middlewareType in TypeCacheUtil.FindFilteredTypes("nflux-middlewares",
                  t => t.IsClass && !t.IsInterface && !t.IsAbstract && !t.IsGenericType && typeof(IMiddleware).IsAssignableFrom(t), this.FluxOptions.AssembliesToScan?.ToArray()))
             {

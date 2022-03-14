@@ -26,6 +26,11 @@ namespace Neuroglia.Data.Flux
     {
 
         /// <summary>
+        /// Gets the <see cref="IStore"/>'s state
+        /// </summary>
+        object State { get; }
+
+        /// <summary>
         /// Adds a new <see cref="IFeature"/> to the store
         /// </summary>
         /// <typeparam name="TState">The type of state managed by the <see cref="IFeature"/> to add</typeparam>

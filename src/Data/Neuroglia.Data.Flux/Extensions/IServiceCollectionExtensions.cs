@@ -35,13 +35,9 @@ namespace Neuroglia.Data.Flux
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddFlux(this IServiceCollection services, Action<IFluxOptionsBuilder> setup)
         {
-            var builder = new FluxOptionsBuilder();
+            var builder = new FluxOptionsBuilder(services);
             setup(builder);
-            var options = builder.Build();
-            services.AddSingleton(Options.Create(options));
-            services.Add(new(typeof(IDispatcher), options.DispatcherType, options.ServiceLifetime));
-            services.Add(new(typeof(IStoreFactory), options.StoreFactoryType, options.ServiceLifetime));
-            services.Add(new(typeof(IStore), provider => provider.GetRequiredService<IStoreFactory>().CreateStore(), options.ServiceLifetime));
+            builder.Build();
             return services;
         }
 

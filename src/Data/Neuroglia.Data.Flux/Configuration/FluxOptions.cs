@@ -20,6 +20,7 @@ using System.Reflection;
 
 namespace Neuroglia.Data.Flux.Configuration
 {
+
     /// <summary>
     /// Represents the options used to configure Flux
     /// </summary>
@@ -62,14 +63,24 @@ namespace Neuroglia.Data.Flux.Configuration
         public virtual Type StoreType { get; set; } = typeof(Store);
 
         /// <summary>
+        /// Gets/sets a <see cref="List{T}"/> containing the types of the <see cref="IFeature"/>s to use
+        /// </summary>
+        public virtual List<IFeature> Features { get; set; } = new();
+
+        /// <summary>
+        /// Gets/sets a <see cref="List{T}"/> containing the types of the <see cref="IMiddleware"/>s to use
+        /// </summary>
+        public virtual List<Type> Middlewares { get; set; } = new();
+
+        /// <summary>
+        /// Gets/sets a <see cref="List{T}"/> containing the types of the <see cref="IEffect"/>s to use
+        /// </summary>
+        public virtual List<IEffect> Effects { get; set; } = new();
+
+        /// <summary>
         /// Gets/sets the lifetime of all Flux services
         /// </summary>
         public virtual ServiceLifetime ServiceLifetime { get; set; }
-
-        /// <summary>
-        /// Gets/sets an <see cref="Action{T}"/> used to configure the Flux <see cref="IStore"/>
-        /// </summary>
-        public virtual Action<IStore>? StoreSetup { get; set; }
 
     }
 

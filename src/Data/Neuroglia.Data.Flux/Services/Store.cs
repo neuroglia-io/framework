@@ -67,7 +67,16 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Gets a <see cref="List{T}"/> containing the <see cref="Store"/>'s <see cref="IEffect"/>s
         /// </summary>
-        protected List<IEffect> Effects { get; } = new(); 
+        protected List<IEffect> Effects { get; } = new();
+
+        /// <inheritdoc/>
+        public virtual object State
+        {
+            get
+            {
+                return this.Features.ToDictionary(f => f.GetType().Name, f => f.State);
+            }
+        }
 
         IDisposable IObservable<object>.Subscribe(IObserver<object> observer)
         {

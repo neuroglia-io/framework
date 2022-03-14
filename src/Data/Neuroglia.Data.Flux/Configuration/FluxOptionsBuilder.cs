@@ -29,6 +29,18 @@ namespace Neuroglia.Data.Flux.Configuration
     {
 
         /// <summary>
+        /// Initializes a new <see cref="FluxOptionsBuilder"/>
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+        public FluxOptionsBuilder(IServiceCollection services)
+        {
+            this.Services = services;
+        }
+
+        /// <inheritdoc/>
+        public IServiceCollection Services { get; }
+
+        /// <summary>
         /// Gets the <see cref="FluxOptions"/> to configure
         /// </summary>
         protected FluxOptions Options { get; } = new();
@@ -104,17 +116,45 @@ namespace Neuroglia.Data.Flux.Configuration
         }
 
         /// <inheritdoc/>
-        public virtual IFluxOptionsBuilder SetupStore(Action<IStore> setup)
+        public virtual IFluxOptionsBuilder AddFeature<TState>(TState state)
         {
-            if (setup == null)
-                throw new ArgumentNullException(nameof(setup));
-            this.Options.StoreSetup = setup;
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            this.Options.Features.Add(new Feature<TState>(state));
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IFluxOptionsBuilder AddFeature<TState>()
+            where TState : new()
+        {
+            return this.AddFeature(new TState());
+        }
+
+        /// <inheritdoc/>
+        public virtual IFluxOptionsBuilder AddMiddleware<TMiddleware>() 
+            where TMiddleware : IMiddleware
+        {
+            this.Options.Middlewares.Add(typeof(TMiddleware));
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IFluxOptionsBuilder AddEffect(IEffect effect) 
+        {
+            if (effect == null)
+                throw new ArgumentNullException(nameof(effect));
+            this.Options.Effects.Add(effect);
             return this;
         }
 
         /// <inheritdoc/>
         public virtual FluxOptions Build()
         {
+            this.Services.AddSingleton(Microsoft.Extensions.Options.Options.Create(this.Options));
+            this.Services.Add(new(typeof(IDispatcher), this.Options.DispatcherType, this.Options.ServiceLifetime));
+            this.Services.Add(new(typeof(IStoreFactory), this.Options.StoreFactoryType, this.Options.ServiceLifetime));
+            this.Services.Add(new(typeof(IStore), provider => provider.GetRequiredService<IStoreFactory>().CreateStore(), this.Options.ServiceLifetime));
             return this.Options;
         }
 
