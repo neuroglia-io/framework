@@ -19,18 +19,10 @@ namespace Neuroglia.Data.Flux
 {
 
     /// <summary>
-    /// Defines the fundamentals of a middleware
+    /// Represents the delegate method used to dispatch an action
     /// </summary>
-    public interface IMiddleware
-    {
-
-        /// <summary>
-        /// Invokes the <see cref="IMiddleware"/>
-        /// </summary>
-        /// <param name="context">The <see cref="IActionContext"/> in which to invoke the <see cref="IMiddleware"/></param>
-        /// <returns>The result of the dispatched Flux action</returns>
-        Task<object> InvokeAsync(IActionContext context);
-
-    }
+    /// <param name="context">The <see cref="IActionContext"/> in which to invoke the delegate</param>
+    /// <returns>The result of the dispatched action</returns>
+    public delegate Task<object> DispatchDelegate(IActionContext context);
 
 }

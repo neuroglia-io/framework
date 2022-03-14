@@ -28,15 +28,14 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Adds a new <see cref="IFeature"/> to the store
         /// </summary>
-        /// <typeparam name="TFeature">The type of <see cref="IFeature"/> to add</typeparam>
+        /// <typeparam name="TState">The type of state managed by the <see cref="IFeature"/> to add</typeparam>
         /// <param name="feature">The <see cref="IFeature"/> to add</param>
-        void AddFeature<TFeature>(IFeature<TFeature> feature);
+        void AddFeature<TState>(IFeature<TState> feature);
 
         /// <summary>
         /// Adds a new <see cref="IMiddleware"/> to the store
         /// </summary>
-        /// <param name="middleware">The <see cref="IMiddleware"/> to add</param>
-        void AddMiddleware(IMiddleware middleware);
+        void AddMiddleware(Type middlewareType);
 
         /// <summary>
         /// Adds a new <see cref="IEffect"/> to the store
@@ -47,9 +46,9 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Gets the <see cref="IFeature"/> of the specified type
         /// </summary>
-        /// <typeparam name="TFeature">The type of the <see cref="IFeature"/> to get</typeparam>
-        /// <returns>The <see cref="IFeature"/> of the specified type</returns>
-        IFeature<TFeature> GetFeature<TFeature>();
+        /// <typeparam name="TState">The type of state managed by the <see cref="IFeature"/> to get</typeparam>
+        /// <returns>The <see cref="IFeature"/> with the specified state type</returns>
+        IFeature<TState> GetFeature<TState>();
 
     }
 

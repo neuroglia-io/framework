@@ -15,107 +15,119 @@
  *
  */
 
-using System.Reflection;
-
 namespace Neuroglia.Data.Flux
 {
 
     /// <summary>
     /// Represents the default implementation of the <see cref="IFeature"/> interface
     /// </summary>
-    /// <typeparam name="TFeature">The type of the <see cref="IFeature"/>'s value</typeparam>
-    public class Feature<TFeature>
-        : IFeature<TFeature>
+    /// <typeparam name="TState">The type of the <see cref="IFeature"/>'s state</typeparam>
+    public class Feature<TState>
+        : IFeature<TState>
     {
 
         /// <summary>
-        /// Initializes a new <see cref="Feature{TFeature}"/>
+        /// Initializes a new <see cref="Feature{TState}"/>
         /// </summary>
-        /// <param name="value">The <see cref="Feature{TFeature}"/>'s value</param>
-        public Feature(TFeature value)
+        /// <param name="value">The <see cref="Feature{TState}"/>'s value</param>
+        public Feature(TState value)
         {
             if(value == null)
                 throw new ArgumentNullException(nameof(value)); 
-            this.Value = value;
-            this.Stream = new(this.Value);
-            this.Initialize();
+            this._State = value;
+            this.Stream = new(this.State);
         }
 
+        private TState _State;
         /// <inheritdoc/>
-        public TFeature Value { get; protected set; }
-
-        object IFeature.Value => this.Value!;
-
-        /// <summary>
-        /// Gets a <see cref="List{T}"/> containing the states the <see cref="Feature{TFeature}"/> is made out of
-        /// </summary>
-        protected List<IState> States { get; } = new();
-
-        /// <summary>
-        /// Gets the <see cref="BehaviorSubject{T}"/> used to stream the <see cref="Feature{TFeature}"/> changes
-        /// </summary>
-        protected BehaviorSubject<TFeature> Stream { get; }
-
-        /// <summary>
-        /// Initializes the <see cref="Feature{TFeature}"/>
-        /// </summary>
-        protected virtual void Initialize()
+        public TState State
         {
-            var genericSubscribeMethod = typeof(ObservableExtensions).GetMethods().First(m => m.Name == nameof(ObservableExtensions.Subscribe) && m.GetParameters().Length == 2);
-            foreach(var property in typeof(TFeature).GetProperties())
+            get => this._State;
+            set
             {
-                var genericStateType = typeof(State<>).MakeGenericType(property.PropertyType);
-                var stateValue = property.GetValue(this.Value);
-                var state = (IState)Activator.CreateInstance(genericStateType, stateValue)!;
-                this.States.Add(state);
-                genericSubscribeMethod.MakeGenericMethod(property.PropertyType).Invoke(null, new object[] { state, (object stateValue) => this.OnNextState(property, stateValue) });
+                this._State = value;
+                this.Stream.OnNext(value);
             }
-            this.Stream.OnNext(this.Value);
         }
 
+        object IFeature.State => this.State!;
+
         /// <summary>
-        /// Adds a <see cref="IReducer"/>
+        /// Gets the <see cref="BehaviorSubject{T}"/> used to stream the <see cref="Feature{TState}"/> changes
         /// </summary>
-        /// <param name="reducer">The <see cref="IReducer"/> to add</param>
-        public void AddReducer(IReducer reducer)
+        protected BehaviorSubject<TState> Stream { get; }
+
+        /// <summary>
+        /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing the type/<see cref="IReducer"/>s mappings
+        /// </summary>
+        protected Dictionary<Type, List<IReducer<TState>>> Reducers { get; } = new();
+
+        /// <inheritdoc/>
+        public virtual void AddReducer(IReducer<TState> reducer)
         {
-            if(reducer == null)
+            if (reducer == null)
                 throw new ArgumentNullException(nameof(reducer));
-            var genericReducerType = reducer.GetType().GetGenericType(typeof(IReducer<>));
-            var stateType = genericReducerType.GetGenericArguments().First();
-            this.States
-                .First(s => s.Value?.GetType() == stateType)
-                .AddReducer(reducer);
+            var genericReducerType = reducer.GetType().GetGenericType(typeof(IReducer<,>));
+            var actionType = genericReducerType.GetGenericArguments()[1];
+            if (this.Reducers.TryGetValue(actionType, out var reducers))
+                reducers.Add(reducer);
+            else
+                this.Reducers.Add(actionType, new() { reducer });
+        }
+
+        void IFeature.AddReducer(IReducer reducer)
+        {
+            if (reducer == null)
+                throw new ArgumentNullException(nameof(reducer));
+            this.AddReducer((IReducer<TState>)reducer);
         }
 
         /// <inheritdoc/>
-        public IDisposable Subscribe(IObserver<TFeature> observer)
+        public virtual IDisposable Subscribe(IObserver<TState> observer)
         {
             return this.Stream.Subscribe(observer);
         }
 
         /// <inheritdoc/>
-        public bool TryDispatch(object action)
+        public virtual bool ShouldReduceStateFor(object action)
         {
             if (action == null)
                 throw new ArgumentNullException(nameof(action));
-            foreach(var state in this.States)
-            {
-                if (state.TryDispatch(action))
-                    return true;
-            }
-            return false;
+            return this.Reducers.ContainsKey(action.GetType());
+        }
+        
+        /// <inheritdoc/>
+        public virtual async Task ReduceStateAsync(IActionContext context, Func<DispatchDelegate, DispatchDelegate> reducerPipelineBuilder)
+        {
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+            if (reducerPipelineBuilder == null)
+                throw new ArgumentNullException(nameof(reducerPipelineBuilder));
+            var pipeline = reducerPipelineBuilder(ApplyReducersAsync);
+            this.State = (TState)await pipeline(context);
         }
 
         /// <summary>
-        /// Handles the next <see cref="Feature{TFeature}"/>'s value
+        /// Applies all the <see cref="IReducer"/> matching the specified <see cref="IActionContext"/>
         /// </summary>
-        /// <param name="stateProperty">The <see cref="PropertyInfo"/> used to get the state to handle the next value of</param>
-        /// <param name="stateValue">The next value of the state to handle</param>
-        protected virtual void OnNextState(PropertyInfo stateProperty, object stateValue)
+        /// <param name="context">The <see cref="IActionContext"/> to apply the <see cref="IReducer"/>s to</param>
+        /// <returns>The reduced <see cref="IFeature"/>'s state</returns>
+        protected virtual async Task<object> ApplyReducersAsync(IActionContext context)
         {
-            stateProperty.SetValue(this.Value, stateValue);
-            this.Stream.OnNext(this.Value!);
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
+            return (await Task.Run(() =>
+            {
+                var newState = this.State;
+                if (this.Reducers.TryGetValue(context.Action.GetType(), out var reducers))
+                {
+                    foreach (var reducer in reducers)
+                    {
+                        newState = reducer.Reduce(newState, context.Action);
+                    }
+                }
+                return newState;
+            }))!;
         }
 
     }

@@ -27,13 +27,13 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Adds a new <see cref="IFeature"/> to the store
         /// </summary>
-        /// <typeparam name="TFeature">The type of <see cref="IFeature"/> to add</typeparam>
+        /// <typeparam name="TState">The type of state managed by the <see cref="IFeature"/> to add</typeparam>
         /// <param name="store">The <see cref="IStore"/> to add the <see cref="IFeature"/> to</param>
-        /// <param name="featureValue">The value of the <see cref="IFeature"/> to add</param>
+        /// <param name="state">The value of the <see cref="IFeature"/> to add</param>
         /// <param name="reducers">An array that contains the <see cref="IReducer"/>s to initialize the <see cref="IFeature"/> to add with</param>
-        public static void AddFeature<TFeature>(this IStore store, TFeature featureValue, params IReducer[] reducers)
+        public static void AddFeature<TState>(this IStore store, TState state, params IReducer<TState>[] reducers)
         {
-            var feature = new Feature<TFeature>(featureValue);
+            var feature = new Feature<TState>(state);
             foreach (var reducer in reducers)
             {
                 feature.AddReducer(reducer);
@@ -44,12 +44,12 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Adds a new <see cref="IFeature"/> to the store
         /// </summary>
-        /// <typeparam name="TFeature">The type of <see cref="IFeature"/> to add</typeparam>
+        /// <typeparam name="TState">The type of state of the <see cref="IFeature"/> to add</typeparam>
         /// <param name="store">The <see cref="IStore"/> to add the <see cref="IFeature"/> to</param>
         /// <param name="reducers">An array that contains the <see cref="IReducer"/>s to initialize the <see cref="IFeature"/> to add with</param>
-        public static void AddFeature<TFeature>(this IStore store, params IReducer[] reducers)
+        public static void AddFeature<TState>(this IStore store, params IReducer<TState>[] reducers)
         {
-            store.AddFeature(Activator.CreateInstance<TFeature>(), reducers);
+            store.AddFeature(Activator.CreateInstance<TState>(), reducers);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Neuroglia.Data.Flux
         public static void AddMiddleware<TMiddleware>(this IStore store)
             where TMiddleware : IMiddleware
         {
-            store.AddMiddleware(Activator.CreateInstance<TMiddleware>());
+            store.AddMiddleware(typeof(TMiddleware));
         }
 
         /// <summary>
