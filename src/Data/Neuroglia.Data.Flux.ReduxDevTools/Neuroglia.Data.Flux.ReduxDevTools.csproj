@@ -24,11 +24,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
+    <None Include="..\..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
       <PackagePath></PackagePath>
       <Pack>True</Pack>
     </None>
-    <None Include="..\..\..\..\LICENSE" Link="LICENSE">
+    <None Include="..\..\..\LICENSE" Link="LICENSE">
       <PackagePath></PackagePath>
       <Pack>True</Pack>
     </None>
@@ -40,8 +40,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Serialization\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj" />
-    <ProjectReference Include="..\..\Neuroglia.Data.Flux\Neuroglia.Data.Flux.csproj" />
+    <ProjectReference Include="..\..\Serialization\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj" />
+    <ProjectReference Include="..\Neuroglia.Data.Flux\Neuroglia.Data.Flux.csproj" />
   </ItemGroup>
 
 </Project>
