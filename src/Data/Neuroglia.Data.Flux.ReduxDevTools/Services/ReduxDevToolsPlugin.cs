@@ -32,23 +32,23 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Gets the name of the method invoke whenever the <see cref="ReduxDevToolsPlugin"/> has been detected
         /// </summary>
-        protected internal const string JSPrefix = "__BladuxDevTools__";
+        public const string JSPrefix = "__BladuxDevTools__";
         /// <summary>
         /// Gets the name of the JavaScript method used to initialize the Redux dev tools
         /// </summary>
-        protected internal const string JSInitializeMethodName = "initialize";
+        public const string JSInitializeMethodName = "initialize";
         /// <summary>
         /// Gets the name of the JavaScript method used to dispatch actions to Redux
         /// </summary>
-        protected internal const string JSDispatchMethodName = "dispatch";
+        public const string JSDispatchMethodName = "dispatch";
         /// <summary>
         /// Gets the name of the method invoked as a Redux dev tools callback
         /// </summary>
-        protected internal const string JSCallbackMethodName = "callback";
+        public const string JSCallbackMethodName = "callback";
         /// <summary>
         /// Gets the name of the method invoke whenever the <see cref="ReduxDevToolsPlugin"/> has been detected
         /// </summary>
-        protected internal const string JSOnDetectedMethodName = "onDetected";
+        public const string JSOnDetectedMethodName = "onDetected";
 
         private bool _Disposed;
 
@@ -59,7 +59,7 @@ namespace Neuroglia.Data.Flux
         /// <param name="jsRuntime">The service used to interact with the JavaScript runtime</param>
         /// <param name="jsonSerializer">The service used to serialize/deserialize objects to/from JSON</param>
         /// <param name="store">The current <see cref="IStore"/></param>
-        public ReduxDevToolsPlugin(ILogger logger, IJSRuntime jsRuntime, IJsonSerializer jsonSerializer, IStore store)
+        public ReduxDevToolsPlugin(ILogger<ReduxDevToolsPlugin> logger, IJSRuntime jsRuntime, IJsonSerializer jsonSerializer, IStore store)
         {
             this.Logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.JSRuntime = jsRuntime ?? throw new ArgumentNullException(nameof(jsRuntime));
@@ -101,6 +101,11 @@ namespace Neuroglia.Data.Flux
         /// </summary>
         protected bool IsInitializing { get; set; }
 
+        /// <summary>
+        /// Gets a boolean indicating whether or not the <see cref="ReduxDevToolsPlugin"/> has been initialized
+        /// </summary>
+        protected bool Initialized { get; set; }
+
         /// <inheritdoc/>
         public virtual async Task InitializeStateAsync()
         {
@@ -112,6 +117,7 @@ namespace Neuroglia.Data.Flux
             finally
             {
                 this.IsInitializing = false;
+                this.Initialized = true;
             }
         }
 
@@ -122,6 +128,8 @@ namespace Neuroglia.Data.Flux
                 throw new ArgumentNullException(nameof(action));
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
+            if (!this.Initialized)
+                await this.InitializeStateAsync();
             await this.InvokeJSRuntimeMethodAsync<object>(JSDispatchMethodName, action, state);
         }
 
@@ -147,7 +155,7 @@ namespace Neuroglia.Data.Flux
         /// <param name="json">The JSON representation of the message sent by the Redux dev tools callback</param>
         /// <returns>A new awaitable <see cref="Task"/></returns>
 		[JSInvokable(JSCallbackMethodName)]
-        protected async Task OnCallbackAsync(string json)
+        public async Task OnCallbackAsync(string json)
         {
             if (string.IsNullOrWhiteSpace(json))
                 return;

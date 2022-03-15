@@ -16,6 +16,7 @@
  */
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Neuroglia.Data.Flux
 {
@@ -31,10 +32,12 @@ namespace Neuroglia.Data.Flux
         /// Initializes a new <see cref="IStore"/>
         /// </summary>
         /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
+        /// <param name="logger">The service used to perform logging</param>
         /// <param name="dispatcher">The service used to dispatch actions</param>
-        public Store(IServiceProvider serviceProvider, IDispatcher dispatcher)
+        public Store(IServiceProvider serviceProvider, ILogger<Store> logger, IDispatcher dispatcher)
         {
             this.ServiceProvider = serviceProvider;
+            this.Logger = logger;
             this.Dispatcher = dispatcher;
             this.Dispatcher.SubscribeAsync(this.DispatchAsync);
         }
@@ -43,6 +46,11 @@ namespace Neuroglia.Data.Flux
         /// Gets the current <see cref="IServiceProvider"/>
         /// </summary>
         protected IServiceProvider ServiceProvider { get; }
+
+        /// <summary>
+        /// Gets the service used to perform logging
+        /// </summary>
+        protected ILogger Logger { get; }
 
         /// <summary>
         /// Gets the service used to dispatch actions
@@ -120,17 +128,25 @@ namespace Neuroglia.Data.Flux
         /// <param name="action">The action to dispatch</param>
         protected virtual async Task DispatchAsync(object action)
         {
-            var pipelineBuilder = (DispatchDelegate reducer) => this.Middlewares
-                .AsEnumerable()
-                .Reverse()
-                .Aggregate(reducer, (next, type) => this.InstanciateMiddleware(type, next).InvokeAsync);                
-            var context = new ActionContext(this.ServiceProvider, this, action);
-            foreach (var feature in this.Features
-                .Where(f => f.ShouldReduceStateFor(action)))
+            try
             {
-                await feature.ReduceStateAsync(context, pipelineBuilder);
+                var pipelineBuilder = (DispatchDelegate reducer) => this.Middlewares
+                    .AsEnumerable()
+                    .Reverse()
+                    .Aggregate(reducer, (next, type) => this.InstanciateMiddleware(type, next).InvokeAsync);
+                var context = new ActionContext(this.ServiceProvider, this, action);
+                foreach (var feature in this.Features
+                    .Where(f => f.ShouldReduceStateFor(action)))
+                {
+                    await feature.ReduceStateAsync(context, pipelineBuilder);
+                }
+                this.OnApplyEffects(action);
             }
-            this.OnApplyEffects(action);
+            catch(Exception ex)
+            {
+                this.Logger.LogError("An error occured while dispatching an action of type '{actionType}': {ex}", action.GetType().Name, ex.ToString());
+                throw;
+            }
         }
 
         /// <summary>

@@ -34,11 +34,11 @@ namespace Neuroglia.Data.Flux
         {
             if(value == null)
                 throw new ArgumentNullException(nameof(value)); 
-            this._State = value;
-            this.Stream = new(this.State);
+            this.Stream = new();
+            this.State = value;
         }
 
-        private TState _State;
+        private TState _State = default!;
         /// <inheritdoc/>
         public TState State
         {
@@ -55,7 +55,7 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Gets the <see cref="BehaviorSubject{T}"/> used to stream the <see cref="Feature{TState}"/> changes
         /// </summary>
-        protected BehaviorSubject<TState> Stream { get; }
+        protected Subject<TState> Stream { get; }
 
         /// <summary>
         /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing the type/<see cref="IReducer"/>s mappings
@@ -103,7 +103,7 @@ namespace Neuroglia.Data.Flux
                 throw new ArgumentNullException(nameof(context));
             if (reducerPipelineBuilder == null)
                 throw new ArgumentNullException(nameof(reducerPipelineBuilder));
-            var pipeline = reducerPipelineBuilder(ApplyReducersAsync);
+                var pipeline = reducerPipelineBuilder(ApplyReducersAsync);
             this.State = (TState)await pipeline(context);
         }
 

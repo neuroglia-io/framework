@@ -39,39 +39,34 @@ namespace Neuroglia.Data.Flux.Components
             {
 				return $@"
 window.{ReduxDevToolsPlugin.JSPrefix} = new (function() {{
-	const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__;
-	this.{ReduxDevToolsPlugin.JSInitializeMethodName} = function() {{}};
-	if (reduxDevTools !== undefined && reduxDevTools !== null) {{
-		const reduxDevTools = reduxDevTools.connect({{ {this.Options} }});
-		if (reduxDevTools !== undefined && reduxDevTools !== null) {{
-			reduxDevTools.subscribe((message) => {{ 
-				if (window.reduxDevToolsCallback) {{
-					const messageAsJson = JSON.stringify(message);
-					window.reduxDevToolsCallback.invokeMethodAsync('{ReduxDevToolsPlugin.JSCallbackMethodName}', messageAsJson); 
-				}}
-			}});
-		}}
-		this.{ReduxDevToolsPlugin.JSInitializeMethodName} = function(dotNetCallbacks, state) {{
-			window.reduxDevToolsCallback = dotNetCallbacks;
-			state = JSON.parse(state);
-			reduxDevTools.init(state);
+const reduxDevTools = window.__REDUX_DEVTOOLS_EXTENSION__;
+this.{ReduxDevToolsPlugin.JSInitializeMethodName} = function() {{}};
+if (reduxDevTools !== undefined && reduxDevTools !== null) {{
+	const fluxDevTools = reduxDevTools.connect({{ {this.Options} }});
+	if (fluxDevTools !== undefined && reduxDevTools !== null) {{
+		fluxDevTools.subscribe((message) => {{ 
 			if (window.reduxDevToolsCallback) {{
-				// Notify Fluxor of the presence of the browser plugin
-				const detectedMessage = {{
-					payload: {{
-						type: '{ReduxDevToolsPlugin.JSOnDetectedMethodName}'
-					}}
-				}};
-				const detectedMessageAsJson = JSON.stringify(detectedMessage);
-				window.reduxDevToolsCallback.invokeMethodAsync('{ReduxDevToolsPlugin.JSCallbackMethodName}', detectedMessageAsJson);
+				const json = JSON.stringify(message);
+				window.reduxDevToolsCallback.invokeMethodAsync('{ReduxDevToolsPlugin.JSCallbackMethodName}', json); 
 			}}
-		}};
-		this.{ReduxDevToolsPlugin.JSDispatchMethodName} = function(action, state) {{
-			action = JSON.parse(action);
-			state = JSON.parse(state);
-			reduxDevTools.send(action, state);
-		}};
+		}});
 	}}
+	this.{ReduxDevToolsPlugin.JSInitializeMethodName} = function(dotNetCallbacks, state) {{
+		window.reduxDevToolsCallback = dotNetCallbacks;
+		fluxDevTools.init(state);
+		if (window.reduxDevToolsCallback) {{
+			const message = {{
+				payload: {{
+					type: '{ReduxDevToolsPlugin.JSOnDetectedMethodName}'
+				}}
+			}};
+			window.reduxDevToolsCallback.invokeMethodAsync('{ReduxDevToolsPlugin.JSCallbackMethodName}', JSON.stringify(message));
+		}}
+	}};
+	this.{ReduxDevToolsPlugin.JSDispatchMethodName} = function(action, state) {{
+		fluxDevTools.send(action, state);
+	}};
+}}
 }})();";
 			}
         }
