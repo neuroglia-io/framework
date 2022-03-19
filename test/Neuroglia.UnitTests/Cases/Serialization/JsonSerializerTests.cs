@@ -37,6 +37,24 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             deserialized.Country.Should().Be(toSerialize.Country);
         }
 
+        [Fact]
+        public async Task SerializeAndDeserialize_AbstractClass_ShouldWork()
+        {
+            //arrange
+            var toSerialize = new Concretion()
+            {
+                Value = "foo"
+            };
+
+            //act
+            var buffer = await this.Serializer.SerializeAsync(toSerialize);
+            var deserialized = await this.Serializer.DeserializeAsync<Abstraction>(buffer);
+
+            //assert
+            deserialized.Should().NotBeNull();
+            deserialized.As<Concretion>().Value.Should().Be(toSerialize.Value);
+        }
+
     }
 
 }

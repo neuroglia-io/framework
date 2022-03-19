@@ -42,6 +42,15 @@ namespace System.Text.Json.Serialization
         }
 
         /// <summary>
+        /// Initializes a new <see cref="AbstractClassConverterFactory"/>
+        /// </summary>
+        public AbstractClassConverterFactory()
+            : this(jsonSerializerOptions: null)
+        {
+
+        }
+
+        /// <summary>
         /// Gets the current <see cref="JsonSerializerOptions"/>
         /// </summary>
         protected JsonSerializerOptions JsonSerializerOptions { get; }

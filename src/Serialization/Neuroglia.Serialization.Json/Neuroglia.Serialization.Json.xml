@@ -53,6 +53,11 @@
             </summary>
             <param name="jsonSerializerOptions">The current <see cref="T:System.Text.Json.JsonSerializerOptions"/></param>
         </member>
+        <member name="M:System.Text.Json.Serialization.AbstractClassConverterFactory.#ctor">
+            <summary>
+            Initializes a new <see cref="T:System.Text.Json.Serialization.AbstractClassConverterFactory"/>
+            </summary>
+        </member>
         <member name="P:System.Text.Json.Serialization.AbstractClassConverterFactory.JsonSerializerOptions">
             <summary>
             Gets the current <see cref="P:System.Text.Json.Serialization.AbstractClassConverterFactory.JsonSerializerOptions"/>
