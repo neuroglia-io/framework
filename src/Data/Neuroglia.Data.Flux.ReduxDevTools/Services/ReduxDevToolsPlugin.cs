@@ -130,7 +130,7 @@ namespace Neuroglia.Data.Flux
                 throw new ArgumentNullException(nameof(state));
             if (!this.Initialized)
                 await this.InitializeStateAsync();
-            await this.InvokeJSRuntimeMethodAsync<object>(JSDispatchMethodName, action, state);
+            await this.InvokeJSRuntimeMethodAsync<object>(JSDispatchMethodName, new { type = action.GetType().Name, Payload = action }, state);
         }
 
         /// <summary>
