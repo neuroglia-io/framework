@@ -72,6 +72,9 @@ namespace Neuroglia.Serialization
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
+            if (type == typeof(Dynamic)
+               || type == typeof(DynamicValue))
+                return this;
             var value = ProtobufHelper.Deserialize(this.Bytes, DynamicHelper.GetClrType(DynamicHelper.GetDynamicType(type)));
             return value switch
             {

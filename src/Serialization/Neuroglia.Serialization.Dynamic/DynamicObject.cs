@@ -227,6 +227,8 @@ namespace Neuroglia.Serialization
                 ignoreIfNotDecorated = true;
             if(type.GetGenericType(typeof(KeyValuePair<,>)) != null)
                 return Activator.CreateInstance(type, new object[]{ this.Get(nameof(KeyValuePair<string, string>.Key))!, this.Get(nameof(KeyValuePair<string, string>.Value))! });
+            if (type == typeof(Dynamic) || type == typeof(DynamicObject))
+                return this;
             var result = Activator.CreateInstance(type, true);
             foreach (var property in type.GetProperties()
                 .Where(p => p.CanRead && p.CanWrite)

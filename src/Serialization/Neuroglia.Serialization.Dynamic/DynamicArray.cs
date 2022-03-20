@@ -76,6 +76,9 @@ namespace Neuroglia.Serialization
         {
             if (expectedType == null)
                 throw new ArgumentNullException(nameof(expectedType));
+            if (expectedType == typeof(Dynamic)
+                || expectedType == typeof(DynamicArray))
+                return this;
             if (!expectedType.IsEnumerable())
                 throw new ArgumentException($"The specified type '{expectedType.Name}' is not an {nameof(IEnumerable)} implementation", nameof(expectedType));
             var elementType = DynamicHelper.GetClrType(this.ElementType)!;

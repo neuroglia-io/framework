@@ -68,7 +68,8 @@ namespace Neuroglia.UnitTests.Cases.Serialization
                     Strings = new() { "1", "2", "3" }
                 },
                 Dictionary = new() { { "fake-key", "fake-value" } },
-                Uri = new ("http://test.com")
+                Uri = new ("http://test.com"),
+                Dynamic = Dynamic.FromObject(new { foo = "bar", baz = "foobar" })
             };
             var dataToAssert = new List<TestData>();
 
@@ -101,6 +102,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
                 data.ComplexTypes.Should().BeEquivalentTo(source.ComplexTypes);
                 data.Dictionary.Should().BeEquivalentTo(source.Dictionary);
                 data.Uri.Should().Be(source.Uri);
+                data.Dynamic.ToObject().Should().BeEquivalentTo(source.Dynamic.ToObject());
             }
 
         }
@@ -177,6 +179,8 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             public Dictionary<string, string> Dictionary { get; set; }
 
             public Uri Uri { get; set; }
+
+            public Dynamic Dynamic { get; set; }
 
         }
 
