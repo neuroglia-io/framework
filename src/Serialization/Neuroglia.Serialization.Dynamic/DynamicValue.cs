@@ -95,6 +95,8 @@ namespace Neuroglia.Serialization
                 return null;
             if (value is DynamicValue primitive)
                 return primitive;
+            if (value is Uri uri)
+                value = uri.ToString();
             if (!value.GetType().IsPrimitiveType())
                 throw new Exception($"The specified value must be a primitive");
             return new DynamicValue(value);

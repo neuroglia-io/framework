@@ -239,6 +239,8 @@ namespace Neuroglia.Serialization
                 if (value == null
                     || value is Empty)
                     continue;
+                if (value is string str && property.PropertyType == typeof(Uri))
+                    value = new Uri(str);
                 property.SetValue(result, value);
             }
             return result;
