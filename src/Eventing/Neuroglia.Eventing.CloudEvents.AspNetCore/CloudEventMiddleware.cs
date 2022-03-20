@@ -2,6 +2,7 @@
 using CloudNative.CloudEvents.AspNetCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Reactive.Subjects;
 
 namespace Neuroglia.Eventing
@@ -46,6 +47,7 @@ namespace Neuroglia.Eventing
             {
                 var e = await context.Request.ToCloudEventAsync(formatter, Array.Empty<CloudEventAttribute>());
                 stream.OnNext(e);
+                context.Response.StatusCode = (int)HttpStatusCode.Accepted;
             }
             catch(Exception ex)
             {

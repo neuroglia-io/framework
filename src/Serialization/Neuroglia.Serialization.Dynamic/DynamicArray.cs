@@ -93,7 +93,7 @@ namespace Neuroglia.Serialization
                         Timestamp timestamp => timestamp.AsDateTime(),
                         Duration duration => duration.AsTimeSpan(),
                         DynamicArray array => array.ToObject()!,
-                        DynamicObject obj => obj.ToObject()!,
+                        DynamicObject obj => obj.ToObject(expectedElementType)!,
                         _ => elem
                     });
                 }

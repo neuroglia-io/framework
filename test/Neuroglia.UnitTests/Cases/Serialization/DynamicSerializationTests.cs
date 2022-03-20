@@ -66,7 +66,8 @@ namespace Neuroglia.UnitTests.Cases.Serialization
                 {
                     String = "HellowWorld",
                     Strings = new() { "1", "2", "3" }
-                }
+                },
+                Dictionary = new() { { "fake-key", "fake-value" } }
             };
             var dataToAssert = new List<TestData>();
 
@@ -97,6 +98,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
                 data.Strings.Should().BeEquivalentTo(source.Strings);
                 data.DateTimes.Should().BeEquivalentTo(source.DateTimes);
                 data.ComplexTypes.Should().BeEquivalentTo(source.ComplexTypes);
+                data.Dictionary.Should().BeEquivalentTo(source.Dictionary);
             }
 
         }
@@ -169,6 +171,8 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             public List<DateTime> DateTimes { get; internal set; }
 
             public List<TestData> ComplexTypes { get; internal set; }
+
+            public Dictionary<string, string> Dictionary { get; set; }
 
         }
 
