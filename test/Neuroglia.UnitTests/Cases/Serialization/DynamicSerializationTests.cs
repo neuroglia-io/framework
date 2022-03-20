@@ -182,6 +182,8 @@ namespace Neuroglia.UnitTests.Cases.Serialization
 
             public Dynamic Dynamic { get; set; }
 
+            public IDictionary<string, object> Extensions { get; set; } = new Dictionary<string, object>();
+
         }
 
     }

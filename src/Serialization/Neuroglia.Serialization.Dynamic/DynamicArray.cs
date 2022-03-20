@@ -52,20 +52,23 @@ namespace Neuroglia.Serialization
             if (elementType == null)
                 return null;
             var enumerableType = typeof(List<>).MakeGenericType(elementType);
-            var enumerable = (IEnumerable)ProtobufHelper.Deserialize(this.Bytes, enumerableType);
             var results = new List<object>();
-            if (enumerable != null)
+            if (this.Bytes != null)
             {
-                foreach (var elem in enumerable)
+                var enumerable = (IEnumerable)ProtobufHelper.Deserialize(this.Bytes, enumerableType);
+                if (enumerable != null)
                 {
-                    results.Add(elem switch
+                    foreach (var elem in enumerable)
                     {
-                        Timestamp timestamp => timestamp.AsDateTime(),
-                        Duration duration => duration.AsTimeSpan(),
-                        DynamicArray array => array.ToObject()!,
-                        DynamicObject obj => obj.ToObject()!,
-                        _ => elem
-                    });
+                        results.Add(elem switch
+                        {
+                            Timestamp timestamp => timestamp.AsDateTime(),
+                            Duration duration => duration.AsTimeSpan(),
+                            DynamicArray array => array.ToObject()!,
+                            DynamicObject obj => obj.ToObject()!,
+                            _ => elem
+                        });
+                    }
                 }
             }
             return results;
@@ -89,16 +92,19 @@ namespace Neuroglia.Serialization
             if (this.Bytes != null)
             {
                 var enumerable = (IEnumerable)ProtobufHelper.Deserialize(this.Bytes, enumerableType);
-                foreach (var elem in enumerable)
+                if(enumerable != null)
                 {
-                    results.Add(elem switch
+                    foreach (var elem in enumerable)
                     {
-                        Timestamp timestamp => timestamp.AsDateTime(),
-                        Duration duration => duration.AsTimeSpan(),
-                        DynamicArray array => array.ToObject()!,
-                        DynamicObject obj => obj.ToObject(expectedElementType)!,
-                        _ => elem
-                    });
+                        results.Add(elem switch
+                        {
+                            Timestamp timestamp => timestamp.AsDateTime(),
+                            Duration duration => duration.AsTimeSpan(),
+                            DynamicArray array => array.ToObject()!,
+                            DynamicObject obj => obj.ToObject(expectedElementType)!,
+                            _ => elem
+                        });
+                    }
                 }
             }
             if (expectedType.IsArray)
@@ -107,6 +113,14 @@ namespace Neuroglia.Serialization
             }
             else
             {
+                if (expectedType.IsInterface )
+                {
+                    var genericType = expectedType.GetGenericType(typeof(IDictionary<,>));
+                    if (genericType != null)
+                        expectedType = typeof(Dictionary<,>).MakeGenericType(genericType.GetGenericArguments()[0], genericType.GetGenericArguments()[1]);
+                    else
+                        expectedType = typeof(List<>).MakeGenericType(expectedType.GetEnumerableElementType());
+                }
                 var collection = (ICollection)Activator.CreateInstance(expectedType)!;
                 collection.AddRange(results);
                 return collection;
