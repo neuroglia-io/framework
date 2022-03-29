@@ -72,6 +72,9 @@ namespace Neuroglia.Serialization
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
+            if (type == typeof(Dynamic)
+               || type == typeof(DynamicValue))
+                return this;
             var value = ProtobufHelper.Deserialize(this.Bytes, DynamicHelper.GetClrType(DynamicHelper.GetDynamicType(type)));
             return value switch
             {
@@ -95,6 +98,8 @@ namespace Neuroglia.Serialization
                 return null;
             if (value is DynamicValue primitive)
                 return primitive;
+            if (value is Uri uri)
+                value = uri.ToString();
             if (!value.GetType().IsPrimitiveType())
                 throw new Exception($"The specified value must be a primitive");
             return new DynamicValue(value);

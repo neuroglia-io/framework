@@ -82,7 +82,7 @@ namespace Neuroglia.Data.Flux
         {
             get
             {
-                return this.Features.ToDictionary(f => f.GetType().Name, f => f.State);
+                return this.Features.ToDictionary(f => f.State.GetType().Name, f => f.State);
             }
         }
 

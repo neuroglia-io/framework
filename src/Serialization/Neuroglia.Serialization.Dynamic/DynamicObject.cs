@@ -225,6 +225,10 @@ namespace Neuroglia.Serialization
             if (type.TryGetCustomAttribute<DataContractAttribute>(out _)
                 || type.TryGetCustomAttribute<ProtoContractAttribute>(out _))
                 ignoreIfNotDecorated = true;
+            if(type.GetGenericType(typeof(KeyValuePair<,>)) != null)
+                return Activator.CreateInstance(type, new object[]{ this.Get(nameof(KeyValuePair<string, string>.Key))!, this.Get(nameof(KeyValuePair<string, string>.Value))! });
+            if (type == typeof(Dynamic) || type == typeof(DynamicObject))
+                return this;
             var result = Activator.CreateInstance(type, true);
             foreach (var property in type.GetProperties()
                 .Where(p => p.CanRead && p.CanWrite)
@@ -237,6 +241,8 @@ namespace Neuroglia.Serialization
                 if (value == null
                     || value is Empty)
                     continue;
+                if (value is string str && property.PropertyType == typeof(Uri))
+                    value = new Uri(str);
                 property.SetValue(result, value);
             }
             return result;

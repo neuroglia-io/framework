@@ -10,9 +10,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework templating razor</PackageTags>
-    <Version>2.0.1.45</Version>
-    <AssemblyVersion>2.0.1.45</AssemblyVersion>
-    <FileVersion>2.0.1.45</FileVersion>
+    <Version>2.0.1.52</Version>
+    <AssemblyVersion>2.0.1.52</AssemblyVersion>
+    <FileVersion>2.0.1.52</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>

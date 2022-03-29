@@ -66,7 +66,10 @@ namespace Neuroglia.UnitTests.Cases.Serialization
                 {
                     String = "HellowWorld",
                     Strings = new() { "1", "2", "3" }
-                }
+                },
+                Dictionary = new() { { "fake-key", "fake-value" } },
+                Uri = new ("http://test.com"),
+                Dynamic = Dynamic.FromObject(new { foo = "bar", baz = "foobar" })
             };
             var dataToAssert = new List<TestData>();
 
@@ -97,6 +100,9 @@ namespace Neuroglia.UnitTests.Cases.Serialization
                 data.Strings.Should().BeEquivalentTo(source.Strings);
                 data.DateTimes.Should().BeEquivalentTo(source.DateTimes);
                 data.ComplexTypes.Should().BeEquivalentTo(source.ComplexTypes);
+                data.Dictionary.Should().BeEquivalentTo(source.Dictionary);
+                data.Uri.Should().Be(source.Uri);
+                data.Dynamic.ToObject().Should().BeEquivalentTo(source.Dynamic.ToObject());
             }
 
         }
@@ -169,6 +175,14 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             public List<DateTime> DateTimes { get; internal set; }
 
             public List<TestData> ComplexTypes { get; internal set; }
+
+            public Dictionary<string, string> Dictionary { get; set; }
+
+            public Uri Uri { get; set; }
+
+            public Dynamic Dynamic { get; set; }
+
+            public IDictionary<string, object> Extensions { get; set; } = new Dictionary<string, object>();
 
         }
 

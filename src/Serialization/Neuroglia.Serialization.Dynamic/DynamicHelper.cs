@@ -54,7 +54,8 @@ namespace Neuroglia.Serialization
             if (typeToCheck.IsNullable())
                 typeToCheck = typeToCheck.GetNullableType();
             if (typeToCheck == typeof(char)
-                || typeToCheck == typeof(string))
+                || typeToCheck == typeof(string)
+                || typeToCheck == typeof(Uri))
                 return DynamicType.String;
             if (typeToCheck == typeof(bool))
                 return DynamicType.Boolean;
@@ -134,6 +135,8 @@ namespace Neuroglia.Serialization
                 case double:
                 case decimal:
                     return value;
+                case Uri uri:
+                    return uri.ToString();
                 case DateTime dateTime:
                     return new Timestamp(dateTime);
                 case DateTimeOffset dateTimeOffset:

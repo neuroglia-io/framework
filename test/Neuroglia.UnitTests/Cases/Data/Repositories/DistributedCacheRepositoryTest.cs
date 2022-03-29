@@ -53,7 +53,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             entity.Should().NotBeNull();
             entity.FirstName.Should().Be(firstName);
             entity.LastName.Should().Be(lastName);
-            entity = await Cache.GetListElementAsync<TestPerson>(nameof(TestPerson), entity.Id.ToString());
+            entity = await Cache.GetListElementAsync<TestPerson>(typeof(TestPerson).FullName, entity.Id.ToString());
             entity.Should().NotBeNull();
             entity.FirstName.Should().Be(firstName);
             entity.LastName.Should().Be(lastName);
@@ -77,7 +77,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
 
             //assert
             entity.Should().NotBeNull();
-            TestPerson fromcontext = (await Cache.GetListAsync<TestPerson>(nameof(TestPerson))).First();
+            TestPerson fromcontext = (await Cache.GetListAsync<TestPerson>(typeof(TestPerson).FullName)).First();
             entity.Should().NotBeNull();
             entity.Id.Should().Be(fromcontext.Id);
             entity.FirstName.Should().Be(fromcontext.FirstName);
@@ -101,7 +101,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             entity.Should().NotBeNull();
             entity.FirstName.Should().Be(newFirstName);
             entity.LastName.Should().Be(newLastName);
-            entity = await Cache.GetListElementAsync<TestPerson>(nameof(TestPerson), entity.Id.ToString());
+            entity = await Cache.GetListElementAsync<TestPerson>(typeof(TestPerson).FullName, entity.Id.ToString());
             entity.Should().NotBeNull();
             entity.FirstName.Should().Be(newFirstName);
             entity.LastName.Should().Be(newLastName);
@@ -135,7 +135,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             await this.Repository.SaveChangesAsync();
 
             //assert
-            TestPerson entity = (await Cache.GetListAsync<TestPerson>(nameof(TestPerson))).FirstOrDefault();
+            TestPerson entity = (await Cache.GetListAsync<TestPerson>(typeof(TestPerson).FullName)).FirstOrDefault();
             entity.Should().BeNull();
         }
 
