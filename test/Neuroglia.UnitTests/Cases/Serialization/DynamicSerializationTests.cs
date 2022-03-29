@@ -45,6 +45,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             //arrange
             var source = new TestData()
             {
+                Enum = TestEnum.Value3,
                 String = "StringPropertyValue",
                 Bool = true,
                 DateTime = DateTime.Now,
@@ -90,6 +91,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             protoContainer.Boolean.Should().BeFalse();
             foreach (var data in dataToAssert)
             {
+                data.Enum.Should().Be(source.Enum);
                 data.String.Should().Be(source.String);
                 data.Bool.Should().Be(source.Bool);
                 data.DateTime.Should().Be(source.DateTime);
@@ -156,6 +158,8 @@ namespace Neuroglia.UnitTests.Cases.Serialization
         class TestData
         {
 
+            public TestEnum? Enum { get; internal set; }
+
             public string String { get; internal set; }
 
             public bool Bool { get; internal set; }
@@ -184,6 +188,16 @@ namespace Neuroglia.UnitTests.Cases.Serialization
 
             public IDictionary<string, object> Extensions { get; set; } = new Dictionary<string, object>();
 
+        }
+
+        enum TestEnum
+        {
+            [EnumMember(Value = "Value1")]
+            Value1,
+            [EnumMember(Value = "Value1")]
+            Value2,
+            [EnumMember(Value = "Value1")]
+            Value3
         }
 
     }

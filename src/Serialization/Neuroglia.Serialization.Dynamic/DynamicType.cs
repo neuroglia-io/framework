@@ -30,6 +30,10 @@ namespace Neuroglia.Serialization
         /// </summary>
         String,
         /// <summary>
+        /// Represents an enum value
+        /// </summary>
+        Enum,
+        /// <summary>
         /// Represents a boolean
         /// </summary>
         Boolean,

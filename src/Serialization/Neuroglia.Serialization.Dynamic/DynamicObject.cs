@@ -242,7 +242,15 @@ namespace Neuroglia.Serialization
                     || value is Empty)
                     continue;
                 if (value is string str && property.PropertyType == typeof(Uri))
+                {
                     value = new Uri(str);
+                }
+                else if(value is int enumValue)
+                {
+                    var enumType = property.PropertyType.IsNullable() ? property.PropertyType.GetNullableType() : property.PropertyType;
+                    if (enumType.IsEnum)
+                        value = Enum.Parse(enumType, enumValue.ToString());
+                }
                 property.SetValue(result, value);
             }
             return result;

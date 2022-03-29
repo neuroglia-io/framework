@@ -53,6 +53,8 @@ namespace Neuroglia.Serialization
             var typeToCheck = type;
             if (typeToCheck.IsNullable())
                 typeToCheck = typeToCheck.GetNullableType();
+            if (typeToCheck.IsEnum)
+                return DynamicType.Enum;
             if (typeToCheck == typeof(char)
                 || typeToCheck == typeof(string)
                 || typeToCheck == typeof(Uri))
@@ -99,6 +101,7 @@ namespace Neuroglia.Serialization
             return type switch
             {
                 DynamicType.Null => null,
+                DynamicType.Enum => typeof(int),
                 DynamicType.String => typeof(string),
                 DynamicType.Boolean => typeof(bool),
                 DynamicType.Timestamp => typeof(Timestamp),
@@ -135,6 +138,8 @@ namespace Neuroglia.Serialization
                 case double:
                 case decimal:
                     return value;
+                case Enum enumValue:
+                    return (int)(object)enumValue;
                 case Uri uri:
                     return uri.ToString();
                 case DateTime dateTime:
