@@ -146,7 +146,8 @@ namespace Neuroglia.Data.Flux
                 throw new ArgumentNullException(nameof(methodName));
             if (!this.IsEnabled && !this.IsInitializing)
                 return default!;
-            return await this.JSRuntime.InvokeAsync<TResult>($"{JSPrefix}.{methodName}", args);
+            var json = await this.JsonSerializer.SerializeAsync(args);
+            return await this.JSRuntime.InvokeAsync<TResult>($"{JSPrefix}.{methodName}", json);
         }
 
         /// <summary>
