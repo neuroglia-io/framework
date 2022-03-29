@@ -64,6 +64,8 @@ if (reduxDevTools !== undefined && reduxDevTools !== null) {{
 		}}
 	}};
 	this.{ReduxDevToolsPlugin.JSDispatchMethodName} = function(action, state) {{
+		action = JSON.parse(action);
+		state = JSON.parse(state);
 		fluxDevTools.send(action, state);
 	}};
 }}

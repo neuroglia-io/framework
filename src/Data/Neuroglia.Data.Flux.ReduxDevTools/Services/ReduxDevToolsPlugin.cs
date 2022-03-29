@@ -146,8 +146,15 @@ namespace Neuroglia.Data.Flux
                 throw new ArgumentNullException(nameof(methodName));
             if (!this.IsEnabled && !this.IsInitializing)
                 return default!;
-            var json = await this.JsonSerializer.SerializeAsync(args);
-            return await this.JSRuntime.InvokeAsync<TResult>($"{JSPrefix}.{methodName}", json);
+            if (args is not null && args.Length > 0)
+            {
+                for (int i = 0; i < args.Length; i++)
+                {
+                    if (this.ShouldSerialize(args[i]))
+                        args[i] = await this.JsonSerializer.SerializeAsync(args[i]);
+                }
+            }
+            return await this.JSRuntime.InvokeAsync<TResult>($"{JSPrefix}.{methodName}", args);
         }
 
         /// <summary>
@@ -178,6 +185,18 @@ namespace Neuroglia.Data.Flux
                         this.Logger.LogWarning("The specified Redux message payload type '{payloadType}' is not supported", message.Payload.Type);
                     break;
             }
+        }
+
+        /// <summary>
+        /// Determines whether or not the specified value should be serialized before invoking the <see cref="IJSRuntime"/>
+        /// </summary>
+        /// <param name="value">The value to check</param>
+        /// <returns>A boolean indicating whether or not the specified value should be serialized before invoking the <see cref="IJSRuntime"/></returns>
+        protected virtual bool ShouldSerialize(object value)
+        {
+            return !(value != null
+                && value.GetType().IsGenericType 
+                && value.GetType().GetGenericTypeDefinition() == typeof(DotNetObjectReference<>));
         }
 
         /// <summary>
