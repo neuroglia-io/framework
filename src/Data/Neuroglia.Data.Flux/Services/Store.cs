@@ -176,7 +176,7 @@ namespace Neuroglia.Data.Flux
             var applyEffectTasks = new List<Task>();
             foreach (var effect in this.Effects)
             {
-                applyEffectTasks.Add(effect.ApplyAsync(action, new EffectContext(this.Dispatcher)));
+                applyEffectTasks.Add(effect.ApplyAsync(action, new EffectContext(this.ServiceProvider, this.Dispatcher)));
             }
             var exceptions = new List<Exception>();
             Task.Run(async () =>

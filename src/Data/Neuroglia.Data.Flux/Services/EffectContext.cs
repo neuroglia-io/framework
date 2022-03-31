@@ -28,11 +28,16 @@ namespace Neuroglia.Data.Flux
         /// <summary>
         /// Initializes a new <see cref="EffectContext"/>
         /// </summary>
+        /// <param name="services">The current <see cref="IServiceProvider"/></param>
         /// <param name="dispatcher">The current <see cref="IDispatcher"/></param>
-        public EffectContext(IDispatcher dispatcher)
+        public EffectContext(IServiceProvider services, IDispatcher dispatcher)
         {
+            this.Services = services;
             this.Dispatcher = dispatcher;
         }
+
+        /// <inheritdoc/>
+        public IServiceProvider Services { get; }
 
         /// <inheritdoc/>
         public IDispatcher Dispatcher { get; }
