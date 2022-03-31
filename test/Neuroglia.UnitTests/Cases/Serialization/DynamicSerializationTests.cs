@@ -195,18 +195,18 @@ namespace Neuroglia.UnitTests.Cases.Serialization
         abstract class AbstractData
         {
 
-            public virtual int Type { get; set; }
+            public virtual TestEnum Type { get; set; }
 
         }
 
-        [DiscriminatorValue(12)]
+        [DiscriminatorValue(TestEnum.Value2)]
         class ConcreteData
             : AbstractData
         {
 
             public ConcreteData()
             {
-                this.Type = 12;
+                this.Type = TestEnum.Value2;
             }
 
         }

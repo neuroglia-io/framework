@@ -233,8 +233,11 @@ namespace Neuroglia.Serialization
                 var dynamicProperty = this.Properties.FirstOrDefault(p => p.Name.Equals(discriminatorProperty.Name, StringComparison.OrdinalIgnoreCase));
                 if (dynamicProperty == null)
                     throw new MissingMemberException($"Failed to find the discriminator property '{discriminatorProperty.Name}'");
-                var discriminatorValue = dynamicProperty.GetValue()!.ToString();
-                concreteType = TypeDiscriminator.Discriminate(concreteType, discriminatorValue);
+                var discriminatorValue = dynamicProperty.GetValue(discriminatorProperty.PropertyType);
+                var discriminatorValueStr = discriminatorValue!.ToString();
+                if (discriminatorValue.GetType().IsEnum)
+                    discriminatorValueStr = EnumHelper.Stringify((Enum)discriminatorValue, discriminatorValue.GetType());
+                concreteType = TypeDiscriminator.Discriminate(concreteType, discriminatorValueStr);
             }
             var ignoreIfNotDecorated = false;
             if (concreteType.TryGetCustomAttribute<DataContractAttribute>(out _)

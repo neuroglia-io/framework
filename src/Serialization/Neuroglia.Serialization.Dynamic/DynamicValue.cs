@@ -75,7 +75,10 @@ namespace Neuroglia.Serialization
             if (type == typeof(Dynamic)
                || type == typeof(DynamicValue))
                 return this;
-            var value = ProtobufHelper.Deserialize(this.Bytes, DynamicHelper.GetClrType(DynamicHelper.GetDynamicType(type)));
+            var clrType = type;
+            if(!clrType.IsEnum)
+                clrType = DynamicHelper.GetClrType(DynamicHelper.GetDynamicType(clrType));
+            var value = ProtobufHelper.Deserialize(this.Bytes, clrType);
             return value switch
             {
                 string str => type == typeof(Guid) ? Guid.Parse(str) : str,
