@@ -1,14 +1,11 @@
 ﻿using FluentAssertions;
 using Neuroglia.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Schema.Generation;
 using ProtoBuf;
 using ProtoBuf.Meta;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Xunit;
@@ -70,7 +67,8 @@ namespace Neuroglia.UnitTests.Cases.Serialization
                 },
                 Dictionary = new() { { "fake-key", "fake-value" } },
                 Uri = new ("http://test.com"),
-                Dynamic = Dynamic.FromObject(new { foo = "bar", baz = "foobar" })
+                Dynamic = Dynamic.FromObject(new { foo = "bar", baz = "foobar" }),
+                Abstract = new ConcreteData()
             };
             var dataToAssert = new List<TestData>();
 
@@ -105,6 +103,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
                 data.Dictionary.Should().BeEquivalentTo(source.Dictionary);
                 data.Uri.Should().Be(source.Uri);
                 data.Dynamic.ToObject().Should().BeEquivalentTo(source.Dynamic.ToObject());
+                data.Abstract.Should().BeEquivalentTo(source.Abstract);
             }
 
         }
@@ -186,7 +185,29 @@ namespace Neuroglia.UnitTests.Cases.Serialization
 
             public Dynamic Dynamic { get; set; }
 
+            public AbstractData Abstract { get; set; }
+
             public IDictionary<string, object> Extensions { get; set; } = new Dictionary<string, object>();
+
+        }
+
+        [Discriminator(nameof(Type))]
+        abstract class AbstractData
+        {
+
+            public virtual int Type { get; set; }
+
+        }
+
+        [DiscriminatorValue(12)]
+        class ConcreteData
+            : AbstractData
+        {
+
+            public ConcreteData()
+            {
+                this.Type = 12;
+            }
 
         }
 

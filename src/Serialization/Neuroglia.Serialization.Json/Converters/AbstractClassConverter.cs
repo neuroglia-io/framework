@@ -36,26 +36,6 @@ namespace System.Text.Json.Serialization
         public AbstractClassConverter(JsonSerializerOptions jsonSerializerOptions)
         {
             this.JsonSerializerOptions = jsonSerializerOptions;
-            DiscriminatorAttribute discriminatorAttribute = typeof(T).GetCustomAttribute<DiscriminatorAttribute>();
-            if (discriminatorAttribute == null)
-                throw new NullReferenceException($"Failed to find the required '{nameof(DiscriminatorAttribute)}'");
-            this.DiscriminatorProperty = typeof(T).GetProperty(discriminatorAttribute.Property, BindingFlags.Default | BindingFlags.Public | BindingFlags.Instance);
-            if (this.DiscriminatorProperty == null)
-                throw new NullReferenceException($"Failed to find the specified discriminator property '{discriminatorAttribute.Property}' in type '{typeof(T).Name}'");
-            this.TypeMappings = new Dictionary<string, Type>();
-            foreach (Type derivedType in TypeCacheUtil.FindFilteredTypes($"nposm:json-polymorph:{typeof(T).Name}",
-                (t) => t.IsClass && !t.IsAbstract && t.BaseType == typeof(T)))
-            {
-                DiscriminatorValueAttribute discriminatorValueAttribute = derivedType.GetCustomAttribute<DiscriminatorValueAttribute>();
-                if (discriminatorValueAttribute == null)
-                    continue;
-                string discriminatorValue = null;
-                if (discriminatorValueAttribute.Value.GetType().IsEnum)
-                    discriminatorValue = EnumHelper.Stringify((Enum)discriminatorValueAttribute.Value, this.DiscriminatorProperty.PropertyType);
-                else
-                    discriminatorValue = discriminatorValueAttribute.Value.ToString();
-                this.TypeMappings.Add(discriminatorValue, derivedType);
-            }
         }
 
         /// <summary>
@@ -63,30 +43,20 @@ namespace System.Text.Json.Serialization
         /// </summary>
         protected JsonSerializerOptions JsonSerializerOptions { get; }
 
-        /// <summary>
-        /// Gets the discriminator <see cref="PropertyInfo"/> of the abstract type to convert
-        /// </summary>
-        protected PropertyInfo DiscriminatorProperty { get; }
-
-        /// <summary>
-        /// Gets an <see cref="Dictionary{TKey, TValue}"/> containing the mappings of the converted type's derived types
-        /// </summary>
-        protected Dictionary<string, Type> TypeMappings { get; }
-
         /// <inheritdoc/>
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType != JsonTokenType.StartObject)
                 throw new JsonException("Start object token type expected");
             using JsonDocument jsonDocument = JsonDocument.ParseValue(ref reader);
-            string discriminatorPropertyName = this.JsonSerializerOptions?.PropertyNamingPolicy == null ? this.DiscriminatorProperty.Name : this.JsonSerializerOptions.PropertyNamingPolicy.ConvertName(this.DiscriminatorProperty.Name);
-            if (!jsonDocument.RootElement.TryGetProperty(discriminatorPropertyName, out JsonElement discriminatorProperty))
-                throw new JsonException($"Failed to find the required '{this.DiscriminatorProperty.Name}' discriminator property");
-            string discriminatorValue = discriminatorProperty.GetString();
-            if (!this.TypeMappings.TryGetValue(discriminatorValue, out Type derivedType))
-                throw new JsonException($"Failed to find the derived type with the specified discriminator value '{discriminatorValue}'");
+            var discriminatorProperty = TypeDiscriminator.GetDiscriminatorProperty<T>();
+            var discriminatorPropertyName = this.JsonSerializerOptions?.PropertyNamingPolicy == null ? discriminatorProperty.Name : this.JsonSerializerOptions.PropertyNamingPolicy.ConvertName(discriminatorProperty.Name);
+            if (!jsonDocument.RootElement.TryGetProperty(discriminatorPropertyName, out var discriminatorJsonValue))
+                throw new JsonException($"Failed to find the required '{discriminatorProperty.Name}' discriminator property");
+            var discriminatorValue = discriminatorJsonValue.GetString();
+            var derivedType = TypeDiscriminator.Discriminate<T>(discriminatorValue);
             string json = jsonDocument.RootElement.GetRawText();
-            return (T)System.Text.Json.JsonSerializer.Deserialize(json, derivedType, this.JsonSerializerOptions);
+            return (T)JsonSerializer.Deserialize(json, derivedType, this.JsonSerializerOptions);
         }
 
         /// <inheritdoc/>

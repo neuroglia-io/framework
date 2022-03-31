@@ -81,7 +81,7 @@ namespace Neuroglia.Serialization
                 string str => type == typeof(Guid) ? Guid.Parse(str) : str,
                 Timestamp timestamp => type == typeof(DateTimeOffset) ? (object)new DateTimeOffset(timestamp.AsDateTime()) : timestamp.AsDateTime(),
                 Duration duration => duration.AsTimeSpan(),
-                _ => value
+                _ => type.IsAssignableFrom(value.GetType()) || type.IsEnum || (type.IsNullable() && type.GetNullableType().IsEnum) ? value : Convert.ChangeType(value, type)
             };
         }
 

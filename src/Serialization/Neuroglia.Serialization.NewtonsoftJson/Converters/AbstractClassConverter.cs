@@ -31,43 +31,6 @@ namespace Newtonsoft.Json
         : JsonConverter
     {
 
-        /// <summary>
-        /// Initializes a new <see cref="AbstractClassConverter{T}"/>
-        /// </summary>
-        public AbstractClassConverter()
-        {
-            DiscriminatorAttribute discriminatorAttribute = typeof(T).GetCustomAttribute<DiscriminatorAttribute>();
-            if (discriminatorAttribute == null)
-                throw new NullReferenceException($"Failed to find the required '{nameof(DiscriminatorAttribute)}'");
-            this.DiscriminatorProperty = typeof(T).GetProperty(discriminatorAttribute.Property, BindingFlags.Default | BindingFlags.Public | BindingFlags.Instance);
-            if (this.DiscriminatorProperty == null)
-                throw new NullReferenceException($"Failed to find the specified discriminator property '{discriminatorAttribute.Property}' in type '{typeof(T).Name}'");
-            this.TypeMappings = new Dictionary<string, Type>();
-            foreach (Type derivedType in TypeCacheUtil.FindFilteredTypes($"nposm:json-polymorph:{typeof(T).Name}",
-                (t) => t.IsClass && !t.IsAbstract && t.BaseType == typeof(T)))
-            {
-                DiscriminatorValueAttribute discriminatorValueAttribute = derivedType.GetCustomAttribute<DiscriminatorValueAttribute>();
-                if (discriminatorValueAttribute == null)
-                    continue;
-                string discriminatorValue = null;
-                if (discriminatorValueAttribute.Value.GetType().IsEnum)
-                    discriminatorValue = EnumHelper.Stringify((Enum)discriminatorValueAttribute.Value, this.DiscriminatorProperty.PropertyType);
-                else
-                    discriminatorValue = discriminatorValueAttribute.Value.ToString();
-                this.TypeMappings.Add(discriminatorValue.ToLower(), derivedType);
-            }
-        }
-
-        /// <summary>
-        /// Gets the discriminator <see cref="PropertyInfo"/> of the abstract type to convert
-        /// </summary>
-        protected PropertyInfo DiscriminatorProperty { get; }
-
-        /// <summary>
-        /// Gets an <see cref="Dictionary{TKey, TValue}"/> containing the mappings of the converted type's derived types
-        /// </summary>
-        protected Dictionary<string, Type> TypeMappings { get; }
-
         /// <inheritdoc/>
         public override bool CanConvert(Type objectType)
         {
@@ -90,11 +53,11 @@ namespace Newtonsoft.Json
                 throw new NullReferenceException($"Failed to find the required '{nameof(DiscriminatorAttribute)}'");
             if (reader.TokenType == JsonToken.Null)
                 return null;
-            JObject jObject = JObject.Load(reader);
-            string discriminatorValue = jObject.Property(this.DiscriminatorProperty.Name, StringComparison.InvariantCultureIgnoreCase).Value.ToString();
-            if (!this.TypeMappings.TryGetValue(discriminatorValue.ToLower(), out Type derivedType))
-                throw new JsonException($"Failed to find the derived type with the specified discriminator value '{discriminatorValue}'");
-            object result = Activator.CreateInstance(derivedType, true);
+            var jObject = JObject.Load(reader);
+            var discriminatorProperty = TypeDiscriminator.GetDiscriminatorProperty<T>();
+            var discriminatorValue = jObject.Property(discriminatorProperty.Name, StringComparison.InvariantCultureIgnoreCase).Value.ToString();
+            var derivedType = TypeDiscriminator.Discriminate<T>(discriminatorValue);
+            var result = Activator.CreateInstance(derivedType, true);
             serializer.Populate(jObject.CreateReader(), result);
             return result;
         }

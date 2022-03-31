@@ -1375,6 +1375,41 @@
             <param name="predicate">The predicate that filters the types</param>
             <returns>The filtered types</returns>
         </member>
+        <member name="T:Neuroglia.TypeDiscriminator">
+            <summary>
+            Exposes helper methods to help discriminate types
+            </summary>
+        </member>
+        <member name="M:Neuroglia.TypeDiscriminator.GetDiscriminatorProperty(System.Type)">
+            <summary>
+            Gets the <see cref="T:System.Reflection.PropertyInfo"/> used to get the discriminator value of the specified type
+            </summary>
+            <param name="type">The type to get the discriminator property of</param>
+            <returns>The <see cref="T:System.Reflection.PropertyInfo"/> used to get the discriminator value of the specified type</returns>
+        </member>
+        <member name="M:Neuroglia.TypeDiscriminator.GetDiscriminatorProperty``1">
+            <summary>
+            Gets the <see cref="T:System.Reflection.PropertyInfo"/> used to get the discriminator value of the specified type
+            </summary>
+            <typeparam name="T">The type to get the discriminator property of</typeparam>
+            <returns>The <see cref="T:System.Reflection.PropertyInfo"/> used to get the discriminator value of the specified type</returns>
+        </member>
+        <member name="M:Neuroglia.TypeDiscriminator.Discriminate(System.Type,System.String)">
+            <summary>
+            Discriminates the specified type
+            </summary>
+            <param name="type">The type to discriminate</param>
+            <param name="discriminatorValue">The value used to discriminate the specified type</param>
+            <returns>The discriminated type</returns>
+        </member>
+        <member name="M:Neuroglia.TypeDiscriminator.Discriminate``1(System.String)">
+            <summary>
+            Discriminates the specified type
+            </summary>
+            <typeparam name="T">The type to discriminate</typeparam>
+            <param name="discriminatorValue">The value used to discriminate the specified type</param>
+            <returns>The discriminated type</returns>
+        </member>
         <member name="T:Neuroglia.XmlDocumentationHelper">
             <summary>
             Defines helper members to handle Xml code documentation

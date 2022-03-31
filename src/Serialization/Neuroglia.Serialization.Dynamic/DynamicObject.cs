@@ -221,16 +221,27 @@ namespace Neuroglia.Serialization
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
-            var ignoreIfNotDecorated = false;
-            if (type.TryGetCustomAttribute<DataContractAttribute>(out _)
-                || type.TryGetCustomAttribute<ProtoContractAttribute>(out _))
-                ignoreIfNotDecorated = true;
-            if(type.GetGenericType(typeof(KeyValuePair<,>)) != null)
-                return Activator.CreateInstance(type, new object[]{ this.Get(nameof(KeyValuePair<string, string>.Key))!, this.Get(nameof(KeyValuePair<string, string>.Value))! });
-            if (type == typeof(Dynamic) || type == typeof(DynamicObject))
+            var concreteType = type;
+            if (concreteType.GetGenericType(typeof(KeyValuePair<,>)) != null)
+                return Activator.CreateInstance(concreteType, new object[] { this.Get(nameof(KeyValuePair<string, string>.Key))!, this.Get(nameof(KeyValuePair<string, string>.Value))! });
+            if (concreteType == typeof(Dynamic) || concreteType == typeof(DynamicObject))
                 return this;
-            var result = Activator.CreateInstance(type, true);
-            foreach (var property in type.GetProperties()
+            if (concreteType.IsInterface 
+                || concreteType.IsAbstract)
+            {
+                var discriminatorProperty = TypeDiscriminator.GetDiscriminatorProperty(concreteType);
+                var dynamicProperty = this.Properties.FirstOrDefault(p => p.Name.Equals(discriminatorProperty.Name, StringComparison.OrdinalIgnoreCase));
+                if (dynamicProperty == null)
+                    throw new MissingMemberException($"Failed to find the discriminator property '{discriminatorProperty.Name}'");
+                var discriminatorValue = dynamicProperty.GetValue()!.ToString();
+                concreteType = TypeDiscriminator.Discriminate(concreteType, discriminatorValue);
+            }
+            var ignoreIfNotDecorated = false;
+            if (concreteType.TryGetCustomAttribute<DataContractAttribute>(out _)
+                || concreteType.TryGetCustomAttribute<ProtoContractAttribute>(out _))
+                ignoreIfNotDecorated = true;
+            var result = Activator.CreateInstance(concreteType, true);
+            foreach (var property in concreteType.GetProperties()
                 .Where(p => p.CanRead && p.CanWrite)
                 .Where(p => ignoreIfNotDecorated ? p.TryGetCustomAttribute<DataMemberAttribute>(out _) || p.TryGetCustomAttribute<ProtoMemberAttribute>(out _) : true))
             {

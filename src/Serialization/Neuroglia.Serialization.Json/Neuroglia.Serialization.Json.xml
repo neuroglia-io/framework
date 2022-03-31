@@ -21,16 +21,6 @@
             Gets the current <see cref="P:System.Text.Json.Serialization.AbstractClassConverter`1.JsonSerializerOptions"/>
             </summary>
         </member>
-        <member name="P:System.Text.Json.Serialization.AbstractClassConverter`1.DiscriminatorProperty">
-            <summary>
-            Gets the discriminator <see cref="T:System.Reflection.PropertyInfo"/> of the abstract type to convert
-            </summary>
-        </member>
-        <member name="P:System.Text.Json.Serialization.AbstractClassConverter`1.TypeMappings">
-            <summary>
-            Gets an <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the mappings of the converted type's derived types
-            </summary>
-        </member>
         <member name="M:System.Text.Json.Serialization.AbstractClassConverter`1.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
             <inheritdoc/>
         </member>
