@@ -61,7 +61,7 @@ namespace Neuroglia.Data.Flux
             if(context == null)
                 throw new ArgumentNullException(nameof(context));
             var result = await this.Next.Invoke(context);
-            await this.ReduxDevToolsPlugin.DispatchAsync(context.Action, context.Store.State);
+            await this.ReduxDevToolsPlugin.DispatchAsync(context.Action, result);
             return result;
         }
 
