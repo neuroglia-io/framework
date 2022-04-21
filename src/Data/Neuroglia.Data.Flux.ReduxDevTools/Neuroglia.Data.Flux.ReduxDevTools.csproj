@@ -9,9 +9,9 @@
 	<RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
 	<PackageTags>neuroglia framework data flux redux dev tools</PackageTags>
-	<Version>2.0.1.58</Version>
-	<AssemblyVersion>2.0.1.58</AssemblyVersion>
-	<FileVersion>2.0.1.58</FileVersion>
+	<Version>2.0.1.59</Version>
+	<AssemblyVersion>2.0.1.59</AssemblyVersion>
+	<FileVersion>2.0.1.59</FileVersion>
 	<NeutralLanguage>en</NeutralLanguage>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -35,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.3" />
-    <PackageReference Include="Microsoft.JSInterop" Version="6.0.3" />
+	<PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.4" />
+    <PackageReference Include="Microsoft.JSInterop" Version="6.0.4" />
   </ItemGroup>
 
   <ItemGroup>

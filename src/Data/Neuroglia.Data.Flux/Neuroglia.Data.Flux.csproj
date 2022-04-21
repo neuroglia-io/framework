@@ -8,9 +8,9 @@
 	<RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
 	<PackageTags>neuroglia framework data flux</PackageTags>
-	<Version>2.0.1.58</Version>
-	<AssemblyVersion>2.0.1.58</AssemblyVersion>
-	<FileVersion>2.0.1.58</FileVersion>
+	<Version>2.0.1.59</Version>
+	<AssemblyVersion>2.0.1.59</AssemblyVersion>
+	<FileVersion>2.0.1.59</FileVersion>
 	<NeutralLanguage>en</NeutralLanguage>
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
