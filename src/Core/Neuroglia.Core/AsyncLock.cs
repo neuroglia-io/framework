@@ -45,7 +45,7 @@ namespace Neuroglia
         /// <returns>A new object which releases the lock upon disposal</returns>
         public Task<IDisposable> LockAsync(CancellationToken cancellationToken = default)
         {
-            Task waitTask = this._Semaphore.WaitAsync(cancellationToken);
+            var waitTask = this._Semaphore.WaitAsync(cancellationToken);
             return waitTask.IsCompleted
                 ? this._Releaser
                 : waitTask.ContinueWith((_, state) => (IDisposable)state, this._Releaser.Result, cancellationToken,
