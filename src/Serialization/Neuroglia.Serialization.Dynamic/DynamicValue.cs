@@ -78,7 +78,17 @@ namespace Neuroglia.Serialization
             var clrType = type;
             if(!clrType.IsEnum)
                 clrType = DynamicHelper.GetClrType(DynamicHelper.GetDynamicType(clrType));
-            var value = ProtobufHelper.Deserialize(this.Bytes, clrType);
+            var value = null as object;
+            try
+            {
+                value = ProtobufHelper.Deserialize(this.Bytes, clrType);
+            }
+            catch (ProtoException)
+            {
+                //in case the serialized value is a string, try to parse it
+                value = ProtobufHelper.Deserialize(this.Bytes, typeof(string));
+                return Parser.Parse((string)value, type);
+            }
             return value switch
             {
                 string str => type == typeof(Guid) ? Guid.Parse(str) : str,

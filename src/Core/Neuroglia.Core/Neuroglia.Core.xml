@@ -1531,6 +1531,85 @@
             <param name="right">A <see cref="T:Neuroglia.ValueObject"/> to compare</param>
             <returns>A boolean indicating whether or not the two specified values are equal</returns>
         </member>
+        <member name="T:System.Linq.ConcurrentFixedSizeQueue`1">
+            <summary>
+            Represents a queue of a fixed size. Adding elements after the queue's capacity has been reached triggers dequeuing
+            </summary>
+            <typeparam name="T">The type of element the <see cref="T:System.Linq.ConcurrentFixedSizeQueue`1"/> is made out of</typeparam>
+            <remarks>Code taken from <see href="https://stackoverflow.com/a/49821753/3637555">Josh's answer</see></remarks>
+        </member>
+        <member name="M:System.Linq.ConcurrentFixedSizeQueue`1.#ctor(System.Int32)">
+            <summary>
+            Initializes a new <see cref="T:System.Linq.ConcurrentFixedSizeQueue`1"/>
+            </summary>
+            <param name="capacity">The <see cref="T:System.Linq.ConcurrentFixedSizeQueue`1"/>'s capacity</param>
+        </member>
+        <member name="P:System.Linq.ConcurrentFixedSizeQueue`1.Queue">
+            <summary>
+            Gets the <see cref="T:System.Collections.Concurrent.ConcurrentQueue`1"/>
+            </summary>
+        </member>
+        <member name="P:System.Linq.ConcurrentFixedSizeQueue`1.Capacity">
+            <summary>
+            Gets the <see cref="T:System.Linq.ConcurrentFixedSizeQueue`1"/>'s capacity
+            </summary>
+        </member>
+        <member name="M:System.Linq.ConcurrentFixedSizeQueue`1.Enqueue(`0)">
+            <summary>
+            Enqueues the specified element
+            </summary>
+            <param name="elem">The element to enqueue</param>
+        </member>
+        <member name="M:System.Linq.ConcurrentFixedSizeQueue`1.Dequeue">
+            <summary>
+            Dequeues the <see cref="T:System.Linq.ConcurrentFixedSizeQueue`1"/>
+            </summary>
+            <returns>The first element in queue</returns>
+        </member>
+        <member name="M:System.Linq.ConcurrentFixedSizeQueue`1.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Linq.IQueryableExtensions">
+            <summary>
+            Defines extensions for <see cref="T:System.Linq.IQueryable"/>s
+            </summary>
+        </member>
+        <member name="M:System.Linq.IQueryableExtensions.OrderBy(System.Linq.IQueryable,Neuroglia.PropertyPath)">
+            <summary>
+            Orders the <see cref="T:System.Linq.IQueryable"/> by the specified <see cref="T:Neuroglia.PropertyPath"/>
+            </summary>
+            <param name="queryable">The <see cref="T:System.Linq.IQueryable"/> to order</param>
+            <param name="propertyPath">The <see cref="T:Neuroglia.PropertyPath"/> to order the <see cref="T:System.Linq.IQueryable"/> by</param>
+            <returns>A new <see cref="T:System.Linq.IQueryable"/></returns>
+        </member>
+        <member name="M:System.Linq.IQueryableExtensions.OrderByDescending(System.Linq.IQueryable,Neuroglia.PropertyPath)">
+            <summary>
+            Orders the <see cref="T:System.Linq.IQueryable"/> by the specified <see cref="T:Neuroglia.PropertyPath"/>, in a descending fashion
+            </summary>
+            <param name="queryable">The <see cref="T:System.Linq.IQueryable"/> to order</param>
+            <param name="propertyPath">The <see cref="T:Neuroglia.PropertyPath"/> to order the <see cref="T:System.Linq.IQueryable"/> by</param>
+            <returns>A new <see cref="T:System.Linq.IQueryable"/></returns>
+        </member>
+        <member name="T:System.Linq.IAsyncQueryable`1">
+            <summary>
+            Defines the fundamentals of an async <see cref="T:System.Linq.IQueryable`1"/>
+            </summary>
+            <typeparam name="T">The type of element to query</typeparam>
+        </member>
+        <member name="T:System.Linq.IAsyncQueryProvider">
+            <summary>
+            Defines the fundamentals of an async <see cref="T:System.Linq.IQueryProvider"/>
+            </summary>
+        </member>
+        <member name="M:System.Linq.IAsyncQueryProvider.ExecuteAsync``1(System.Linq.Expressions.Expression,System.Threading.CancellationToken)">
+            <summary>
+            Executes the query represented by a specified expression tree
+            </summary>
+            <typeparam name="TResult">The type of the value that results from executing the query</typeparam>
+            <param name="expression">An <see cref="T:System.Linq.Expressions.Expression"/> tree that represents a LINQ query</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The value that results from executing the specified query</returns>
+        </member>
         <member name="T:System.Collections.ICollectionExtensions">
             <summary>
             Defines extensions for <see cref="T:System.Collections.ICollection"/>s
@@ -1583,47 +1662,6 @@
             </summary>
             <param name="enumerable">The <see cref="T:System.Collections.IEnumerable"/> to convert</param>
             <returns>A new <see cref="T:System.Collections.IList"/>, made out of the <see cref="T:System.Collections.IEnumerable"/>'s values</returns>
-        </member>
-        <member name="T:System.Linq.IQueryableExtensions">
-            <summary>
-            Defines extensions for <see cref="T:System.Linq.IQueryable"/>s
-            </summary>
-        </member>
-        <member name="M:System.Linq.IQueryableExtensions.OrderBy(System.Linq.IQueryable,Neuroglia.PropertyPath)">
-            <summary>
-            Orders the <see cref="T:System.Linq.IQueryable"/> by the specified <see cref="T:Neuroglia.PropertyPath"/>
-            </summary>
-            <param name="queryable">The <see cref="T:System.Linq.IQueryable"/> to order</param>
-            <param name="propertyPath">The <see cref="T:Neuroglia.PropertyPath"/> to order the <see cref="T:System.Linq.IQueryable"/> by</param>
-            <returns>A new <see cref="T:System.Linq.IQueryable"/></returns>
-        </member>
-        <member name="M:System.Linq.IQueryableExtensions.OrderByDescending(System.Linq.IQueryable,Neuroglia.PropertyPath)">
-            <summary>
-            Orders the <see cref="T:System.Linq.IQueryable"/> by the specified <see cref="T:Neuroglia.PropertyPath"/>, in a descending fashion
-            </summary>
-            <param name="queryable">The <see cref="T:System.Linq.IQueryable"/> to order</param>
-            <param name="propertyPath">The <see cref="T:Neuroglia.PropertyPath"/> to order the <see cref="T:System.Linq.IQueryable"/> by</param>
-            <returns>A new <see cref="T:System.Linq.IQueryable"/></returns>
-        </member>
-        <member name="T:System.Linq.IAsyncQueryable`1">
-            <summary>
-            Defines the fundamentals of an async <see cref="T:System.Linq.IQueryable`1"/>
-            </summary>
-            <typeparam name="T">The type of element to query</typeparam>
-        </member>
-        <member name="T:System.Linq.IAsyncQueryProvider">
-            <summary>
-            Defines the fundamentals of an async <see cref="T:System.Linq.IQueryProvider"/>
-            </summary>
-        </member>
-        <member name="M:System.Linq.IAsyncQueryProvider.ExecuteAsync``1(System.Linq.Expressions.Expression,System.Threading.CancellationToken)">
-            <summary>
-            Executes the query represented by a specified expression tree
-            </summary>
-            <typeparam name="TResult">The type of the value that results from executing the query</typeparam>
-            <param name="expression">An <see cref="T:System.Linq.Expressions.Expression"/> tree that represents a LINQ query</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>The value that results from executing the specified query</returns>
         </member>
     </members>
 </doc>
