@@ -10,8 +10,8 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework serialization dynamic</PackageTags>
     <Version>2.0.1.6</Version>
-    <AssemblyVersion>2.0.1.61</AssemblyVersion>
-    <FileVersion>2.0.1.61</FileVersion>
+    <AssemblyVersion>2.0.1.62</AssemblyVersion>
+    <FileVersion>2.0.1.62</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
