@@ -103,6 +103,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Flux", "Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Flux.ReduxDevTools", "Data\Neuroglia.Data.Flux.ReduxDevTools\Neuroglia.Data.Flux.ReduxDevTools.csproj", "{0EF4F20E-82B8-4D9B-9A6D-3BA5F74CB079}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor", "Blazor", "{E8E47E11-2D59-456D-966B-9C7BAFB21E79}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Blazor.Dagre", "Blazor\Neuroglia.Blazor.Dagre\Neuroglia.Blazor.Dagre.csproj", "{C7F03D4D-E65C-44F9-BAA6-2BEDC367A7AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -261,6 +265,10 @@ Global
 		{0EF4F20E-82B8-4D9B-9A6D-3BA5F74CB079}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EF4F20E-82B8-4D9B-9A6D-3BA5F74CB079}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EF4F20E-82B8-4D9B-9A6D-3BA5F74CB079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F03D4D-E65C-44F9-BAA6-2BEDC367A7AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F03D4D-E65C-44F9-BAA6-2BEDC367A7AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F03D4D-E65C-44F9-BAA6-2BEDC367A7AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F03D4D-E65C-44F9-BAA6-2BEDC367A7AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -314,6 +322,8 @@ Global
 		{C10EA3A4-007D-4255-B27F-707426331735} = {03BA8EDF-BB40-445E-90C4-815919223B54}
 		{0F06FA73-6D9A-4874-BDEB-B50C7B6E4D0B} = {673DB177-2599-4F86-894C-0C90E6925C36}
 		{0EF4F20E-82B8-4D9B-9A6D-3BA5F74CB079} = {673DB177-2599-4F86-894C-0C90E6925C36}
+		{E8E47E11-2D59-456D-966B-9C7BAFB21E79} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{C7F03D4D-E65C-44F9-BAA6-2BEDC367A7AB} = {E8E47E11-2D59-456D-966B-9C7BAFB21E79}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}
