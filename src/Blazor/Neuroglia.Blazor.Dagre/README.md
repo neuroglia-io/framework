@@ -1,10 +1,6 @@
 ﻿# Neuroglia.Blazor.Dagre
 Neuroglia.Blazor.Dagre is a Blazor wrapper and a **customizable** renderer for [dagrejs/dragre][dagrejs/dragre] and, by extension, [dagrejs/graphlib][dagrejs/graphlib]. In other words, it allows graph or diagram data visualisation.
 
-
-## Preliminary note
-This project is not part of [Synapse][Synapse]. During the early development phase, it's more convenient to have it in the same solution.  However, it will be migrated to the [Neuroglia .NET Framework][Neuroglia .NET Framework] when it reaches as satisfying state.
-
 ## Get Started
 - Add the package reference to your project, ideally using NuGet package manager (not yet available)
 
