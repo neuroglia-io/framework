@@ -79,25 +79,69 @@ namespace Neuroglia.Data.Expressions.JQ
                 throw new ArgumentNullException(nameof(expression));
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
-            string json = this.JsonSerializer.Serialize(data);
-            string jsonArgs = string.Empty;
-            string jqExpression = this.BuildJQExpression(expression);
+            var inputJson = this.JsonSerializer.Serialize(data);
+            var serializedArgs = args?.ToDictionary(a => a.Key, a => JToken.FromObject(a.Value).ToString(Newtonsoft.Json.Formatting.None));
+            var jsonArgs = string.Empty;
+            var jqExpression = this.BuildJQExpression(expression);
             string fileName;
             string processArgs;
+            var files = new List<string>();
             using Process process = new();
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                if(args != null)
-                    jsonArgs = string.Join(" ", args.Select(a => @$"--argjson {a.Key} ""{this.EscapeDoubleQuotes(JToken.FromObject(a.Value).ToString(Newtonsoft.Json.Formatting.None))}"""));
+                if(serializedArgs != null)
+                    jsonArgs = string.Join(" ", serializedArgs.Select(a => @$"--argjson {a.Key} ""{this.EscapeDoubleQuotes(a.Value)}"""));
                 fileName = "cmd.exe";
-                processArgs = @$"/c echo {json} | jq.exe ""{jqExpression}"" {jsonArgs}";
+                processArgs = @$"/c echo {inputJson} | jq.exe ""{jqExpression}"" {jsonArgs}";
+                if (processArgs.Length > 8000)
+                {
+                    var inputJsonFile = Path.GetTempFileName();
+                    File.WriteAllText(inputJsonFile, inputJson);
+                    files.Add(inputJsonFile);
+                    var filterFile = Path.GetTempFileName();
+                    File.WriteAllText(filterFile, jqExpression);
+                    files.Add(filterFile);
+                    processArgs = @$"/c type {inputJsonFile} | jq.exe -f {filterFile}";
+                    if(serializedArgs != null)
+                    {
+                        foreach (var arg in serializedArgs)
+                        {
+                            var argFile = Path.GetTempFileName();
+                            File.WriteAllText(argFile, arg.Value);
+                            files.Add(argFile);
+                            processArgs += $" --argfile {arg.Key} {argFile}";
+                        }
+                    }
+                }
             }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                if (args != null)
-                    jsonArgs = string.Join(" ", args.Select(a => @$"--argjson {a.Key} '{this.EscapeDoubleQuotes(JToken.FromObject(a.Value).ToString(Newtonsoft.Json.Formatting.None))}'"));
+                if (serializedArgs != null)
+                    jsonArgs = string.Join(" ", serializedArgs.Select(a => @$"--argjson {a.Key} '{this.EscapeDoubleQuotes(a.Value)}'"));
                 fileName = "bash";
-                processArgs = @$"-c ""echo '{this.EscapeDoubleQuotes(json)}' | jq '{jqExpression}' {jsonArgs}""";
+                processArgs = @$"-c ""echo '{this.EscapeDoubleQuotes(inputJson)}' | jq '{jqExpression}' {jsonArgs}""";
+                if (processArgs.Length > 200000)
+                {
+                    var inputJsonFile = Path.GetTempFileName();
+                    File.WriteAllText(inputJsonFile, inputJson);
+                    files.Add(inputJsonFile);
+                    var filterFile = Path.GetTempFileName();
+                    File.WriteAllText(filterFile, jqExpression);
+                    files.Add(filterFile);
+                    processArgs = @$"-c ""cat {inputJsonFile} | jq.exe -f {filterFile}";
+                    if (serializedArgs != null)
+                    {
+                        foreach (var arg in serializedArgs)
+                        {
+                            var argFile = Path.GetTempFileName();
+                            File.WriteAllText(argFile, arg.Value);
+                            files.Add(argFile);
+                            processArgs += $" --argfile {arg.Key} {argFile}";
+                        }
+                    }
+                    processArgs += @"""";
+                }
             }
             else
                 throw new PlatformNotSupportedException();
@@ -107,9 +151,13 @@ namespace Neuroglia.Data.Expressions.JQ
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
             process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
+            var output = process.StandardOutput.ReadToEnd();
+            var error = process.StandardError.ReadToEnd();
             process.WaitForExit();
+            foreach(var file in files)
+            {
+                try { File.Delete(file); } catch { }
+            }
             if (process.ExitCode != 0)
             {
                 this.Logger.LogError("An error occured while evaluting the specified expression: {error}", error);
@@ -143,7 +191,7 @@ namespace Neuroglia.Data.Expressions.JQ
         /// <returns>A new jq compliant expression built from the specified expression</returns>
         protected virtual string BuildJQExpression(string expression)
         {
-            string jqExpression = expression.Trim();
+            var jqExpression = expression.Trim();
             if (jqExpression.StartsWith("${"))
                 jqExpression = jqExpression[2..^1].Trim();
             if (!jqExpression.Contains(@"\"""))
