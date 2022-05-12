@@ -55,4 +55,10 @@
     <ProjectReference Include="..\..\src\Testing\Neuroglia.Xunit\Neuroglia.Xunit.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Assets\dogs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

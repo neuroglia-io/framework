@@ -3,7 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Data.Expressions;
 using Neuroglia.Data.Expressions.JQ;
 using Neuroglia.Serialization;
+using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using Xunit;
 
 namespace Neuroglia.UnitTests.Cases.Data.Expressions
@@ -92,6 +94,38 @@ namespace Neuroglia.UnitTests.Cases.Data.Expressions
 
             //assert
             Assert.Equal(((System.Text.Json.JsonElement)((dynamic)result).value).GetInt64(), value);
+        }
+
+        [Fact]
+        public void Evaluate_LargeData_UsingNewtonsoft_ShouldWork()
+        {
+            //arrange
+            var evaluator = BuildExpressionEvaluatorWithNewtonsoftJsonSerializer();
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ExpandoObject>>(File.ReadAllText(Path.Combine("Assets", "dogs.json")));
+            var expression = ". | map(select(.category.name == $CONST.category))[0]";
+            var args = new Dictionary<string, object>() { { "CONST", new { category = "Pugal" } } };
+
+            //act
+            var result = evaluator.Evaluate(expression, data, args);
+
+            //assert
+            result.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void Evaluate_LargeData_UsingSystemTextJson_ShouldWork()
+        {
+            //arrange
+            var evaluator = BuildExpressionEvaluatorWithSystemTextJsonSerializer();
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ExpandoObject>>(File.ReadAllText(Path.Combine("Assets", "dogs.json")));
+            var expression = ". | map(select(.category.name == $CONST.category))[0]";
+            var args = new Dictionary<string, object>() { { "CONST", new { category = "Pugal" } } };
+
+            //act
+            var result = evaluator.Evaluate(expression, data, args);
+
+            //assert
+            result.Should().NotBeNull();
         }
 
         static IExpressionEvaluator BuildExpressionEvaluatorWithNewtonsoftJsonSerializer()
