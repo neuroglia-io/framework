@@ -6,6 +6,7 @@ using ProtoBuf.Meta;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Numerics;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Xunit;
@@ -118,6 +119,31 @@ namespace Neuroglia.UnitTests.Cases.Serialization
 
             serialized.Should().Be(json);
 
+        }
+
+        [Fact]
+        public void CreateFrom_ExpandoObject_ShouldWork()
+        {
+            BigInteger x;
+
+            //arrange
+            var obj = new
+            {
+                username = "test",
+                quantityToOrder = 1,
+                user = new
+                {
+                    id = (BigInteger)21354895452521,
+                    username = "test",
+                    firstName = "string",
+                    lastName = "string",
+                    email = "string",
+                    password = "string"
+                }.ToExpandoObject()
+            }.ToExpandoObject();
+
+            //act
+            var dyn = Dynamic.FromObject(obj);
         }
 
         public static IEnumerable<object[]> JsonTheoryData

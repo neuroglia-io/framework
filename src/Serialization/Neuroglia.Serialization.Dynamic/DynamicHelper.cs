@@ -18,6 +18,7 @@ using Newtonsoft.Json.Linq;
 using ProtoBuf.WellKnownTypes;
 using System.Collections;
 using System.Dynamic;
+using System.Numerics;
 
 namespace Neuroglia.Serialization
 {
@@ -67,7 +68,8 @@ namespace Neuroglia.Serialization
                 || typeToCheck == typeof(uint)
                 || typeToCheck == typeof(int)
                 || typeToCheck == typeof(long)
-                || typeToCheck == typeof(ulong))
+                || typeToCheck == typeof(ulong)
+                || typeToCheck == typeof(BigInteger))
                 return DynamicType.Integer;
             if (typeToCheck == typeof(float)
                 || typeToCheck == typeof(double)
@@ -138,6 +140,8 @@ namespace Neuroglia.Serialization
                 case double:
                 case decimal:
                     return value;
+                case BigInteger:
+                    return (long)value;
                 case Enum enumValue:
                     return (int)(object)enumValue;
                 case Uri uri:
