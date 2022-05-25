@@ -509,7 +509,7 @@ namespace Neuroglia.Caching
         public virtual List<T> GetList<T>(string key)
         {
             List<T> results = new();
-            List<string> keyList = this.Get<List<string>>(key);
+            List<string> keyList = this.Get<List<string>>(key).ToList();
             if (keyList != null)
             {
                 foreach (string elemKey in keyList)
