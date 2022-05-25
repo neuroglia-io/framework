@@ -358,7 +358,7 @@ namespace Neuroglia
             else
                 result = result.ToLower();
             result = InvalidChars.Replace(result, SubstitutionBlock).Trim();
-            result = ReduceSpaces.Replace(result, " ");
+            result = ReduceSpaces.Replace(result, " ").Replace(" ", delimiter);
             if (maxLength.HasValue)
                 result = result.Substring(0, result.Length <= maxLength.Value ? result.Length : maxLength.Value).Trim();
             result = ReplaceSubstitutionBlock.Replace(result, delimiter);
