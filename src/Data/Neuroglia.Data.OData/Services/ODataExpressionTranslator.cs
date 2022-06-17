@@ -140,6 +140,7 @@ namespace Neuroglia.Data.Services
                     lambda = (LambdaExpression)unary.Operand;
                     setup = query => query.Filter((Expression<Func<T, bool>>)lambda);
                     break;
+                case nameof(string.Contains):
                 case nameof(string.ToLower):
                 case nameof(string.ToLowerInvariant):
                 case nameof(string.ToUpper):
