@@ -99,6 +99,7 @@ namespace Neuroglia.Data.Expressions.JQ
                     File.WriteAllText(inputJsonFile, inputJson);
                     files.Add(inputJsonFile);
                     var filterFile = Path.GetTempFileName();
+                    jqExpression = this.BuildJQExpression(expression, false);
                     File.WriteAllText(filterFile, jqExpression);
                     files.Add(filterFile);
                     processArgs = @$"/c type {inputJsonFile} | jq.exe -f {filterFile}";
@@ -127,6 +128,7 @@ namespace Neuroglia.Data.Expressions.JQ
                     File.WriteAllText(inputJsonFile, inputJson);
                     files.Add(inputJsonFile);
                     var filterFile = Path.GetTempFileName();
+                    jqExpression = this.BuildJQExpression(expression, false);
                     File.WriteAllText(filterFile, jqExpression);
                     files.Add(filterFile);
                     processArgs = @$"-c ""cat {inputJsonFile} | jq.exe -f {filterFile}";
@@ -150,11 +152,11 @@ namespace Neuroglia.Data.Expressions.JQ
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
-            process.Start();
+            var started = process.Start();
             var output = process.StandardOutput.ReadToEnd();
             var error = process.StandardError.ReadToEnd();
             process.WaitForExit();
-            foreach(var file in files)
+            foreach (var file in files)
             {
                 try { File.Delete(file); } catch { }
             }
@@ -166,7 +168,7 @@ namespace Neuroglia.Data.Expressions.JQ
             if (string.IsNullOrWhiteSpace(output))
                 return null;
             else
-                return this.JsonSerializer.Deserialize(output, expectedType);
+                return this.JsonSerializer.Deserialize(output, expectedType); 
         }
 
         /// <inheritdoc/>
@@ -188,12 +190,15 @@ namespace Neuroglia.Data.Expressions.JQ
         /// Builds a jq compliant expression from the specified expression
         /// </summary>
         /// <param name="expression">The expression to build a jq compliant expression for</param>
+        /// <param name="escape">A boolean indicating whether to escape '"' and '&' chgaracters in the resulting JQ expression</param>
         /// <returns>A new jq compliant expression built from the specified expression</returns>
-        protected virtual string BuildJQExpression(string expression)
+        protected virtual string BuildJQExpression(string expression, bool escape = true)
         {
             var jqExpression = expression.Trim();
             if (jqExpression.StartsWith("${"))
                 jqExpression = jqExpression[2..^1].Trim();
+            if (!escape)
+                return jqExpression;
             if (!jqExpression.Contains(@"\"""))
                 jqExpression = jqExpression.Replace("\"", @"\""");
             if (!jqExpression.Contains("^&"))

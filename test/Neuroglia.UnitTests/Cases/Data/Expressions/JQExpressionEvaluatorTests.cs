@@ -6,6 +6,7 @@ using Neuroglia.Serialization;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
+using System.Text.Json;
 using Xunit;
 
 namespace Neuroglia.UnitTests.Cases.Data.Expressions
@@ -128,6 +129,40 @@ namespace Neuroglia.UnitTests.Cases.Data.Expressions
             result.Should().NotBeNull();
         }
 
+        [Fact]
+        public void Evaluate_LargeExpression_UsingNewtonsoft_ShouldWork()
+        {
+            //arrange
+            var evaluator = BuildExpressionEvaluatorWithNewtonsoftJsonSerializer();
+            var data = new { };
+            var expression = File.ReadAllText(Path.Combine("Assets", "pets.expression.json"));
+            var args = new Dictionary<string, object>() { { "CONST", new { category = "Pugal" } } };
+
+            //act
+            dynamic result = evaluator.Evaluate(expression, data, args);
+
+            //assert
+            Assert.NotEmpty(result.pets);
+        }
+
+        [Fact]
+        public void Evaluate_LargeExpression_UsingSystemTextJson_ShouldWork()
+        {
+            //arrange
+            var evaluator = BuildExpressionEvaluatorWithSystemTextJsonSerializer();
+            var data = new { };
+            var expression = File.ReadAllText(Path.Combine("Assets", "pets.expression.json"));
+            var args = new Dictionary<string, object>() { { "CONST", new { category = "Pugal" } } };
+
+            //act
+            dynamic result = evaluator.Evaluate(expression, data, args);
+            if(result is JsonElement jsonElem)
+                result = jsonElem.Deserialize<ExpandoObject>();
+
+            //assert
+            Assert.NotNull(result);
+        }
+
         static IExpressionEvaluator BuildExpressionEvaluatorWithNewtonsoftJsonSerializer()
         {
             var services = new ServiceCollection();
@@ -142,7 +177,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Expressions
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddJsonSerializer();
-            services.AddJQExpressionEvaluator(builder => builder.UseSerializer<JsonSerializer>());
+            services.AddJQExpressionEvaluator(builder => builder.UseSerializer<Neuroglia.Serialization.JsonSerializer>());
             return services.BuildServiceProvider().GetRequiredService<IExpressionEvaluator>();
         }
 

@@ -110,13 +110,7 @@
         <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate(System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.BuildJQExpression(System.String)">
-            <summary>
-            Builds a jq compliant expression from the specified expression
-            </summary>
-            <param name="expression">The expression to build a jq compliant expression for</param>
-            <returns>A new jq compliant expression built from the specified expression</returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.BuildJQExpression(System.String,System.Boolean)" -->
         <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.EscapeDoubleQuotes(System.String)">
             <summary>
             Escapes double quotes in the specified string
