@@ -1,5 +1,6 @@
 ﻿using Neuroglia.Serialization;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System.Collections;
 
 namespace Newtonsoft.Json
@@ -32,8 +33,14 @@ namespace Newtonsoft.Json
         /// <inheritdoc/>
         public override void WriteJson(JsonWriter writer, Dynamic? value, JsonSerializer serializer)
         {
-            if(value != null)
+            if (value != null)
+            {
+                var currentResolver = serializer.ContractResolver;
+                serializer.ContractResolver = new DefaultContractResolver();
                 serializer.Serialize(writer, value.ToObject());
+                serializer.ContractResolver = currentResolver;
+            }
+                
         }
 
     }
