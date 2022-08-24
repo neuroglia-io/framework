@@ -18,7 +18,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neuroglia.Data.Expressions.JQ.Configuration;
 using Neuroglia.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System.Collections;
 using System.Diagnostics;
 using System.Dynamic;
@@ -79,8 +81,9 @@ namespace Neuroglia.Data.Expressions.JQ
                 throw new ArgumentNullException(nameof(expression));
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
-            var inputJson = this.JsonSerializer.Serialize(data);
-            var serializedArgs = args?.ToDictionary(a => a.Key, a => JToken.FromObject(a.Value).ToString(Newtonsoft.Json.Formatting.None));
+            var serializerSettings = new JsonSerializerSettings() { ContractResolver = new DefaultContractResolver(), NullValueHandling = NullValueHandling.Ignore };
+            var inputJson = JsonConvert.SerializeObject(data, serializerSettings);
+            var serializedArgs = args?.ToDictionary(a => a.Key, a => JsonConvert.SerializeObject(JToken.FromObject(a.Value), Formatting.None, serializerSettings));
             var jsonArgs = string.Empty;
             var jqExpression = this.BuildJQExpression(expression);
             string fileName;
