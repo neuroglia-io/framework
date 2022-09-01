@@ -1,0 +1,771 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Data.SchemaRegistry.ApiCurio</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Data.SchemaRegistry.ArtifactState">
+            <summary>
+            Enumerates all supported artifact states
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactState.Enabled">
+            <summary>
+            Indicates the the artifact is enabled
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactState.Disabled">
+            <summary>
+            Indicates the the artifact is disabled
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactState.Deprecated">
+            <summary>
+            Indicates the the artifact has been deprecated
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.ArtifactType">
+            <summary>
+            Enumerates all supported artifact types
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactType.Avro">
+            <summary>
+            Indicates an Avro schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactType.PROTOBUF">
+            <summary>
+            Indicates a PROTOBUF schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactType.JSON">
+            <summary>
+            Indicates a JSON schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactType.OPENAPI">
+            <summary>
+            Indicates an OPENAPI schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactType.ASYNCAPI">
+            <summary>
+            Indicates an ASYNCAPI schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactType.GRAPHQL">
+            <summary>
+            Indicates a GRAPHQL schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactType.KCONNECT">
+            <summary>
+            Indicates a KCONNECT schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactType.WSDL">
+            <summary>
+            Indicates a WSDL schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactType.XSD">
+            <summary>
+            Indicates an XSD schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.ArtifactType.XML">
+            <summary>
+            Indicates an XML schema
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions">
+            <summary>
+            Represents the options used to configure an <see cref="T:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions.ServerUri">
+            <summary>
+            Gets/sets the Api Curio Registry server uri
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions.LineEndingFormatMode">
+            <summary>
+            Gets/sets the line ending format
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.IApiCurioRegistryServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.IApiCurioRegistryServiceCollectionExtensions.AddApiCurioRegistryClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration,System.Action{Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions},Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new Api Curio Registry client
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="configuration">The current <see cref="T:Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions"/></param>
+            <param name="setup">An <see cref="T:System.Action`1"/> used to setup <see cref="T:Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions"/></param>
+            <param name="lifetime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.IApiCurioRegistryServiceCollectionExtensions.AddApiCurioRegistryClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions},Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new Api Curio Registry client
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="setup">An <see cref="T:System.Action`1"/> used to setup <see cref="T:Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions"/></param>
+            <param name="lifetime"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.HashAlgorithm">
+            <summary>
+            Enumerates all supported hash algorithms
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.HashAlgorithm.SHA256">
+            <summary>
+            Indicates a SHA256 hash
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.HashAlgorithm.MD5">
+            <summary>
+            Indicates an MD5 hash
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.IfArtifactExistsAction">
+            <summary>
+            Enumerates all actions to undertake if an artifact already exist when attempting to create a new one
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.IfArtifactExistsAction.Fail">
+            <summary>
+            Server rejects the content with a 409 error if the artifact already exists
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.IfArtifactExistsAction.Update">
+            <summary>
+            Server updates the existing artifact and returns the new metadata
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.IfArtifactExistsAction.Return">
+            <summary>
+            Server does not create or add content to the server, but instead returns the metadata for the existing artifact
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.IfArtifactExistsAction.ReturnOrUpdate">
+            <summary>
+            Server returns an existing version that matches the provided content if such a version exists, otherwise a new version is created
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.LineEndingFormatMode">
+            <summary>
+            Enumerates all supported line ending formats
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.LineEndingFormatMode.Preserve">
+            <summary>
+            Indicates that original line endings should be preserved 
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.LineEndingFormatMode.ConvertToUnix">
+            <summary>
+            Indicates that original line endings should be converted to Unix line endings ('\n' character)
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.LineEndingFormatMode.ConvertToWindows">
+            <summary>
+            Indicates that original line endings should be converted to Windows line endings ('\r\n' character)
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.Models.Artifact">
+            <summary>
+            Describes an artifact
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.Id">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s id
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.GlobalId">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s global id
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.ContentId">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s contentId
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.Name">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s name
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.Description">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s description
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.CreatedOn">
+            <summary>
+            Gets/sets date and time at which the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> has been created
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.CreatedBy">
+            <summary>
+            Gets/sets the user the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> has been created by
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.Type">
+            <summary>
+            Gets/sets <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s type
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.Labels">
+            <summary>
+            Gets/sets a collection containing the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s labels
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.State">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s state
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.ModifiedOn">
+            <summary>
+            Gets the date and time the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> has last been modified on
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.ModifiedBy">
+            <summary>
+            Gets/sets the user the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> has last been modified by
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.GroupId">
+            <summary>
+            Gets/sets the id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s group
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.Version">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s version
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.Artifact.Properties">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s user-defined name/value pairs
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.Models.ArtifactQueryResults">
+            <summary>
+            Represents the results of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> query
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.ArtifactQueryResults.Artifacts">
+            <summary>
+            Gets/sets an <see cref="T:System.Collections.Generic.ICollection`1"/> containing <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> results
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.ArtifactQueryResults.Count">
+            <summary>
+            Gets/sets the result count
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsByContentQuery">
+            <summary>
+            Represents the query used to search for artifacts by content
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsByContentQuery.IsCannonical">
+            <summary>
+            Gets/sets a parameter that can be set to true to indicate that the server should "canonicalize" the content when searching for matching artifacts. Canonicalization is unique to each artifact type, but typically involves removing any extra whitespace and formatting the content in a consistent manner. Must be used along with the artifactType query parameter.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsByContentQuery.ArtifactType">
+            <summary>
+            Gets/sets the type of artifact represented by the content being used for the search. This is only needed when using the canonical query parameter, so that the server knows how to canonicalize the content prior to searching for matching artifacts.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsByContentQuery.Offset">
+            <summary>
+            Gets/sets the number of artifacts to skip before starting to collect the result set. Defaults to 0.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsByContentQuery.Limit">
+            <summary>
+            Gets/sets the number of artifacts to return. Defaults to 20.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsByContentQuery.Order">
+            <summary>
+            Gets/sets the number of artifacts to return. Defaults to 20.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsByContentQuery.OrderBy">
+            <summary>
+            Gets/sets the field to sort by. Can be one of: name and createdOn
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery">
+            <summary>
+            Represents the query used to search for artifacts
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery.Name">
+            <summary>
+            Gets/sets the name to filter artifacts by
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery.Offset">
+            <summary>
+            Gets/sets the number of artifacts to skip before starting to collect the result set. Defaults to 0.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery.Limit">
+            <summary>
+            Gets/sets the number of artifacts to return. Defaults to 20.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery.Order">
+            <summary>
+            Gets/sets the number of artifacts to return. Defaults to 20.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery.OrderBy">
+            <summary>
+            Gets/sets the field to sort by. Can be one of: name and createdOn
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery.Labels">
+            <summary>
+            Gets/sets the label to filter by. Include one or more label to only return artifacts containing all of the specified labels.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery.Properties">
+            <summary>
+            Gets/sets the name/value properties to filter by. Separate each name/value pair using a colon. For example properties=foo:bar will return only artifacts with a custom property named foo and value bar.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery.Description">
+            <summary>
+            Gets/sets the description to filter by
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery.Group">
+            <summary>
+            Gets/sets the group to filter by
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.Models.UpdateArtifactMetadataCommand">
+            <summary>
+            Represents the command used to update the metadata of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.UpdateArtifactMetadataCommand.Name">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s name
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.UpdateArtifactMetadataCommand.Description">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s description
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.UpdateArtifactMetadataCommand.Labels">
+            <summary>
+            Gets/sets a collection containing the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s labels
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Models.UpdateArtifactMetadataCommand.Properties">
+            <summary>
+            Gets/sets the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s user-defined name/value pairs
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.#ctor(Microsoft.Extensions.Logging.ILogger{Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient},Microsoft.Extensions.Options.IOptions{Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions},System.Net.Http.IHttpClientFactory,Neuroglia.Serialization.IJsonSerializer)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient"/>
+            </summary>
+            <param name="logger">The service used to perform logging</param>
+            <param name="options">The current <see cref="T:Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions"/></param>
+            <param name="httpClientFactory">The service used to create <see cref="T:System.Net.Http.HttpClient"/>s</param>
+            <param name="jsonSerializer">The service used to serialize and deserialize JSON</param>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.Options">
+            <summary>
+            Gets the current <see cref="T:Neuroglia.Data.SchemaRegistry.Configuration.ApiCurioRegistryClientOptions"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.HttpClient">
+            <summary>
+            Gets the <see cref="T:System.Net.Http.HttpClient"/> used to perform calls to the remote ApiCurio Registry API
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.JsonSerializer">
+            <summary>
+            Gets the service used to serialize and deserialize JSON
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.FormatAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Formats the specified string
+            </summary>
+            <param name="value">The string to format</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The formatted string</returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.GetLatestArtifactAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.GetArtifactContentByIdAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.GetArtifactContentByGlobalIdAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.GetArtifactContentBySha256HashAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.SearchForArtifactsAsync(Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.SearchForArtifactsByContentAsync(System.String,Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsByContentQuery,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.ListArtifactsInGroupAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.UpdateArtifactStateAsync(System.String,Neuroglia.Data.SchemaRegistry.ArtifactState,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.UpdateArtifactAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.CreateArtifactAsync(Neuroglia.Data.SchemaRegistry.ArtifactType,System.String,Neuroglia.Data.SchemaRegistry.IfArtifactExistsAction,System.String,System.String,System.Boolean,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.DeleteArtifactAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.DeleteAllArtifactsInGroupAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.GetArtifactMetadataAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.GetArtifactVersionMetadataAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.GetArtifactVersionMetadataByContentAsync(System.String,System.String,System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.UpdateArtifactMetadataAsync(System.String,System.String,System.String,System.String,System.Collections.Generic.ICollection{System.String},System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.UpdateArtifactVersionMetadataAsync(System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.ICollection{System.String},System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.DeleteArtifactVersionMetadataAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.GetArtifactVersionAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.ListArtifactVersionsAsync(System.String,System.String,System.Int64,System.Int64,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.UpdateArtifactVersionStateAsync(System.String,System.String,System.String,Neuroglia.Data.SchemaRegistry.ArtifactState,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.ApiCurioRegistryClient.CreateArtifactVersionAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient">
+            <summary>
+            Defines the fundamentals of an Api Curio Registry client
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.GetLatestArtifactAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Returns the latest version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> in its raw form. The Content-Type of the response depends on the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> type. In most cases, this is application/json, but for some types it may be different (for example, PROTOBUF).
+            </summary>
+            <param name="artifactId">The id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get</param>
+            <param name="groupId">The id of the group of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The latest version of the specified <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.GetArtifactContentByIdAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the content for an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version in the registry using the unique content identifier for that content. This content ID may be shared by multiple artifact versions in the case where the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> versions are identical.
+            </summary>
+            <param name="contentId">The global identifier of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content to get</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version with the specified global id</returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.GetArtifactContentByGlobalIdAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the content for an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version in the registry using its globally unique identifier
+            </summary>
+            <param name="globalId">The global identifier of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version to get</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version with the specified global id</returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.GetArtifactContentBySha256HashAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the content for an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version in the registry using the SHA-256 hash of the content. This content hash may be shared by multiple <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> versions in the case where the artifact versions have identical content.
+            </summary>
+            <param name="contentHash">The SHA-256 hash of the content to get the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version for</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version with the specified SHA-256 hash</returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.SearchForArtifactsAsync(Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsQuery,System.Threading.CancellationToken)">
+            <summary>
+            Returns a paginated list of all <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>s that match the provided filter criteria.
+            </summary>
+            <param name="query">The query to perform</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:Neuroglia.Data.SchemaRegistry.Models.ArtifactQueryResults"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.SearchForArtifactsByContentAsync(System.String,Neuroglia.Data.SchemaRegistry.Models.SearchForArtifactsByContentQuery,System.Threading.CancellationToken)">
+            <summary>
+            Returns a paginated list of all <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>s with at least one version that matches the posted content.
+            </summary>
+            <param name="content">The content to search <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>s by</param>
+            <param name="query">The query to perform</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:Neuroglia.Data.SchemaRegistry.Models.ArtifactQueryResults"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.ListArtifactsInGroupAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Lists all <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>s in the specified group
+            </summary>
+            <param name="groupId">The id of the group to list <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>s for</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:Neuroglia.Data.SchemaRegistry.Models.ArtifactQueryResults"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.UpdateArtifactStateAsync(System.String,Neuroglia.Data.SchemaRegistry.ArtifactState,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Updates the state of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>. For example, you can use this to mark the latest version of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> as DEPRECATED. The operation changes the state of the latest version of the a<see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>tifact. If multiple versions exist, only the most recent is changed.
+            </summary>
+            <param name="groupId">The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> group ID. Must be a string provided by the client, representing the name of the grouping of <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>s.</param>
+            <param name="artifactId">The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> ID. Can be a string (client-provided) or UUID (server-generated), representing the unique <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> identifier.</param>
+            <param name="state">The state of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> or <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.UpdateArtifactAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Updates an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> by uploading new content. The body of the request should be the raw content of the artifact. 
+            This is typically in JSON format for most of the supported types, but may be in another format for a few (for example, PROTOBUF). The type of the content should be compatible with the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>'s type (it would be an error to update an AVRO artifact with new OPENAPI content, for example).
+            </summary>
+            <param name="groupId">The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> group ID. Must be a string provided by the client, representing the name of the grouping of <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>s.</param>
+            <param name="artifactId">The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> ID. Can be a string (client-provided) or UUID (server-generated), representing the unique <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> identifier.</param>
+            <param name="version">The version number of this new version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content. This would typically be a simple integer or a SemVer value. If not provided, the server will assign a version number automatically.</param>
+            <param name="name">The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> name of this new version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content. Name must be ASCII-only string. If this is not provided, the server will extract the name from the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content.</param>
+            <param name="description">The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> description of this new version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content. Description must be ASCII-only string. If this is not provided, the server will extract the description from the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content.</param>
+            <param name="content">The new content of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/></param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The updated <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.CreateArtifactAsync(Neuroglia.Data.SchemaRegistry.ArtifactType,System.String,Neuroglia.Data.SchemaRegistry.IfArtifactExistsAction,System.String,System.String,System.Boolean,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a new artifact by posting the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content. The body of the request should be the raw content of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>. This is typically in JSON format for most of the supported types, but may be in another format for a few (for example, PROTOBUF).
+            </summary>
+            <param name="groupId">The unique ID of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> group.</param>
+            <param name="artifactType">The type of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to create</param>
+            <param name="artifactId">A globally unique identifier for the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to create</param>
+            <param name="content">The content of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to create</param>
+            <param name="ifExists">The option used to instruct the server on what to do if the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> already exists.</param>
+            <param name="canonical">Used only when the ifExists query parameter is set to RETURN_OR_UPDATE, this parameter can be set to true to indicate that the server should "canonicalize" the content when searching for a matching version. 
+            The canonicalization algorithm is unique to each <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> type, but typically involves removing extra whitespace and formatting the content in a consistent manner.</param>
+            <param name="version">The version number of this initial version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content. This would typically be a simple integer or a SemVer value. If not provided, the server will assign a version number automatically (starting with version 1).</param>
+            <param name="description">The description of <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> being added. Description must be ASCII-only string. If this is not provided, the server will extract the description from the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content.</param>
+            <param name="name">The name of <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> being added. Name must be ASCII-only string. If this is not provided, the server will extract the name from the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The newly created <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.DeleteArtifactAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Deletes the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> with the specified id
+            </summary>
+            <param name="artifactId">The id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to delete</param>
+            <param name="groupId">The id of the group the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to delete belongs to</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.DeleteAllArtifactsInGroupAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Deletes all <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>s in the specified group
+            </summary>
+            <param name="groupId">The id of the group to remove all <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>s from</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.GetArtifactMetadataAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the metadata of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> with the specified id
+            </summary>
+            <param name="artifactId">The id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get the metadata of</param>
+            <param name="groupId">The id of the group the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get the metadata of belongs to</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The metadata of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> with the specified id</returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.GetArtifactVersionMetadataAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the metadata of a specific version of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>
+            </summary>
+            <param name="artifactId">The id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get the metadata of</param>
+            <param name="groupId">The id of the group the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get the metadata of belongs to</param>
+            <param name="version">The version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get the metadata of</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The metadata of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> with the specified id</returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.GetArtifactVersionMetadataByContentAsync(System.String,System.String,System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+            Gets the metadata of a specific version of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>
+            </summary>
+            <param name="artifactId">The id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get the metadata of</param>
+            <param name="groupId">The id of the group the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get the metadata of belongs to</param>
+            <param name="content">The content of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version to update</param>
+            <param name="canonical">The content of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version to get</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The metadata of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> with the specified id</returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.UpdateArtifactMetadataAsync(System.String,System.String,System.String,System.String,System.Collections.Generic.ICollection{System.String},System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Updates the metadata of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> with the specified id
+            </summary>
+            <param name="artifactId">The id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to update</param>
+            <param name="groupId">The id of the group the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to update belongs to</param>
+            <param name="name">The updated <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> name</param>
+            <param name="description">The updated <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> description</param>
+            <param name="labels">The updated <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> labels</param>
+            <param name="properties">The updated <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> user-defined properties</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.UpdateArtifactVersionMetadataAsync(System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.ICollection{System.String},System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
+            <summary>
+            Updates the metadata of a specific version of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>
+            </summary>
+            <param name="artifactId">The id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to update</param>
+            <param name="groupId">The id of the group the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to update belongs to</param>
+            <param name="version">The version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to update the metadata of</param>
+            <param name="name">The updated <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> name</param>
+            <param name="description">The updated <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> description</param>
+            <param name="labels">The updated <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> labels</param>
+            <param name="properties">The updated <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> user-defined properties</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.DeleteArtifactVersionMetadataAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Deletes the metadata of a specific version of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>
+            </summary>
+            <param name="version">The id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to delete the metadata of</param>
+            <param name="artifactId">The id of the group the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to delete the metadata of belongs to</param>
+            <param name="cancellationToken">The version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to delete the metadata of</param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.GetArtifactVersionAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the specified <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version
+            </summary>
+            <param name="artifactId">The id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get</param>
+            <param name="groupId">The id of the group the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get belongs to</param>
+            <param name="version">The version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The content of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> with the specified id and version</returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.ListArtifactVersionsAsync(System.String,System.String,System.Int64,System.Int64,System.Threading.CancellationToken)">
+            <summary>
+            Lists all the versions of the specified <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>
+            </summary>
+            <param name="artifactId">The id of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get the versions of</param>
+            <param name="groupId">The id of the group the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to get the versions of belongs to</param>
+            <param name="offset">The number of versions to skip before starting to collect the result set. Defaults to 0.</param>
+            <param name="limit">The number of versions to return. Defaults to 20.</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:Neuroglia.Data.SchemaRegistry.Models.ArtifactQueryResults"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.UpdateArtifactVersionStateAsync(System.String,System.String,System.String,Neuroglia.Data.SchemaRegistry.ArtifactState,System.Threading.CancellationToken)">
+            <summary>
+            Updates the state of the specified <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version
+            </summary>
+            <param name="groupId">The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> group ID. Must be a string provided by the client, representing the name of the grouping of <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>s.</param>
+            <param name="artifactId">The <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> ID. Can be a string (client-provided) or UUID (server-generated), representing the unique <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> identifier.</param>
+            <param name="version">The version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to update the state of</param>
+            <param name="state">The state of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> or <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> version</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.Services.IApiCurioRegistryClient.CreateArtifactVersionAsync(System.String,System.String,System.String,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Creates a new version of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> by posting the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content. The body of the request should be the raw content of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/>. This is typically in JSON format for most of the supported types, but may be in another format for a few (for example, PROTOBUF).
+            </summary>
+            <param name="groupId">The unique ID of an <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> group.</param>
+            <param name="artifactId">A globally unique identifier for the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to create</param>
+            <param name="content">The content of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> to create</param>
+            <param name="canonical">Used only when the ifExists query parameter is set to RETURN_OR_UPDATE, this parameter can be set to true to indicate that the server should "canonicalize" the content when searching for a matching version. 
+            The canonicalization algorithm is unique to each <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> type, but typically involves removing extra whitespace and formatting the content in a consistent manner.</param>
+            <param name="version">The version number of this initial version of the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content. This would typically be a simple integer or a SemVer value. If not provided, the server will assign a version number automatically (starting with version 1).</param>
+            <param name="description">The description of <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> being added. Description must be ASCII-only string. If this is not provided, the server will extract the description from the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content.</param>
+            <param name="name">The name of <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> being added. Name must be ASCII-only string. If this is not provided, the server will extract the name from the <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/> content</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The newly created <see cref="T:Neuroglia.Data.SchemaRegistry.Models.Artifact"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.SortOrder">
+            <summary>
+            Enumerates all supported sort orders
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.SortOrder.Ascending">
+            <summary>
+            Indicates an ascending sorting
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaRegistry.SortOrder.Descending">
+            <summary>
+            Indicates a descending sorting
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaRegistry.HashHelper">
+            <summary>
+            Defines helpers methods for generating hashes
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.HashHelper.Hash(Neuroglia.Data.SchemaRegistry.HashAlgorithm,System.String)">
+            <summary>
+            Generates a new hash using the specified <see cref="T:Neuroglia.Data.SchemaRegistry.HashAlgorithm"/>
+            </summary>
+            <param name="hashAlgorithm">The <see cref="T:Neuroglia.Data.SchemaRegistry.HashAlgorithm"/> to use</param>
+            <param name="value">The value to hash</param>
+            <returns>The hashed value</returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.HashHelper.SHA256Hash(System.String)">
+            <summary>
+            Generates a new SHA256 hash
+            </summary>
+            <param name="value">The value to hash</param>
+            <returns>The hashed value</returns>
+        </member>
+        <member name="M:Neuroglia.Data.SchemaRegistry.HashHelper.MD5Hash(System.String)">
+            <summary>
+            Generates a new MD5 hash
+            </summary>
+            <param name="value">The value to hash</param>
+            <returns>The hashed value</returns>
+        </member>
+    </members>
+</doc>

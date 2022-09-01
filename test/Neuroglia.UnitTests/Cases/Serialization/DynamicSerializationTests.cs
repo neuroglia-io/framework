@@ -146,6 +146,24 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             var dyn = Dynamic.FromObject(obj);
         }
 
+        [Fact]
+        public void CreateConvert_DynamicArray_FromToDictionary_ShouldWork()
+        {
+            //arrange
+            var dictionary = new Dictionary<string, int>()
+            {
+                {"1", 1 },
+                {"2", 2 },
+                {"3", 3 },
+                {"4", 4 },
+                {"5", 5 },
+            };
+
+            //act
+            var dynArray = DynamicArray.FromObject(dictionary);
+            var converted = dynArray.ToObject<Dictionary<string, int>>();
+        }
+
         public static IEnumerable<object[]> JsonTheoryData
         {
             get

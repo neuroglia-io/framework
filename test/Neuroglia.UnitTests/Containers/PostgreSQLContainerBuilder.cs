@@ -1,7 +1,6 @@
-﻿using DotNet.Testcontainers.Containers.Builders;
-using DotNet.Testcontainers.Containers.Configurations.Databases;
-using DotNet.Testcontainers.Containers.Modules.Databases;
-using DotNet.Testcontainers.Containers.WaitStrategies;
+﻿using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Configurations;
+using DotNet.Testcontainers.Containers;
 using System;
 
 namespace Neuroglia.UnitTests.Containers
@@ -21,7 +20,7 @@ namespace Neuroglia.UnitTests.Containers
             if (Container != null)
                 return Container;
             Container = new TestcontainersBuilder<PostgreSqlTestcontainer>()
-                .WithName($"npgsql-{Guid.NewGuid().ToString("N")}")
+                .WithName($"npgsql-{Guid.NewGuid():N}")
                 .WithDatabase(new PostgreSqlTestcontainerConfiguration()
                 {
                     Database = Database,

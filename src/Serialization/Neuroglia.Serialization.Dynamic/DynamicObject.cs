@@ -222,8 +222,16 @@ namespace Neuroglia.Serialization
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
             var concreteType = type;
-            if (concreteType.GetGenericType(typeof(KeyValuePair<,>)) != null)
-                return Activator.CreateInstance(concreteType, new object[] { this.Get(nameof(KeyValuePair<string, string>.Key))!, this.Get(nameof(KeyValuePair<string, string>.Value))! });
+            var kvpType = concreteType.GetGenericType(typeof(KeyValuePair<,>));
+            if (kvpType != null)
+            {
+                var keyType = kvpType.GetGenericArguments()[0];
+                var valueType = kvpType.GetGenericArguments()[1];
+                var key = this.Get(nameof(KeyValuePair<string, string>.Key), keyType)!;
+                var value = this.Get(nameof(KeyValuePair<string, string>.Value), valueType)!;
+                return Activator.CreateInstance(concreteType, key, value);
+            }
+                
             if (concreteType == typeof(Dynamic) || concreteType == typeof(DynamicObject))
                 return this;
             if (concreteType.IsInterface 

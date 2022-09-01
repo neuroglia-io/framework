@@ -14,11 +14,11 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
 {
 
     [TestCaseOrderer("Xunit.PriorityTestCaseOrderer", "Neuroglia.Xunit")]
-    public sealed class DistributedCacheRepositoryTest
+    public sealed class DistributedCacheRepositoryTests
         : IDisposable
     {
 
-        public DistributedCacheRepositoryTest()
+        public DistributedCacheRepositoryTests()
         {
             ServiceCollection services = new();
             services.AddLogging();

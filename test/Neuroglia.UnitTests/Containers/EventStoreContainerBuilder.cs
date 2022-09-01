@@ -1,5 +1,4 @@
-﻿using DotNet.Testcontainers.Containers.Builders;
-using DotNet.Testcontainers.Containers.WaitStrategies;
+﻿using DotNet.Testcontainers.Builders;
 using System;
 
 namespace Neuroglia.UnitTests.Containers

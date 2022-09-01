@@ -1,5 +1,6 @@
-﻿using DotNet.Testcontainers.Containers.Configurations;
-using DotNet.Testcontainers.Containers.Modules.Abstractions;
+﻿using DotNet.Testcontainers.Configurations;
+using DotNet.Testcontainers.Containers;
+using Microsoft.Extensions.Logging;
 
 namespace Neuroglia.UnitTests.Containers
 {
@@ -12,8 +13,8 @@ namespace Neuroglia.UnitTests.Containers
         public const string DefaultPassword = "test";
         public const int PublicPort = 27017;
 
-        internal MongoDBContainer(ITestcontainersConfiguration configuration) 
-            : base(configuration)
+        protected MongoDBContainer(ITestcontainersConfiguration configuration, ILogger<MongoDBContainer> logger) 
+            : base(configuration, logger)
         {
             base.Database = DefaultDatabase;
             base.Username = DefaultUsername;
