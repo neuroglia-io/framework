@@ -256,7 +256,11 @@ namespace Neuroglia.Serialization
                 .Where(p => p.CanRead && p.CanWrite)
                 .Where(p => ignoreIfNotDecorated ? p.TryGetCustomAttribute<DataMemberAttribute>(out _) || p.TryGetCustomAttribute<ProtoMemberAttribute>(out _) : true))
             {
-                var dynProperty = this.Properties.FirstOrDefault(p => p.Name.Equals(property.Name, StringComparison.OrdinalIgnoreCase));
+                var propertyName = property.Name;
+                if (property.TryGetCustomAttribute<DataMemberAttribute>(out var dataMemberAttribute)
+                    && !string.IsNullOrWhiteSpace(dataMemberAttribute.Name))
+                    propertyName = dataMemberAttribute.Name;
+                var dynProperty = this.Properties.FirstOrDefault(p => p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase));
                 if (dynProperty == null)
                     continue;
                 var value = dynProperty.GetValue(property.PropertyType);
@@ -303,7 +307,11 @@ namespace Neuroglia.Serialization
                 .Where(p => p.CanRead && p.GetGetMethod(true) != null)
                 .Where(p => ignoreIfNotDecorated ? p.TryGetCustomAttribute<DataMemberAttribute>(out _) || p.TryGetCustomAttribute<ProtoMemberAttribute>(out _) : true))
             {
-                dyn.Set(property.Name, property.GetValue(value));
+                var propertyName = property.Name;
+                if (property.TryGetCustomAttribute<DataMemberAttribute>(out var dataMemberAttribute)
+                    && !string.IsNullOrWhiteSpace(dataMemberAttribute.Name))
+                    propertyName = dataMemberAttribute.Name;
+                dyn.Set(propertyName, property.GetValue(value));
             }
             return dyn;
         }

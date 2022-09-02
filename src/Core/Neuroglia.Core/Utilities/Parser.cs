@@ -58,6 +58,8 @@ namespace Neuroglia
         {
             if (expectedType == null)
                 throw new ArgumentNullException(nameof(expectedType));
+            if (expectedType.IsEnum)
+                return EnumHelper.Parse(input, expectedType);
             if (string.IsNullOrWhiteSpace(input))
                 return expectedType.GetDefaultValue();
             if (expectedType.IsNullable())
