@@ -13,11 +13,11 @@ namespace Neuroglia.Blazor.Dagre.Behaviors
             this.Graph.Wheel += this.OnWheelAsync;
         }
 
-        protected virtual async Task OnWheelAsync(ElementReference sender, WheelEventArgs e, IGraphElement? element)
+        protected virtual async Task OnWheelAsync(GraphEventArgs<WheelEventArgs> e)
         {
-            if (element != null)
+            if (e.GraphElement != null)
                 return;
-            this.Graph.Scale += (decimal)(e.DeltaY / Math.Abs(e.DeltaY)) * -0.1M; ;
+            this.Graph.Scale += (decimal)(e.BaseEvent.DeltaY / Math.Abs(e.BaseEvent.DeltaY)) * -0.1M; ;
             this.Graph.Scale = Math.Clamp(this.Graph.Scale, Constants.MinScale, Constants.MaxScale);
             await Task.CompletedTask;
         }

@@ -363,37 +363,37 @@ namespace Neuroglia.Blazor.Dagre.Models
         public virtual async Task OnMouseMoveAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
         {
             if (this.MouseMove != null)
-                await this.MouseMove.Invoke(sender, e, element);
+                await this.MouseMove.Invoke(new (e, sender, element));
         }
 
         public virtual async Task OnMouseDownAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
         {
             if (this.MouseDown != null)
-                await this.MouseDown.Invoke(sender, e, element);
+                await this.MouseDown.Invoke(new(e, sender, element));
         }
 
         public virtual async Task OnMouseUpAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
         {
             if (this.MouseUp != null)
-                await this.MouseUp.Invoke(sender, e, element);
+                await this.MouseUp.Invoke(new(e, sender, element));
         }
 
         public virtual async Task OnMouseEnterAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
         {
             if (this.MouseEnter != null)
-                await this.MouseEnter.Invoke(sender, e, element);
+                await this.MouseEnter.Invoke(new(e, sender, element));
         }
 
         public virtual async Task OnMouseLeaveAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
         {
             if (this.MouseLeave != null)
-                await this.MouseLeave.Invoke(sender, e, element);
+                await this.MouseLeave.Invoke(new(e, sender, element));
         }
 
         public virtual async Task OnWheelAsync(ElementReference sender, WheelEventArgs e, IGraphElement? element)
         {
             if (this.Wheel != null)
-                await this.Wheel.Invoke(sender, e, element);
+                await this.Wheel.Invoke(new(e, sender, element));
         }
 
         public virtual void OnChildAdded(INodeViewModel child)

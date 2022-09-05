@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+﻿using Microsoft.AspNetCore.Components.Web;
 using Neuroglia.Blazor.Dagre.Models;
 
 namespace Neuroglia.Blazor.Dagre.Behaviors
@@ -18,47 +17,51 @@ namespace Neuroglia.Blazor.Dagre.Behaviors
             this.Graph.Wheel += this.OnWheelAsync;
         }
 
-        protected virtual async Task OnMouseEnterAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
+        protected virtual async Task OnMouseEnterAsync(GraphEventArgs<MouseEventArgs> e)
         {
-            this.Print("Mouse enter", sender, e, element);
+            this.Print("Mouse enter", e);
             await Task.CompletedTask;
         }
 
-        protected virtual async Task OnMouseLeaveAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
+        protected virtual async Task OnMouseLeaveAsync(GraphEventArgs<MouseEventArgs> e)
         {
-            this.Print("Mouse leave", sender, e, element);
+            this.Print("Mouse leave", e);
             await Task.CompletedTask;
         }
 
-        protected virtual async Task OnMouseMoveAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
+        protected virtual async Task OnMouseMoveAsync(GraphEventArgs<MouseEventArgs> e)
         {
-            this.Print("Mouse move", sender, e, element);
+            this.Print("Mouse move", e);
             await Task.CompletedTask;
         }
 
-        protected virtual async Task OnMouseDownAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
+        protected virtual async Task OnMouseDownAsync(GraphEventArgs<MouseEventArgs> e)
         {
-            this.Print("Mouse down", sender, e, element);
+            this.Print("Mouse down", e);
             await Task.CompletedTask;
         }
 
-        protected virtual async Task OnMouseUpAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
+        protected virtual async Task OnMouseUpAsync(GraphEventArgs<MouseEventArgs> e)
         {
-            this.Print("Mouse up", sender, e, element);
+            this.Print("Mouse up", e);
             await Task.CompletedTask;
         }
 
-        protected virtual async Task OnWheelAsync(ElementReference sender, WheelEventArgs e, IGraphElement? element)
+        protected virtual async Task OnWheelAsync(GraphEventArgs<WheelEventArgs> e)
         {
-            this.Print("Wheel", sender, e, element);
+            this.Print("Wheel", e);
             await Task.CompletedTask;
         }
 
-        protected virtual void Print(string type, ElementReference sender, EventArgs e, IGraphElement? element)
+        protected virtual void Print(string type, GraphEventArgs<MouseEventArgs> e)
         {
             Console.WriteLine(type);
-            Console.WriteLine(type + " - sender - " + Newtonsoft.Json.JsonConvert.SerializeObject(sender));
-            Console.WriteLine(type + " - element - " + Newtonsoft.Json.JsonConvert.SerializeObject(element));
+            Console.WriteLine(type + " - event - " + Newtonsoft.Json.JsonConvert.SerializeObject(e));
+        }
+
+        protected virtual void Print(string type, GraphEventArgs<WheelEventArgs> e)
+        {
+            Console.WriteLine(type);
             Console.WriteLine(type + " - event - " + Newtonsoft.Json.JsonConvert.SerializeObject(e));
         }
 

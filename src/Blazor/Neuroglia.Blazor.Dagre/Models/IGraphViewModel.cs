@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Components.Web;
 
 namespace Neuroglia.Blazor.Dagre.Models
 {
-    public delegate Task MouseEventHandler(ElementReference sender, MouseEventArgs e, IGraphElement? element);
-    public delegate Task WheelEventHandler(ElementReference sender, WheelEventArgs e, IGraphElement? element);
+    public delegate Task MouseEventHandler(GraphEventArgs<MouseEventArgs> e);
+    public delegate Task WheelEventHandler(GraphEventArgs<WheelEventArgs> e);
 
     public interface IGraphViewModel
         : IIdentifiable, ILabeled, IDimension, IPosition, ICssClass, IMetadata

@@ -131,11 +131,9 @@ Let's use a custom component for the `Action` node of the `Get Started` sample
 </g>
 
 @code {
-    [CascadingParameter]
-    public virtual IGraphViewModel Graph { get; set; } = null!;
+    [CascadingParameter] public virtual IGraphViewModel Graph { get; set; } = null!;
 
-    [Parameter]
-    public virtual IGraphElement Element { get; set; } = null!;
+    [Parameter] public virtual IGraphElement Element { get; set; } = null!;
 
     protected virtual INodeViewModel Node => (INodeViewModel)this.Element;
     protected virtual string? X => this.Node.X.ToInvariantString();
