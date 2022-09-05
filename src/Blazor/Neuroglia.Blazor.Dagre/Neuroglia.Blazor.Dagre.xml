@@ -268,6 +268,34 @@
         <member name="P:Neuroglia.Blazor.Dagre.Models.GraphElement.Metadata">
             <inheritdoc />
         </member>
+        <member name="T:Neuroglia.Blazor.Dagre.Models.GraphEventArgs`1">
+            <summary>
+            Supplies information about a mouse event that's being raised by the graph
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Blazor.Dagre.Models.GraphEventArgs`1.Component">
+            <summary>
+            The component <see cref="T:Microsoft.AspNetCore.Components.ElementReference"/> that raised the event
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Blazor.Dagre.Models.GraphEventArgs`1.GraphElement">
+            <summary>
+            The graph element, <see cref="T:Neuroglia.Blazor.Dagre.Models.IGraphElement"/>, that raised the event, if any.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Blazor.Dagre.Models.GraphEventArgs`1.BaseEvent">
+            <summary>
+            The <see cref="T:System.EventArgs"/> (<see cref="T:Microsoft.AspNetCore.Components.Web.MouseEventArgs"/> or <see cref="T:Microsoft.AspNetCore.Components.Web.WheelEventArgs"/>)
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Blazor.Dagre.Models.GraphEventArgs`1.#ctor(`0,Microsoft.AspNetCore.Components.ElementReference,Neuroglia.Blazor.Dagre.Models.IGraphElement)">
+            <summary>
+            Constructs a new <see cref="!:GraphArgs"/>
+            </summary>
+            <param name="baseEvent"></param>
+            <param name="component"></param>
+            <param name="graphElement"></param>
+        </member>
         <member name="T:Neuroglia.Blazor.Dagre.Models.GraphLibEdge">
             <inheritdoc />
         </member>

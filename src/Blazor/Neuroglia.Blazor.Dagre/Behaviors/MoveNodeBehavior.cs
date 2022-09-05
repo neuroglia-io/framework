@@ -21,27 +21,27 @@ namespace Neuroglia.Blazor.Dagre.Behaviors
             this.Graph.MouseUp += this.OnMouseUpAsync;
         }
 
-        protected virtual async Task OnMouseMoveAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
+        protected virtual async Task OnMouseMoveAsync(GraphEventArgs<MouseEventArgs> e)
         {
             if (this._target == null)
                 return;
-            this._movementX = e.ClientX - this._previousX;
-            this._movementY = e.ClientY - this._previousY;
+            this._movementX = e.BaseEvent.ClientX - this._previousX;
+            this._movementY = e.BaseEvent.ClientY - this._previousY;
             this.UpdatedPosition();
             await Task.CompletedTask;
         }
 
-        protected virtual async Task OnMouseDownAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
+        protected virtual async Task OnMouseDownAsync(GraphEventArgs<MouseEventArgs> e)
         {
-            if (element == null || element is not INodeViewModel)
+            if (e.GraphElement == null || e.GraphElement is not INodeViewModel)
                 return;
-            this._target = (INodeViewModel)element;
-            this._previousX = e.ClientX;
-            this._previousY = e.ClientY;
+            this._target = (INodeViewModel)e.GraphElement;
+            this._previousX = e.BaseEvent.ClientX;
+            this._previousY = e.BaseEvent.ClientY;
             await Task.CompletedTask;
         }
 
-        protected virtual async Task OnMouseUpAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
+        protected virtual async Task OnMouseUpAsync(GraphEventArgs<MouseEventArgs> e)
         {
             this._target = null;
             this.UpdatedPosition();
