@@ -134,7 +134,7 @@ namespace Neuroglia.Data.Expressions.JQ
                     jqExpression = this.BuildJQExpression(expression, false);
                     File.WriteAllText(filterFile, jqExpression);
                     files.Add(filterFile);
-                    processArgs = @$"-c ""cat {inputJsonFile} | jq.exe -f {filterFile}";
+                    processArgs = @$"-c ""cat {inputJsonFile} | jq -f {filterFile}";
                     if (serializedArgs != null)
                     {
                         foreach (var arg in serializedArgs)

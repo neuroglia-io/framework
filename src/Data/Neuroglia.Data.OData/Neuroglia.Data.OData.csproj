@@ -9,9 +9,9 @@
 		<RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>neuroglia framework data odata</PackageTags>
-		<Version>2.0.1.74</Version>
-		<AssemblyVersion>2.0.1.74</AssemblyVersion>
-		<FileVersion>2.0.1.74</FileVersion>
+		<Version>2.0.1.75</Version>
+		<AssemblyVersion>2.0.1.75</AssemblyVersion>
+		<FileVersion>2.0.1.75</FileVersion>
 		<NeutralLanguage>en</NeutralLanguage>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
