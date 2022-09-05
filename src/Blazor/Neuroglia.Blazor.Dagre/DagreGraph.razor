@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
 @inject IDagreService DagreService
 @inject IJSRuntime JSRuntime
+@implements IDisposable
 
 @if (Graph != null) {
     <div class="graph-container">
@@ -9,12 +10,12 @@
                 class="graph-canvas @Graph.CssClass"
                 width="@(Graph.Width?.ToString() ?? "100%")" 
                 height="@(Graph.Height?.ToString() ?? "100%")"
-                @onmouseenter="OnMouseEnter"
-                @onmouseleave="OnMouseLeave"
-                @onmousedown="OnMouseDown"
-                @onmouseup="OnMouseUp"
-                @onmousemove="OnMouseMove"
-                @onwheel="OnWheel"
+                @onmouseenter="HandleOnMouseEnter"
+                @onmouseleave="HandleOnMouseLeave"
+                @onmousedown="HandleOnMouseDown"
+                @onmouseup="HandleOnMouseUp"
+                @onmousemove="HandleOnMouseMove"
+                @onwheel="HandleOnWheel"
             >
                 <defs>
                     @foreach(var def in Graph.SvgDefinitionComponents)
@@ -68,11 +69,21 @@
 }
 
 @code {
-    [Parameter]
-    public IDagreGraphOptions? Options { get; set; }
+    [Parameter] public IDagreGraphOptions? Options { get; set; }
 
-    [Parameter]
-    public IGraphViewModel? Graph { get; set; }
+    [Parameter] public IGraphViewModel? Graph { get; set; }
+
+    [Parameter] public EventCallback<GraphEventArgs<MouseEventArgs>> OnMouseEnter { get; set; }
+
+    [Parameter] public EventCallback<GraphEventArgs<MouseEventArgs>> OnMouseLeave { get; set; }
+
+    [Parameter] public EventCallback<GraphEventArgs<MouseEventArgs>> OnMouseDown { get; set; }
+
+    [Parameter] public EventCallback<GraphEventArgs<MouseEventArgs>> OnMouseUp { get; set; }
+
+    [Parameter] public EventCallback<GraphEventArgs<MouseEventArgs>> OnMouseMove { get; set; }
+
+    [Parameter] public EventCallback<GraphEventArgs<WheelEventArgs>> OnWheel { get; set; }
 
     protected ElementReference graphReference;
 
@@ -81,10 +92,30 @@
         await base.OnParametersSetAsync();
         if (this.Graph != null)
         {
+            this.RemoveHandlers();
+            this.Graph.MouseEnter += this.OnMouseEnter.InvokeAsync;
+            this.Graph.MouseLeave += this.OnMouseLeave.InvokeAsync;
+            this.Graph.MouseDown += this.OnMouseDown.InvokeAsync;
+            this.Graph.MouseUp += this.OnMouseUp.InvokeAsync;
+            this.Graph.MouseMove += this.OnMouseMove.InvokeAsync;
+            this.Graph.Wheel += this.OnWheel.InvokeAsync;
             //this.Graph.ShowConstruction = true;
             await this.RefreshAsync();
             //Console.WriteLine(await this.DagreService.SerializeAsync(this.Graph.DagreGraph!));
             //Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(this.Graph));
+        }
+    }
+
+    protected virtual void RemoveHandlers()
+    {
+        if (this.Graph != null)
+        {
+            this.Graph.MouseEnter -= this.OnMouseEnter.InvokeAsync;
+            this.Graph.MouseLeave -= this.OnMouseLeave.InvokeAsync;
+            this.Graph.MouseDown -= this.OnMouseDown.InvokeAsync;
+            this.Graph.MouseUp -= this.OnMouseUp.InvokeAsync;
+            this.Graph.MouseMove -= this.OnMouseMove.InvokeAsync;
+            this.Graph.Wheel -= this.OnWheel.InvokeAsync;
         }
     }
 
@@ -131,39 +162,55 @@
         return parameters;
     }
 
-    protected virtual async Task OnMouseEnter(MouseEventArgs e)
+    protected virtual async Task HandleOnMouseEnter(MouseEventArgs e)
     {
         if (this.Graph != null)
             await this.Graph.OnMouseEnterAsync(this.graphReference, e, null);
     }
 
-    protected virtual async Task OnMouseLeave(MouseEventArgs e)
+    protected virtual async Task HandleOnMouseLeave(MouseEventArgs e)
     {
         if (this.Graph != null)
             await this.Graph.OnMouseLeaveAsync(this.graphReference, e, null);
     }
 
-    protected virtual async Task OnMouseDown(MouseEventArgs e)
+    protected virtual async Task HandleOnMouseDown(MouseEventArgs e)
     {
         if (this.Graph != null)
             await this.Graph.OnMouseDownAsync(this.graphReference, e, null);
     }
 
-    protected virtual async Task OnMouseMove(MouseEventArgs e)
+    protected virtual async Task HandleOnMouseMove(MouseEventArgs e)
     {
         if (this.Graph != null)
             await this.Graph.OnMouseMoveAsync(this.graphReference, e, null);
     }
 
-    protected virtual async Task OnMouseUp(MouseEventArgs e)
+    protected virtual async Task HandleOnMouseUp(MouseEventArgs e)
     {
         if (this.Graph != null)
             await this.Graph.OnMouseUpAsync(this.graphReference, e, null);
     }
 
-    protected virtual async Task OnWheel(WheelEventArgs e)
+    protected virtual async Task HandleOnWheel(WheelEventArgs e)
     {
         if (this.Graph != null)
             await this.Graph.OnWheelAsync(this.graphReference, e, null);
+    }
+
+    private bool disposed;
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this.disposed)
+        {
+            this.RemoveHandlers();
+            this.disposed = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        this.Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 }

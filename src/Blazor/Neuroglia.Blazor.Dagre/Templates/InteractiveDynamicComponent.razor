@@ -1,11 +1,11 @@
 ﻿<g
     @ref="elementReference"
-    @onmouseenter="OnMouseEnter"
-    @onmouseleave="OnMouseLeave"
-    @onmousemove="OnMouseMove"
-    @onmousedown="OnMouseDown"
+    @onmouseenter="HandleOnMouseEnter"
+    @onmouseleave="HandleOnMouseLeave"
+    @onmousemove="HandleOnMouseMove"
+    @onmousedown="HandleOnMouseDown"
     @onmousedown:stopPropagation
-    @onmouseup="OnMouseUp"
+    @onmouseup="HandleOnMouseUp"
     @onmouseup:stopPropagation
 >
     <CascadingValue Value="Graph">
@@ -13,26 +13,23 @@
     </CascadingValue>
 </g>
 @code {
-    [CascadingParameter]
-    public virtual IGraphViewModel Graph { get; set; } = null!;
+    [CascadingParameter] public virtual IGraphViewModel Graph { get; set; } = null!;
 
-    [Parameter]
-    public virtual Type Type { get; set; } = null!;
+    [Parameter] public virtual Type Type { get; set; } = null!;
 
-    [Parameter]
-    public virtual IDictionary<string, object> Parameters { get; set; } = null!;
+    [Parameter] public virtual IDictionary<string, object> Parameters { get; set; } = null!;
 
     protected ElementReference elementReference;
 
     protected virtual IGraphElement Element => (IGraphElement)this.Parameters["Element"];
 
-    protected virtual async Task OnMouseEnter(MouseEventArgs e) => await this.Graph.OnMouseEnterAsync(this.elementReference, e, this.Element);
+    protected virtual async Task HandleOnMouseEnter(MouseEventArgs e) => await this.Graph.OnMouseEnterAsync(this.elementReference, e, this.Element);
 
-    protected virtual async Task OnMouseLeave(MouseEventArgs e) => await this.Graph.OnMouseLeaveAsync(this.elementReference, e, this.Element);
+    protected virtual async Task HandleOnMouseLeave(MouseEventArgs e) => await this.Graph.OnMouseLeaveAsync(this.elementReference, e, this.Element);
 
-    protected virtual async Task OnMouseDown(MouseEventArgs e) => await this.Graph.OnMouseDownAsync(this.elementReference, e, this.Element);
+    protected virtual async Task HandleOnMouseDown(MouseEventArgs e) => await this.Graph.OnMouseDownAsync(this.elementReference, e, this.Element);
 
-    protected virtual async Task OnMouseMove(MouseEventArgs e) => await this.Graph.OnMouseMoveAsync(this.elementReference, e, this.Element);
+    protected virtual async Task HandleOnMouseMove(MouseEventArgs e) => await this.Graph.OnMouseMoveAsync(this.elementReference, e, this.Element);
 
-    protected virtual async Task OnMouseUp(MouseEventArgs e) => await this.Graph.OnMouseUpAsync(this.elementReference, e, this.Element);
+    protected virtual async Task HandleOnMouseUp(MouseEventArgs e) => await this.Graph.OnMouseUpAsync(this.elementReference, e, this.Element);
 }
