@@ -93,12 +93,12 @@
         if (this.Graph != null)
         {
             this.RemoveHandlers();
-            this.Graph.MouseEnter += this.OnMouseEnter.InvokeAsync;
-            this.Graph.MouseLeave += this.OnMouseLeave.InvokeAsync;
-            this.Graph.MouseDown += this.OnMouseDown.InvokeAsync;
-            this.Graph.MouseUp += this.OnMouseUp.InvokeAsync;
-            this.Graph.MouseMove += this.OnMouseMove.InvokeAsync;
-            this.Graph.Wheel += this.OnWheel.InvokeAsync;
+            this.Graph.MouseEnter += this.InvokeMouseEnter;
+            this.Graph.MouseLeave += this.InvokeMouseLeave;
+            this.Graph.MouseDown += this.InvokeMouseDown;
+            this.Graph.MouseUp += this.InvokeMouseUp;
+            this.Graph.MouseMove += this.InvokeMouseMove;
+            this.Graph.Wheel += this.InvokeWheel;
             //this.Graph.ShowConstruction = true;
             await this.RefreshAsync();
             //Console.WriteLine(await this.DagreService.SerializeAsync(this.Graph.DagreGraph!));
@@ -106,16 +106,46 @@
         }
     }
 
+    protected async Task InvokeMouseEnter(GraphEventArgs<MouseEventArgs> e)
+    {
+        await this.OnMouseEnter.InvokeAsync(e);
+    }
+
+    protected async Task InvokeMouseLeave(GraphEventArgs<MouseEventArgs> e)
+    {
+        await this.OnMouseLeave.InvokeAsync(e);
+    }
+
+    protected async Task InvokeMouseDown(GraphEventArgs<MouseEventArgs> e)
+    {
+        await this.OnMouseDown.InvokeAsync(e);
+    }
+
+    protected async Task InvokeMouseUp(GraphEventArgs<MouseEventArgs> e)
+    {
+        await this.OnMouseUp.InvokeAsync(e);
+    }
+
+    protected async Task InvokeMouseMove(GraphEventArgs<MouseEventArgs> e)
+    {
+        await this.OnMouseMove.InvokeAsync(e);
+    }
+
+    protected async Task InvokeWheel(GraphEventArgs<WheelEventArgs> e)
+    {
+        await this.OnWheel.InvokeAsync(e);
+    }
+
     protected virtual void RemoveHandlers()
     {
         if (this.Graph != null)
         {
-            this.Graph.MouseEnter -= this.OnMouseEnter.InvokeAsync;
-            this.Graph.MouseLeave -= this.OnMouseLeave.InvokeAsync;
-            this.Graph.MouseDown -= this.OnMouseDown.InvokeAsync;
-            this.Graph.MouseUp -= this.OnMouseUp.InvokeAsync;
-            this.Graph.MouseMove -= this.OnMouseMove.InvokeAsync;
-            this.Graph.Wheel -= this.OnWheel.InvokeAsync;
+            this.Graph.MouseEnter -= this.InvokeMouseEnter;
+            this.Graph.MouseLeave -= this.InvokeMouseLeave;
+            this.Graph.MouseDown -= this.InvokeMouseDown;
+            this.Graph.MouseUp -= this.InvokeMouseUp;
+            this.Graph.MouseMove -= this.InvokeMouseMove;
+            this.Graph.Wheel -= this.InvokeWheel;
         }
     }
 
