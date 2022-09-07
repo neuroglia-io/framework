@@ -32,7 +32,7 @@ namespace Newtonsoft.Json.Serialization
         /// <inheritdoc/>
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
-            JsonProperty result = base.CreateProperty(member, memberSerialization);
+            var result = base.CreateProperty(member, memberSerialization);
             switch (member)
             {
                 case PropertyInfo property:
@@ -46,13 +46,32 @@ namespace Newtonsoft.Json.Serialization
         /// <inheritdoc/>
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            var orderedProperties = type.GetProperties().Select(p => p.Name.ToLowerInvariant()).ToList();
+            var propertiesByInheritancePriority = type.GetProperties()
+               .ToDictionary(p => p.Name.ToLowerInvariant(), p => GetBaseTypes(p.DeclaringType).Count() * 100);
             var properties = base.CreateProperties(type, memberSerialization);
             foreach (var property in properties)
             {
-                property.Order = orderedProperties.IndexOf(property.PropertyName.ToLowerInvariant());
+                var propertyName = property.PropertyName.ToLowerInvariant();
+                propertiesByInheritancePriority.TryGetValue(propertyName, out var baseIndex);
+                if (baseIndex == 0)
+                    baseIndex = 999999;
+                int order;
+                if (property.Order == null)
+                    order = propertiesByInheritancePriority.Keys.ToList().IndexOf(propertyName);
+                else
+                    order = property.Order.Value;
+                property.Order = baseIndex + order;
             }
             return properties.OrderBy(p => p.Order).ToList();
+        }
+
+        static IEnumerable<Type> GetBaseTypes(Type type)
+        {
+            while (type != null)
+            {
+                yield return type;
+                type = type.BaseType;
+            }
         }
 
     }
