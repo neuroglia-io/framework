@@ -14,6 +14,9 @@
  * limitations under the License.
  *
  */
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Newtonsoft.Json.Serialization
@@ -38,6 +41,18 @@ namespace Newtonsoft.Json.Serialization
                     break;
             }
             return result;
+        }
+
+        /// <inheritdoc/>
+        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
+        {
+            var orderedProperties = type.GetProperties().Select(p => p.Name.ToLowerInvariant()).ToList();
+            var properties = base.CreateProperties(type, memberSerialization);
+            foreach (var property in properties)
+            {
+                property.Order = orderedProperties.IndexOf(property.PropertyName.ToLowerInvariant());
+            }
+            return properties.OrderBy(p => p.Order).ToList();
         }
 
     }

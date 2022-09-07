@@ -17,8 +17,6 @@
 using Neuroglia;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace Newtonsoft.Json
 {
@@ -55,8 +53,18 @@ namespace Newtonsoft.Json
                 return null;
             var jObject = JObject.Load(reader);
             var discriminatorProperty = TypeDiscriminator.GetDiscriminatorProperty<T>();
-            var discriminatorValue = jObject.Property(discriminatorProperty.Name, StringComparison.InvariantCultureIgnoreCase).Value.ToString();
-            var derivedType = TypeDiscriminator.Discriminate<T>(discriminatorValue);
+            var jProperty = jObject.Property(discriminatorProperty.Name, StringComparison.InvariantCultureIgnoreCase);
+            object discriminatorValue;
+            string discriminatorValueStr;
+            if (jProperty == null)
+                discriminatorValue = discriminatorProperty.PropertyType.GetDefaultValue();
+            else
+                discriminatorValue = jProperty.Value.ToObject(discriminatorProperty.PropertyType);
+            if (discriminatorValue is Enum enumValue)
+                discriminatorValueStr = EnumHelper.Stringify(enumValue, discriminatorProperty.PropertyType);
+            else
+                discriminatorValueStr = discriminatorValue.ToString();
+            var derivedType = TypeDiscriminator.Discriminate<T>(discriminatorValueStr);
             var result = Activator.CreateInstance(derivedType, true);
             serializer.Populate(jObject.CreateReader(), result);
             return result;
