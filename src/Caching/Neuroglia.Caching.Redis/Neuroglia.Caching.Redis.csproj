@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia caching redis</PackageTags>
-    <Version>2.0.1.76</Version>
-    <AssemblyVersion>2.0.1.76</AssemblyVersion>
-    <FileVersion>2.0.1.76</FileVersion>
+    <Version>2.0.1.77</Version>
+    <AssemblyVersion>2.0.1.77</AssemblyVersion>
+    <FileVersion>2.0.1.77</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
