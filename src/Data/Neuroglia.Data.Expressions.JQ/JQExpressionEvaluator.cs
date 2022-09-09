@@ -228,7 +228,7 @@ namespace Neuroglia.Data.Expressions.JQ
         /// <returns>The string with escaped single quotes</returns>
         protected virtual string EscapeSingleQuotes(string input)
         {
-            if (!input.Contains("'"))
+            if (!input.Contains("\'"))
                 input = input.Replace("'", "\'");
             return input;
         }
