@@ -118,5 +118,12 @@
             <param name="input">The string for which to escape double quotes</param>
             <returns>The string with escaped double quotes</returns>
         </member>
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.EscapeSingleQuotes(System.String)">
+            <summary>
+            Escapes single quotes in the specified string
+            </summary>
+            <param name="input">The string for which to escape single quotes</param>
+            <returns>The string with escaped single quotes</returns>
+        </member>
     </members>
 </doc>

@@ -52,6 +52,9 @@
         <member name="M:Newtonsoft.Json.Serialization.NonPublicSetterContractResolver.CreateProperty(System.Reflection.MemberInfo,Newtonsoft.Json.MemberSerialization)">
             <inheritdoc/>
         </member>
+        <member name="M:Newtonsoft.Json.Serialization.NonPublicSetterContractResolver.CreateProperties(System.Type,Newtonsoft.Json.MemberSerialization)">
+            <inheritdoc/>
+        </member>
         <member name="T:Neuroglia.Serialization.IServiceCollectionExtensions">
             <summary>
             Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s

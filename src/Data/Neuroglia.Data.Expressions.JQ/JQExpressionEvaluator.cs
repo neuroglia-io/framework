@@ -122,9 +122,9 @@ namespace Neuroglia.Data.Expressions.JQ
                 || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 if (serializedArgs != null)
-                    jsonArgs = string.Join(" ", serializedArgs.Select(a => @$"--argjson {a.Key} '{this.EscapeDoubleQuotes(a.Value)}'"));
+                    jsonArgs = string.Join(" ", serializedArgs.Select(a => @$"--argjson {a.Key} $'{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(a.Value))}'"));
                 fileName = "bash";
-                processArgs = @$"-c ""echo '{this.EscapeDoubleQuotes(inputJson)}' | jq '{jqExpression}' {jsonArgs}""";
+                processArgs = @$"-c ""echo $'{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(inputJson))}' | jq $'{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(jqExpression))}' {jsonArgs}""";
                 if (processArgs.Length > 200000)
                 {
                     var inputJsonFile = Path.GetTempFileName();
@@ -218,6 +218,18 @@ namespace Neuroglia.Data.Expressions.JQ
         {
             if (!input.Contains(@"\"""))
                 input = input.Replace("\"", @"\""");
+            return input;
+        }
+
+        /// <summary>
+        /// Escapes single quotes in the specified string
+        /// </summary>
+        /// <param name="input">The string for which to escape single quotes</param>
+        /// <returns>The string with escaped single quotes</returns>
+        protected virtual string EscapeSingleQuotes(string input)
+        {
+            if (!input.Contains("'"))
+                input = input.Replace("'", "\'");
             return input;
         }
 
