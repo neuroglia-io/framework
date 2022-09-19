@@ -4,6 +4,41 @@
         <name>Neuroglia.Data.Schemas</name>
     </assembly>
     <members>
+        <member name="T:Neuroglia.Data.ISchemaRegistryExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Neuroglia.Data.Services.ISchemaRegistry"/> instances
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.ISchemaRegistryExtensions.GetOpenApiSchemaAsync(Neuroglia.Data.Services.ISchemaRegistry,System.Uri,Neuroglia.Data.SchemaDocumentPullPolicy,System.Threading.CancellationToken)">
+            <summary>
+            Gets the <see cref="T:Microsoft.OpenApi.Models.OpenApiDocument"/> at the specified uri
+            </summary>
+            <param name="schemaRegistry">The extended <see cref="T:Neuroglia.Data.Services.ISchemaRegistry"/></param>
+            <param name="documentUri">The <see cref="T:System.Uri"/> referencing the schema document to get</param>
+            <param name="pullPolicy">The schema document pull policy</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>An <see cref="T:Neuroglia.Data.ISchemaDescriptor"/> that describes the <see cref="T:Microsoft.OpenApi.Models.OpenApiDocument"/> at the specified uri</returns>
+        </member>
+        <member name="M:Neuroglia.Data.ISchemaRegistryExtensions.GetProtoSchemaAsync(Neuroglia.Data.Services.ISchemaRegistry,System.Uri,Neuroglia.Data.SchemaDocumentPullPolicy,System.Threading.CancellationToken)">
+            <summary>
+            Gets the <see cref="T:Google.Protobuf.Reflection.FileDescriptorProto"/> at the specified uri
+            </summary>
+            <param name="schemaRegistry">The extended <see cref="T:Neuroglia.Data.Services.ISchemaRegistry"/></param>
+            <param name="documentUri">The <see cref="T:System.Uri"/> referencing the schema document to get</param>
+            <param name="pullPolicy">The schema document pull policy</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>An <see cref="T:Neuroglia.Data.ISchemaDescriptor"/> that describes the <see cref="T:Google.Protobuf.Reflection.FileDescriptorProto"/> at the specified uri</returns>
+        </member>
+        <member name="M:Neuroglia.Data.ISchemaRegistryExtensions.GetODataSchemaAsync(Neuroglia.Data.Services.ISchemaRegistry,System.Uri,Neuroglia.Data.SchemaDocumentPullPolicy,System.Threading.CancellationToken)">
+            <summary>
+            Gets the <see cref="T:Microsoft.Data.OData.ODataWorkspace"/> at the specified uri
+            </summary>
+            <param name="schemaRegistry">The extended <see cref="T:Neuroglia.Data.Services.ISchemaRegistry"/></param>
+            <param name="documentUri">The <see cref="T:System.Uri"/> referencing the schema document to get</param>
+            <param name="pullPolicy">The schema document pull policy</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>An <see cref="T:Neuroglia.Data.ISchemaDescriptor"/> that describes the <see cref="T:Microsoft.Data.OData.ODataWorkspace"/> at the specified uri</returns>
+        </member>
         <member name="T:Neuroglia.Data.IServiceCollectionExtensions">
             <summary>
             Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
@@ -169,7 +204,7 @@
             Represents the default implementation of the <see cref="T:Neuroglia.Data.Services.ISchemaRegistry"/> interface
             </summary>
         </member>
-        <member name="M:Neuroglia.Data.Services.SchemaRegistry.#ctor(Microsoft.Extensions.Logging.ILogger,System.Collections.Generic.IEnumerable{Neuroglia.Data.Services.ISchemaReader},System.Net.Http.HttpClient)">
+        <member name="M:Neuroglia.Data.Services.SchemaRegistry.#ctor(Microsoft.Extensions.Logging.ILogger{Neuroglia.Data.Services.SchemaRegistry},System.Collections.Generic.IEnumerable{Neuroglia.Data.Services.ISchemaReader},System.Net.Http.HttpClient)">
             <summary>
             Initializes a new <see cref="T:Neuroglia.Data.Services.SchemaRegistry"/>
             </summary>
@@ -200,6 +235,12 @@
         </member>
         <member name="M:Neuroglia.Data.Services.SchemaRegistry.GetSchemaByDocumentUriAsync(System.Uri,System.Threading.CancellationToken)">
             <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Services.SchemaRegistry.Create">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.Services.SchemaRegistry"/>
+            </summary>
+            <returns>A new <see cref="T:Neuroglia.Data.Services.SchemaRegistry"/></returns>
         </member>
         <member name="T:Neuroglia.Data.SchemaDescriptor">
             <summary>

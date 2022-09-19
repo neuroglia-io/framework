@@ -43,6 +43,9 @@ namespace Neuroglia.Data
             services.AddSingleton<ProtoSchemaReader>();
             services.AddSingleton<ISchemaReader>(provider => provider.GetRequiredService<ProtoSchemaReader>());
 
+            services.AddSingleton<ODataSchemaReader>();
+            services.AddSingleton<ISchemaReader>(provider => provider.GetRequiredService<ODataSchemaReader>());
+
             return services;
         }
 

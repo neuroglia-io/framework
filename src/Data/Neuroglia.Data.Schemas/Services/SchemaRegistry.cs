@@ -17,6 +17,7 @@
 
 
 
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
 
 namespace Neuroglia.Data.Services
@@ -34,7 +35,7 @@ namespace Neuroglia.Data.Services
         /// <param name="logger">The service used to perform logging</param>
         /// <param name="documentReaders">An <see cref="IEnumerable{T}"/> containing all registered <see cref="ISchemaReader"/>s</param>
         /// <param name="httpClient">The service used to perform <see cref="HttpRequestMessage"/>s</param>
-        public SchemaRegistry(ILogger logger, IEnumerable<ISchemaReader> documentReaders, HttpClient httpClient)
+        public SchemaRegistry(ILogger<SchemaRegistry> logger, IEnumerable<ISchemaReader> documentReaders, HttpClient httpClient)
         {
             this.Logger = logger;
             this.DocumentReaders = documentReaders
@@ -91,6 +92,19 @@ namespace Neuroglia.Data.Services
         public virtual async Task<ISchemaDescriptor?> GetSchemaByDocumentUriAsync(Uri documentUri, CancellationToken cancellationToken = default)
         {
             return await Task.FromResult(this.Schemas.Values.ToList().FirstOrDefault(s => s.DocumentUri == documentUri));
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="SchemaRegistry"/>
+        /// </summary>
+        /// <returns>A new <see cref="SchemaRegistry"/></returns>
+        public static SchemaRegistry Create()
+        {
+            var services = new ServiceCollection();
+            services.AddLogging();
+            services.AddHttpClient();
+            services.AddSchemaRegistry();
+            return services.BuildServiceProvider().GetRequiredService<SchemaRegistry>();
         }
 
     }

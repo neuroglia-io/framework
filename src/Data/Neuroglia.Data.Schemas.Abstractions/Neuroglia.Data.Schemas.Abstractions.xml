@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Data.Schemas.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Data.ISchemaDescriptor">
+            <summary>
+            Defines the fundamentals of an object used to describe a schema
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.ISchemaDescriptor.Type">
+            <summary>
+            Gets the type of the described schema
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.ISchemaDescriptor.Id">
+            <summary>
+            Gets the id of the described schema
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.ISchemaDescriptor.Version">
+            <summary>
+            Gets the version of the described schema
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.ISchemaDescriptor.DocumentUri">
+            <summary>
+            Gets the <see cref="T:System.Uri"/> of the described schema's document
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.ISchemaDescriptor.Document">
+            <summary>
+            Gets the described schema's document
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.ISchemaDescriptor`1">
+            <summary>
+            Defines the fundamentals of an object used to describe a schema
+            </summary>
+            <typeparam name="TSchema">The type of the schema to describe</typeparam>
+        </member>
+        <member name="P:Neuroglia.Data.ISchemaDescriptor`1.Document">
+            <summary>
+            Gets the described schema's document
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaDocumentPullPolicy">
+            <summary>
+            Enumerates all supported schema document pull policies
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaDocumentPullPolicy.IfNotPresent">
+            <summary>
+            Indicates that the schema document should only be pulled if not present
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaDocumentPullPolicy.Always">
+            <summary>
+            Indicates that the schema document should always be pulled
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.SchemaType">
+            <summary>
+            Enumerates all supported schema types
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaType.Json">
+            <summary>
+            Indicates a JSON schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaType.JsonForm">
+            <summary>
+            Indicates a JSON Form schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaType.Proto">
+            <summary>
+            Indicates a Google Protobuf schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaType.OpenApi">
+            <summary>
+            Indicates an OpenAPI schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaType.AsyncApi">
+            <summary>
+            Indicates an AsyncAPI schela
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaType.OData">
+            <summary>
+            Indicates an ODATA schema
+            </summary>
+        </member>
+        <member name="F:Neuroglia.Data.SchemaType.GraphQL">
+            <summary>
+            Indicates a GraphQL schema
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.Services.ISchemaRegistry">
+            <summary>
+            Defines the fundamentals of a service used to manage schemas
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Services.ISchemaRegistry.GetSchemaAsync(Neuroglia.Data.SchemaType,System.Uri,Neuroglia.Data.SchemaDocumentPullPolicy,System.Threading.CancellationToken)">
+            <summary>
+            Gets the schema at the specified <see cref="T:System.Uri"/>
+            </summary>
+            <param name="schemaType">The type of schema to get</param>
+            <param name="documentUri">The <see cref="T:System.Uri"/> referencing the document of the schema to get</param>
+            <param name="pullPolicy">The schema document pull policy</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A <see cref="T:Neuroglia.Data.ISchemaDescriptor"/> that descrubes the schema at the specified uri</returns>
+        </member>
+        <member name="M:Neuroglia.Data.Services.ISchemaRegistry.GetSchemaByIdAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the schema with the specified id
+            </summary>
+            <param name="id">The id of the schema to get</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>An <see cref="T:Neuroglia.Data.ISchemaDescriptor"/> that describes the schema with the specified id</returns>
+        </member>
+        <member name="M:Neuroglia.Data.Services.ISchemaRegistry.GetSchemaByDocumentUriAsync(System.Uri,System.Threading.CancellationToken)">
+            <summary>
+            Gets the schema with the specified id
+            </summary>
+            <param name="id">The id of the schema to get</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>An <see cref="T:Neuroglia.Data.ISchemaDescriptor"/> that describes the schema with the specified resource <see cref="T:System.Uri"/></returns>
+        </member>
+    </members>
+</doc>
