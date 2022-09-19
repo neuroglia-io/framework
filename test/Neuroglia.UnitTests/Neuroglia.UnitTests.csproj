@@ -40,6 +40,7 @@
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.MongoDB\Neuroglia.Data.MongoDB.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.OData\Neuroglia.Data.OData.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data.SchemaRegistry.ApiCurio\Neuroglia.Data.SchemaRegistry.ApiCurio.csproj" />
+    <ProjectReference Include="..\..\src\Data\Neuroglia.Data.Schemas\Neuroglia.Data.Schemas.csproj" />
     <ProjectReference Include="..\..\src\Data\Neuroglia.Data\Neuroglia.Data.csproj" />
     <ProjectReference Include="..\..\src\Eventing\Neuroglia.Eventing.CloudEvents\Neuroglia.Eventing.CloudEvents.csproj" />
     <ProjectReference Include="..\..\src\Mapping\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
