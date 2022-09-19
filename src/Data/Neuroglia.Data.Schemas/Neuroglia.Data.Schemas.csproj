@@ -11,7 +11,7 @@
 	<Authors>Neuroglia SPRL</Authors>
 	<RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
-	<PackageTags>neuroglia framework data odata</PackageTags>
+	<PackageTags>neuroglia framework data schemas</PackageTags>
 	<Version>2.0.1.83</Version>
 	<AssemblyVersion>2.0.1.83</AssemblyVersion>
 	<FileVersion>2.0.1.83</FileVersion>
