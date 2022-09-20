@@ -199,6 +199,23 @@ namespace Neuroglia.Serialization
         }
 
         /// <summary>
+        /// Inserts a new property at the specified index
+        /// </summary>
+        /// <param name="index">The index at which to insert the property</param>
+        /// <param name="name">The name of the property to insert</param>
+        /// <param name="value">The value of the property to insert</param>
+        public virtual void Insert(int index, string name, object? value)
+        {
+            if (index < 0 || index >= this.DynamicProperties.Count)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            var property = this.Properties.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (property != null)
+                throw new Exception($"A property with the name '{name}' already exists");
+            this.Properties.Insert(index, new(index, name, value));
+            this.ReorderProperties();
+        }
+
+        /// <summary>
         /// Removes the specified property
         /// </summary>
         /// <param name="name">The name of the property to remove</param>
@@ -212,15 +229,35 @@ namespace Neuroglia.Serialization
                 return false;
             var removed = this.Properties.Remove(property);
             if (removed)
-            {
-                var index = 1;
-                foreach (var prop in this.Properties)
-                {
-                    prop.Order = index;
-                    index++;
-                }
-            }
+                this.ReorderProperties();
             return removed;
+        }
+
+        /// <summary>
+        /// Removes the specified property
+        /// </summary>
+        /// <param name="index">The index of the property to remove</param>
+        /// <returns>A boolean indicating whether or not the property could be removed</returns>
+        public virtual bool RemoveAt(int index)
+        {
+            if (index < 0 || index >= this.DynamicProperties.Count)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            this.Properties.RemoveAt(index);
+            this.ReorderProperties();
+            return true;
+        }
+
+        /// <summary>
+        /// Reorders the <see cref="DynamicObject"/>'s properties
+        /// </summary>
+        protected virtual void ReorderProperties()
+        {
+            var order = 1;
+            foreach (var property in this.Properties)
+            {
+                property.Order = order;
+                order++;
+            }
         }
 
         /// <inheritdoc/>
