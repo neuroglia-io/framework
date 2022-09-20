@@ -198,6 +198,31 @@ namespace Neuroglia.Serialization
                 property.SetValue(value);
         }
 
+        /// <summary>
+        /// Removes the specified property
+        /// </summary>
+        /// <param name="name">The name of the property to remove</param>
+        /// <returns>A boolean indicating whether or not the property could be removed</returns>
+        public virtual bool Remove(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+            var property = this.Properties.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (property == null)
+                return false;
+            var removed = this.Properties.Remove(property);
+            if (removed)
+            {
+                var index = 1;
+                foreach (var prop in this.Properties)
+                {
+                    prop.Order = index;
+                    index++;
+                }
+            }
+            return removed;
+        }
+
         /// <inheritdoc/>
         public override object? ToObject()
         {

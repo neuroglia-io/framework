@@ -53,7 +53,7 @@ namespace Neuroglia.Serialization
         /// </summary>
         [DataMember(Order = 1)]
         [ProtoMember(1)]
-        public virtual int Order { get; protected set; }
+        public virtual int Order { get; internal protected set; }
 
         /// <summary>
         /// Gets the <see cref="ProtoField"/>'s name

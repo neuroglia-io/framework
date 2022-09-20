@@ -6,6 +6,7 @@ using ProtoBuf.Meta;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
@@ -162,6 +163,40 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             //act
             var dynArray = DynamicArray.FromObject(dictionary);
             var converted = dynArray.ToObject<Dictionary<string, int>>();
+        }
+
+        [Fact]
+        public void AddAndRemoveProperties_ToFromDynamicObject_ShouldWork()
+        {
+            //arrange
+            var properties = new Dictionary<string, object>()
+            {
+                { "foo", "bar" },
+                { "bar", "baz" },
+                { "baz", "foo" }
+            };
+
+            //act
+            var fullObject = JsonConvert.DeserializeObject<DynamicObject>(JsonConvert.SerializeObject(new DynamicObject()));
+            foreach(var property in properties)
+            {
+                fullObject.Set(property.Key, property.Value);
+            } 
+
+            var trimmedOf1Object = JsonConvert.DeserializeObject<DynamicObject>(JsonConvert.SerializeObject(fullObject));
+            trimmedOf1Object.Remove(properties.Keys.ElementAt(0));
+
+            var trimmedOf2Object = JsonConvert.DeserializeObject<DynamicObject>(JsonConvert.SerializeObject(trimmedOf1Object));
+            trimmedOf2Object.Remove(properties.Keys.ElementAt(1));
+
+            var emptiedObject = JsonConvert.DeserializeObject<DynamicObject>(JsonConvert.SerializeObject(trimmedOf2Object));
+            emptiedObject.Remove(properties.Keys.ElementAt(2));
+
+            //assert
+            fullObject.DynamicProperties.Should().HaveCount(properties.Count);
+            trimmedOf1Object.DynamicProperties.Should().HaveCount(2);
+            trimmedOf2Object.DynamicProperties.Should().HaveCount(1);
+            emptiedObject.DynamicProperties.Should().BeEmpty();
         }
 
         public static IEnumerable<object[]> JsonTheoryData
