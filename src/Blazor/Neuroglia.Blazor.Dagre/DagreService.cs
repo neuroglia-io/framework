@@ -31,6 +31,12 @@ namespace Neuroglia.Blazor.Dagre
         /// <returns>The updated <see cref="IGraphViewModel"/></returns>
         public virtual async Task<IGraphViewModel> ComputePositionsAsync(IGraphViewModel graphViewModel, IDagreGraphOptions? options = null)
         {
+            ProfilingTimer? profilingTimer = null;
+            if (graphViewModel.EnableProfiling)
+            {
+                profilingTimer = new("ComputePositionsAsync");
+                profilingTimer.Start();
+            }
             // build the dagre/graphlib graph
             var graph = await this.GraphAsync(options);
             var nodes = graphViewModel.AllNodes.Values.Concat(
@@ -78,6 +84,11 @@ namespace Neuroglia.Blazor.Dagre
                 }
             }
             graphViewModel.DagreGraph = graph;
+            if (profilingTimer != null)
+            {
+                profilingTimer.Stop();
+                profilingTimer.Dispose();
+            }
             return graphViewModel;
         }
 

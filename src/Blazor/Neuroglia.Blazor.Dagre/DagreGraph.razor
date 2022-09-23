@@ -3,34 +3,13 @@
 @inject IJSRuntime JSRuntime
 @implements IDisposable
 
-@if (Graph != null) {
-    <svg id="svg-definitions"
-         version="1.2"
-         baseProfile="tiny"
-         xmlns="http://www.w3.org/2000/svg"
-         xmlns:xlink="http://www.w3.org/1999/xlink">
-        <defs>
-            <svg id="center-target" viewBox="0 0 29.334 29.334">
-                <!-- from https://www.svgrepo.com/svg/174124/circle-outline-with-huge-dot-at-the-center -->
-                <path d="M14.666,0C6.578,0,0,6.58,0,14.667s6.578,14.667,14.666,14.667s14.668-6.58,14.668-14.667S22.754,0,14.666,0z
-                    M14.666,25.334C8.784,25.334,4,20.549,4,14.667S8.784,4,14.666,4c5.883,0,10.668,4.785,10.668,10.667S20.547,25.334,14.666,25.334
-                    z M19.332,14.667c0,2.577-2.089,4.667-4.666,4.667c-2.576,0-4.666-2.089-4.666-4.667C10,12.09,12.09,10,14.666,10
-                    C17.243,10,19.332,12.09,19.332,14.667z"/>
-            </svg>
-            <svg id="fit"  viewBox="4 4 24 24">
-                <!-- from https://github.com/carbon-design-system/carbon -->
-                <polygon points="22 16 24 16 24 8 16 8 16 10 22 10 22 16"/>
-                <polygon points="8 24 16 24 16 22 10 22 10 16 8 16 8 24"/>
-            </svg>
-        </defs>
-    </svg>
-
+@if (graph != null) {
     <div class="graph-container">
-        <CascadingValue Value="Graph">
+        <CascadingValue Value="graph">
             <svg @ref="graphReference"
-                class="graph-canvas @Graph.CssClass"
-                width="@(Graph.Width?.ToString() ?? "100%")" 
-                height="@(Graph.Height?.ToString() ?? "100%")"
+                class="graph-canvas @graph.CssClass"
+                width="@(graph.Width?.ToString() ?? "100%")" 
+                height="@(graph.Height?.ToString() ?? "100%")"
                 @onmouseenter="HandleOnMouseEnter"
                 @onmouseleave="HandleOnMouseLeave"
                 @onmousedown="HandleOnMouseDown"
@@ -39,39 +18,39 @@
                 @onwheel="HandleOnWheel"
             >
                 <defs>
-                    @foreach(var def in Graph.SvgDefinitionComponents)
+                    @foreach(var def in graph.SvgDefinitionComponents)
                     {
                         <DynamicComponent @key="def" Type="def" />
                     }
                 </defs>
                 <g 
                     class="graph"
-                    transform="scale(@(Graph.Scale.ToInvariantString())) translate(@Graph.X.ToInvariantString(), @Graph.Y.ToInvariantString())"
+                    transform="scale(@(graph.Scale.ToInvariantString())) translate(@graph.X.ToInvariantString(), @graph.Y.ToInvariantString())"
                 >
                     <g class="clusters">
-                        @foreach(var cluster in Graph.AllClusters.Values)
+                        @foreach(var cluster in graph.AllClusters.Values)
                         {
                             @if (cluster != null)
                             {
-                                <InteractiveDynamicComponent @key="cluster" Type="Graph.GetComponentTypeAsync(cluster)" Parameters="GetComponentParameter(cluster)" />
+                                <InteractiveDynamicComponent @key="cluster" Type="graph.GetComponentTypeAsync(cluster)" Parameters="GetComponentParameter(cluster)" />
                             }
                         }
                     </g>
                     <g class="edges">
-                        @foreach(var edge in Graph.Edges.Values)
+                        @foreach(var edge in graph.Edges.Values)
                         {
                             @if (edge != null)
                             {
-                                <DynamicComponent @key="edge" Type="Graph.GetComponentTypeAsync(edge)" Parameters="GetComponentParameter(edge)" />
+                                <DynamicComponent @key="edge" Type="graph.GetComponentTypeAsync(edge)" Parameters="GetComponentParameter(edge)" />
                             }
                         }
                     </g>
                     <g class="nodes">
-                        @foreach(var node in Graph.AllNodes.Values)
+                        @foreach(var node in graph.AllNodes.Values)
                         {
                             @if (node != null)
                             {
-                                <InteractiveDynamicComponent @key="node" Type="Graph.GetComponentTypeAsync(node)" Parameters="GetComponentParameter(node)" />
+                                <InteractiveDynamicComponent @key="node" Type="graph.GetComponentTypeAsync(node)" Parameters="GetComponentParameter(node)" />
                             }
                         }
                     </g>
@@ -79,15 +58,11 @@
             </svg>
         </CascadingValue>
         <div class="graph-controls">
-            <button class="btn" type="button" @onclick="Center" title="center graph">
-                <svg class="icon-target">
-                    <use xlink:href="#center-target" />
-                </svg>
+            <button class="btn btn-outline-dark" type="button" @onclick="Center" title="center graph">
+                <span class="oi oi-target"></span>
             </button>
-            <button class="btn" type="button" @onclick="ZoomToFit" title="zoom to fit">
-                <svg class="icon-target">
-                    <use xlink:href="#fit" />
-                </svg>
+            <button class="btn btn-outline-dark" type="button" @onclick="ZoomToFit" title="zoom to fit">
+                <span class="oi oi-resize-both"></span>
             </button>
         </div>
     </div>
@@ -96,6 +71,7 @@
 @code {
     [Parameter] public IDagreGraphOptions? Options { get; set; }
 
+    private IGraphViewModel? graph { get; set; }
     [Parameter] public IGraphViewModel? Graph { get; set; }
 
     [Parameter] public EventCallback<GraphEventArgs<MouseEventArgs>> OnMouseEnter { get; set; }
@@ -111,24 +87,67 @@
     [Parameter] public EventCallback<GraphEventArgs<WheelEventArgs>> OnWheel { get; set; }
 
     protected ElementReference graphReference;
+    protected bool isDirty = false;
+    protected ProfilingTimer? profilingTimer;
+    protected bool enableProfiling
+    {
+        get => this.graph?.EnableProfiling ?? false;
+        set
+        {
+            if (this.graph != null && this.graph.EnableProfiling != value) {
+                this.graph.EnableProfiling = value;
+            }
+            if (value) this.CreateProfilingTimer();
+        }
+    }
+
+    protected void CreateProfilingTimer()
+    {
+        if (this.profilingTimer == null)
+            this.profilingTimer = new ProfilingTimer("DagreGraph", 3);
+    }
 
     protected override async Task OnParametersSetAsync()
     {
-        await base.OnParametersSetAsync();
-        if (this.Graph != null)
+        if (this.Graph != null && this.graph != this.Graph)
         {
+            this.graph = this.Graph;
+            if (this.enableProfiling) this.CreateProfilingTimer();
             this.RemoveHandlers();
-            this.Graph.MouseEnter += this.InvokeMouseEnter;
-            this.Graph.MouseLeave += this.InvokeMouseLeave;
-            this.Graph.MouseDown += this.InvokeMouseDown;
-            this.Graph.MouseUp += this.InvokeMouseUp;
-            this.Graph.MouseMove += this.InvokeMouseMove;
-            this.Graph.Wheel += this.InvokeWheel;
+            this.graph.Changed += this.TriggerRender;
+            this.graph.MouseEnter += this.InvokeMouseEnter;
+            this.graph.MouseLeave += this.InvokeMouseLeave;
+            this.graph.MouseDown += this.InvokeMouseDown;
+            this.graph.MouseUp += this.InvokeMouseUp;
+            this.graph.MouseMove += this.InvokeMouseMove;
+            this.graph.Wheel += this.InvokeWheel;
             //this.Graph.ShowConstruction = true;
             await this.RefreshAsync();
+            this.isDirty = true;
             //Console.WriteLine(await this.DagreService.SerializeAsync(this.Graph.DagreGraph!));
             //Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(this.Graph));
         }
+        this.profilingTimer?.Start();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        this.profilingTimer?.Stop();
+    }
+
+    protected override bool ShouldRender()
+    {
+        if (!this.isDirty) return false;
+        this.isDirty = false;
+        return true;
+        
+    }
+
+    protected void TriggerRender()
+    {
+        this.profilingTimer?.Start();
+        this.isDirty = true;
+        this.StateHasChanged();
     }
 
     protected async Task InvokeMouseEnter(GraphEventArgs<MouseEventArgs> e)
@@ -163,23 +182,24 @@
 
     protected virtual void RemoveHandlers()
     {
-        if (this.Graph != null)
+        if (this.graph != null)
         {
-            this.Graph.MouseEnter -= this.InvokeMouseEnter;
-            this.Graph.MouseLeave -= this.InvokeMouseLeave;
-            this.Graph.MouseDown -= this.InvokeMouseDown;
-            this.Graph.MouseUp -= this.InvokeMouseUp;
-            this.Graph.MouseMove -= this.InvokeMouseMove;
-            this.Graph.Wheel -= this.InvokeWheel;
+            this.graph.Changed -= this.TriggerRender;
+            this.graph.MouseEnter -= this.InvokeMouseEnter;
+            this.graph.MouseLeave -= this.InvokeMouseLeave;
+            this.graph.MouseDown -= this.InvokeMouseDown;
+            this.graph.MouseUp -= this.InvokeMouseUp;
+            this.graph.MouseMove -= this.InvokeMouseMove;
+            this.graph.Wheel -= this.InvokeWheel;
         }
     }
 
     public virtual async Task RefreshAsync()
     {
-        if (this.Graph != null)
+        if (this.graph != null)
         {
-            await this.DagreService.ComputePositionsAsync(this.Graph, this.Options);
-            this.StateHasChanged();
+            await this.DagreService.ComputePositionsAsync(this.graph, this.Options);
+            this.TriggerRender();
             await this.ZoomToFit();
         }
     }
@@ -192,19 +212,20 @@
 
     protected virtual async Task Center()
     {
-        if (this.Graph == null) 
+        if (this.graph == null) 
             return;
         var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graphReference);
-        this.Graph.X = position.X / (double)this.Graph.Scale;
-        this.Graph.Y = position.Y / (double)this.Graph.Scale;
+        this.graph.X = position.X / (double)this.graph.Scale;
+        this.graph.Y = position.Y / (double)this.graph.Scale;
+        this.isDirty = true;
     }
 
     protected virtual async Task ZoomToFit()
     {
-        if (this.Graph == null) 
+        if (this.graph == null) 
             return;
-        this.Graph.Scale = Math.Clamp(await this.JSRuntime.InvokeAsync<decimal>("neuroglia.blazor.getScale", this.graphReference), Constants.MinScale, Constants.MaxScale);
-        this.StateHasChanged();
+        this.graph.Scale = Math.Clamp(await this.JSRuntime.InvokeAsync<decimal>("neuroglia.blazor.getScale", this.graphReference), Constants.MinScale, Constants.MaxScale);
+        this.TriggerRender();
         await this.Center();
     }
 
@@ -219,38 +240,38 @@
 
     protected virtual async Task HandleOnMouseEnter(MouseEventArgs e)
     {
-        if (this.Graph != null)
-            await this.Graph.OnMouseEnterAsync(this.graphReference, e, null);
+        if (this.graph != null)
+            await this.graph.OnMouseEnterAsync(this.graphReference, e, null);
     }
 
     protected virtual async Task HandleOnMouseLeave(MouseEventArgs e)
     {
-        if (this.Graph != null)
-            await this.Graph.OnMouseLeaveAsync(this.graphReference, e, null);
+        if (this.graph != null)
+            await this.graph.OnMouseLeaveAsync(this.graphReference, e, null);
     }
 
     protected virtual async Task HandleOnMouseDown(MouseEventArgs e)
     {
-        if (this.Graph != null)
-            await this.Graph.OnMouseDownAsync(this.graphReference, e, null);
+        if (this.graph != null)
+            await this.graph.OnMouseDownAsync(this.graphReference, e, null);
     }
 
     protected virtual async Task HandleOnMouseMove(MouseEventArgs e)
     {
-        if (this.Graph != null)
-            await this.Graph.OnMouseMoveAsync(this.graphReference, e, null);
+        if (this.graph != null)
+            await this.graph.OnMouseMoveAsync(this.graphReference, e, null);
     }
 
     protected virtual async Task HandleOnMouseUp(MouseEventArgs e)
     {
-        if (this.Graph != null)
-            await this.Graph.OnMouseUpAsync(this.graphReference, e, null);
+        if (this.graph != null)
+            await this.graph.OnMouseUpAsync(this.graphReference, e, null);
     }
 
     protected virtual async Task HandleOnWheel(WheelEventArgs e)
     {
-        if (this.Graph != null)
-            await this.Graph.OnWheelAsync(this.graphReference, e, null);
+        if (this.graph != null)
+            await this.graph.OnWheelAsync(this.graphReference, e, null);
     }
 
     private bool disposed;
@@ -259,6 +280,10 @@
         if (!this.disposed)
         {
             this.RemoveHandlers();
+            if (this.enableProfiling && this.profilingTimer != null)
+            {
+                this.profilingTimer.Dispose();
+            }
             this.disposed = true;
         }
     }

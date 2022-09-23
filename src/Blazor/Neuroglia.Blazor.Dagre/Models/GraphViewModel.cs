@@ -13,22 +13,68 @@ namespace Neuroglia.Blazor.Dagre.Models
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public virtual IGraphLib? DagreGraph { get; set; }
 
+        protected double? _x { get; set; }
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public virtual double? X { get; set; }
+        public virtual double? X
+        {
+            get => this._x;
+            set
+            {
+                this._x = value;
+                this.OnChange();
+            }
+        }
 
+        protected double? _y { get; set; }
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public virtual double? Y { get; set; }
+        public virtual double? Y
+        {
+            get => this._y;
+            set
+            {
+                this._y = value;
+                this.OnChange();
+            }
+        }
 
+        protected double? _width { get; set; }
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public virtual double? Width { get; set; }
+        public virtual double? Width
+        {
+            get => this._width;
+            set
+            {
+                this._width = value;
+                this.OnChange();
+            }
+        }
 
+        protected double? _height { get; set; }
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public virtual double? Height { get; set; }
-        public virtual decimal Scale { get; set; }
+        public virtual double? Height
+        {
+            get => this._height;
+            set
+            {
+                this._height = value;
+                this.OnChange();
+            }
+        }
+
+        protected decimal _scale { get; set; }
+        public virtual decimal Scale
+        {
+            get => this._scale;
+            set
+            {
+                this._scale = value;
+                this.OnChange();
+            }
+        }
 
         /// <summary>
         /// The first level graph nodes (direct children)
@@ -63,7 +109,7 @@ namespace Neuroglia.Blazor.Dagre.Models
         protected readonly Collection<Type> _svgDefinitionComponents;
         public virtual IReadOnlyCollection<Type> SvgDefinitionComponents => this._svgDefinitionComponents;
 
-        public virtual bool ShowConstruction { get; set; }
+        public virtual bool EnableProfiling { get; set; }
 
         /// <summary>
         /// The map of node type and their component type
@@ -98,7 +144,7 @@ namespace Neuroglia.Blazor.Dagre.Models
             double? height = null,
             string? label = null,
             Type? componentType = null,
-            bool showConstruction = false
+            bool enableProfiling = false
         )
             : base(label, cssClass, componentType)
         {
@@ -117,7 +163,7 @@ namespace Neuroglia.Blazor.Dagre.Models
             this._allNodes = new Dictionary<Guid, INodeViewModel>();
             this._allClusters = new Dictionary<Guid, IClusterViewModel>();
             this._behaviors = new Dictionary<Type, GraphBehavior>();
-            this.ShowConstruction = showConstruction;
+            this.EnableProfiling = enableProfiling;
             // this.RegisterBehavior(new DebugEventsBehavior(this));
             this.RegisterBehavior(new ZoomBahavior(this));
             this.RegisterBehavior(new PanBahavior(this));
@@ -189,6 +235,7 @@ namespace Neuroglia.Blazor.Dagre.Models
             {
                 await this.AddElementAsync(element);
             }
+            this.OnChange();
         }
 
         /// <summary>
@@ -207,6 +254,7 @@ namespace Neuroglia.Blazor.Dagre.Models
             this._allClusters.Add(cluster.Id, cluster);
             cluster.ChildAdded += this.OnChildAdded;
             this.Flatten(cluster);
+            this.OnChange();
             await Task.CompletedTask;
         }
 
@@ -229,6 +277,7 @@ namespace Neuroglia.Blazor.Dagre.Models
             }
             this._nodes.Add(node.Id, node);
             this._allNodes.Add(node.Id, node);
+            this.OnChange();
             await Task.CompletedTask;
         }
 
@@ -245,6 +294,7 @@ namespace Neuroglia.Blazor.Dagre.Models
                 throw new ArgumentNullException(nameof(edge));
             }
             this._edges.Add(edge.Id, edge);
+            this.OnChange();
             await Task.CompletedTask;
         }
 
@@ -407,6 +457,7 @@ namespace Neuroglia.Blazor.Dagre.Models
             {
                 this._allNodes.Add(node.Id, node);
             }
+            this.OnChange();
         }
     }
 }

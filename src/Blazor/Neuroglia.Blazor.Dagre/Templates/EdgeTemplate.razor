@@ -16,7 +16,7 @@
             </foreignObject>
         </g>
     }
-    @if (Graph.ShowConstruction) {
+    @if (Graph.EnableProfiling) {
         @foreach(var point in Edge.Points)
         {
             <circle cx="@point.X" cy="@point.Y" r="1" fill="red" />

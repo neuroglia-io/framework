@@ -55,7 +55,7 @@ namespace Neuroglia.Blazor.Dagre.Models
             }
         }
 
-        public override void Move (double deltaX, double deltaY)
+        public override void Move(double deltaX, double deltaY)
         {
             if (deltaX == 0 && deltaY == 0)
                 return;
@@ -89,6 +89,7 @@ namespace Neuroglia.Blazor.Dagre.Models
                 return;
             }
             this._allNodes.Add(node.Id, node);
+            this.OnChange();
             await Task.CompletedTask;
         }
 
