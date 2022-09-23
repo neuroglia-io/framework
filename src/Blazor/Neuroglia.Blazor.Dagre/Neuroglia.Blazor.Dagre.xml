@@ -1061,5 +1061,38 @@
             The metadata payload
             </summary>
         </member>
+        <member name="T:Neuroglia.Blazor.Dagre.ProfilingTimer">
+            <summary>
+            A timer used to perform basic profiling
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Blazor.Dagre.ProfilingTimer.#ctor(System.String,System.Int32)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Blazor.Dagre.ProfilingTimer"/>
+            </summary>
+            <param name="label">The timer label</param>
+            <param name="stackDepth">The stack trace depth to display</param>
+        </member>
+        <member name="M:Neuroglia.Blazor.Dagre.ProfilingTimer.Start">
+            <summary>
+            Starts the timer
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Blazor.Dagre.ProfilingTimer.Stop">
+            <summary>
+            Stops the timer
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Blazor.Dagre.ProfilingTimer.Dispose(System.Boolean)">
+            <summary>
+            Disposes the resources
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Neuroglia.Blazor.Dagre.ProfilingTimer.Dispose">
+            <summary>
+            Implements <see cref="T:System.IDisposable"/>
+            </summary>
+        </member>
     </members>
 </doc>

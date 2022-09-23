@@ -31,6 +31,8 @@
         [Newtonsoft.Json.JsonExtensionData]
         public virtual IDictionary<string, object>? Metadata { get; set; }
 
+        public virtual event Action? Changed;
+
         protected GraphElement() 
         { }
 
@@ -38,6 +40,11 @@
             this.Label = label;
             this.CssClass = cssClass;
             this.ComponentType = componentType;
+        }
+
+        protected virtual void OnChange()
+        {
+            this.Changed?.Invoke();
         }
 
     }

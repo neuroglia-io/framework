@@ -5,5 +5,6 @@ namespace Neuroglia.Blazor.Dagre.Models
         : IIdentifiable, ILabeled, ICssClass, IMetadata
     {
         Type? ComponentType { get; set; }
+        event Action? Changed;
     }
 }

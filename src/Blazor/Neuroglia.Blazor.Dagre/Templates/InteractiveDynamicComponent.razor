@@ -1,4 +1,6 @@
-﻿<g
+﻿@implements IDisposable
+
+<g
     @ref="elementReference"
     @onmouseenter="HandleOnMouseEnter"
     @onmouseleave="HandleOnMouseLeave"
@@ -8,18 +10,74 @@
     @onmouseup="HandleOnMouseUp"
     @onmouseup:stopPropagation
 >
-    <CascadingValue Value="Graph">
-        <DynamicComponent Type="Type" Parameters="Parameters" />
+    <CascadingValue Value="graph">
+        <DynamicComponent Type="type" Parameters="parameters" />
     </CascadingValue>
 </g>
 @code {
+    private IGraphViewModel? graph;
     [CascadingParameter] public virtual IGraphViewModel Graph { get; set; } = null!;
 
+    private Type type;
     [Parameter] public virtual Type Type { get; set; } = null!;
 
+    private IDictionary<string, object>? parameters;
     [Parameter] public virtual IDictionary<string, object> Parameters { get; set; } = null!;
 
     protected ElementReference elementReference;
+    protected bool isDirty = false;
+    protected ProfilingTimer? profilingTimer;
+    protected bool enableProfiling
+    {
+        get => this.Graph?.EnableProfiling ?? false;
+        set
+        {
+            if (this.Graph != null && this.Graph.EnableProfiling != value) {
+                this.Graph.EnableProfiling = value;
+            }
+            if (value) this.CreateProfilingTimer();
+        }
+    }
+
+    protected void CreateProfilingTimer()
+    {
+        if (this.profilingTimer == null)
+            this.profilingTimer = new ProfilingTimer("InteractiveDynamicComponent " + this.Type.ToString(), 3);
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (this.graph != this.Graph)
+        {
+            this.graph = this.Graph;
+            this.isDirty = true;
+        }
+        if (this.parameters != this.Parameters)
+        {
+            this.parameters = this.Parameters;
+            this.isDirty = true;
+        }
+        if (this.type != this.Type)
+        {
+            this.type = this.Type;
+            this.isDirty = true;
+        }
+        if (this.enableProfiling) this.CreateProfilingTimer();
+        this.profilingTimer?.Start();
+    }
+
+    protected override bool ShouldRender()
+    {
+        if (!this.isDirty) return false;
+        this.isDirty = false;
+        return true;
+
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        this.profilingTimer?.Stop();
+    }
 
     protected virtual IGraphElement Element => (IGraphElement)this.Parameters["Element"];
 
@@ -32,4 +90,23 @@
     protected virtual async Task HandleOnMouseMove(MouseEventArgs e) => await this.Graph.OnMouseMoveAsync(this.elementReference, e, this.Element);
 
     protected virtual async Task HandleOnMouseUp(MouseEventArgs e) => await this.Graph.OnMouseUpAsync(this.elementReference, e, this.Element);
+    
+    private bool disposed;
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this.disposed)
+        {
+            if (this.enableProfiling && this.profilingTimer != null)
+            {
+                this.profilingTimer.Dispose();
+            }
+            this.disposed = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        this.Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
 }

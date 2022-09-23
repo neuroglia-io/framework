@@ -10,7 +10,7 @@ namespace Neuroglia.Blazor.Dagre.Models
         : IIdentifiable, ILabeled, IDimension, IPosition, ICssClass, IMetadata
     {
         decimal Scale { get; set; }
-        bool ShowConstruction { get; set; }
+        bool EnableProfiling { get; set; }
         IReadOnlyDictionary<Guid, INodeViewModel> Nodes { get; }
         IReadOnlyDictionary<Guid, INodeViewModel> AllNodes { get; }
         IReadOnlyDictionary<Guid, IEdgeViewModel> Edges { get; }
@@ -25,6 +25,7 @@ namespace Neuroglia.Blazor.Dagre.Models
         event MouseEventHandler? MouseEnter;
         event MouseEventHandler? MouseLeave;
         event WheelEventHandler? Wheel;
+        event Action? Changed;
 
         Task RegisterComponentTypeAsync<TElement, TComponent>()
             where TElement : IGraphElement

@@ -8,6 +8,5 @@
         IBoundingBox? BBox { get; }
         void SetGeometry(double? x, double? y, double? width, double? height);
         void Move(double deltaX, double deltaY);
-        event Action? Changed;
     }
 }

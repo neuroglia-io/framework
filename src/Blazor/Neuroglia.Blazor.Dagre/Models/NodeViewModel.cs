@@ -11,7 +11,7 @@
             set
             {
                 this._x = value;
-                this.Changed?.Invoke();
+                this.OnChange();
             }
         }
 
@@ -24,7 +24,7 @@
             set
             {
                 this._y = value;
-                this.Changed?.Invoke();
+                this.OnChange();
             }
         }
 
@@ -74,8 +74,6 @@
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public virtual IBoundingBox? BBox => this._bbox;
-
-        public virtual event Action? Changed;
 
         public NodeViewModel()
             : this("", null, null, Constants.NodeWidth, Constants.NodeHeight, Constants.NodeRadius, Constants.NodeRadius, 0, 0, null, null)
@@ -145,7 +143,7 @@
                 return;
             this._x += deltaX;
             this._y += deltaY;
-            this.Changed?.Invoke();
+            this.OnChange();
         }
 
         protected virtual void UpdateBBox()
@@ -161,7 +159,7 @@
                     break;
 
             }
-            this.Changed?.Invoke();
+            this.OnChange();
         }
     
     }
