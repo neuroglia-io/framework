@@ -43,10 +43,12 @@
   border-color: #333;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
 .graph-controls .btn svg {
   width: 18px;
   height: 18px;
 }
+
 .graph-controls .btn:hover {
   color: #fff;
   fill: #fff;
