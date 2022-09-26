@@ -1,4 +1,4 @@
-name: Builds and push nugets
+name: Build and push nugets
 
 on:
   pull_request:
