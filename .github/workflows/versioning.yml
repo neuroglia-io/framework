@@ -1,4 +1,4 @@
-name: auto-version
+name: Auto-versioning
 
 on:
   workflow_call:
