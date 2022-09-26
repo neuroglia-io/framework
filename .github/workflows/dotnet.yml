@@ -3,6 +3,8 @@ name: Builds and push nugets
 on:
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - '.github/**'
   workflow_call:
 
 jobs:
