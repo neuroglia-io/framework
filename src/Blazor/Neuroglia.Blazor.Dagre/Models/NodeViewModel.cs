@@ -3,7 +3,7 @@
     public class NodeViewModel
         : GraphElement, INodeViewModel
     {
-        protected double? _x { get; set; }
+        protected double? _x = null;
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public virtual double? X { 
@@ -15,7 +15,7 @@
             }
         }
 
-        protected double? _y { get; set; }
+        protected double? _y = null;
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public virtual double? Y
@@ -28,7 +28,7 @@
             }
         }
 
-        protected double? _width { get; set; }
+        protected double? _width = null;
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public virtual double? Width
@@ -41,7 +41,7 @@
             }
         }
 
-        protected double? _height { get; set; }
+        protected double? _height = null;
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public virtual double? Height
@@ -54,23 +54,59 @@
             }
         }
 
+        protected double? _radiusX = null;
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public virtual double? RadiusX { get; set; }
+        public virtual double? RadiusX
+        {
+            get => this._radiusX;
+            set
+            {
+                this._radiusX = value;
+                this.OnChange();
+            }
+        }
 
+        protected double? _radiusY = null;
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public virtual double? RadiusY { get; set; }
+        public virtual double? RadiusY
+        {
+            get => this._radiusY;
+            set
+            {
+                this._radiusY = value;
+                this.OnChange();
+            }
+        }
 
+        protected Guid? _parentId = null;
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public virtual Guid? ParentId { get; set; }
+        public virtual Guid? ParentId
+        {
+            get => this._parentId;
+            set
+            {
+                this._parentId = value;
+                this.OnChange();
+            }
+        }
 
+        protected string? _shape = null;
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public virtual string? Shape { get; set; }
+        public virtual string? Shape
+        {
+            get => this._shape;
+            set
+            {
+                this._shape = value;
+                this.OnChange();
+            }
+        }
 
-        protected IBoundingBox _bbox { get; set; }
+        protected IBoundingBox _bbox = null!;
         [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
         [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public virtual IBoundingBox? BBox => this._bbox;

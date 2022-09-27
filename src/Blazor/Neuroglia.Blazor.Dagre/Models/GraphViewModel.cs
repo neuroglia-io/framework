@@ -109,7 +109,16 @@ namespace Neuroglia.Blazor.Dagre.Models
         protected readonly Collection<Type> _svgDefinitionComponents;
         public virtual IReadOnlyCollection<Type> SvgDefinitionComponents => this._svgDefinitionComponents;
 
-        public virtual bool EnableProfiling { get; set; }
+        protected bool _enableProfiling = false;
+        public virtual bool EnableProfiling
+        {
+            get => this._enableProfiling;
+            set
+            {
+                this._enableProfiling = value;
+                this.OnChange();
+            }
+        }
 
         /// <summary>
         /// The map of node type and their component type
