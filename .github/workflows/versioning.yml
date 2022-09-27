@@ -1,0 +1,33 @@
+name: Auto-versioning
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    if: github.repository == 'neuroglia-io/framework' && github.ref_name == 'main'
+#   check the current repository of performing the action, if it is not the 'neuroglia-io/framework' cancels the job.
+#   check the current branch of performing the action, if it is not the 'main' cancel the job.
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.4.2
+        with:
+          fetch-depth: 0
+
+      - name: Reset Origin
+        run: |
+          git remote set-url origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git checkout ${{ github.ref_name }}
+#   github.actor will be the account how will perform the push (or most of the case 'merge pull request'). (May better to use github.triggering_actor for reruns.)
+#   secrets.GITHUB_TOKEN was the token creates for the current action, it is associated with the actor and will persist until the end of the action.
+#   github.ref_name work fine if the trigger was a push/merge.  
+
+      - name: Install Versioning.NET
+        run: |
+          dotnet tool install --global Versioning.NET
+          
+      - name: Increment Version
+        run: |
+          dotnet-version increment-version-with-git -g "." --branch-name ${{ github.ref_name }} --author-email actions@github.com
