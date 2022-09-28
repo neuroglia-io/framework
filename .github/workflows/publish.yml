@@ -1,5 +1,4 @@
-name: Build and push nugets
-
+name: Publish on release
 
 on:
   release:
