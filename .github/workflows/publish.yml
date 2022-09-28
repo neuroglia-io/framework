@@ -1,11 +1,9 @@
 name: Build and push nugets
 
+
 on:
-  pull_request:
-    branches: [ main ]
-    paths-ignore:
-      - '.github/**'
-  workflow_call:
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -13,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
@@ -22,6 +20,6 @@ jobs:
       run: dotnet restore "./src/Neuroglia Framework.sln"
     - name: Build
       run: dotnet build "./src/Neuroglia Framework.sln" --configuration Release --no-restore 
-    - name: Push
+    - name: Publish
       if: github.event_name != 'pull_request' && github.repository == 'neuroglia-io/framework' && github.ref_name == 'main'
       run: dotnet nuget push "./src/*/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
