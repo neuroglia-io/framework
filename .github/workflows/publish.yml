@@ -20,5 +20,4 @@ jobs:
     - name: Build
       run: dotnet build "./src/Neuroglia Framework.sln" --configuration Release --no-restore 
     - name: Publish
-      if: github.event_name != 'pull_request' && github.repository == 'neuroglia-io/framework' && github.ref_name == 'main'
       run: dotnet nuget push "./src/*/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
