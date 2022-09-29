@@ -1,18 +1,25 @@
 name: Continuous integration
 
-# on:
-#   push:
-#     branches: [ main ]
-#     paths-ignore:
-#       - '.github/**'
-#   workflow_dispatch:
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '.github/**'
+  workflow_dispatch:
 
-# jobs:
-#   versionning:
-#     uses: ./.github/workflows/versioning.yml
-#     secrets: inherit
+jobs:
+  versionning:
+    # Skip if it's not running in the `neuroglia-io/framework` repo
+    if: github.repository == 'neuroglia-io/framework' && github.ref_name == 'main'
+    uses: ./.github/workflows/versioning.yml
+    secrets: inherit
 
-#   build:
-#     needs: versionning
-#     uses: ./.github/workflows/dotnet.yml
-#     secrets: inherit
+  build:
+    needs: [versioning]
+    uses: ./.github/workflows/build-dotnet.yml
+    secrets: inherit
+
+  release:
+    needs: [build]
+    uses: ./.github/workflows/release.yml
+    secrets: inherit
