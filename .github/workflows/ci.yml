@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  versionning:
+  versioning:
     # Skip if it's not running in the `neuroglia-io/framework` repo
     if: github.repository == 'neuroglia-io/framework' && github.ref_name == 'main'
     uses: ./.github/workflows/versioning.yml
