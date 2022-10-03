@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Neuroglia.Data</RootNamespace>
@@ -10,35 +9,32 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework data kubernetes k8s</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>logo_white_on_blue_256.png</PackageIcon>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
-
   <PropertyGroup>
     <DocumentationFile>Neuroglia.Data.Kubernetes.xml</DocumentationFile>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Neuroglia.K8s" Version="1.0.1.4" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Neuroglia.Data\Neuroglia.Data.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="..\..\..\assets\img\logo_white_on_blue_256.png">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
     <None Include="..\..\..\LICENSE">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
   </ItemGroup>
-
 </Project>

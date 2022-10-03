@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Neuroglia.Serialization</RootNamespace>
@@ -9,7 +8,7 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework serialization dynamic</PackageTags>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -19,27 +18,25 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
   <ItemGroup>
     <None Include="..\..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
       <Pack>True</Pack>
     </None>
     <None Include="..\..\..\LICENSE" Link="LICENSE">
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
       <Pack>True</Pack>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="protobuf-net.Core" Version="3.0.101" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Neuroglia.Core\Neuroglia.Core.csproj" />
     <ProjectReference Include="..\..\Serialization\Neuroglia.Serialization.Protobuf\Neuroglia.Serialization.Protobuf.csproj" />
     <ProjectReference Include="..\Neuroglia.Serialization.Json\Neuroglia.Serialization.Json.csproj" />
     <ProjectReference Include="..\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
   </ItemGroup>
-
 </Project>

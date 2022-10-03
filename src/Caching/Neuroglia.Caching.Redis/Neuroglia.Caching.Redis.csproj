@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Neuroglia.Caching</RootNamespace>
@@ -9,7 +8,7 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia caching redis</PackageTags>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -17,31 +16,28 @@
     <PackageIcon>logo_white_on_blue_256.png</PackageIcon>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
-
   <PropertyGroup>
     <DocumentationFile>Neuroglia.Caching.Redis.xml</DocumentationFile>
   </PropertyGroup>
-
   <ItemGroup>
     <None Include="..\..\..\assets\img\logo_white_on_blue_256.png">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
     <None Include="..\..\..\LICENSE">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="StackExchange.Redis" Version="2.5.61" />
     <PackageReference Include="StackExchange.Redis.Extensions.Core" Version="8.0.4" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Serialization\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj" />
     <ProjectReference Include="..\..\Serialization\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj" />
     <ProjectReference Include="..\Neuroglia.Caching.Abstractions\Neuroglia.Caching.Abstractions.csproj" />
   </ItemGroup>
-
 </Project>

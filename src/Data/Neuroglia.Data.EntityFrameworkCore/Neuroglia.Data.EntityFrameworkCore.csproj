@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Neuroglia.Data</RootNamespace>
@@ -9,7 +8,7 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework data entity ef</PackageTags>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -17,28 +16,25 @@
     <PackageIcon>logo_white_on_blue_256.png</PackageIcon>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
-
   <PropertyGroup>
     <DocumentationFile>Neuroglia.Data.EntityFrameworkCore.xml</DocumentationFile>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Neuroglia.Data\Neuroglia.Data.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="..\..\..\assets\img\logo_white_on_blue_256.png">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
     <None Include="..\..\..\LICENSE">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
   </ItemGroup>
-
 </Project>

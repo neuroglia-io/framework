@@ -1,44 +1,40 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<RootNamespace>Neuroglia.Mediation</RootNamespace>
-		<Company>Neuroglia SPRL</Company>
-		<Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
-		<Authors>Neuroglia SPRL</Authors>
-		<RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>neuroglia framework mediation opentelemetry instrumentation</PackageTags>
-		<Version>2.0.2</Version>
-		<NeutralLanguage>en</NeutralLanguage>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<PackageIcon>logo_white_on_blue_256.png</PackageIcon>
-		<IsPackable>true</IsPackable>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<DocumentationFile>Neuroglia.Mediation.Extensions.OpenTelemetry.xml</DocumentationFile>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<None Include="..\..\..\assets\img\logo_white_on_blue_256.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-		<None Include="..\..\..\LICENSE">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="OpenTelemetry.Api" Version="1.2.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
-	</ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Neuroglia.Mediation</RootNamespace>
+    <Company>Neuroglia SPRL</Company>
+    <Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
+    <Authors>Neuroglia SPRL</Authors>
+    <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>neuroglia framework mediation opentelemetry instrumentation</PackageTags>
+    <Version>2.0.3</Version>
+    <NeutralLanguage>en</NeutralLanguage>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>logo_white_on_blue_256.png</PackageIcon>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DocumentationFile>Neuroglia.Mediation.Extensions.OpenTelemetry.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\..\assets\img\logo_white_on_blue_256.png">
+      <Pack>True</Pack>
+      <PackagePath>
+      </PackagePath>
+    </None>
+    <None Include="..\..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>
+      </PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenTelemetry.Api" Version="1.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
+  </ItemGroup>
 </Project>

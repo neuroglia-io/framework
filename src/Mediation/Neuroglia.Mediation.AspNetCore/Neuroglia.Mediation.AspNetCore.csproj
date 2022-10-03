@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <OutputType>Library</OutputType>
@@ -10,7 +9,7 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>neuroglia framework mediation asp core</PackageTags>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <NeutralLanguage>en</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
@@ -18,24 +17,22 @@
     <PackageIcon>logo_white_on_blue_256.png</PackageIcon>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
-
   <PropertyGroup>
     <DocumentationFile>Neuroglia.Mediation.AspNetCore.xml</DocumentationFile>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="..\..\..\assets\img\logo_white_on_blue_256.png">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
     <None Include="..\..\..\LICENSE">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
   </ItemGroup>
-
 </Project>

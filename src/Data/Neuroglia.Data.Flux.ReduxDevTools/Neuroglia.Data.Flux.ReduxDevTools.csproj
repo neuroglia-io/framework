@@ -1,45 +1,42 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-	<TargetFramework>net6.0</TargetFramework>
-	<RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace(".ReduxDevTools", ""))</RootNamespace>
-	<Company>Neuroglia SPRL</Company>
-	<Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
-	<Authors>Neuroglia SPRL</Authors>
-	<RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
-	<RepositoryType>git</RepositoryType>
-	<PackageTags>neuroglia framework data flux redux dev tools</PackageTags>
-	<Version>2.0.2</Version>
-	<NeutralLanguage>en</NeutralLanguage>
-	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageIcon>logo_white_on_blue_256.png</PackageIcon>
-	<IsPackable>true</IsPackable>
-	<ImplicitUsings>enable</ImplicitUsings>
-	<Nullable>enable</Nullable>
-	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace(".ReduxDevTools", ""))</RootNamespace>
+    <Company>Neuroglia SPRL</Company>
+    <Copyright>Copyright © 2021 Neuroglia SPRL. All rights reserved.</Copyright>
+    <Authors>Neuroglia SPRL</Authors>
+    <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>neuroglia framework data flux redux dev tools</PackageTags>
+    <Version>2.0.3</Version>
+    <NeutralLanguage>en</NeutralLanguage>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>logo_white_on_blue_256.png</PackageIcon>
+    <IsPackable>true</IsPackable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
-
   <ItemGroup>
     <None Include="..\..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
       <Pack>True</Pack>
     </None>
     <None Include="..\..\..\LICENSE" Link="LICENSE">
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
       <Pack>True</Pack>
     </None>
   </ItemGroup>
-
   <ItemGroup>
-	<PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.4" />
     <PackageReference Include="Microsoft.JSInterop" Version="6.0.4" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Serialization\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj" />
     <ProjectReference Include="..\Neuroglia.Data.Flux\Neuroglia.Data.Flux.csproj" />
   </ItemGroup>
-
 </Project>
