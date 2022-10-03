@@ -1,10 +1,6 @@
-name: Build and test .NET
+name: Build .NET
 
 on:
-  pull_request:
-    branches: [ main ]
-    paths-ignore:
-      - '.github/**'
   workflow_call:
 
 env:
@@ -39,9 +35,6 @@ jobs:
 
       - name: Build
         run: dotnet build "${{ env.SOLUTION }}" --configuration Release --no-restore
-
-      - name: Test
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --verbosity normal
       
       - name: Cache build items
         if: github.event_name != 'pull_request'
