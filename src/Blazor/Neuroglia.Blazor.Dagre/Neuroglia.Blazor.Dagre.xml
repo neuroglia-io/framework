@@ -256,17 +256,60 @@
         <member name="P:Neuroglia.Blazor.Dagre.Models.GraphElement.Id">
             <inheritdoc />
         </member>
+        <member name="F:Neuroglia.Blazor.Dagre.Models.GraphElement._label">
+            <summary>
+            Stores the element's label
+            </summary>
+        </member>
         <member name="P:Neuroglia.Blazor.Dagre.Models.GraphElement.Label">
             <inheritdoc />
+        </member>
+        <member name="F:Neuroglia.Blazor.Dagre.Models.GraphElement._componentType">
+            <summary>
+            Stores the element's component type
+            </summary>
         </member>
         <member name="P:Neuroglia.Blazor.Dagre.Models.GraphElement.ComponentType">
             <inheritdoc />
         </member>
+        <member name="F:Neuroglia.Blazor.Dagre.Models.GraphElement._cssClass">
+            <summary>
+            Stores the element's css class
+            </summary>
+        </member>
         <member name="P:Neuroglia.Blazor.Dagre.Models.GraphElement.CssClass">
             <inheritdoc />
         </member>
+        <member name="F:Neuroglia.Blazor.Dagre.Models.GraphElement._metadata">
+            <summary>
+            Stores the element's metadata
+            </summary>
+        </member>
         <member name="P:Neuroglia.Blazor.Dagre.Models.GraphElement.Metadata">
             <inheritdoc />
+        </member>
+        <member name="E:Neuroglia.Blazor.Dagre.Models.GraphElement.Changed">
+            <summary>
+            The action tiggered when a property changes
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Blazor.Dagre.Models.GraphElement.#ctor">
+            <summary>
+            Constructs a new <see cref="T:Neuroglia.Blazor.Dagre.Models.GraphElement"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Blazor.Dagre.Models.GraphElement.#ctor(System.String,System.String,System.Type)">
+            <summary>
+            Constructs a new <see cref="T:Neuroglia.Blazor.Dagre.Models.GraphElement"/>
+            </summary>
+            <param name="label">The element's label</param>
+            <param name="cssClass">The element's css class(es)</param>
+            <param name="componentType">The element's component(template) type</param>
+        </member>
+        <member name="M:Neuroglia.Blazor.Dagre.Models.GraphElement.OnChange">
+            <summary>
+            Invokes the change action
+            </summary>
         </member>
         <member name="T:Neuroglia.Blazor.Dagre.Models.GraphEventArgs`1">
             <summary>
