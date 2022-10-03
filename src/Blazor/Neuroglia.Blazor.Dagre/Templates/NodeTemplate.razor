@@ -90,6 +90,14 @@
         this.profilingTimer?.Stop();
     }
 
+    protected override bool ShouldRender()
+    {
+        if (!this.isDirty) return false;
+        this.isDirty = false;
+        return true;
+
+    }
+
     private bool disposed;
     protected virtual void Dispose(bool disposing)
     {
