@@ -52,4 +52,4 @@ jobs:
           key: build-dotnet-cache-${{ github.sha }}
       
       - name: Publish NuGet Packages
-        run: dotnet nuget push "./*/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push "./src/*/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
