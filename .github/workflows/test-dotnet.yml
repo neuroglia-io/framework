@@ -18,16 +18,18 @@ jobs:
         dotnet-version: ['6.0.x' ]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      # - name: Checkout
+      #   uses: actions/checkout@v3
 
-      - name: Setup .NET ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v2
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+      # - name: Setup .NET ${{ matrix.dotnet-version }}
+      #   uses: actions/setup-dotnet@v2
+      #   with:
+      #     dotnet-version: ${{ matrix.dotnet-version }}
 
-      - name: Restore dependencies
-        run: dotnet restore "${{ env.SOLUTION }}"
+      # - name: Restore dependencies
+      #   run: dotnet restore "${{ env.SOLUTION }}"
 
+      # - name: Test
+      #   run: dotnet test "${{ env.SOLUTION }}" --no-restore --verbosity normal
       - name: Test
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --verbosity normal
+        run: echo Testing currently disabled
