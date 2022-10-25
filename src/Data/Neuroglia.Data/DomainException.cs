@@ -375,6 +375,17 @@ namespace Neuroglia.Data
         }
 
         /// <summary>
+        /// Creates a new <see cref="DomainArgumentException"/> for an argument that must be lower than the specified time
+        /// </summary>
+        /// <param name="argumentName">The argument's name</param>
+        /// <param name="date">The date the argument must be lower than</param>
+        /// <returns>A new <see cref="DomainArgumentException"/> for an argument that must be lower than the specified time</returns>
+        public static DomainArgumentException ArgumentMustBeEarlierThan(string argumentName, DateTimeOffset date)
+        {
+            return new DomainArgumentException(StringExtensions.Format(LocalizedResources.exception_domain_argumentmustbeearlierthan, argumentName, date), argumentName);
+        }
+
+        /// <summary>
         /// Creates a new <see cref="DomainArgumentException"/> for an argument that must be higher than the specified time
         /// </summary>
         /// <param name="argumentName">The argument's name</param>
@@ -392,6 +403,17 @@ namespace Neuroglia.Data
         /// <param name="date">The date the argument must be higher than</param>
         /// <returns>A new <see cref="DomainArgumentException"/> for an argument that must be higher than the specified date</returns>
         public static DomainArgumentException ArgumentMustBeLaterThan(string argumentName, DateTime date)
+        {
+            return new DomainArgumentException(StringExtensions.Format(LocalizedResources.exception_domain_argumentmustbelaterthan, argumentName, date), argumentName);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DomainArgumentException"/> for an argument that must be higher than the specified date
+        /// </summary>
+        /// <param name="argumentName">The argument's name</param>
+        /// <param name="date">The date the argument must be higher than</param>
+        /// <returns>A new <see cref="DomainArgumentException"/> for an argument that must be higher than the specified date</returns>
+        public static DomainArgumentException ArgumentMustBeLaterThan(string argumentName, DateTimeOffset date)
         {
             return new DomainArgumentException(StringExtensions.Format(LocalizedResources.exception_domain_argumentmustbelaterthan, argumentName, date), argumentName);
         }
