@@ -453,6 +453,30 @@ namespace Neuroglia.Data
         }
 
         /// <summary>
+        /// Creates a new <see cref="DomainArgumentException"/> for an argument that must be comprised between the specified values
+        /// </summary>
+        /// <param name="argumentName">The argument's name</param>
+        /// <param name="min">The minimum value</param>
+        /// <param name="max">The maximum value</param>
+        /// <returns>A new <see cref="DomainArgumentException"/> for an argument that must be comprised between the specified values</returns>
+        public static DomainArgumentException ArgumentMustBeComprisedBetweenIncluding(string argumentName, double min, double max)
+        {
+            return new DomainArgumentException(StringExtensions.Format(LocalizedResources.exception_domain_argumentmustbecomprisedbetweenincluding, argumentName, min, max), argumentName);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="DomainArgumentException"/> for an argument that must be comprised between the specified values
+        /// </summary>
+        /// <param name="argumentName">The argument's name</param>
+        /// <param name="min">The minimum value</param>
+        /// <param name="max">The maximum value</param>
+        /// <returns>A new <see cref="DomainArgumentException"/> for an argument that must be comprised between the specified values</returns>
+        public static DomainArgumentException ArgumentMustBeComprisedBetweenIncluding(string argumentName, decimal min, decimal max)
+        {
+            return new DomainArgumentException(StringExtensions.Format(LocalizedResources.exception_domain_argumentmustbecomprisedbetweenincluding, argumentName, min, max), argumentName);
+        }
+
+        /// <summary>
         /// Creates a new <see cref="DomainArgumentException"/> for a non-numeric argument
         /// </summary>
         /// <param name="argumentName">The argument's name</param>
