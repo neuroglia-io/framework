@@ -189,6 +189,9 @@
   <data name="exception_domain_argumentcannotbeadateinthefuture" xml:space="preserve">
     <value>Het {argument} kan in de toekomst geen datum zijn</value>
   </data>
+  <data name="exception_domain_argumentcannotbeadateinthepast" xml:space="preserve">
+    <value>Het {argument} kan in de verleden geen datum zijn</value>
+  </data>
   <data name="exception_domain_argumentisinvalidaddress" xml:space="preserve">
     <value>De opgegeven waarde {argument} '{value}' is een ongeldig adres</value>
   </data>

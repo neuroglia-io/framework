@@ -69,6 +69,16 @@ namespace Neuroglia.Data
         }
 
         /// <summary>
+        /// Creates a new <see cref="DomainArgumentException"/> thrown when an argument is a date in the past
+        /// </summary>
+        /// <param name="argumentName">The name of the argument</param>
+        /// <returns>A new <see cref="DomainArgumentException"/> thrown when an argument is a date in the past</returns>
+        public static DomainArgumentException ArgumentCannotBeADateInThePast(string argumentName)
+        {
+            return new DomainArgumentException(StringExtensions.Format(LocalizedResources.exception_domain_argumentcannotbeadateinthefuture, argumentName), argumentName);
+        }
+
+        /// <summary>
         /// Creates a new <see cref="DomainArgumentException"/> for a null argument
         /// </summary>
         /// <param name="argumentName">The argument's name</param>
