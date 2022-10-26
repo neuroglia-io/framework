@@ -457,15 +457,6 @@ namespace Neuroglia.Data.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {argument} argument must be higher or equal to {quantity}.
-        /// </summary>
-        public static string exception_domain_argumentmustbelowerorhigherthan {
-            get {
-                return ResourceManager.GetString("exception_domain_argumentmustbelowerorhigherthan", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The {argument} argument must contain digits only.
         /// </summary>
         public static string exception_domain_argumentmustbenumeric {

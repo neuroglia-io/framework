@@ -243,17 +243,6 @@ namespace Neuroglia.Data
         }
 
         /// <summary>
-        /// Creates a new <see cref="DomainArgumentException"/> for an argument that must be lower or higher than the specified quantity
-        /// </summary>
-        /// <param name="argumentName">The argument's name</param>
-        /// <param name="quantity">The quantity the argument must be lower or higher than</param>
-        /// <returns>A new <see cref="DomainArgumentException"/> for an argument that must be lower or higher than the specified quantity</returns>
-        public static DomainArgumentException ArgumentMustBeLowerOrHigherThan(string argumentName, int quantity)
-        {
-            return new DomainArgumentException(StringExtensions.Format(LocalizedResources.exception_domain_argumentmustbelowerorhigherthan, argumentName, quantity), argumentName);
-        }
-
-        /// <summary>
         /// Creates a new <see cref="DomainArgumentException"/> for an argument that must be higher than the specified quantity
         /// </summary>
         /// <param name="argumentName">The argument's name</param>

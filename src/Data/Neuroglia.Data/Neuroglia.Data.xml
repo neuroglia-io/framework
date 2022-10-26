@@ -112,6 +112,13 @@
             <param name="argumentName">The name of the argument</param>
             <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> thrown when an argument is a date in the future</returns>
         </member>
+        <member name="M:Neuroglia.Data.DomainException.ArgumentCannotBeADateInThePast(System.String)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> thrown when an argument is a date in the past
+            </summary>
+            <param name="argumentName">The name of the argument</param>
+            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> thrown when an argument is a date in the past</returns>
+        </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentNull(System.String)">
             <summary>
             Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for a null argument
@@ -231,14 +238,6 @@
             <param name="quantity">The quantity the argument must be higher or lower than</param>
             <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> thrown when an argument must be higher or lower than a specific value</returns>
         </member>
-        <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeLowerOrHigherThan(System.String,System.Int32)">
-            <summary>
-            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower or higher than the specified quantity
-            </summary>
-            <param name="argumentName">The argument's name</param>
-            <param name="quantity">The quantity the argument must be lower or higher than</param>
-            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower or higher than the specified quantity</returns>
-        </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeHigherThan(System.String,System.Int32)">
             <summary>
             Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified quantity
@@ -319,6 +318,22 @@
             <param name="time">The time the argument must be lower than</param>
             <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified time</returns>
         </member>
+        <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeEarlierThan(System.String,System.DateTime)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified time
+            </summary>
+            <param name="argumentName">The argument's name</param>
+            <param name="date">The date the argument must be lower than</param>
+            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified time</returns>
+        </member>
+        <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeEarlierThan(System.String,System.DateTimeOffset)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified time
+            </summary>
+            <param name="argumentName">The argument's name</param>
+            <param name="date">The date the argument must be lower than</param>
+            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified time</returns>
+        </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeLaterThan(System.String,System.TimeSpan)">
             <summary>
             Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified time
@@ -328,6 +343,14 @@
             <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified time</returns>
         </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeLaterThan(System.String,System.DateTime)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date
+            </summary>
+            <param name="argumentName">The argument's name</param>
+            <param name="date">The date the argument must be higher than</param>
+            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date</returns>
+        </member>
+        <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeLaterThan(System.String,System.DateTimeOffset)">
             <summary>
             Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date
             </summary>
@@ -352,6 +375,24 @@
             <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument has a length higher than the maximum authorized length</returns>
         </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeComprisedBetweenIncluding(System.String,System.Int32,System.Int32)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be comprised between the specified values
+            </summary>
+            <param name="argumentName">The argument's name</param>
+            <param name="min">The minimum value</param>
+            <param name="max">The maximum value</param>
+            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be comprised between the specified values</returns>
+        </member>
+        <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeComprisedBetweenIncluding(System.String,System.Double,System.Double)">
+            <summary>
+            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be comprised between the specified values
+            </summary>
+            <param name="argumentName">The argument's name</param>
+            <param name="min">The minimum value</param>
+            <param name="max">The maximum value</param>
+            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be comprised between the specified values</returns>
+        </member>
+        <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeComprisedBetweenIncluding(System.String,System.Decimal,System.Decimal)">
             <summary>
             Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be comprised between the specified values
             </summary>
@@ -851,323 +892,323 @@
         </member>
         <member name="T:Neuroglia.Data.Properties.LocalizedResources">
             <summary>
-              Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+              A strongly-typed resource class, for looking up localized strings, etc.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.ResourceManager">
             <summary>
-              Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+              Returns the cached ResourceManager instance used by this class.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.Culture">
             <summary>
-              Remplace la propriété CurrentUICulture du thread actuel pour toutes
-              les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_account_invalidcredentials">
             <summary>
-              Recherche une chaîne localisée semblable à Invalid username and/or password.
+              Looks up a localized string similar to Invalid username and/or password.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_concurrencyfailure">
             <summary>
-              Recherche une chaîne localisée semblable à Optimistic concurrency failure, object has been modified.
+              Looks up a localized string similar to Optimistic concurrency failure, object has been modified.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_defaulterror">
             <summary>
-              Recherche une chaîne localisée semblable à An unknown failure has occurred.
+              Looks up a localized string similar to An unknown failure has occurred.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_duplicateemail">
             <summary>
-              Recherche une chaîne localisée semblable à Email &apos;{email}&apos; is already taken.
+              Looks up a localized string similar to Email &apos;{email}&apos; is already taken.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_duplicaterolename">
             <summary>
-              Recherche une chaîne localisée semblable à Role name &apos;{role}&apos; is already taken.
+              Looks up a localized string similar to Role name &apos;{role}&apos; is already taken.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_duplicateusername">
             <summary>
-              Recherche une chaîne localisée semblable à User name &apos;{userName}&apos; is already taken.
+              Looks up a localized string similar to User name &apos;{userName}&apos; is already taken.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_invalidemail">
             <summary>
-              Recherche une chaîne localisée semblable à Email &apos;{email}&apos; is invalid.
+              Looks up a localized string similar to Email &apos;{email}&apos; is invalid.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_invalidrolename">
             <summary>
-              Recherche une chaîne localisée semblable à Role name &apos;{role}&apos; is invalid.
+              Looks up a localized string similar to Role name &apos;{role}&apos; is invalid.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_invalidtoken">
             <summary>
-              Recherche une chaîne localisée semblable à Invalid token.
+              Looks up a localized string similar to Invalid token.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_invalidusername">
             <summary>
-              Recherche une chaîne localisée semblable à User name &apos;{username}&apos; is invalid, it can only contain letters or digits.
+              Looks up a localized string similar to User name &apos;{username}&apos; is invalid, it can only contain letters or digits.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_loginalreadyassociated">
             <summary>
-              Recherche une chaîne localisée semblable à A user with this login already exists.
+              Looks up a localized string similar to A user with this login already exists.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_passwordmismatch">
             <summary>
-              Recherche une chaîne localisée semblable à Incorrect password.
+              Looks up a localized string similar to Incorrect password.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_passwordrequiresdigit">
             <summary>
-              Recherche une chaîne localisée semblable à Passwords must have at least one digit (&apos;0&apos;-&apos;9&apos;).
+              Looks up a localized string similar to Passwords must have at least one digit (&apos;0&apos;-&apos;9&apos;).
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_passwordrequireslower">
             <summary>
-              Recherche une chaîne localisée semblable à Passwords must have at least one lowercase (&apos;a&apos;-&apos;z&apos;).
+              Looks up a localized string similar to Passwords must have at least one lowercase (&apos;a&apos;-&apos;z&apos;).
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_passwordrequiresnonalphanumeric">
             <summary>
-              Recherche une chaîne localisée semblable à Passwords must have at least one non alphanumeric character.
+              Looks up a localized string similar to Passwords must have at least one non alphanumeric character.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_passwordrequiresuniquechars">
             <summary>
-              Recherche une chaîne localisée semblable à Passwords must use at least {amount} different characters.
+              Looks up a localized string similar to Passwords must use at least {amount} different characters.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_passwordrequiresupper">
             <summary>
-              Recherche une chaîne localisée semblable à Passwords must have at least one uppercase (&apos;A&apos;-&apos;Z&apos;).
+              Looks up a localized string similar to Passwords must have at least one uppercase (&apos;A&apos;-&apos;Z&apos;).
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_passwordtooshort">
             <summary>
-              Recherche une chaîne localisée semblable à Passwords must be at least {length} characters.
+              Looks up a localized string similar to Passwords must be at least {length} characters.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_recoverycoderedemptionfailed">
             <summary>
-              Recherche une chaîne localisée semblable à Recovery code redemption failed.
+              Looks up a localized string similar to Recovery code redemption failed.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_useralreadyhaspassword">
             <summary>
-              Recherche une chaîne localisée semblable à User already has a password set.
+              Looks up a localized string similar to User already has a password set.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_useralreadyinrole">
             <summary>
-              Recherche une chaîne localisée semblable à User already in role &apos;{role}&apos;.
+              Looks up a localized string similar to User already in role &apos;{role}&apos;.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_userlockoutnotenabled">
             <summary>
-              Recherche une chaîne localisée semblable à Lockout is not enabled for this user.
+              Looks up a localized string similar to Lockout is not enabled for this user.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.error_identity_usernotinrole">
             <summary>
-              Recherche une chaîne localisée semblable à User is not in role &apos;{role}&apos;.
+              Looks up a localized string similar to User is not in role &apos;{role}&apos;.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_activetilloperatorsessionfound">
             <summary>
-              Recherche une chaîne localisée semblable à Failed to start a new operator session on the till with id &apos;{tillId}&apos;: an active operator session already exists.
+              Looks up a localized string similar to Failed to start a new operator session on the till with id &apos;{tillId}&apos;: an active operator session already exists.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_activetillsessionfound">
             <summary>
-              Recherche une chaîne localisée semblable à Failed to start a new session on the till with id &apos;{tillId}&apos;: an active session already exists.
+              Looks up a localized string similar to Failed to start a new session on the till with id &apos;{tillId}&apos;: an active session already exists.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentcannotbeadateinthefuture">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} cannot be a date in the future.
+              Looks up a localized string similar to The {argument} cannot be a date in the future.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentcannotbeadateinthepast">
+            <summary>
+              Looks up a localized string similar to The {argument} cannot be a date in the past.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentisinvalidaddress">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} value &apos;{value}&apos; is an invalid address.
+              Looks up a localized string similar to The specified {argument} value &apos;{value}&apos; is an invalid address.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentisinvalidcountrycode">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} value &apos;{value}&apos; is not a valid two-letter ISO 3166 country code.
+              Looks up a localized string similar to The specified {argument} value &apos;{value}&apos; is not a valid two-letter ISO 3166 country code.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentisinvalidemail">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} value &apos;{value}&apos; is not a valid email address.
+              Looks up a localized string similar to The specified {argument} value &apos;{value}&apos; is not a valid email address.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentisinvalidiso4217code">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} &apos;{value}&apos; is not a valid ISO 4217 currency code.
+              Looks up a localized string similar to The specified {argument} &apos;{value}&apos; is not a valid ISO 4217 currency code.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentisinvalidiso6391code">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} value &apos;{value}&apos; is not a valid ISO 639-1 language code.
+              Looks up a localized string similar to The specified {argument} value &apos;{value}&apos; is not a valid ISO 639-1 language code.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentisinvalidphonenumber">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} value &apos;{value}&apos; is an invalid phone number.
+              Looks up a localized string similar to The specified {argument} value &apos;{value}&apos; is an invalid phone number.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentisinvalidphonenumberprefix">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} &apos;{value}&apos; is not a valid international phone number prefix.
+              Looks up a localized string similar to The specified {argument} &apos;{value}&apos; is not a valid international phone number prefix.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentisinvalidtimezoneid">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} &apos;{value}&apos; is not a valid time zone id.
+              Looks up a localized string similar to The specified {argument} &apos;{value}&apos; is not a valid time zone id.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentisinvaliduri">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} value &apos;{value}&apos; is not a valid uri.
+              Looks up a localized string similar to The specified {argument} value &apos;{value}&apos; is not a valid uri.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentisunsupportedvalue">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} &apos;{value}&apos; is not supported. Supported values: {values}.
+              Looks up a localized string similar to The specified {argument} &apos;{value}&apos; is not supported. Supported values: {values}.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbecomprisedbetweenincluding">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must be superior or equal to {min} and inferior or equal to {max}.
+              Looks up a localized string similar to The {argument} argument must be superior or equal to {min} and inferior or equal to {max}.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbeearlierthan">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must be a time equal to or earlier than &apos;{time}&apos;.
+              Looks up a localized string similar to The {argument} argument must be a time equal to or earlier than &apos;{time}&apos;.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbehigherorequalto">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must be superior or equal to {quantity}.
+              Looks up a localized string similar to The {argument} argument must be superior or equal to {quantity}.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbehigherorlowerthan">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must be higher or lower than {value}.
+              Looks up a localized string similar to The {argument} argument must be higher or lower than {value}.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbehigherthan">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must be higher than {min}.
+              Looks up a localized string similar to The {argument} argument must be higher than {min}.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbelaterthan">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must be a time equal to or later than &apos;{time}&apos;.
+              Looks up a localized string similar to The {argument} argument must be a time equal to or later than &apos;{time}&apos;.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbelowerorequalto">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must be lower or equal to {quantity}.
-            </summary>
-        </member>
-        <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbelowerorhigherthan">
-            <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must be higher or equal to {quantity}.
+              Looks up a localized string similar to The {argument} argument must be lower or equal to {quantity}.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbenumeric">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must contain digits only.
+              Looks up a localized string similar to The {argument} argument must contain digits only.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmusthavemaximumlengthof">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must have a maximum length of {length}.
+              Looks up a localized string similar to The {argument} argument must have a maximum length of {length}.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmusthaveminimumlengthof">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument must have a minimum length of {length}.
+              Looks up a localized string similar to The {argument} argument must have a minimum length of {length}.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentnull">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument cannot be null.
+              Looks up a localized string similar to The {argument} argument cannot be null.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentnullorwhitespace">
             <summary>
-              Recherche une chaîne localisée semblable à The {argument} argument cannot be null or empty.
+              Looks up a localized string similar to The {argument} argument cannot be null or empty.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentoutofrange">
             <summary>
-              Recherche une chaîne localisée semblable à The specified {argument} value &apos;{value}&apos; is out of range.
+              Looks up a localized string similar to The specified {argument} value &apos;{value}&apos; is out of range.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_deletionnotsupported">
             <summary>
-              Recherche une chaîne localisée semblable à Deleting entities of type &apos;{type}&apos; is not supported.
+              Looks up a localized string similar to Deleting entities of type &apos;{type}&apos; is not supported.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_entityalreadyexists">
             <summary>
-              Recherche une chaîne localisée semblable à A {entityType} with the specified {keyProperty} &apos;{key}&apos; already exists.
+              Looks up a localized string similar to A {entityType} with the specified {keyProperty} &apos;{key}&apos; already exists.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_entityalreadyexists_many">
             <summary>
-              Recherche une chaîne localisée semblable à A {entityType} with the specified {keyProperties} already exists.
+              Looks up a localized string similar to A {entityType} with the specified {keyProperties} already exists.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_filteringnotallowed">
             <summary>
-              Recherche une chaîne localisée semblable à Filtering is not allowed for the specified type &apos;{type}&apos;.
+              Looks up a localized string similar to Filtering is not allowed for the specified type &apos;{type}&apos;.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_invalidcast">
             <summary>
-              Recherche une chaîne localisée semblable à Failed to cast the type &apos;{from}&apos; to the type &apos;{to}&apos;.
+              Looks up a localized string similar to Failed to cast the type &apos;{from}&apos; to the type &apos;{to}&apos;.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_missingproperty">
             <summary>
-              Recherche une chaîne localisée semblable à Failed to find the property &apos;{property}&apos; in the specified type &apos;{type}&apos;.
+              Looks up a localized string similar to Failed to find the property &apos;{property}&apos; in the specified type &apos;{type}&apos;.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_notsupported">
             <summary>
-              Recherche une chaîne localisée semblable à The supplied {type} value &apos;{value}&apos; is not supported.
+              Looks up a localized string similar to The supplied {type} value &apos;{value}&apos; is not supported.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_nullreference">
             <summary>
-              Recherche une chaîne localisée semblable à Failed to find a &apos;{type}&apos; with the specified {keyProperty} &apos;{key}&apos;.
+              Looks up a localized string similar to Failed to find a &apos;{type}&apos; with the specified {keyProperty} &apos;{key}&apos;.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_nullreference_many">
             <summary>
-              Recherche une chaîne localisée semblable à Failed to find a &apos;{type}&apos; with the specified keys: {keys}.
+              Looks up a localized string similar to Failed to find a &apos;{type}&apos; with the specified keys: {keys}.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_unexpectedstate">
             <summary>
-              Recherche une chaîne localisée semblable à The {entityType} with {keyProperty} &apos;{key}&apos; is in an unexpected state &apos;{state}&apos;.
+              Looks up a localized string similar to The {entityType} with {keyProperty} &apos;{key}&apos; is in an unexpected state &apos;{state}&apos;.
             </summary>
         </member>
         <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_unexpectedvalue">
             <summary>
-              Recherche une chaîne localisée semblable à The entity of type &apos;{type}&apos; with {keyProperty} &apos;{id}&apos; has an unexpected &apos;{property}&apos; value &apos;{value}&apos;.
+              Looks up a localized string similar to The entity of type &apos;{type}&apos; with {keyProperty} &apos;{id}&apos; has an unexpected &apos;{property}&apos; value &apos;{value}&apos;.
             </summary>
         </member>
         <member name="T:Neuroglia.Data.RepositoryBase`2">

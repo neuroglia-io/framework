@@ -249,9 +249,6 @@
   <data name="exception_domain_argumentmustbelowerorequalto" xml:space="preserve">
     <value>The {argument} argument must be lower or equal to {quantity}</value>
   </data>
-  <data name="exception_domain_argumentmustbelowerorhigherthan" xml:space="preserve">
-    <value>The {argument} argument must be higher or equal to {quantity}</value>
-  </data>
   <data name="exception_domain_argumentmustbenumeric" xml:space="preserve">
     <value>The {argument} argument must contain digits only</value>
   </data>

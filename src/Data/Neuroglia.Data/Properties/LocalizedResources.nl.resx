@@ -243,9 +243,6 @@
   <data name="exception_domain_argumentmustbelowerorequalto" xml:space="preserve">
     <value>Het {argument} moet lager zijn dan of gelijk zijn aan {hoeveelheid}</value>
   </data>
-  <data name="exception_domain_argumentmustbelowerorhigherthan" xml:space="preserve">
-    <value>Het {argument} kan niet gelijk zijn aan {hoeveelheid}</value>
-  </data>
   <data name="exception_domain_argumentmustbenumeric" xml:space="preserve">
     <value>Het {argument} mag alleen cijfers bevatten</value>
   </data>
