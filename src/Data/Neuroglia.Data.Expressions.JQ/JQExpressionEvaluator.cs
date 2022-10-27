@@ -24,6 +24,7 @@ using Newtonsoft.Json.Serialization;
 using System.Collections;
 using System.Diagnostics;
 using System.Dynamic;
+using System.Reactive.Joins;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
@@ -215,12 +216,7 @@ namespace Neuroglia.Data.Expressions.JQ
         /// </summary>
         /// <param name="input">The string for which to escape double quotes</param>
         /// <returns>The string with escaped double quotes</returns>
-        protected virtual string EscapeDoubleQuotes(string input)
-        {
-            var processed = input.Replace(@"\""", @"\\\""");
-            processed = Regex.Replace(processed, @"(?<!\\)(?:\\{2})*""", @"\""", RegexOptions.Compiled);
-            return processed;
-        }
+        protected virtual string EscapeDoubleQuotes(string input) => Regex.Replace(input, "([\"\\\\])", @"\$1", RegexOptions.Compiled);
 
         /// <summary>
         /// Escapes single quotes in the specified string
