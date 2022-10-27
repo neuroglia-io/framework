@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 env:
-  SOLUTION: ./src/Neuroglia Framework.sln
+  SOLUTION: ./Neuroglia Framework.sln
 
 jobs:
   build:
