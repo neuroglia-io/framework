@@ -25,6 +25,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Dynamic;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace Neuroglia.Data.Expressions.JQ
 {
@@ -124,7 +125,7 @@ namespace Neuroglia.Data.Expressions.JQ
                 if (serializedArgs != null)
                     jsonArgs = string.Join(" ", serializedArgs.Select(a => @$"--argjson {a.Key} $'{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(a.Value))}'"));
                 fileName = "bash";
-                processArgs = @$"-c ""echo $'{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(inputJson))}' | jq $'{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(jqExpression))}' {jsonArgs}""";
+                processArgs = @$"-c ""echo '{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(inputJson))}' | jq '{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(jqExpression))}' {jsonArgs}""";
                 if (processArgs.Length > 200000)
                 {
                     var inputJsonFile = Path.GetTempFileName();
@@ -216,9 +217,9 @@ namespace Neuroglia.Data.Expressions.JQ
         /// <returns>The string with escaped double quotes</returns>
         protected virtual string EscapeDoubleQuotes(string input)
         {
-            if (!input.Contains(@"\"""))
-                input = input.Replace("\"", @"\""");
-            return input;
+            var processed = input.Replace(@"\""", @"\\\""");
+            processed = Regex.Replace(processed, @"(?<!\\)(?:\\{2})*""", @"\""", RegexOptions.Compiled);
+            return processed;
         }
 
         /// <summary>

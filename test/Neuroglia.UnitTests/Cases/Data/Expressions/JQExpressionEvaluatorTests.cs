@@ -163,6 +163,22 @@ namespace Neuroglia.UnitTests.Cases.Data.Expressions
             Assert.NotNull(result);
         }
 
+        [Fact]
+        public void Evaluate_EscapedJsonInput_UsingNewtonsoft_ShouldWork()
+        {
+            //arrange
+            var evaluator = BuildExpressionEvaluatorWithNewtonsoftJsonSerializer();
+            var json = File.ReadAllText(Path.Combine("Assets", "inputWithEscapedJson.json"));
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(json);
+            var expression = "${ ._user }";
+
+            //act
+            dynamic result = evaluator.Evaluate(expression, data);
+
+            //assert
+            Assert.NotEmpty(result.user);
+        }
+
         static IExpressionEvaluator BuildExpressionEvaluatorWithNewtonsoftJsonSerializer()
         {
             var services = new ServiceCollection();
