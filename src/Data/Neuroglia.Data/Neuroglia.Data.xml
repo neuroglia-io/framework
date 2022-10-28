@@ -320,19 +320,19 @@
         </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeEarlierThan(System.String,System.DateTime)">
             <summary>
-            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified time
+            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified date and time
             </summary>
             <param name="argumentName">The argument's name</param>
-            <param name="date">The date the argument must be lower than</param>
-            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified time</returns>
+            <param name="date">The date and time the argument must be lower than</param>
+            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified date and time</returns>
         </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeEarlierThan(System.String,System.DateTimeOffset)">
             <summary>
-            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified time
+            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified date and time
             </summary>
             <param name="argumentName">The argument's name</param>
-            <param name="date">The date the argument must be lower than</param>
-            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified time</returns>
+            <param name="date">The date and time the argument must be lower than</param>
+            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be lower than the specified date and time</returns>
         </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeLaterThan(System.String,System.TimeSpan)">
             <summary>
@@ -344,19 +344,19 @@
         </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeLaterThan(System.String,System.DateTime)">
             <summary>
-            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date
+            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date and time
             </summary>
             <param name="argumentName">The argument's name</param>
-            <param name="date">The date the argument must be higher than</param>
-            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date</returns>
+            <param name="date">The date and time the argument must be higher than</param>
+            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date and time</returns>
         </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentMustBeLaterThan(System.String,System.DateTimeOffset)">
             <summary>
-            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date
+            Creates a new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date and time
             </summary>
             <param name="argumentName">The argument's name</param>
-            <param name="date">The date the argument must be higher than</param>
-            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date</returns>
+            <param name="date">The date and time the argument must be higher than</param>
+            <returns>A new <see cref="T:Neuroglia.Data.DomainArgumentException"/> for an argument that must be higher than the specified date and time</returns>
         </member>
         <member name="M:Neuroglia.Data.DomainException.ArgumentMustHaveMinimumLengthOf(System.String,System.Int32)">
             <summary>
@@ -1096,7 +1096,12 @@
               Looks up a localized string similar to The {argument} argument must be superior or equal to {min} and inferior or equal to {max}.
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbeearlierthan">
+        <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbeearlierdatetimethan">
+            <summary>
+              Looks up a localized string similar to The {argument} argument must be a date and time equal to or earlier than &apos;{datetime}&apos;.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbeearliertimethan">
             <summary>
               Looks up a localized string similar to The {argument} argument must be a time equal to or earlier than &apos;{time}&apos;.
             </summary>
@@ -1116,7 +1121,12 @@
               Looks up a localized string similar to The {argument} argument must be higher than {min}.
             </summary>
         </member>
-        <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbelaterthan">
+        <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbelaterdatetimethan">
+            <summary>
+              Looks up a localized string similar to The {argument} argument must be a date and time equal to or later than &apos;{datetime}&apos;.
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Properties.LocalizedResources.exception_domain_argumentmustbelatertimethan">
             <summary>
               Looks up a localized string similar to The {argument} argument must be a time equal to or later than &apos;{time}&apos;.
             </summary>

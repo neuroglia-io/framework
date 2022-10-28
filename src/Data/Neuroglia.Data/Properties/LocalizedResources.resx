@@ -231,7 +231,10 @@
   <data name="exception_domain_argumentmustbecomprisedbetweenincluding" xml:space="preserve">
     <value>The {argument} argument must be superior or equal to {min} and inferior or equal to {max}</value>
   </data>
-  <data name="exception_domain_argumentmustbeearlierthan" xml:space="preserve">
+  <data name="exception_domain_argumentmustbeearlierdatetimethan" xml:space="preserve">
+    <value>The {argument} argument must be a date and time equal to or earlier than '{datetime}'</value>
+  </data>
+  <data name="exception_domain_argumentmustbeearliertimethan" xml:space="preserve">
     <value>The {argument} argument must be a time equal to or earlier than '{time}'</value>
   </data>
   <data name="exception_domain_argumentmustbehigherorequalto" xml:space="preserve">
@@ -243,7 +246,10 @@
   <data name="exception_domain_argumentmustbehigherthan" xml:space="preserve">
     <value>The {argument} argument must be higher than {min}</value>
   </data>
-  <data name="exception_domain_argumentmustbelaterthan" xml:space="preserve">
+  <data name="exception_domain_argumentmustbelaterdatetimethan" xml:space="preserve">
+    <value>The {argument} argument must be a date and time equal to or later than '{datetime}'</value>
+  </data>
+  <data name="exception_domain_argumentmustbelatertimethan" xml:space="preserve">
     <value>The {argument} argument must be a time equal to or later than '{time}'</value>
   </data>
   <data name="exception_domain_argumentmustbelowerorequalto" xml:space="preserve">

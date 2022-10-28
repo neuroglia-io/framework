@@ -403,11 +403,20 @@ namespace Neuroglia.Data.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The {argument} argument must be a date and time equal to or earlier than &apos;{datetime}&apos;.
+        /// </summary>
+        public static string exception_domain_argumentmustbeearlierdatetimethan {
+            get {
+                return ResourceManager.GetString("exception_domain_argumentmustbeearlierdatetimethan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {argument} argument must be a time equal to or earlier than &apos;{time}&apos;.
         /// </summary>
-        public static string exception_domain_argumentmustbeearlierthan {
+        public static string exception_domain_argumentmustbeearliertimethan {
             get {
-                return ResourceManager.GetString("exception_domain_argumentmustbeearlierthan", resourceCulture);
+                return ResourceManager.GetString("exception_domain_argumentmustbeearliertimethan", resourceCulture);
             }
         }
         
@@ -439,11 +448,20 @@ namespace Neuroglia.Data.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The {argument} argument must be a date and time equal to or later than &apos;{datetime}&apos;.
+        /// </summary>
+        public static string exception_domain_argumentmustbelaterdatetimethan {
+            get {
+                return ResourceManager.GetString("exception_domain_argumentmustbelaterdatetimethan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {argument} argument must be a time equal to or later than &apos;{time}&apos;.
         /// </summary>
-        public static string exception_domain_argumentmustbelaterthan {
+        public static string exception_domain_argumentmustbelatertimethan {
             get {
-                return ResourceManager.GetString("exception_domain_argumentmustbelaterthan", resourceCulture);
+                return ResourceManager.GetString("exception_domain_argumentmustbelatertimethan", resourceCulture);
             }
         }
         
