@@ -176,7 +176,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Expressions
             dynamic result = evaluator.Evaluate(expression, data);
 
             //assert
-            Assert.NotEmpty(result.user);
+            Assert.NotEmpty(result.name);
         }
 
         static IExpressionEvaluator BuildExpressionEvaluatorWithNewtonsoftJsonSerializer()

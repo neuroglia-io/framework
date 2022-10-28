@@ -126,7 +126,7 @@ namespace Neuroglia.Data.Expressions.JQ
                 if (serializedArgs != null)
                     jsonArgs = string.Join(" ", serializedArgs.Select(a => @$"--argjson {a.Key} $'{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(a.Value))}'"));
                 fileName = "bash";
-                processArgs = @$"-c ""echo '{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(inputJson))}' | jq '{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(jqExpression))}' {jsonArgs}""";
+                processArgs = @$"-c ""echo '{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(inputJson))}' | jq $'{this.EscapeDoubleQuotes(this.EscapeSingleQuotes(jqExpression))}' {jsonArgs}""";
                 if (processArgs.Length > 200000)
                 {
                     var inputJsonFile = Path.GetTempFileName();
