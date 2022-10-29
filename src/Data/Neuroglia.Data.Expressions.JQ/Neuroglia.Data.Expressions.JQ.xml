@@ -110,20 +110,12 @@
         <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate(System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <inheritdoc/>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.BuildJQExpression(System.String,System.Boolean)" -->
         <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.EscapeDoubleQuotes(System.String)">
             <summary>
             Escapes double quotes in the specified string
             </summary>
             <param name="input">The string for which to escape double quotes</param>
             <returns>The string with escaped double quotes</returns>
-        </member>
-        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.EscapeSingleQuotes(System.String)">
-            <summary>
-            Escapes single quotes in the specified string
-            </summary>
-            <param name="input">The string for which to escape single quotes</param>
-            <returns>The string with escaped single quotes</returns>
         </member>
     </members>
 </doc>
