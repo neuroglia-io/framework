@@ -92,10 +92,10 @@ namespace Neuroglia.Data.Expressions.JQ
                 .ToDictionary(a => a.Key, a => JsonConvert.SerializeObject(JToken.FromObject(a.Value), Formatting.None, serializerSettings))
                 .Aggregate(
                     new StringBuilder(),
-                    (accumulator, source) => accumulator.Append(@$"--argjson ""{source.Key}"" ""{this.EscapeDoubleQuotes(source.Value)}"" "),
+                    (accumulator, source) => accumulator.Append(@$"--argjson ""{source.Key}"" ""{this.EscapeArgs(source.Value)}"" "),
                     sb => sb.ToString()
                 );
-            var processArguments = $"\"{this.EscapeDoubleQuotes(expression)}\" {serializedArgs} -c";
+            var processArguments = @$"""{this.EscapeArgs(expression)}"" {serializedArgs} -c";
             var files = new List<string>();
             var maxLength = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 8000 : 200000;
             if (processArguments.Length >= maxLength)
@@ -160,11 +160,11 @@ namespace Neuroglia.Data.Expressions.JQ
         }
 
         /// <summary>
-        /// Escapes double quotes in the specified string
+        /// Escapes double quotes (") or backslashes (\) in the provided string
         /// </summary>
-        /// <param name="input">The string for which to escape double quotes</param>
-        /// <returns>The string with escaped double quotes</returns>
-        protected virtual string EscapeDoubleQuotes(string input) => Regex.Replace(input, "([\"\\\\])", @"\$1", RegexOptions.Compiled);
+        /// <param name="input">The string to escape</param>
+        /// <returns>The escaped string</returns>
+        protected virtual string EscapeArgs(string input) => Regex.Replace(input, @"(\\(?!\()|"")", @"\$1", RegexOptions.Compiled);
 
 
     }

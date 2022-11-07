@@ -110,9 +110,9 @@
         <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.Evaluate(System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
             <inheritdoc/>
         </member>
-        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.EscapeDoubleQuotes(System.String)">
+        <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.EscapeArgs(System.String)">
             <summary>
-            Escapes double quotes in the specified string
+            Escapes double quotes or slashes in the specified string
             </summary>
             <param name="input">The string for which to escape double quotes</param>
             <returns>The string with escaped double quotes</returns>
