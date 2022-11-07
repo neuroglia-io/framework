@@ -22,7 +22,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
 
         public YamlDotNetSerializerTests()
         {
-            CultureInfo.CurrentCulture = new("en");
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture;
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.CurrentCulture;
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.CurrentCulture;
@@ -78,8 +78,8 @@ namespace Neuroglia.UnitTests.Cases.Serialization
             new object[] { JObject.FromObject(new { }), "{}" },
             new object[] { JValue.CreateNull(), "--- ''" },
             new object[] { JToken.FromObject(Guid.Parse("864febab-99d4-49af-9fc8-a46c910bcc23")), "864febab-99d4-49af-9fc8-a46c910bcc23" },
-            new object[] { JToken.FromObject(DateTimeOffset.Parse("2022-01-27T11:18:23.9397185+00:00")), DateTimeOffset.Parse("2022-01-27T11:18:23.9397185+00:00").ToString() },
-            new object[] { JToken.FromObject(DateTime.Parse("2022-01-27T11:18:23.9397185+00:00")), DateTimeOffset.Parse("2022-01-27T11:18:23.9397185+00:00").ToString()},
+            new object[] { JToken.FromObject(DateTimeOffset.Parse("2022-01-27T11:18:23.9397185+00:00")), DateTimeOffset.Parse("2022-01-27T11:18:23.9397185+00:00").ToString(CultureInfo.InvariantCulture) },
+            new object[] { JToken.FromObject(DateTime.Parse("2022-01-27T11:18:23.9397185+00:00")), DateTime.Parse("2022-01-27T11:18:23.9397185+00:00").ToString(CultureInfo.InvariantCulture) },
             new object[] { JToken.FromObject(TimeSpan.FromSeconds(1)), "PT1S" },
             new object[] { JToken.FromObject(1.25F), "1.25" },
             new object[] { JToken.FromObject(1.25D), "1.25" },

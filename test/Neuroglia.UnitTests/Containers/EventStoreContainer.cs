@@ -5,14 +5,14 @@ using Microsoft.Extensions.Logging;
 namespace Neuroglia.UnitTests.Containers
 {
 
-    public class EventStoreContainer
+    public sealed class EventStoreContainer
         : TestcontainerDatabase
     {
 
         public const int PublicPort1 = 1113;
         public const int PublicPort2 = 2113;
 
-        protected EventStoreContainer(ITestcontainersConfiguration configuration, ILogger<EventStoreContainer> logger) 
+        internal EventStoreContainer(ITestcontainersConfiguration configuration, ILogger logger) 
             : base(configuration, logger)
         {
 
