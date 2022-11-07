@@ -179,6 +179,36 @@ namespace Neuroglia.UnitTests.Cases.Data.Expressions
             Assert.NotEmpty(result.name);
         }
 
+        [Fact]
+        public void Evaluate_String_Concatenation_ShouldWork()
+        {
+            //arrange
+            var evaluator = BuildExpressionEvaluatorWithSystemTextJsonSerializer();
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-concat.input.json")));
+            var expression = File.ReadAllText(Path.Combine("Assets", "string-concat.expression.txt"));
+
+            //act
+            string result = (string)evaluator.Evaluate(expression, data, typeof(string), null);
+
+            //assert
+            result.Should().Be("hello world");
+        }
+
+        [Fact]
+        public void Evaluate_String_Interpolation_ShouldWork()
+        {
+            //arrange
+            var evaluator = BuildExpressionEvaluatorWithSystemTextJsonSerializer();
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-interpolation.input.json")));
+            var expression = File.ReadAllText(Path.Combine("Assets", "string-interpolation.expression.txt"));
+
+            //act
+            string result = (string)evaluator.Evaluate(expression, data, typeof(string), null);
+
+            //assert
+            result.Should().Be("hello world is a greeting");
+        }
+
         static IExpressionEvaluator BuildExpressionEvaluatorWithNewtonsoftJsonSerializer()
         {
             var services = new ServiceCollection();
