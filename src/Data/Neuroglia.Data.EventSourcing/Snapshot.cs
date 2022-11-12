@@ -21,68 +21,9 @@ namespace Neuroglia.Data.EventSourcing
     /// <summary>
     /// Represents the snapshot envelope of an <see cref="IAggregateRoot"/>
     /// </summary>
-    public abstract class Snapshot
-        : ISnapshot
-    {
-
-        /// <summary>
-        /// Initializes a new <see cref="Snapshot{TKey}"/>
-        /// </summary>
-        protected Snapshot()
-        {
-
-        }
-
-        /// <summary>
-        /// Initializes a new <see cref="Snapshot{TKey}"/>
-        /// </summary>
-        /// <param name="data">The <see cref="IAggregateRoot"/> to snapshot</param>
-        /// <param name="metadata">The metadata of the <see cref="Snapshot"/> to create</param>
-        protected Snapshot(IAggregateRoot data, object metadata)
-        {
-            this.Version = data.StateVersion;
-            this.Data = data;
-            this.Metadata = metadata;
-        }
-
-        /// <summary>
-        /// Initializes a new <see cref="Snapshot{TKey}"/>
-        /// </summary>
-        /// <param name="data">The <see cref="IAggregateRoot"/> to snapshot</param>
-        protected Snapshot(IAggregateRoot data)
-            : this(data, null)
-        {
-   
-        }
-
-        /// <inheritdoc/>
-        public virtual long Version { get; protected set; }
-
-        /// <inheritdoc/>
-        public virtual IAggregateRoot Data { get; protected set; }
-
-        /// <inheritdoc/>
-        public virtual object Metadata { get; protected set; }
-
-        /// <summary>
-        /// Creates a new <see cref="Snapshot{TAggregate}"/> for the specified <see cref="IAggregateRoot"/>
-        /// </summary>
-        /// <param name="aggregate">The <see cref="IAggregateRoot"/> to create a new <see cref="Snapshot{TAggregate}"/> for</param>
-        /// <returns>A new <see cref="Snapshot{TAggregate}"/> of the specified <see cref="IAggregateRoot"/></returns>
-        public static Snapshot<TAggregate> CreateFor<TAggregate>(TAggregate aggregate)
-            where TAggregate : class, IAggregateRoot
-        {
-            return new(aggregate);
-        }
-
-    }
-
-    /// <summary>
-    /// Represents the snapshot envelope of an <see cref="IAggregateRoot"/>
-    /// </summary>
     /// <typeparam name="TAggregate">The type of the snapshot <see cref="IAggregateRoot"/></typeparam>
     public class Snapshot<TAggregate>
-        : Snapshot, ISnapshot<TAggregate>
+        : ISnapshot<TAggregate>
         where TAggregate : class, IAggregateRoot
     {
 
@@ -100,31 +41,50 @@ namespace Neuroglia.Data.EventSourcing
         /// <param name="data">The <see cref="IAggregateRoot"/> to snapshot</param>
         /// <param name="metadata">The metadata of the <see cref="Snapshot"/> to create</param>
         public Snapshot(TAggregate data, object metadata)
-            : base(data, metadata)
         {
-
+            this.Version = data.StateVersion;
+            this.Data = data;
+            this.Metadata = metadata;
         }
 
         /// <summary>
         /// Initializes a new <see cref="Snapshot{TKey}"/>
         /// </summary>
+        /// <param name="data">The <see cref="IAggregateRoot"/> to snapshot</param>
         public Snapshot(TAggregate data)
-            : base(data, null)
+            : this(data, null)
         {
 
         }
 
         /// <inheritdoc/>
-        public new virtual TAggregate Data
+        public virtual TAggregate Data { get; protected set; }
+
+        IAggregateRoot ISnapshot.Data => this.Data;
+
+        /// <inheritdoc/>
+        public virtual long Version { get; protected set; }
+
+        /// <inheritdoc/>
+        public virtual object Metadata { get; protected set; }
+
+    }
+
+    /// <summary>
+    /// Defines helpers methods to handle <see cref="ISnapshot"/>s
+    /// </summary>
+    public static class Snapshot
+    {
+
+        /// <summary>
+        /// Creates a new <see cref="Snapshot{TAggregate}"/> for the specified <see cref="IAggregateRoot"/>
+        /// </summary>
+        /// <param name="aggregate">The <see cref="IAggregateRoot"/> to create a new <see cref="Snapshot{TAggregate}"/> for</param>
+        /// <returns>A new <see cref="Snapshot{TAggregate}"/> of the specified <see cref="IAggregateRoot"/></returns>
+        public static Snapshot<TAggregate> CreateFor<TAggregate>(TAggregate aggregate)
+            where TAggregate : class, IAggregateRoot
         {
-            get
-            {
-                return (TAggregate)base.Data;
-            }
-            protected set
-            {
-                base.Data = value;
-            }
+            return new(aggregate);
         }
 
     }
