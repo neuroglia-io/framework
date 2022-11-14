@@ -16,7 +16,7 @@
  */
 using System;
 
-namespace Neuroglia.Caching
+namespace Neuroglia
 {
 
     /// <summary>
