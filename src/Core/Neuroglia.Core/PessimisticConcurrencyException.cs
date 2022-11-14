@@ -16,7 +16,7 @@
  */
 using System;
 
-namespace Neuroglia.Caching
+namespace Neuroglia
 {
     /// <summary>
     /// Represents the <see cref="Exception"/> thrown when a pessimistic concurrency error occurs

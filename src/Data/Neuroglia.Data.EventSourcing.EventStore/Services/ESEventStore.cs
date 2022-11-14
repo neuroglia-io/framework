@@ -130,10 +130,17 @@ namespace Neuroglia.Data.EventSourcing
             if (events == null || !events.Any())
                 throw new ArgumentNullException(nameof(events));
             IEnumerable<EventData> eventDataCollection = await this.GenerateEventsDataAsync(events, cancellationToken);
-            if (expectedVersion < 0)
-                await EventStoreClient.AppendToStreamAsync(streamId, StreamState.Any, eventDataCollection, cancellationToken: cancellationToken);
-            else
-                await EventStoreClient.AppendToStreamAsync(streamId, StreamRevision.FromInt64(expectedVersion == 0 ? expectedVersion : expectedVersion - 1), eventDataCollection, cancellationToken: cancellationToken);
+            try
+            {
+                if (expectedVersion < 0)
+                    await EventStoreClient.AppendToStreamAsync(streamId, StreamState.Any, eventDataCollection, cancellationToken: cancellationToken);
+                else
+                    await EventStoreClient.AppendToStreamAsync(streamId, StreamRevision.FromInt64(expectedVersion == 0 ? expectedVersion : expectedVersion - 1), eventDataCollection, cancellationToken: cancellationToken);
+            }
+            catch (WrongExpectedVersionException ex)
+            {
+                throw new ConcurrencyException();
+            }
         }
 
         /// <inheritdoc/>
