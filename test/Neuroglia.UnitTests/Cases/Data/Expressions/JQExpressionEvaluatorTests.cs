@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Data.Expressions;
 using Neuroglia.Data.Expressions.JQ;
 using Neuroglia.Serialization;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
@@ -207,6 +208,21 @@ namespace Neuroglia.UnitTests.Cases.Data.Expressions
 
             //assert
             result.Should().Be("hello world is a greeting");
+        }
+
+        [Fact]
+        public void Evaluate_String_Substitution_ShouldWork()
+        {
+            //arrange
+            var evaluator = BuildExpressionEvaluatorWithSystemTextJsonSerializer();
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-substitution.input.json")));
+            var expression = File.ReadAllText(Path.Combine("Assets", "string-substitution.expression.txt"));
+
+            //act
+            string result = (string)evaluator.Evaluate(expression, data, typeof(string), null);
+
+            //assert
+            result.Should().Be("Hello world");
         }
 
         static IExpressionEvaluator BuildExpressionEvaluatorWithNewtonsoftJsonSerializer()

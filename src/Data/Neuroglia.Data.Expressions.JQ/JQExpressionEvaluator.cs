@@ -117,7 +117,9 @@ namespace Neuroglia.Data.Expressions.JQ
                 processArguments += " -c";
             }
             using Process process = new();
+            
             process.StartInfo.FileName = "jq";
+            Console.WriteLine(processArguments);
             process.StartInfo.Arguments = processArguments;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardInput = true;
