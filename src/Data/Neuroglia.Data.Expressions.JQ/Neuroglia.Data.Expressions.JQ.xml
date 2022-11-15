@@ -113,6 +113,8 @@
         <member name="M:Neuroglia.Data.Expressions.JQ.JQExpressionEvaluator.EscapeArgs(System.String)">
             <summary>
             Escapes double quotes (") or backslashes (\) in the provided string
+            
+            Ignores \( and \\$
             </summary>
             <param name="input">The string to escape</param>
             <returns>The escaped string</returns>

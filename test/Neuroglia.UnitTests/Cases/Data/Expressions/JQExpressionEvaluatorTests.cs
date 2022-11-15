@@ -211,7 +211,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Expressions
         }
 
         [Fact]
-        public void Evaluate_String_Substitution_ShouldWork()
+        public void Evaluate_Complex_String_Substitution_ShouldWork()
         {
             //arrange
             var evaluator = BuildExpressionEvaluatorWithSystemTextJsonSerializer();
@@ -223,6 +223,21 @@ namespace Neuroglia.UnitTests.Cases.Data.Expressions
 
             //assert
             result.Should().Be("Hello world");
+        }
+
+        [Fact]
+        public void Evaluate_String_With_Escaped_Quotes_ShouldWork()
+        {
+            //arrange
+            var evaluator = BuildExpressionEvaluatorWithSystemTextJsonSerializer();
+            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-quoted.input.json")));
+            var expression = File.ReadAllText(Path.Combine("Assets", "string-quoted.expression.txt"));
+
+            //act
+            string result = (string)evaluator.Evaluate(expression, data, typeof(string), null);
+
+            //assert
+            result.Should().Be(@"bar is ""bar""");
         }
 
         static IExpressionEvaluator BuildExpressionEvaluatorWithNewtonsoftJsonSerializer()

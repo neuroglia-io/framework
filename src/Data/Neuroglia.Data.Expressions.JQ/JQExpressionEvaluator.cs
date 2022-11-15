@@ -97,7 +97,7 @@ namespace Neuroglia.Data.Expressions.JQ
                 );
             var processArguments = @$"""{this.EscapeArgs(expression)}"" {serializedArgs} -c";
             var files = new List<string>();
-            var maxLength = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 8000 : 200000;
+            var maxLength = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 8000 : 32699; // https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo.arguments?view=net-7.0#remarks
             if (processArguments.Length >= maxLength)
             {
                 var filterFile = Path.GetTempFileName();
@@ -119,7 +119,6 @@ namespace Neuroglia.Data.Expressions.JQ
             using Process process = new();
             
             process.StartInfo.FileName = "jq";
-            Console.WriteLine(processArguments);
             process.StartInfo.Arguments = processArguments;
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardInput = true;
@@ -163,10 +162,12 @@ namespace Neuroglia.Data.Expressions.JQ
 
         /// <summary>
         /// Escapes double quotes (") or backslashes (\) in the provided string
+        /// 
+        /// Ignores \( and \\$
         /// </summary>
         /// <param name="input">The string to escape</param>
         /// <returns>The escaped string</returns>
-        protected virtual string EscapeArgs(string input) => Regex.Replace(input, @"(\\(?!\()|"")", @"\$1", RegexOptions.Compiled);
+        protected virtual string EscapeArgs(string input) => Regex.Replace(input, @"(\\(?!(\(|\$|\\\$))|"")", @"\$1", RegexOptions.Compiled);
 
 
     }
