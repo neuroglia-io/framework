@@ -141,7 +141,7 @@ namespace Neuroglia.Serialization
                 case decimal:
                     return value;
                 case BigInteger:
-                    return (long)value;
+                    return (long)(BigInteger)value;
                 case Enum enumValue:
                     return (int)(object)enumValue;
                 case Uri uri:

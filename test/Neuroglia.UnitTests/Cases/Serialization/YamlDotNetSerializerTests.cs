@@ -70,7 +70,7 @@ namespace Neuroglia.UnitTests.Cases.Serialization
 
             //assert
             deserialized.Should().NotBeNull();
-            Assert.Equal(expectedSerializedValue + "\r\n", buffer);
+            Assert.Equal(expectedSerializedValue.Trim(), buffer.Trim());
         }
 
         public static IEnumerable<object[]> SerializeJTokenTypes => new List<object[]>

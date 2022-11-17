@@ -66,8 +66,8 @@ jobs:
       - name: Test Mediation
         run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Mediation"
 
-      #- name: Test Serialization
-      #  run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Serialization"
+      - name: Test Serialization
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Serialization"
 
-      - name: Test Templating
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Templating"
+      #- name: Test Templating
+      #  run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Templating"
