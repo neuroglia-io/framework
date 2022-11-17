@@ -21,6 +21,7 @@ using Neuroglia.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using System.Collections;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -88,22 +89,28 @@ namespace Neuroglia.Data.Expressions.JQ
                 throw new ArgumentNullException(nameof(data));
             var serializerSettings = new JsonSerializerSettings() { ContractResolver = new DefaultContractResolver(), NullValueHandling = NullValueHandling.Ignore };
             var input = JsonConvert.SerializeObject(data, serializerSettings);
-            var serializedArgs = args?
-                .ToDictionary(a => a.Key, a => JsonConvert.SerializeObject(JToken.FromObject(a.Value), Formatting.None, serializerSettings))
-                .Aggregate(
-                    new StringBuilder(),
-                    (accumulator, source) => accumulator.Append(@$"--argjson ""{source.Key}"" ""{this.EscapeArgs(source.Value)}"" "),
-                    sb => sb.ToString()
-                );
-            var processArguments = @$"""{this.EscapeArgs(expression)}"" {serializedArgs} -c";
-            var files = new List<string>();
-            var maxLength = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 8000 : 200000;
-            if (processArguments.Length >= maxLength)
+
+            var arguments = new List<string>();
+            arguments.Add(expression);
+            if (args != null)
             {
+                foreach (var kvp in args.ToDictionary(a => a.Key, a => JsonConvert.SerializeObject(JToken.FromObject(a.Value), Formatting.None, serializerSettings)))
+                {
+                    arguments.Add("--argjson");
+                    arguments.Add(kvp.Key);
+                    arguments.Add(kvp.Value);
+                }
+            }
+            var files = new List<string>();
+            var maxLength = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? 8000 : 32699; // https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.processstartinfo.arguments?view=net-7.0#remarks
+            if (arguments.Any(arg => arg.Length >= maxLength))
+            {
+                arguments = new List<string>();
                 var filterFile = Path.GetTempFileName();
                 File.WriteAllText(filterFile, expression);
                 files.Add(filterFile);
-                processArguments = $"-f {filterFile}";
+                arguments.Add("-f");
+                arguments.Add(filterFile);
                 if (args != null && args.Any())
                 {
                     foreach (var kvp in args)
@@ -111,14 +118,17 @@ namespace Neuroglia.Data.Expressions.JQ
                         var argFile = Path.GetTempFileName();
                         File.WriteAllText(argFile, JsonConvert.SerializeObject(JToken.FromObject(kvp.Value), Formatting.None, serializerSettings));
                         files.Add(argFile);
-                        processArguments += @$" --argfile ""{kvp.Key}"" ""{argFile}""";
+                        arguments.Add("--argfile");
+                        arguments.Add(kvp.Key);
+                        arguments.Add(argFile);
                     }
                 }
-                processArguments += " -c";
             }
+            arguments.Add("-c");
+
             using Process process = new();
             process.StartInfo.FileName = "jq";
-            process.StartInfo.Arguments = processArguments;
+            arguments.ForEach(arg => process.StartInfo.ArgumentList.Add(arg));
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardInput = true;
             process.StartInfo.RedirectStandardOutput = true;
@@ -158,14 +168,6 @@ namespace Neuroglia.Data.Expressions.JQ
                 result = jtoken.ToObject();
             return result;
         }
-
-        /// <summary>
-        /// Escapes double quotes (") or backslashes (\) in the provided string
-        /// </summary>
-        /// <param name="input">The string to escape</param>
-        /// <returns>The escaped string</returns>
-        protected virtual string EscapeArgs(string input) => Regex.Replace(input, @"(\\(?!\()|"")", @"\$1", RegexOptions.Compiled);
-
 
     }
 

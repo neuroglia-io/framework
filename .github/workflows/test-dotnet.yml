@@ -18,18 +18,56 @@ jobs:
         dotnet-version: ['6.0.x' ]
 
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      # - name: Setup .NET ${{ matrix.dotnet-version }}
-      #   uses: actions/setup-dotnet@v2
-      #   with:
-      #     dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Setup .NET ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
 
-      # - name: Restore dependencies
-      #   run: dotnet restore "${{ env.SOLUTION }}"
+      - name: Restore dependencies
+        run: dotnet restore "${{ env.SOLUTION }}"
 
       # - name: Test
-      #   run: dotnet test "${{ env.SOLUTION }}" --no-restore --verbosity normal
-      - name: Test
-        run: echo Testing currently disabled
+      #   run: dotnet test "${{ env.SOLUTION }}" --no-restore --verbosity normal"
+
+      # Test "per domain" for ease of readability
+      - name: Test Core
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Core"
+
+      - name: Test Data.EventSourcing
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.EventSourcing"
+
+      - name: Test Data.Expressions
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Expressions"
+
+      - name: Test Data.Flux
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Flux"
+
+      - name: Test Data.OData
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.OData"
+
+      #- name: Test Data.Repositories
+      #  run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Repositories"
+
+      - name: Test Data.SchemaRegistry
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.SchemaRegistry"
+
+      - name: Test Data.Schemas
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Schemas"
+
+      - name: Test Eventing
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Eventing"
+
+      - name: Test JsonPatch
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~JsonPatch"
+
+      - name: Test Mediation
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Mediation"
+
+      - name: Test Serialization
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Serialization"
+
+      #- name: Test Templating
+      #  run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Templating"

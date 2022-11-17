@@ -130,7 +130,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Flux
             dispatcher.Dispatch(action);
             var feature = store.GetFeature<CounterFeature>();
 
-            await Task.Delay(1); //todo: why on earth Flux with DI is the only case where we have to wait a bit before getting the updated state???
+            await Task.Delay(100); //todo: why on earth Flux with DI is the only case where we have to wait a bit before getting the updated state???
 
             //assert
             feature.Should().NotBeNull();

@@ -5,13 +5,13 @@ using System;
 
 namespace Neuroglia.UnitTests.Containers
 {
-    public class ApiCurioRegistryContainer
+    public sealed class ApiCurioRegistryContainer
         : HostedServiceContainer
     {
 
         public const int HostPort = 8080;
 
-        protected ApiCurioRegistryContainer(ITestcontainersConfiguration configuration, ILogger logger) 
+        internal ApiCurioRegistryContainer(ITestcontainersConfiguration configuration, ILogger logger) 
             : base(configuration, logger)
         {
 

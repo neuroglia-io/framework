@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Neuroglia.UnitTests.Containers
 {
-    public class MongoDBContainer
+    public sealed class MongoDBContainer
         : TestcontainerDatabase
     {
 
@@ -13,7 +13,7 @@ namespace Neuroglia.UnitTests.Containers
         public const string DefaultPassword = "test";
         public const int PublicPort = 27017;
 
-        protected MongoDBContainer(ITestcontainersConfiguration configuration, ILogger<MongoDBContainer> logger) 
+        internal MongoDBContainer(ITestcontainersConfiguration configuration, ILogger logger) 
             : base(configuration, logger)
         {
             base.Database = DefaultDatabase;
