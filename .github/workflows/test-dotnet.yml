@@ -48,8 +48,8 @@ jobs:
       - name: Test Data.OData
         run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.OData"
 
-      #- name: Test Data.Repositories
-      #  run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Repositories"
+      - name: Test Data.Repositories
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Repositories"
 
       - name: Test Data.SchemaRegistry
         run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.SchemaRegistry"
