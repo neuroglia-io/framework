@@ -34,7 +34,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
 
         static Guid? EntityId;
 
-        [Fact, Priority(300)]
+        [Fact, Priority(0)]
         public async Task AddEntity()
         {
             //arrange
@@ -58,7 +58,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             entity.LastName.Should().Be(lastName);
         }
 
-        [Fact, Priority(301)]
+        [Fact, Priority(1)]
         public async Task ContainsEntity()
         {
             //act
@@ -68,7 +68,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             exists.Should().BeTrue();
         }
 
-        [Fact, Priority(302)]
+        [Fact, Priority(2)]
         public async Task FindEntity()
         {
             //act
@@ -83,7 +83,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             entity.LastName.Should().Be(fromcontext.LastName);
         }
 
-        [Fact, Priority(303)]
+        [Fact, Priority(3)]
         public async Task UpdateEntity()
         {
             //arrange
@@ -106,7 +106,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             entity.LastName.Should().Be(newLastName);
         }
 
-        [Fact, Priority(304)]
+        [Fact, Priority(4)]
         public async Task ListEntities()
         {
             //act
@@ -116,7 +116,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             entities.Should().NotBeEmpty();
         }
 
-        [Fact, Priority(305)]
+        [Fact, Priority(5)]
         public void GetQueryable()
         {
             //act
@@ -126,7 +126,7 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             entities.Should().NotBeEmpty();
         }
 
-        [Fact, Priority(306)]
+        [Fact, Priority(6)]
         public async Task RemoveEntity()
         {
             //act

@@ -48,8 +48,17 @@ jobs:
       - name: Test Data.OData
         run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.OData"
 
+      - name: Test Data.Repositories.DistributedCacheRepositoryTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~DistributedCacheRepositoryTests"
+
       - name: Test Data.Repositories
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~DistributedCacheRepositoryTests|FullyQualifiedName~EventSourcingRepositoryTests|FullyQualifiedName~MongoRepositoryTests"
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~EFCoreRepositoryTests"
+
+      - name: Test Data.Repositories.EventSourcingRepositoryTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~EventSourcingRepositoryTests"
+
+      - name: Test Data.Repositories.MongoRepositoryTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~MongoRepositoryTests"
 
       - name: Test Data.SchemaRegistry
         run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.SchemaRegistry"
