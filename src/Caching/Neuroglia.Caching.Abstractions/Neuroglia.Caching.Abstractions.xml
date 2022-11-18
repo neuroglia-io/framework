@@ -119,29 +119,6 @@
             Disposes of the <see cref="T:Neuroglia.Caching.CacheLock"/>
             </summary>
         </member>
-        <member name="T:Neuroglia.Caching.ConcurrencyException">
-            <summary>
-            Represents the <see cref="T:System.Exception"/> thrown when a concurrency error occurs
-            </summary>
-        </member>
-        <member name="M:Neuroglia.Caching.ConcurrencyException.#ctor">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Caching.ConcurrencyException"/>
-            </summary>
-        </member>
-        <member name="M:Neuroglia.Caching.ConcurrencyException.#ctor(System.String)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Caching.ConcurrencyException"/>
-            </summary>
-            <param name="message">The exception message</param>
-        </member>
-        <member name="M:Neuroglia.Caching.ConcurrencyException.#ctor(System.String,System.Exception)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Caching.ConcurrencyException"/>
-            </summary>
-            <param name="message">The exception message</param>
-            <param name="innerException">The inner exception</param>
-        </member>
         <member name="T:Neuroglia.Caching.IDistributedCacheExtensions">
             <summary>
             Defines extensions for <see cref="T:Neuroglia.Caching.IDistributedCache"/>s
@@ -197,52 +174,6 @@
             <summary>
             Gets the entry's key
             </summary>
-        </member>
-        <member name="T:Neuroglia.Caching.OptimisticConcurrencyException">
-            <summary>
-            Represents the <see cref="T:System.Exception"/> thrown when an optimistic concurrency error occurs
-            </summary>
-        </member>
-        <member name="M:Neuroglia.Caching.OptimisticConcurrencyException.#ctor">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Caching.OptimisticConcurrencyException"/>
-            </summary>
-        </member>
-        <member name="M:Neuroglia.Caching.OptimisticConcurrencyException.#ctor(System.String)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Caching.OptimisticConcurrencyException"/>
-            </summary>
-            <param name="message">The exception message</param>
-        </member>
-        <member name="M:Neuroglia.Caching.OptimisticConcurrencyException.#ctor(System.String,System.Exception)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Caching.OptimisticConcurrencyException"/>
-            </summary>
-            <param name="message">The exception message</param>
-            <param name="innerException">The inner exception</param>
-        </member>
-        <member name="T:Neuroglia.Caching.PessimisticConcurrencyException">
-            <summary>
-            Represents the <see cref="T:System.Exception"/> thrown when a pessimistic concurrency error occurs
-            </summary>
-        </member>
-        <member name="M:Neuroglia.Caching.PessimisticConcurrencyException.#ctor">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Caching.PessimisticConcurrencyException"/>
-            </summary>
-        </member>
-        <member name="M:Neuroglia.Caching.PessimisticConcurrencyException.#ctor(System.String)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Caching.PessimisticConcurrencyException"/>
-            </summary>
-            <param name="message">The exception message</param>
-        </member>
-        <member name="M:Neuroglia.Caching.PessimisticConcurrencyException.#ctor(System.String,System.Exception)">
-            <summary>
-            Initializes a new <see cref="T:Neuroglia.Caching.PessimisticConcurrencyException"/>
-            </summary>
-            <param name="message">The exception message</param>
-            <param name="innerException">The inner exception</param>
         </member>
         <member name="T:Neuroglia.Caching.IDistributedCache">
             <summary>

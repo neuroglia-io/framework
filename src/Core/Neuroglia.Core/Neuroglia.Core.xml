@@ -143,6 +143,29 @@
             Represents the base class for all command DTOs
             </summary>
         </member>
+        <member name="T:Neuroglia.ConcurrencyException">
+            <summary>
+            Represents the <see cref="T:System.Exception"/> thrown when a concurrency error occurs
+            </summary>
+        </member>
+        <member name="M:Neuroglia.ConcurrencyException.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.ConcurrencyException"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.ConcurrencyException.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.ConcurrencyException"/>
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:Neuroglia.ConcurrencyException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.ConcurrencyException"/>
+            </summary>
+            <param name="message">The exception message</param>
+            <param name="innerException">The inner exception</param>
+        </member>
         <member name="T:Neuroglia.DataTransferObject">
             <summary>
             Represents the base class for all Data Transfer Objects (DTOs)
@@ -1135,6 +1158,86 @@
             <summary>
             Indicates an internal error
             </summary>
+        </member>
+        <member name="T:Neuroglia.OptimisticConcurrencyException">
+            <summary>
+            Represents the <see cref="T:System.Exception"/> thrown when an optimistic concurrency error occurs
+            </summary>
+        </member>
+        <member name="M:Neuroglia.OptimisticConcurrencyException.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OptimisticConcurrencyException"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.OptimisticConcurrencyException.#ctor(System.Nullable{System.Int64},System.Nullable{System.Int64})">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OptimisticConcurrencyException"/>
+            </summary>
+            <param name="actualVersion">The expected version</param>
+            <param name="expectedVersion">The actual version</param>
+        </member>
+        <member name="M:Neuroglia.OptimisticConcurrencyException.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OptimisticConcurrencyException"/>
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:Neuroglia.OptimisticConcurrencyException.#ctor(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64})">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OptimisticConcurrencyException"/>
+            </summary>
+            <param name="message">The exception message</param>
+            <param name="actualVersion">The expected version</param>
+            <param name="expectedVersion">The actual version</param>
+        </member>
+        <member name="M:Neuroglia.OptimisticConcurrencyException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OptimisticConcurrencyException"/>
+            </summary>
+            <param name="message">The exception message</param>
+            <param name="innerException">The inner exception</param>
+        </member>
+        <member name="M:Neuroglia.OptimisticConcurrencyException.#ctor(System.String,System.Exception,System.Int64,System.Int64)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.OptimisticConcurrencyException"/>
+            </summary>
+            <param name="message">The exception message</param>
+            <param name="innerException">The inner exception</param>
+            <param name="actualVersion">The expected version</param>
+            <param name="expectedVersion">The actual version</param>
+        </member>
+        <member name="P:Neuroglia.OptimisticConcurrencyException.ExpectedVersion">
+            <summary>
+            Gets the expected version
+            </summary>
+        </member>
+        <member name="P:Neuroglia.OptimisticConcurrencyException.ActualVersion">
+            <summary>
+            Gets the actual version
+            </summary>
+        </member>
+        <member name="T:Neuroglia.PessimisticConcurrencyException">
+            <summary>
+            Represents the <see cref="T:System.Exception"/> thrown when a pessimistic concurrency error occurs
+            </summary>
+        </member>
+        <member name="M:Neuroglia.PessimisticConcurrencyException.#ctor">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.PessimisticConcurrencyException"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.PessimisticConcurrencyException.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.PessimisticConcurrencyException"/>
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:Neuroglia.PessimisticConcurrencyException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.PessimisticConcurrencyException"/>
+            </summary>
+            <param name="message">The exception message</param>
+            <param name="innerException">The inner exception</param>
         </member>
         <member name="T:Neuroglia.PropertyPath">
             <summary>
