@@ -51,7 +51,7 @@ jobs:
       - name: Test Data.Repositories.DistributedCacheRepositoryTests
         run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~DistributedCacheRepositoryTests"
 
-      - name: Test Data.Repositories
+      - name: Test Data.Repositories.EFCoreRepositoryTests
         run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~EFCoreRepositoryTests"
 
       - name: Test Data.Repositories.EventSourcingRepositoryTests
