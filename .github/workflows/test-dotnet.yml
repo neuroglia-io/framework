@@ -49,7 +49,7 @@ jobs:
         run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.OData"
 
       - name: Test Data.Repositories
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Repositories"
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~DistributedCacheRepositoryTests|FullyQualifiedName~EventSourcingRepositoryTests|FullyQualifiedName~MongoRepositoryTests"
 
       - name: Test Data.SchemaRegistry
         run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.SchemaRegistry"
