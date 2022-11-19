@@ -2,6 +2,7 @@
 using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
 using System;
+using System.IO;
 
 namespace Neuroglia.UnitTests.Containers
 {
@@ -19,6 +20,7 @@ namespace Neuroglia.UnitTests.Containers
         {
             if (Container != null)
                 return Container;
+            using var outputConsumer = Consume.RedirectStdoutAndStderrToStream(new MemoryStream(), new MemoryStream());
             Container = new TestcontainersBuilder<PostgreSqlTestcontainer>()
                 .WithName($"npgsql-{Guid.NewGuid():N}")
                 .WithDatabase(new PostgreSqlTestcontainerConfiguration()
@@ -27,8 +29,12 @@ namespace Neuroglia.UnitTests.Containers
                     Username = Username,
                     Password = Password
                 })
-                .WithWaitStrategy(Wait.ForUnixContainer()
-                    .UntilPortIsAvailable(5432))
+                .WithOutputConsumer(outputConsumer)
+                .WithWaitStrategy(Wait
+                    .ForUnixContainer()
+                    .UntilPortIsAvailable(5432)
+                    .UntilMessageIsLogged(outputConsumer.Stdout, "database system is ready to accept connections")
+                )
                 .Build();
             Container.StartAsync().GetAwaiter().GetResult();
             return Container;
