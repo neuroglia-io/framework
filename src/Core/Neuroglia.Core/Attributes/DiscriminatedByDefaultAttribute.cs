@@ -19,25 +19,12 @@ using System;
 namespace Neuroglia;
 
 /// <summary>
-/// Represents the <see cref="Attribute"/> used to indicate the discriminator value of a derived type
+/// Represents the <see cref="Attribute"/> used to discriminate the marked class by default when the discriminator value does not match any mapping 
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public class DiscriminatorValueAttribute
+public class DiscriminatedByDefaultAttribute
     : Attribute
 {
 
-    /// <summary>
-    /// Initializes a new <see cref="DiscriminatorValueAttribute"/>
-    /// </summary>
-    /// <param name="value">The value used to discriminate the derived type marked by the <see cref="DiscriminatorValueAttribute"/></param>
-    public DiscriminatorValueAttribute(object value)
-    {
-        this.Value = value;
-    }
-
-    /// <summary>
-    /// Gets the value used to discriminate the derived type marked by the <see cref="DiscriminatorValueAttribute"/>
-    /// </summary>
-    public object Value { get; }
 
 }

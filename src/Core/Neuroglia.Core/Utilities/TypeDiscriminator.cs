@@ -68,9 +68,10 @@ namespace Neuroglia
                 throw new ArgumentNullException(nameof(discriminatorValue));
             if (!Mappings.TryGetValue(type, out var discriminatorInfo))
                 discriminatorInfo = MapDiscriminatedType(type);
-            if (discriminatorInfo == null)
-                throw new Exception($"The specified type '{type.FullName}' cannot be discriminated. Make sure that it is marked with the '{nameof(DiscriminatorAttribute)}', and that its concretions are marked with the '{nameof(DiscriminatorValueAttribute)}'");
-            return discriminatorInfo.Mappings[discriminatorValue];
+            if (discriminatorInfo == null) throw new Exception($"The specified type '{type.FullName}' cannot be discriminated. Make sure that it is marked with the '{nameof(DiscriminatorAttribute)}', and that its concretions are marked with the '{nameof(DiscriminatorValueAttribute)}'");
+            if(discriminatorInfo.Mappings.TryGetValue(discriminatorValue, out var discriminatedType)) return discriminatedType;
+            if(discriminatorInfo.DefaultType == null) throw new Exception($"The specified type '{type.FullName}' cannot be discriminated. Make sure that it is marked with the '{nameof(DiscriminatorAttribute)}', and that its concretions are marked with the '{nameof(DiscriminatorValueAttribute)}'");
+            return discriminatorInfo.DefaultType;
         }
 
         /// <summary>
@@ -86,20 +87,22 @@ namespace Neuroglia
 
         private static TypeDiscriminatorInfo MapDiscriminatedType(Type type)
         {
-            if (type == null)
-                throw new ArgumentNullException(nameof(type));
-            if (!type.TryGetCustomAttribute(out DiscriminatorAttribute discriminatorAttribute))
-                return null;
+            if (type == null) throw new ArgumentNullException(nameof(type));
+            if (!type.TryGetCustomAttribute(out DiscriminatorAttribute discriminatorAttribute)) return null;
             var property = type.GetProperty(discriminatorAttribute.Property, BindingFlags.Default | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
-            if (property == null)
-                throw new MissingMemberException($"Failed to find the discriminator property with name '{property.Name}'");
+            if (property == null) throw new MissingMemberException($"Failed to find the discriminator property with name '{property.Name}'");
             var mappings = new Dictionary<string, Type>();
+            Type defaultType = null;
             foreach (var derivedType in TypeCacheUtil.FindFilteredTypes($"nposm:json-polymorph:{type.Name}",
                 (t) => t.IsClass && !t.IsAbstract && t.BaseType == type))
             {
                 var discriminatorValueAttribute = derivedType.GetCustomAttribute<DiscriminatorValueAttribute>();
                 if (discriminatorValueAttribute == null)
+                {
+                    var discriminateByDefaultAttribute = derivedType.GetCustomAttribute<DiscriminatedByDefaultAttribute>();
+                    if (discriminateByDefaultAttribute != null) defaultType = derivedType;
                     continue;
+                }
                 var discriminatorValue = null as string;
                 if (discriminatorValueAttribute.Value.GetType().IsEnum)
                     discriminatorValue = EnumHelper.Stringify((Enum)discriminatorValueAttribute.Value, property.PropertyType);
@@ -107,7 +110,7 @@ namespace Neuroglia
                     discriminatorValue = discriminatorValueAttribute.Value.ToString();
                 mappings.Add(discriminatorValue, derivedType);
             }
-            var discriminator = new TypeDiscriminatorInfo(property, mappings);
+            var discriminator = new TypeDiscriminatorInfo(property, mappings, defaultType);
             Mappings.Add(type, discriminator);
             return discriminator;
         }
@@ -115,15 +118,18 @@ namespace Neuroglia
         class TypeDiscriminatorInfo
         {
 
-            public TypeDiscriminatorInfo(PropertyInfo property, IDictionary<string, Type> mappings)
+            public TypeDiscriminatorInfo(PropertyInfo property, IDictionary<string, Type> mappings, Type defaultType = null)
             {
                 this.Property = property ?? throw new ArgumentNullException(nameof(property));
                 this.Mappings = mappings ?? throw new ArgumentNullException(nameof(mappings));
+                this.DefaultType = defaultType;
             }
 
             public PropertyInfo Property { get; }
 
             public IDictionary<string, Type> Mappings { get; }
+
+            public Type DefaultType { get; }
 
         }
 
