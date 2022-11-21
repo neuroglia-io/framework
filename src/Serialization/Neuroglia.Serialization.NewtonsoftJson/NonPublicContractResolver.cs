@@ -47,6 +47,7 @@ namespace Newtonsoft.Json.Serialization
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
             var propertiesByInheritancePriority = type.GetProperties()
+               .DistinctBy(p => p.Name)
                .ToDictionary(p => p.Name.ToLowerInvariant(), p => GetBaseTypes(p.DeclaringType).Count() * 100);
             var properties = base.CreateProperties(type, memberSerialization);
             foreach (var property in properties)
