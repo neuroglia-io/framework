@@ -113,6 +113,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Schemas.Abst
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Serialization.YamlDotNet", "src\Serialization\Neuroglia.Serialization.YamlDotNet\Neuroglia.Serialization.YamlDotNet.csproj", "{B51E0072-114C-42BD-B9B3-C27314E63240}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Expressions.JavaScript", "src\Data\Neuroglia.Data.Expressions.JavaScript\Neuroglia.Data.Expressions.JavaScript.csproj", "{AD2B0796-0BD3-4247-B113-5CE4FB13FF50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -287,6 +289,10 @@ Global
 		{B51E0072-114C-42BD-B9B3-C27314E63240}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B51E0072-114C-42BD-B9B3-C27314E63240}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B51E0072-114C-42BD-B9B3-C27314E63240}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD2B0796-0BD3-4247-B113-5CE4FB13FF50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD2B0796-0BD3-4247-B113-5CE4FB13FF50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD2B0796-0BD3-4247-B113-5CE4FB13FF50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD2B0796-0BD3-4247-B113-5CE4FB13FF50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -345,6 +351,7 @@ Global
 		{1C6B02F2-493D-4DA0-9B00-D5A5291CC8D2} = {673DB177-2599-4F86-894C-0C90E6925C36}
 		{D0F62CAE-62CF-4EE6-A6CD-FE50786B9053} = {673DB177-2599-4F86-894C-0C90E6925C36}
 		{B51E0072-114C-42BD-B9B3-C27314E63240} = {03BA8EDF-BB40-445E-90C4-815919223B54}
+		{AD2B0796-0BD3-4247-B113-5CE4FB13FF50} = {673DB177-2599-4F86-894C-0C90E6925C36}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}

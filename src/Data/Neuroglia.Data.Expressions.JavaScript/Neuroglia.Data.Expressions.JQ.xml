@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Neuroglia.Data.Expressions.JavaScript</name>
+    </assembly>
+    <members>
+        <member name="T:Neuroglia.Data.Expressions.JavaScript.Configuration.IJavaScriptExpressionEvaluatorOptionsBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build <see cref="T:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptions"/>
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.Configuration.IJavaScriptExpressionEvaluatorOptionsBuilder.UseSerializer``1">
+            <summary>
+            Configures the <see cref="T:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator"/> to use the specified <see cref="T:Neuroglia.Serialization.IJsonSerializer"/> type
+            </summary>
+            <typeparam name="TSerializer">The type of <see cref="T:Neuroglia.Serialization.IJsonSerializer"/> to use</typeparam>
+            <returns>The configured <see cref="T:Neuroglia.Data.Expressions.JavaScript.Configuration.IJavaScriptExpressionEvaluatorOptionsBuilder"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.Configuration.IJavaScriptExpressionEvaluatorOptionsBuilder.Build">
+            <summary>
+            Builds the <see cref="T:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptions"/>
+            </summary>
+            <returns>New <see cref="T:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptions"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptions">
+            <summary>
+            Represents the options used to configure a <see cref="T:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator"/>
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptions.SerializerType">
+            <summary>
+            Gets/sets the type of <see cref="T:Neuroglia.Serialization.IJsonSerializer"/> to use. Defaults to <see cref="T:Neuroglia.Serialization.NewtonsoftJsonSerializer"/>
+            </summary>
+        </member>
+        <member name="T:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptionsBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:Neuroglia.Data.Expressions.JavaScript.Configuration.IJavaScriptExpressionEvaluatorOptionsBuilder"/> interface
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptionsBuilder.Options">
+            <summary>
+            Gets the <see cref="T:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptions"/> to configure
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptionsBuilder.UseSerializer``1">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptionsBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:Neuroglia.Data.Expressions.JavaScript.IServiceCollectionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.IServiceCollectionExtensions.AddJavaScriptExpressionEvaluator(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Neuroglia.Data.Expressions.JavaScript.Configuration.IJavaScriptExpressionEvaluatorOptionsBuilder},Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="setup">An <see cref="T:System.Action`1"/> used to configure the <see cref="T:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator"/></param>
+            <param name="lifetime">The service's lifetime. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.IServiceCollectionExtensions.AddJavaScriptExpressionEvaluator(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.DependencyInjection.ServiceLifetime)">
+            <summary>
+            Adds and configures a new <see cref="T:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator"/>
+            </summary>
+            <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
+            <param name="lifetime">The service's lifetime. Defaults to <see cref="F:Microsoft.Extensions.DependencyInjection.ServiceLifetime.Transient"/></param>
+            <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator">
+            <summary>
+            Represents the default, JQ implementation of the <see cref="T:Neuroglia.Data.Expressions.IExpressionEvaluator"/> interface
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator.#ctor(Microsoft.Extensions.Logging.ILogger{Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator},Microsoft.Extensions.Options.IOptions{Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptions},Neuroglia.Serialization.ISerializerProvider)">
+            <summary>
+            Initializes a new <see cref="T:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator"/>
+            </summary>
+            <param name="logger">The service used to perform logging</param>
+            <param name="options">The service used to access the current <see cref="T:Neuroglia.Data.Expressions.JavaScript.Configuration.JavaScriptExpressionEvaluatorOptions"/></param>
+            <param name="serializerProvider">The service used to provide <see cref="T:Neuroglia.Serialization.ISerializer"/>s</param>
+        </member>
+        <member name="P:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator.JsonSerializer">
+            <summary>
+            Gets the service used to serialize and deserialize json
+            </summary>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator.Supports(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator.Evaluate(System.String,System.Object,System.Type,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator.Evaluate``1(System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Neuroglia.Data.Expressions.JavaScript.JavaScriptExpressionEvaluator.Evaluate(System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>
