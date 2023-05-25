@@ -379,9 +379,8 @@ namespace Neuroglia.Data.EventSourcing
         /// <inheritdoc/>
         public virtual async Task DeleteStreamAsync(string streamId, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrWhiteSpace(streamId))
-                throw new ArgumentNullException(nameof(streamId));
-            await this.EventStoreClient.TombstoneAsync(streamId, StreamState.Any, cancellationToken: cancellationToken);
+            if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
+            await this.EventStoreClient.SoftDeleteAsync(streamId, StreamState.Any, cancellationToken: cancellationToken);
         }
 
         /// <summary>

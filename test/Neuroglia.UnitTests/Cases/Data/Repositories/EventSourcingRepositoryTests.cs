@@ -183,6 +183,11 @@ namespace Neuroglia.UnitTests.Cases.Data.Repositories
             //assert
             TestPerson aggregate = await this.Repository.FindAsync(AggregateId.Value);
             aggregate.Should().BeNull();
+
+            var firstName = "Fake First Name";
+            var lastName = "Fake Last Name";
+            await this.Repository.AddAsync(new TestPerson(AggregateId.Value, firstName, lastName));
+            await this.Repository.SaveChangesAsync();
         }
 
         [Fact, Priority(8)]

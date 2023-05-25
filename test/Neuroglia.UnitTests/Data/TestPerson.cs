@@ -19,10 +19,16 @@ namespace Neuroglia.UnitTests.Data
 
         }
 
-        public TestPerson(string firstName, string lastName)
-          : this()
+        public TestPerson(Guid id, string firstName, string lastName)
+            : base(id)
         {
             this.On(this.RegisterEvent(new TestPersonCreatedDomainEvent(this.Id, firstName, lastName)));
+        }
+
+        public TestPerson(string firstName, string lastName)
+          : this(Guid.NewGuid(), firstName, lastName)
+        {
+           
         }
 
         public virtual string FirstName { get; internal protected set; }
