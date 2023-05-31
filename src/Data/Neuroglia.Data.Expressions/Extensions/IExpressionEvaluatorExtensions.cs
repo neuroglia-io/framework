@@ -40,7 +40,7 @@ namespace Neuroglia.Data.Expressions
                 throw new ArgumentNullException(nameof(evaluator));
             if (obj.GetType().IsPrimitiveType())
             {
-                if (obj is string expression)
+                if (obj is string expression && expression.IsRuntimeExpression())
                     return evaluator.Evaluate(expression, data);
                 else
                     return obj;
