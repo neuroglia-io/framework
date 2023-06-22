@@ -32,29 +32,6 @@ namespace System.Text.Json.Serialization
         /// </summary>
         private static readonly ConcurrentDictionary<Type, JsonConverter> Converters = new();
 
-        /// <summary>
-        /// Initializes a new <see cref="AbstractClassConverterFactory"/>
-        /// </summary>
-        /// <param name="jsonSerializerOptions">The current <see cref="System.Text.Json.JsonSerializerOptions"/></param>
-        public AbstractClassConverterFactory(JsonSerializerOptions jsonSerializerOptions)
-        {
-            this.JsonSerializerOptions = jsonSerializerOptions;
-        }
-
-        /// <summary>
-        /// Initializes a new <see cref="AbstractClassConverterFactory"/>
-        /// </summary>
-        public AbstractClassConverterFactory()
-            : this(jsonSerializerOptions: null)
-        {
-
-        }
-
-        /// <summary>
-        /// Gets the current <see cref="JsonSerializerOptions"/>
-        /// </summary>
-        protected JsonSerializerOptions JsonSerializerOptions { get; }
-
         /// <inheritdoc/>
         public override bool CanConvert(Type typeToConvert)
         {
@@ -67,7 +44,7 @@ namespace System.Text.Json.Serialization
             if (!Converters.TryGetValue(typeToConvert, out JsonConverter converter))
             {
                 Type converterType = typeof(AbstractClassConverter<>).MakeGenericType(typeToConvert);
-                converter = (JsonConverter)Activator.CreateInstance(converterType, this.JsonSerializerOptions);
+                converter = (JsonConverter)Activator.CreateInstance(converterType);
                 Converters.TryAdd(typeToConvert, converter);
             }
             return converter;
