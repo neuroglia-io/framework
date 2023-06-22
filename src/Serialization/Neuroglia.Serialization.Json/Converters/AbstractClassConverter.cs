@@ -16,53 +16,31 @@
  */
 using Neuroglia;
 
-namespace System.Text.Json.Serialization
+namespace System.Text.Json.Serialization;
+
+/// <summary>
+/// Represents the <see cref="JsonConverter"/> used to convert to/from an abstract class
+/// </summary>
+/// <typeparam name="T">The type of the abstract class to convert to/from</typeparam>
+public class AbstractClassConverter<T>
+    : JsonConverter<T>
 {
 
-    /// <summary>
-    /// Represents the <see cref="JsonConverter"/> used to convert to/from an abstract class
-    /// </summary>
-    /// <typeparam name="T">The type of the abstract class to convert to/from</typeparam>
-    public class AbstractClassConverter<T>
-        : JsonConverter<T>
+    /// <inheritdoc/>
+    public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-
-        /// <summary>
-        /// Initializes a new <see cref="AbstractClassConverter{T}"/>
-        /// </summary>
-        /// <param name="jsonSerializerOptions">The current <see cref="JsonSerializerOptions"/></param>
-        public AbstractClassConverter(JsonSerializerOptions jsonSerializerOptions)
-        {
-            this.JsonSerializerOptions = jsonSerializerOptions;
-        }
-
-        /// <summary>
-        /// Gets the current <see cref="JsonSerializerOptions"/>
-        /// </summary>
-        protected JsonSerializerOptions JsonSerializerOptions { get; }
-
-        /// <inheritdoc/>
-        public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            if (reader.TokenType != JsonTokenType.StartObject)
-                throw new JsonException("Start object token type expected");
-            using JsonDocument jsonDocument = JsonDocument.ParseValue(ref reader);
-            var discriminatorProperty = TypeDiscriminator.GetDiscriminatorProperty<T>();
-            var discriminatorPropertyName = this.JsonSerializerOptions?.PropertyNamingPolicy == null ? discriminatorProperty.Name : this.JsonSerializerOptions.PropertyNamingPolicy.ConvertName(discriminatorProperty.Name);
-            if (!jsonDocument.RootElement.TryGetProperty(discriminatorPropertyName, out var discriminatorJsonValue))
-                throw new JsonException($"Failed to find the required '{discriminatorProperty.Name}' discriminator property");
-            var discriminatorValue = discriminatorJsonValue.GetString();
-            var derivedType = TypeDiscriminator.Discriminate<T>(discriminatorValue);
-            string json = jsonDocument.RootElement.GetRawText();
-            return (T)JsonSerializer.Deserialize(json, derivedType, this.JsonSerializerOptions);
-        }
-
-        /// <inheritdoc/>
-        public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
-        {
-            JsonSerializer.Serialize(writer, (object)value, options);
-        }
-
+        if (reader.TokenType != JsonTokenType.StartObject) throw new JsonException("Start object token type expected");
+        using JsonDocument jsonDocument = JsonDocument.ParseValue(ref reader);
+        var discriminatorProperty = TypeDiscriminator.GetDiscriminatorProperty<T>();
+        var discriminatorPropertyName = options.PropertyNamingPolicy == null ? discriminatorProperty.Name : options.PropertyNamingPolicy.ConvertName(discriminatorProperty.Name);
+        if (!jsonDocument.RootElement.TryGetProperty(discriminatorPropertyName, out var discriminatorJsonValue)) throw new JsonException($"Failed to find the required '{discriminatorProperty.Name}' discriminator property");
+        var discriminatorValue = discriminatorJsonValue.GetString();
+        var derivedType = TypeDiscriminator.Discriminate<T>(discriminatorValue);
+        string json = jsonDocument.RootElement.GetRawText();
+        return (T)JsonSerializer.Deserialize(json, derivedType, options);
     }
+
+    /// <inheritdoc/>
+    public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options) => JsonSerializer.Serialize(writer, (object)value, options);
 
 }
