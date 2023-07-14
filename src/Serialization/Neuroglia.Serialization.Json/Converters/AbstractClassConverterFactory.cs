@@ -14,42 +14,38 @@
  * limitations under the License.
  *
  */
+
 using Neuroglia;
 using System.Collections.Concurrent;
 using System.Reflection;
 
-namespace System.Text.Json.Serialization
+namespace System.Text.Json.Serialization;
+
+/// <summary>
+/// Represents the <see cref="JsonConverterFactory"/> used to create <see cref="AbstractClassConverter{T}"/>
+/// </summary>
+public class AbstractClassConverterFactory
+    : JsonConverterFactory
 {
+
     /// <summary>
-    /// Represents the <see cref="JsonConverterFactory"/> used to create <see cref="AbstractClassConverter{T}"/>
+    /// Gets a <see cref="ConcurrentDictionary{TKey, TValue}"/> containing the mappings of types to their respective <see cref="JsonConverter"/>
     /// </summary>
-    public class AbstractClassConverterFactory
-        : JsonConverterFactory
+    private static readonly ConcurrentDictionary<Type, JsonConverter> Converters = new();
+
+    /// <inheritdoc/>
+    public override bool CanConvert(Type typeToConvert) => typeToConvert.IsClass && typeToConvert.IsAbstract && typeToConvert.IsDefined(typeof(DiscriminatorAttribute));
+
+    /// <inheritdoc/>
+    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
-
-        /// <summary>
-        /// Gets a <see cref="ConcurrentDictionary{TKey, TValue}"/> containing the mappings of types to their respective <see cref="JsonConverter"/>
-        /// </summary>
-        private static readonly ConcurrentDictionary<Type, JsonConverter> Converters = new();
-
-        /// <inheritdoc/>
-        public override bool CanConvert(Type typeToConvert)
+        if (!Converters.TryGetValue(typeToConvert, out JsonConverter converter))
         {
-            return typeToConvert.IsClass && typeToConvert.IsAbstract && typeToConvert.IsDefined(typeof(DiscriminatorAttribute));
+            var converterType = typeof(AbstractClassConverter<>).MakeGenericType(typeToConvert);
+            converter = (JsonConverter)Activator.CreateInstance(converterType);
+            Converters.TryAdd(typeToConvert, converter);
         }
-
-        /// <inheritdoc/>
-        public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
-        {
-            if (!Converters.TryGetValue(typeToConvert, out JsonConverter converter))
-            {
-                Type converterType = typeof(AbstractClassConverter<>).MakeGenericType(typeToConvert);
-                converter = (JsonConverter)Activator.CreateInstance(converterType);
-                Converters.TryAdd(typeToConvert, converter);
-            }
-            return converter;
-        }
-
+        return converter;
     }
 
 }

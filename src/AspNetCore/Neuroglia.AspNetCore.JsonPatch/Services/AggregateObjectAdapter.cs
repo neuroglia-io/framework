@@ -21,6 +21,7 @@ using Neuroglia;
 using Neuroglia.Data;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
@@ -81,6 +82,7 @@ namespace Microsoft.AspNetCore.JsonPatch
             PropertyInfo property = target.GetType().GetProperty(path, BindingFlags.Default | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase);
             if ((property.PropertyType.IsEnumerable()
                 && !typeof(ExpandoObject).IsAssignableFrom(property.PropertyType)
+                && !typeof(IDictionary<string, object>).IsAssignableFrom(property.PropertyType)
                 && operationMetadata.ReferencedType == null)
                 || pathComponents.Length > 1)
             {
