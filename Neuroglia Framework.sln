@@ -11,13 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Core", "src\Neuro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Serialization.Abstractions", "src\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.Abstractions.csproj", "{8244998D-D4A5-43FB-A933-AB0D85E48FDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Serialization.Json", "src\Neuroglia.Serialization.Json\Neuroglia.Serialization.Json.csproj", "{239C4378-2C13-440B-831A-81ADCF846283}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Serialization.YamlDotNet", "src\Neuroglia.Serialization.YamlDotNet\Neuroglia.Serialization.YamlDotNet.csproj", "{3C1E9E45-C2B8-4533-A0FA-7E88FB5B525A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Serialization.YamlDotNet", "src\Neuroglia.Serialization.YamlDotNet\Neuroglia.Serialization.YamlDotNet.csproj", "{3C1E9E45-C2B8-4533-A0FA-7E88FB5B525A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Serialization.DataContract", "src\Neuroglia.Serialization.DataContract\Neuroglia.Serialization.DataContract.csproj", "{441862E1-6C07-4586-8EC8-913E1DD6BCBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Serialization.DataContract", "src\Neuroglia.Serialization.DataContract\Neuroglia.Serialization.DataContract.csproj", "{441862E1-6C07-4586-8EC8-913E1DD6BCBF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Serialization.ProtobufNet", "src\Neuroglia.Serialization.ProtobufNet\Neuroglia.Serialization.ProtobufNet.csproj", "{D734DD48-E496-417B-A899-B44C2FA9E216}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Serialization.NewtonsoftJson", "src\Neuroglia.Serialization.NewtonsoftJson\Neuroglia.Serialization.NewtonsoftJson.csproj", "{4F6A9532-5E8F-41C7-A63F-9A699964AD64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,6 @@ Global
 		{8244998D-D4A5-43FB-A933-AB0D85E48FDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8244998D-D4A5-43FB-A933-AB0D85E48FDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8244998D-D4A5-43FB-A933-AB0D85E48FDE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{239C4378-2C13-440B-831A-81ADCF846283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{239C4378-2C13-440B-831A-81ADCF846283}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{239C4378-2C13-440B-831A-81ADCF846283}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{239C4378-2C13-440B-831A-81ADCF846283}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3C1E9E45-C2B8-4533-A0FA-7E88FB5B525A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C1E9E45-C2B8-4533-A0FA-7E88FB5B525A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C1E9E45-C2B8-4533-A0FA-7E88FB5B525A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -49,6 +45,10 @@ Global
 		{D734DD48-E496-417B-A899-B44C2FA9E216}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D734DD48-E496-417B-A899-B44C2FA9E216}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D734DD48-E496-417B-A899-B44C2FA9E216}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F6A9532-5E8F-41C7-A63F-9A699964AD64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F6A9532-5E8F-41C7-A63F-9A699964AD64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F6A9532-5E8F-41C7-A63F-9A699964AD64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F6A9532-5E8F-41C7-A63F-9A699964AD64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,10 +56,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{33741468-A5E4-46DF-8F0F-6555088EDAA5} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{8244998D-D4A5-43FB-A933-AB0D85E48FDE} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
-		{239C4378-2C13-440B-831A-81ADCF846283} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{3C1E9E45-C2B8-4533-A0FA-7E88FB5B525A} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{441862E1-6C07-4586-8EC8-913E1DD6BCBF} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{D734DD48-E496-417B-A899-B44C2FA9E216} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{4F6A9532-5E8F-41C7-A63F-9A699964AD64} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}

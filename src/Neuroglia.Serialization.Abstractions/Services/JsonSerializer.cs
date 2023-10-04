@@ -9,7 +9,7 @@ namespace Neuroglia.Serialization.Json;
 /// Represents the System.Text.Json implementation of the <see cref="IJsonSerializer"/> interface
 /// </summary>
 public class JsonSerializer
-    : IJsonSerializer
+    : IJsonSerializer, IAsyncSerializer
 {
 
     /// <summary>
@@ -73,17 +73,8 @@ public class JsonSerializer
     /// <inheritdoc/>
     public virtual Task SerializeAsync<T>(Stream stream, T graph, CancellationToken cancellationToken = default) => System.Text.Json.JsonSerializer.SerializeAsync(stream, graph, this.Options.CurrentValue, cancellationToken);
 
-    /// <summary>
-    /// Serializes an object to the specified <see cref="Stream"/>
-    /// </summary>
-    /// <param name="stream">The <see cref="Stream"/> to serialize the object to</param>
-    /// <param name="graph">The object to serialize</param>
-    /// <param name="inputType">The type of the object to serialize</param>
-    /// <param name="indented">A boolean indicating whether or not to indent the output</param>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new awaitable <see cref="Task"/></returns>
     /// <inheritdoc/>
-    public virtual Task SerializeAsync(Stream stream, object graph, Type inputType, CancellationToken cancellationToken = default) => System.Text.Json.JsonSerializer.SerializeAsync(stream, graph, inputType, this.Options.CurrentValue, cancellationToken);
+    public virtual Task SerializeAsync(Stream stream, object graph, Type type, CancellationToken cancellationToken = default) => System.Text.Json.JsonSerializer.SerializeAsync(stream, graph, type, this.Options.CurrentValue, cancellationToken);
 
     /// <inheritdoc/>
     public virtual object? Deserialize(string input, Type type) => System.Text.Json.JsonSerializer.Deserialize(input, type, this.Options.CurrentValue);
@@ -122,6 +113,9 @@ public class JsonSerializer
     /// <param name="buffer">The JSON input to deserialize</param>
     /// <returns>The deserialized value</returns>
     public virtual T? Deserialize<T>(ReadOnlySpan<byte> buffer) => System.Text.Json.JsonSerializer.Deserialize<T>(buffer, this.Options.CurrentValue);
+
+    /// <inheritdoc/>
+    public virtual async Task<object?> DeserializeAsync(Stream stream, Type type, CancellationToken cancellationToken = default) => await System.Text.Json.JsonSerializer.DeserializeAsync(stream, type, this.Options.CurrentValue, cancellationToken).ConfigureAwait(false);
 
     /// <summary>
     /// Deserializes the specified <see cref="Stream"/> as a new <see cref="IAsyncEnumerable{T}"/>
