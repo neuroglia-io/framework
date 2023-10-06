@@ -3,9 +3,9 @@
 namespace Neuroglia.Serialization.Yaml;
 
 /// <summary>
-/// Defines the fundamentals of a service used to build and configure a <see cref="YamlDotNetSerializer"/>
+/// Defines the fundamentals of a service used to build and configure a <see cref="YamlSerializer"/>
 /// </summary>
-public interface IYamlDotNetSerializerBuilder
+public interface IYamlSerializerBuilder
 {
 
     /// <summary>

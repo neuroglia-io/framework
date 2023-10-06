@@ -1,21 +1,66 @@
 ﻿using System.Text;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Serialization.NodeDeserializers;
 
 namespace Neuroglia.Serialization.Yaml;
 
 /// <summary>
 /// Represents the <see href="YamlDotNet">https://github.com/aaubry/YamlDotNet</see> implementation of the <see cref="IYamlSerializer"/>
 /// </summary>
-public class YamlDotNetSerializer
+public class YamlSerializer
     : IYamlSerializer
 {
 
+    static readonly YamlDotNet.Serialization.ISerializer DefaultSerializer;
+    static readonly IDeserializer DefaultDeserializer;
+
+    static YamlSerializer? _default;
     /// <summary>
-    /// Initializes a new <see cref="YamlDotNetSerializer"/>
+    /// Gets the default, globally accessible <see cref="YamlSerializer"/>
+    /// </summary>
+    public static YamlSerializer Default
+    {
+        get
+        {
+            _default ??= new(DefaultSerializer, DefaultDeserializer);
+            return _default;
+        }
+    }
+
+    static YamlSerializer()
+    {
+        DefaultSerializer = new SerializerBuilder()
+            .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitEmptyCollections)
+            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .WithTypeConverter(new JsonNodeTypeConverter())
+            .WithTypeConverter(new JsonSchemaTypeConverter())
+            .WithTypeConverter(new StringEnumSerializer())
+            .WithTypeConverter(new UriTypeSerializer())
+            .WithTypeConverter(new DateTimeOffsetSerializer())
+            .Build();
+        DefaultDeserializer = new DeserializerBuilder()
+            .IgnoreUnmatchedProperties()
+            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .WithNodeDeserializer(
+                inner => new StringEnumDeserializer(inner),
+                syntax => syntax.InsteadOf<ScalarNodeDeserializer>())
+            .WithNodeTypeResolver(new InferTypeResolver())
+            .WithNodeDeserializer(
+                inner => new JsonObjectDeserializer(inner),
+                syntax => syntax.InsteadOf<DictionaryNodeDeserializer>())
+            .WithNodeDeserializer(
+                inner => new JsonSchemaDeserializer(inner),
+                syntax => syntax.InsteadOf<JsonObjectDeserializer>())
+            .Build();
+    }
+
+    /// <summary>
+    /// Initializes a new <see cref="YamlSerializer"/>
     /// </summary>
     /// <param name="serializer">The underlying <see cref="YamlDotNet.Serialization.ISerializer"/></param>
     /// <param name="deserializer">The underlying <see cref="IDeserializer"/></param>
-    public YamlDotNetSerializer(YamlDotNet.Serialization.ISerializer serializer, IDeserializer deserializer)
+    public YamlSerializer(YamlDotNet.Serialization.ISerializer serializer, IDeserializer deserializer)
     {
         this.Serializer = serializer;
         this.Deserializer = deserializer;

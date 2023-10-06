@@ -3,10 +3,10 @@
 namespace Neuroglia.Serialization.Yaml;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IYamlDotNetSerializerBuilder"/>
+/// Represents the default implementation of the <see cref="IYamlSerializerBuilder"/>
 /// </summary>
-public class YamlDotNetSerializerBuilder
-    : IYamlDotNetSerializerBuilder
+public class YamlSerializerBuilder
+    : IYamlSerializerBuilder
 {
 
     /// <inheritdoc/>
