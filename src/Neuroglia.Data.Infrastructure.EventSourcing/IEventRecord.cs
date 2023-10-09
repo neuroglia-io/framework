@@ -27,14 +27,9 @@ public interface IEventRecord
     string Type { get; }
 
     /// <summary>
-    /// Gets the assembly qualified name of the recorded event type, if any
-    /// </summary>
-    string? ClrType { get; }
-
-    /// <summary>
     /// Gets the data of the recorded event
     /// </summary>
-    IDictionary<string, object>? Data { get; }
+    object? Data { get; }
 
     /// <summary>
     /// Gets the metadata of the recorded event

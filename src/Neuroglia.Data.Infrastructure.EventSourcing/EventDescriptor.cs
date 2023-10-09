@@ -16,9 +16,9 @@ public class EventDescriptor
     public EventDescriptor(string type, object? data, IDictionary<string, object>? metadata = null)
     {
         if (string.IsNullOrWhiteSpace(type)) throw new ArgumentNullException(nameof(type));
-        Type = type;
-        Data = data;
-        Metadata = metadata;
+        this.Type = type;
+        this.Data = data;
+        this.Metadata = metadata;
     }
 
     /// <inheritdoc/>

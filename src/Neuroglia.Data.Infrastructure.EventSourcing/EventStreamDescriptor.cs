@@ -17,7 +17,7 @@ public record EventStreamDescriptor
     /// <param name="length">The length of the stream</param>
     /// <param name="firstEventAt">The date and time at which the first event of the stream has been created</param>
     /// <param name="lastEventAt">The date and time at which the last event of the stream has been created</param>
-    public EventStreamDescriptor(object id, long length, DateTime firstEventAt, DateTime lastEventAt)
+    public EventStreamDescriptor(object id, long length, DateTimeOffset? firstEventAt, DateTimeOffset? lastEventAt)
     {
         this.Id = id;
         this.Length = length;
@@ -35,10 +35,10 @@ public record EventStreamDescriptor
 
     /// <inheritdoc/>
     [DataMember]
-    public virtual DateTimeOffset FirstEventAt { get; }
+    public virtual DateTimeOffset? FirstEventAt { get; }
 
     /// <inheritdoc/>
     [DataMember]
-    public virtual DateTimeOffset LastEventAt { get; }
+    public virtual DateTimeOffset? LastEventAt { get; }
 
 }

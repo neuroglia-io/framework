@@ -105,7 +105,7 @@ public class EventSourcingRepository<TAggregate, TKey>
         if (aggregate == null) throw new ArgumentNullException(nameof(aggregate));
         if (!aggregate.PendingEvents.Any()) return aggregate;
         var events = aggregate.PendingEvents.ToList();
-        await this.EventStore.AppendAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetDescriptor()), aggregate.StateVersion, cancellationToken).ConfigureAwait(false);
+        await this.EventStore.AppendAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetDescriptor()), (long)aggregate.StateVersion, cancellationToken).ConfigureAwait(false);
         aggregate.StateVersion += (ulong)events.Count;
         aggregate.ClearPendingEvents();
         await this.TrySnapshotAsync(aggregate, cancellationToken);

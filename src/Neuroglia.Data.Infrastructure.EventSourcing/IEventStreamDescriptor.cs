@@ -15,11 +15,11 @@ public interface IEventStreamDescriptor
     /// <summary>
     /// Gets the date and time at which the first event has been created
     /// </summary>
-    DateTimeOffset FirstEventAt { get; }
+    DateTimeOffset? FirstEventAt { get; }
 
     /// <summary>
     /// Gets the date and time at which the last event has been created
     /// </summary>
-    DateTimeOffset LastEventAt { get; }
+    DateTimeOffset? LastEventAt { get; }
 
 }
