@@ -30,6 +30,7 @@
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.EventSourcing.MemoryCache\Neuroglia.Data.EventSourcing.MemoryCache.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
   </ItemGroup>
 

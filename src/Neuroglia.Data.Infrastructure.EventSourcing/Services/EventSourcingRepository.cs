@@ -23,11 +23,12 @@ public class EventSourcingRepository<TAggregate, TKey>
     /// <param name="eventStore">The service used to persist events</param>
     /// <param name="aggregatorFactory">The service used to create <see cref="IEventAggregator"/>s</param>
     /// <param name="mediator">The service used to mediate calls</param>
-    public EventSourcingRepository(IOptions<EventSourcingRepositoryOptions<TAggregate, TKey>> options, IEventStore eventStore, IEventAggregatorFactory aggregatorFactory, IMediator mediator)
+    public EventSourcingRepository(IOptions<EventSourcingRepositoryOptions<TAggregate, TKey>> options, IEventStore eventStore, IEventAggregatorFactory aggregatorFactory, IEventMigrationManager migrationManager, IMediator mediator)
     {
         this.Options = options.Value;
         this.EventStore = eventStore;
         this.Aggregator = aggregatorFactory.CreateAggregator<TAggregate, IDomainEvent>();
+        this.MigrationManager = migrationManager;
         this.Mediator = mediator;
     }
 
@@ -45,6 +46,11 @@ public class EventSourcingRepository<TAggregate, TKey>
     /// Gets the service used to aggregate events
     /// </summary>
     protected IEventAggregator<TAggregate, IDomainEvent> Aggregator { get; }
+
+    /// <summary>
+    /// Gets the service used to manage event migrations
+    /// </summary>
+    protected IEventMigrationManager MigrationManager { get; }
 
     /// <summary>
     /// Gets the service, if any, used to mediate calls
@@ -75,8 +81,15 @@ public class EventSourcingRepository<TAggregate, TKey>
     /// <inheritdoc/>
     public virtual async Task<bool> ContainsAsync(TKey key, CancellationToken cancellationToken = default)
     {
-        var stream = await this.EventStore.GetAsync(this.GetStreamIdFor(key), cancellationToken).ConfigureAwait(false);
-        return stream != null;
+        try
+        {
+            var stream = await this.EventStore.GetAsync(this.GetStreamIdFor(key), cancellationToken).ConfigureAwait(false);
+            return stream != null;
+        }
+        catch (StreamNotFoundException)
+        {
+            return false;
+        }
     }
 
     /// <inheritdoc/>
@@ -88,13 +101,13 @@ public class EventSourcingRepository<TAggregate, TKey>
         {
             recordedEvents = await this.EventStore.ReadAsync(this.GetStreamIdFor(key), StreamReadDirection.Forwards, StreamPosition.StartOfStream, null, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false);
             if (recordedEvents == null) return null;
-            aggregate = this.Aggregator.Aggregate(recordedEvents.Select(e => e.Data).OfType<IDomainEvent>());
+            aggregate = this.Aggregator.Aggregate(recordedEvents.Select(e => this.MigrationManager.MigrateEventToLatest(e.Data!)).OfType<IDomainEvent>());
         }
         else
         {
             recordedEvents = await this.EventStore.ReadAsync(this.GetStreamIdFor(key), StreamReadDirection.Forwards, (long)aggregate.StateVersion, null, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false);
             if (recordedEvents == null) return null;
-            aggregate = this.Aggregator.Aggregate(recordedEvents.Select(e => e.Data).OfType<IDomainEvent>(), aggregate);
+            aggregate = this.Aggregator.Aggregate(recordedEvents.Select(e => this.MigrationManager.MigrateEventToLatest(e.Data!)).OfType<IDomainEvent>(), aggregate);
         }
         return aggregate;
     }
@@ -144,8 +157,15 @@ public class EventSourcingRepository<TAggregate, TKey>
     /// <returns>The snapshot of the <see cref="IAggregateRoot"/> with the specified key</returns>
     protected virtual async Task<ISnapshot<TAggregate>?> GetSnapshotAsync(TKey key, CancellationToken cancellationToken = default)
     {
-        var e = await this.EventStore.ReadAsync(this.GetSnapshotStreamIdFor(key), StreamReadDirection.Backwards, StreamPosition.EndOfStream, 1, cancellationToken).FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
-        return e == null ? null : (Snapshot<TAggregate>)e.Data!;
+        try
+        {
+            var e = await this.EventStore.ReadAsync(this.GetSnapshotStreamIdFor(key), StreamReadDirection.Backwards, StreamPosition.EndOfStream, 1, cancellationToken).FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+            return e == null ? null : (Snapshot<TAggregate>)e.Data!;
+        }
+        catch (StreamNotFoundException)
+        {
+            return null;
+        }
     }
 
     /// <summary>

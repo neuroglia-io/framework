@@ -17,10 +17,10 @@ public static class IServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
     /// <param name="configurationAction">The <see cref="Action{T}"/> used to configure the <see cref="IMediator"/> options</param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddMediator(this IServiceCollection services, Action<IMediatorOptionsBuilder> configurationAction)
+    public static IServiceCollection AddMediator(this IServiceCollection services, Action<IMediatorOptionsBuilder>? configurationAction = null)
     {
         var optionsBuilder = new MediatorOptionsBuilder();
-        configurationAction(optionsBuilder);
+        configurationAction?.Invoke(optionsBuilder);
         var options = optionsBuilder.Build();
         services.TryAddTransient<Mediator>();
         services.TryAddTransient<IMediator>(provider => provider.GetRequiredService<Mediator>());

@@ -1,25 +1,19 @@
 ﻿using Neuroglia.Data;
-using System;
 
-namespace Neuroglia.UnitTests.Data.Events
+namespace Neuroglia.UnitTests.Data.Events;
+
+public class PersonLastNameChangedDomainEvent
+    : DomainEvent<Person, Guid>
 {
-    public class PersonLastNameChangedDomainEvent
-        : DomainEvent<Person, Guid>
+
+    protected PersonLastNameChangedDomainEvent() { }
+
+    public PersonLastNameChangedDomainEvent(Guid personId, string lastName)
+        : base(personId)
     {
-
-        protected PersonLastNameChangedDomainEvent()
-        {
-
-        }
-
-        public PersonLastNameChangedDomainEvent(Guid personId, string lastName)
-            : base(personId)
-        {
-            this.LastName = lastName;
-        }
-
-        public string LastName { get; protected set; }
-
+        this.LastName = lastName;
     }
+
+    public string LastName { get; protected set; } = null!;
 
 }

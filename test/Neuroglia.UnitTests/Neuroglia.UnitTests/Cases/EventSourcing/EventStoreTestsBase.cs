@@ -59,10 +59,7 @@ public abstract class EventStoreTestsBase
         await this.EventStore.AppendAsync(streamId, events);
 
         //act
-        await this.EventStore.AppendAsync(streamId, eventsToAppend, events.Count - 1);
-
-        //assert
-
+        await this.EventStore.AppendAsync(streamId, eventsToAppend, events.Count);
     }
 
     [Fact]

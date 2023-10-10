@@ -29,7 +29,7 @@ public class EventMigrationManager
     protected ConcurrentDictionary<Type, Func<IServiceProvider, object, object>> Migrations { get; } = new();
 
     /// <inheritdoc/>
-    public virtual void RegisterMigration(Type sourceType, Func<IServiceProvider, object, object> handler)
+    public virtual void RegisterEventMigration(Type sourceType, Func<IServiceProvider, object, object> handler)
     {
         if (sourceType == null) throw new ArgumentNullException(nameof(sourceType));
         if (handler == null) throw new ArgumentNullException(nameof(handler));
@@ -37,11 +37,11 @@ public class EventMigrationManager
     }
 
     /// <inheritdoc/>
-    public virtual object MigrateToLatest(object e)
+    public virtual object MigrateEventToLatest(object e)
     {
         if (e == null) throw new ArgumentNullException(nameof(e));
         if (!this.Migrations.TryGetValue(e.GetType(), out var handler) || handler == null) return e;
-        return handler.Invoke(this.ServiceProvider, e);
+        return this.MigrateEventToLatest(handler.Invoke(this.ServiceProvider, e));
     }
 
 }

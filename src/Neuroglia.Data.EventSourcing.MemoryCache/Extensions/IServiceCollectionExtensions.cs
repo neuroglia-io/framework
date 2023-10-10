@@ -19,6 +19,7 @@ public static class IServiceCollectionExtensions
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddMemoryCacheEventStore(this IServiceCollection services, Action<IEventStoreOptionsBuilder> setup)
     {
+        services.AddMemoryCache();
         services.AddEventStore<MemoryCacheEventStore>(setup);
         return services;
     }

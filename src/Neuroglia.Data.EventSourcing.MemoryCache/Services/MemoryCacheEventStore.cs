@@ -36,7 +36,7 @@ public class MemoryCacheEventStore
         if (events == null || !events.Any()) throw new ArgumentNullException(nameof(events));
 
         this.Cache.TryGetValue<ObservableCollection<IEventRecord>>(streamId, out var stream);
-        var actualversion = stream == null ? (long?)null : stream.Count - 1;
+        var actualversion = stream == null ? (long?)null : stream.Count;
 
         if (expectedVersion.HasValue)
         {
@@ -67,7 +67,7 @@ public class MemoryCacheEventStore
 
         if (!this.Cache.TryGetValue<ObservableCollection<IEventRecord>>(streamId, out var stream) || stream == null) throw new StreamNotFoundException(streamId);
 
-        return Task.FromResult((IEventStreamDescriptor)new EventStreamDescriptor(streamId, stream.LongCount(), stream.FirstOrDefault()?.Timestamp, stream.LastOrDefault()?.Timestamp));
+        return Task.FromResult((IEventStreamDescriptor)new EventStreamDescriptor(streamId, stream.Count, stream.FirstOrDefault()?.Timestamp, stream.LastOrDefault()?.Timestamp));
     }
 
     /// <inheritdoc/>
