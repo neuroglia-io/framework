@@ -109,6 +109,6 @@ public class User
         this.LastOnline = e.CreatedAt;
     }
 
-    internal static User Create() => new User("John", "Doe", "john.doe@email.com");
+    internal static User Create() => new("John", "Doe", "john.doe@email.com");
 
 }

@@ -13,7 +13,7 @@ public class EventRecord
     /// <summary>
     /// Initializes a new <see cref="EventRecord"/>
     /// </summary>
-    protected EventRecord() { }
+    public EventRecord() { }
 
     /// <summary>
     /// Initializes a new <see cref="EventRecord"/>
@@ -37,26 +37,26 @@ public class EventRecord
 
     /// <inheritdoc/>
     [DataMember]
-    public virtual string Id { get; protected set; } = null!;
+    public virtual string Id { get; set; } = null!;
 
     /// <inheritdoc/>
     [DataMember]
-    public virtual ulong Offset { get; protected set; }
+    public virtual ulong Offset { get; set; }
 
     /// <inheritdoc/>
     [DataMember]
-    public virtual DateTimeOffset Timestamp { get; protected set; }
+    public virtual DateTimeOffset Timestamp { get; set; }
 
     /// <inheritdoc/>
     [DataMember]
-    public virtual string Type { get; protected set; } = null!;
+    public virtual string Type { get; set; } = null!;
 
     /// <inheritdoc/>
     [DataMember]
-    public virtual object? Data { get; protected set; }
+    public virtual object? Data { get; set; }
 
     /// <inheritdoc/>
     [DataMember]
-    public virtual IDictionary<string, object>? Metadata { get; protected set; }
+    public virtual IDictionary<string, object>? Metadata { get; set; }
 
 }

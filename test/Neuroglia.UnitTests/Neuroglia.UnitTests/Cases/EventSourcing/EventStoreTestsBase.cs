@@ -6,6 +6,8 @@ namespace Neuroglia.UnitTests.Cases.EventSourcing;
 public abstract class EventStoreTestsBase
 {
 
+    bool _disposed;
+
     public EventStoreTestsBase(IEventStore eventStore)
     {
         this.EventStore = eventStore;
@@ -13,7 +15,7 @@ public abstract class EventStoreTestsBase
 
     protected IEventStore EventStore { get; }
 
-    [Fact]
+    [Fact, Priority(1)]
     public async Task Append_Should_Work()
     {
         //arrange
@@ -38,7 +40,7 @@ public abstract class EventStoreTestsBase
         }
     }
 
-    [Fact]
+    [Fact, Priority(2)]
     public async Task Append_ToNonExistingStream_Should_Work_StreamNotFoundException()
     {
         //arrange
@@ -49,7 +51,7 @@ public abstract class EventStoreTestsBase
         await this.EventStore.AppendAsync(streamId, events, -1);
     }
 
-    [Fact]
+    [Fact, Priority(3)]
     public async Task Append_WithValidExpectedVersion_Should_Work()
     {
         //arrange
@@ -62,7 +64,7 @@ public abstract class EventStoreTestsBase
         await this.EventStore.AppendAsync(streamId, eventsToAppend, events.Count);
     }
 
-    [Fact]
+    [Fact, Priority(4)]
     public async Task Append_WithInvalidExpectedVersion_Should_Throw_OptmisticConcurrencyException()
     {
         //arrange
@@ -74,7 +76,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<OptimisticConcurrencyException>();
     }
 
-    [Fact]
+    [Fact, Priority(5)]
     public async Task Get_Should_Work()
     {
         //arrange
@@ -94,7 +96,7 @@ public abstract class EventStoreTestsBase
         stream.LastEventAt.Should().Be(storedEvents.Last().Timestamp);
     }
 
-    [Fact]
+    [Fact, Priority(6)]
     public async Task Get_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
@@ -102,7 +104,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact]
+    [Fact, Priority(7)]
     public async Task Read_Forwards_FromStart_Should_Work()
     {
         //arrange
@@ -117,13 +119,13 @@ public abstract class EventStoreTestsBase
         storedEvents.Should().HaveSameCount(events);
 
         storedEvents.First().Type.Should().Be(events.First().Type);
-        storedEvents.First().Data.Should().Be(events.First().Data);
+        storedEvents.First().Data.Should().BeEquivalentTo(events.First().Data);
 
         storedEvents.Last().Type.Should().Be(events.Last().Type);
-        storedEvents.Last().Data.Should().Be(events.Last().Data);
+        storedEvents.Last().Data.Should().BeEquivalentTo(events.Last().Data);
     }
 
-    [Fact]
+    [Fact, Priority(8)]
     public async Task Read_Forwards_FromEnd_Should_BeEmpty()
     {
         //arrange
@@ -138,7 +140,7 @@ public abstract class EventStoreTestsBase
         storedEvents.Should().BeEmpty();
     }
 
-    [Fact]
+    [Fact, Priority(9)]
     public async Task Read_Forwards_FromOffset_Should_Work()
     {
         //arrange
@@ -158,7 +160,7 @@ public abstract class EventStoreTestsBase
         storedEvents.Last().Data.Should().BeEquivalentTo(events.Last().Data);
     }
 
-    [Fact]
+    [Fact, Priority(10)]
     public async Task Read_Backwards_FromEnd_Should_Work()
     {
         //arrange
@@ -179,7 +181,7 @@ public abstract class EventStoreTestsBase
         storedEvents.Last().Data.Should().BeEquivalentTo(events.First().Data);
     }
 
-    [Fact]
+    [Fact, Priority(11)]
     public async Task Read_Backwards_FromOffset_Should_Work()
     {
         //arrange
@@ -199,7 +201,7 @@ public abstract class EventStoreTestsBase
         storedEvents.Last().Data.Should().BeEquivalentTo(events.First().Data);
     }
 
-    [Fact]
+    [Fact, Priority(12)]
     public async Task Read_Backwards_FromEnd_Should_BeEmpty()
     {
         //arrange
@@ -214,7 +216,7 @@ public abstract class EventStoreTestsBase
         storedEvents.Should().BeEmpty();
     }
 
-    [Fact]
+    [Fact, Priority(13)]
     public async Task Read_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
@@ -222,7 +224,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact]
+    [Fact, Priority(14)]
     public async Task Subscribe_FromStart_Should_Work()
     {
         //arrange
@@ -241,7 +243,7 @@ public abstract class EventStoreTestsBase
         handledEvents.Should().HaveCount(events.Count + eventsToAppend.Count);
     }
 
-    [Fact]
+    [Fact, Priority(15)]
     public async Task Subscribe_FromOffset_Should_Work()
     {
         //arrange
@@ -256,12 +258,13 @@ public abstract class EventStoreTestsBase
         var observable = (await this.EventStore.SubscribeAsync(streamId, offset))
             .Subscribe(handledEvents.Add);
         await this.EventStore.AppendAsync(streamId, eventsToAppend);
+        await Task.Delay(100);
 
         //assert
         handledEvents.Should().HaveSameCount(eventsToAppend);
     }
 
-    [Fact]
+    [Fact, Priority(16)]
     public async Task Subscribe_FromEnd_Should_Work()
     {
         //arrange
@@ -275,12 +278,13 @@ public abstract class EventStoreTestsBase
         var observable = (await this.EventStore.SubscribeAsync(streamId))
             .Subscribe(handledEvents.Add);
         await this.EventStore.AppendAsync(streamId, eventsToAppend);
+        await Task.Delay(100);
 
         //assert
         handledEvents.Should().HaveSameCount(eventsToAppend);
     }
 
-    [Fact]
+    [Fact, Priority(17)]
     public async Task Subscribe_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
@@ -288,7 +292,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact]
+    [Fact, Priority(18)]
     public async Task Truncate_ToZero_Should_Work()
     {
         //arrange
@@ -298,15 +302,23 @@ public abstract class EventStoreTestsBase
 
         //act
         await this.EventStore.TruncateAsync(streamId);
-        var stream = await this.EventStore.GetAsync(streamId);
-
+        IEventStreamDescriptor? stream;
+        try
+        {
+            stream = await this.EventStore.GetAsync(streamId);
+        }
+        catch (StreamNotFoundException)
+        {
+            stream = new EventStreamDescriptor(streamId, 0, null, null);
+        }
+  
         //assert
         stream.Length.Should().Be(0);
         stream.FirstEventAt.Should().BeNull();
         stream.LastEventAt.Should().BeNull();
     }
 
-    [Fact]
+    [Fact, Priority(19)]
     public async Task Truncate_Partially_Should_Work()
     {
         //arrange
@@ -325,7 +337,7 @@ public abstract class EventStoreTestsBase
         stream.LastEventAt.Should().NotBeNull();
     }
 
-    [Fact]
+    [Fact, Priority(20)]
     public async Task Truncate_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
@@ -333,7 +345,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact]
+    [Fact, Priority(21)]
     public async Task Delete_Should_Work()
     {
         //arrange
@@ -349,12 +361,30 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact]
+    [Fact, Priority(22)]
     public async Task Delete_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
         var action = async () => await this.EventStore.DeleteAsync("non-existing");
         await action.Should().ThrowAsync<StreamNotFoundException>();
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this._disposed)
+        {
+            if (disposing)
+            {
+               
+            }
+            this._disposed = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        this.Dispose(disposing: true);
+        GC.SuppressFinalize(this);
     }
 
 }

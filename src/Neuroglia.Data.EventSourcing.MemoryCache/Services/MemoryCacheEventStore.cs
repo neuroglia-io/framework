@@ -36,7 +36,7 @@ public class MemoryCacheEventStore
         if (events == null || !events.Any()) throw new ArgumentNullException(nameof(events));
 
         this.Cache.TryGetValue<ObservableCollection<IEventRecord>>(streamId, out var stream);
-        var actualversion = stream == null ? (long?)null : stream.Count;
+        var actualversion = stream == null ? (long?)null : (long)stream.Last().Offset + 1;
 
         if (expectedVersion.HasValue)
         {
@@ -99,6 +99,8 @@ public class MemoryCacheEventStore
                 break;
             default: throw new NotSupportedException($"The specified {nameof(StreamReadDirection)} '{readDirection}' is not supported");
         }
+
+        if (length.HasValue) events = events.Take((int)length.Value).ToList();
 
         foreach (var e in events) yield return e;
 

@@ -18,6 +18,16 @@ public class EventSourcingRepositoryOptions
     /// </summary>
     public virtual ulong? SnapshotFrequency { get; set; } = DefaultSnapshotFrequency;
 
+    /// <summary>
+    /// Gets/sets the type of <see cref="IEventAggregatorFactory"/> to use to create <see cref="IEventAggregator"/>s
+    /// </summary>
+    public Type AggregatorFactoryType { get; set; } = typeof(EventAggregatorFactory);
+
+    /// <summary>
+    /// Gets/sets the type of <see cref="IEventMigrationManager"/> to use to migrate events
+    /// </summary>
+    public Type MigrationManagerType { get; set; } = typeof(EventMigrationManager);
+
 }
 
 /// <summary>

@@ -16,22 +16,6 @@ public class EventStoreOptionsBuilder
     protected EventStoreOptions Options { get; } = new();
 
     /// <inheritdoc/>
-    public virtual IEventStoreOptionsBuilder UseAggregatorFactory<TFactory>()
-        where TFactory : class, IEventAggregatorFactory
-    {
-        this.Options.AggregatorFactoryType = typeof(TFactory);
-        return this;
-    }
-
-    /// <inheritdoc/>
-    public virtual IEventStoreOptionsBuilder UseMigrationManager<TMigrationManager>()
-        where TMigrationManager : class, IEventMigrationManager
-    {
-        this.Options.MigrationManagerType = typeof(TMigrationManager);
-        return this;
-    }
-
-    /// <inheritdoc/>
     public virtual IEventStoreOptionsBuilder UseSerializer<TSerializer>()
         where TSerializer : class, ISerializer
     {

@@ -15,7 +15,7 @@ public static class IServiceCollectionExtensions
 {
 
     static readonly MethodInfo CreateOptionsMethod = typeof(Options).GetMethod(nameof(Options.Create))!;
-    static readonly MethodInfo ConfigureMethod = typeof(OptionsServiceCollectionExtensions).GetMethods().First(m => m.Name == nameof(OptionsServiceCollectionExtensions.Configure) && m.GetParameters().Count() == 2);
+    static readonly MethodInfo ConfigureMethod = typeof(OptionsServiceCollectionExtensions).GetMethods().First(m => m.Name == nameof(OptionsServiceCollectionExtensions.Configure) && m.GetParameters().Length == 2);
 
     /// <summary>
     /// Adds and configures a new <see cref="EventSourcingRepository{TAggregate, TKey}"/>
@@ -32,10 +32,12 @@ public static class IServiceCollectionExtensions
         if (!typeof(IAggregateRoot<>).MakeGenericType(keyType).IsAssignableFrom(aggregateType)) throw new ArgumentException("The specified type must be an IAggregateRoot<TKey> implementation", nameof(aggregateType));
         if (keyType == null) throw new ArgumentNullException(nameof(keyType));
         var optionsType = typeof(EventSourcingRepositoryOptions<,>).MakeGenericType(aggregateType, keyType);
-        if(setup == null)
+        var options = (EventSourcingRepositoryOptions)Activator.CreateInstance(optionsType)!;
+        setup?.Invoke(options);
+        if (setup == null)
         {
-            var options = CreateOptionsMethod.MakeGenericMethod(optionsType).Invoke(null, new object[] { Activator.CreateInstance(optionsType)! })!;
-            services.TryAddSingleton(typeof(IOptions<>).MakeGenericType(optionsType), provider => options);
+            var optionsAccessor = CreateOptionsMethod.MakeGenericMethod(optionsType).Invoke(null, new object[] { options })!;
+            services.TryAddSingleton(typeof(IOptions<>).MakeGenericType(optionsType), provider => optionsAccessor);
         }
         else
         {
@@ -46,6 +48,8 @@ public static class IServiceCollectionExtensions
         services.TryAdd(new ServiceDescriptor(implementationType, implementationType, lifetime));
         services.TryAdd(new ServiceDescriptor(typeof(IRepository<,>).MakeGenericType(aggregateType, keyType), provider => provider.GetRequiredService(implementationType), lifetime));
         services.TryAdd(new ServiceDescriptor(typeof(IRepository<>).MakeGenericType(aggregateType), provider => provider.GetRequiredService(implementationType), lifetime));
+        services.TryAddSingleton(typeof(IEventAggregatorFactory), options.AggregatorFactoryType);
+        services.TryAddSingleton(typeof(IEventMigrationManager), options.MigrationManagerType);
         return services;
     }
 
@@ -80,8 +84,6 @@ public static class IServiceCollectionExtensions
         setupAction(optionsBuilder);
         var options = optionsBuilder.Build();
         services.TryAddSingleton(Options.Create(options));
-        services.TryAddSingleton(typeof(IEventAggregatorFactory), options.AggregatorFactoryType);
-        services.TryAddSingleton(typeof(IEventMigrationManager), options.MigrationManagerType);
         services.TryAddSingleton<TEventStore>();
         services.AddSingleton(typeof(IEventStore), provider => provider.GetRequiredService<TEventStore>());
         return services;
