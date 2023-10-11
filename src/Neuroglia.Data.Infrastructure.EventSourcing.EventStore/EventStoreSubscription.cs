@@ -1,7 +1,7 @@
 ﻿using EventStore.Client;
-using Neuroglia.Data.EventSourcing.EventStore.Subscriptions;
+using Neuroglia.Data.Infrastructure.EventSourcing.EventStore.Subscriptions;
 
-namespace Neuroglia.Data.EventSourcing.EventStore;
+namespace Neuroglia.Data.Infrastructure.EventSourcing.EventStore;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="IEventStoreSubscription"/> interface

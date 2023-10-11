@@ -33,13 +33,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mediation.FluentV
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.PatchModel", "src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj", "{1518C91D-6DA2-4C50-B6F2-C19F0B920231}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.EventSourcing.MemoryCache", "src\Neuroglia.Data.EventSourcing.MemoryCache\Neuroglia.Data.EventSourcing.MemoryCache.csproj", "{99C280BA-5AF8-493B-B091-53D5459EB8CB}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mapping", "src\Neuroglia.Mapping\Neuroglia.Mapping.csproj", "{26184251-0F35-41C4-A702-8CB52D53E4A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.EventSourcing.Redis", "src\Neuroglia.Data.EventSourcing.Redis\Neuroglia.Data.EventSourcing.Redis.csproj", "{3255C9DF-B091-49F4-941C-21774E90FF43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing.EventStore", "src\Neuroglia.Data.Infrastructure.EventSourcing.EventStore\Neuroglia.Data.Infrastructure.EventSourcing.EventStore.csproj", "{2E8752CF-5A78-48EC-96B1-828B88287D1D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.EventSourcing.EventStore", "src\Neuroglia.Data.EventSourcing.EventStore\Neuroglia.Data.EventSourcing.EventStore.csproj", "{5D45BAA3-3775-436E-A8C4-88226FC85375}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache", "src\Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache\Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache.csproj", "{F67B19C9-3894-4ACC-8B76-E24FADE0682C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing.Redis", "src\Neuroglia.Data.Infrastructure.EventSourcing.Redis\Neuroglia.Data.Infrastructure.EventSourcing.Redis.csproj", "{27A98088-995B-49F0-9E4E-F7C752A77907}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,22 +99,22 @@ Global
 		{1518C91D-6DA2-4C50-B6F2-C19F0B920231}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1518C91D-6DA2-4C50-B6F2-C19F0B920231}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1518C91D-6DA2-4C50-B6F2-C19F0B920231}.Release|Any CPU.Build.0 = Release|Any CPU
-		{99C280BA-5AF8-493B-B091-53D5459EB8CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99C280BA-5AF8-493B-B091-53D5459EB8CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99C280BA-5AF8-493B-B091-53D5459EB8CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99C280BA-5AF8-493B-B091-53D5459EB8CB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{26184251-0F35-41C4-A702-8CB52D53E4A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26184251-0F35-41C4-A702-8CB52D53E4A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26184251-0F35-41C4-A702-8CB52D53E4A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26184251-0F35-41C4-A702-8CB52D53E4A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3255C9DF-B091-49F4-941C-21774E90FF43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3255C9DF-B091-49F4-941C-21774E90FF43}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3255C9DF-B091-49F4-941C-21774E90FF43}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3255C9DF-B091-49F4-941C-21774E90FF43}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D45BAA3-3775-436E-A8C4-88226FC85375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D45BAA3-3775-436E-A8C4-88226FC85375}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D45BAA3-3775-436E-A8C4-88226FC85375}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D45BAA3-3775-436E-A8C4-88226FC85375}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E8752CF-5A78-48EC-96B1-828B88287D1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E8752CF-5A78-48EC-96B1-828B88287D1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E8752CF-5A78-48EC-96B1-828B88287D1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E8752CF-5A78-48EC-96B1-828B88287D1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F67B19C9-3894-4ACC-8B76-E24FADE0682C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F67B19C9-3894-4ACC-8B76-E24FADE0682C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F67B19C9-3894-4ACC-8B76-E24FADE0682C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F67B19C9-3894-4ACC-8B76-E24FADE0682C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27A98088-995B-49F0-9E4E-F7C752A77907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27A98088-995B-49F0-9E4E-F7C752A77907}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27A98088-995B-49F0-9E4E-F7C752A77907}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27A98088-995B-49F0-9E4E-F7C752A77907}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -133,10 +133,10 @@ Global
 		{6152BB71-E0E0-4DDC-AC03-43A340DEAFA1} = {AFFADE1D-C17D-4ED8-8407-BFE108714262}
 		{57E56FC8-3497-4536-A699-9E929DAA02F6} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{1518C91D-6DA2-4C50-B6F2-C19F0B920231} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
-		{99C280BA-5AF8-493B-B091-53D5459EB8CB} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{26184251-0F35-41C4-A702-8CB52D53E4A3} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
-		{3255C9DF-B091-49F4-941C-21774E90FF43} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
-		{5D45BAA3-3775-436E-A8C4-88226FC85375} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{2E8752CF-5A78-48EC-96B1-828B88287D1D} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{F67B19C9-3894-4ACC-8B76-E24FADE0682C} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{27A98088-995B-49F0-9E4E-F7C752A77907} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}

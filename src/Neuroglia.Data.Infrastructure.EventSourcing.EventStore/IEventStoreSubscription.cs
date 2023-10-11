@@ -16,7 +16,7 @@
  */
 using System;
 
-namespace Neuroglia.Data.EventSourcing.EventStore
+namespace Neuroglia.Data.Infrastructure.EventSourcing.EventStore
 {
 
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿using DotNet.Testcontainers.Containers;
 using Microsoft.Extensions.DependencyInjection;
-using Neuroglia.Data.EventSourcing.Redis;
+using Neuroglia.Data.Infrastructure.EventSourcing.Redis;
 using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Containers;
 using StackExchange.Redis;

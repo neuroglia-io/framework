@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Neuroglia.Data.EventSourcing.DistributedCache.Services;
+using Neuroglia.Data.Infrastructure.EventSourcing.DistributedCache.Services;
 using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 
-namespace Neuroglia.Data.EventSourcing.MemoryCache;
+namespace Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache;
 
 /// <summary>
 /// Defines extensions for <see cref="IServiceCollection"/>s

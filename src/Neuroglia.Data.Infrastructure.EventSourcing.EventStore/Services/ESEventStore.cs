@@ -1,7 +1,7 @@
 ﻿using EventStore.Client;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Neuroglia.Data.EventSourcing.EventStore;
+using Neuroglia.Data.Infrastructure.EventSourcing.EventStore;
 using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
@@ -13,7 +13,7 @@ using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using ESStreamPosition = EventStore.Client.StreamPosition;
 
-namespace Neuroglia.Data.EventSourcing;
+namespace Neuroglia.Data.Infrastructure.EventSourcing;
 
 /// <summary>
 /// Represents the default <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="IEventStore"/> interface

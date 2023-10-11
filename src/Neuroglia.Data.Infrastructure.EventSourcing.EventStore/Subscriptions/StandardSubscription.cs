@@ -1,6 +1,6 @@
 ﻿using EventStore.Client;
 
-namespace Neuroglia.Data.EventSourcing.EventStore.Subscriptions;
+namespace Neuroglia.Data.Infrastructure.EventSourcing.EventStore.Subscriptions;
 
 /// <summary>
 /// Represents a standard <see cref="EventStoreSubscription"/>

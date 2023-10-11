@@ -7,7 +7,7 @@ using StackExchange.Redis;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 
-namespace Neuroglia.Data.EventSourcing.Services;
+namespace Neuroglia.Data.Infrastructure.EventSourcing.Services;
 
 /// <summary>
 /// Represents a <see href="https://stackexchange.github.io/StackExchange.Redis/">StackExchange Redis</see> implementation of the <see cref="IEventStore"/> interface

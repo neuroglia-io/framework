@@ -1,7 +1,7 @@
 ﻿using DotNet.Testcontainers.Containers;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
-using Neuroglia.Data.EventSourcing;
+using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Containers;
 

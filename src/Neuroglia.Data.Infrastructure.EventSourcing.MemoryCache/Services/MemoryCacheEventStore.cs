@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 
-namespace Neuroglia.Data.EventSourcing.DistributedCache.Services;
+namespace Neuroglia.Data.Infrastructure.EventSourcing.DistributedCache.Services;
 
 /// <summary>
 /// Represents an <see cref="IEventStore"/> implementation relying on an <see cref="IMemoryCache"/>
