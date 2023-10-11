@@ -77,11 +77,11 @@ public static class IServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
     /// <param name="setupAction">An <see cref="Action{T}"/> used to configure the <see cref="IEventStore"/></param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddEventStore<TEventStore>(this IServiceCollection services, Action<IEventStoreOptionsBuilder> setupAction)
+    public static IServiceCollection AddEventStore<TEventStore>(this IServiceCollection services, Action<IEventStoreOptionsBuilder>? setupAction = null)
         where TEventStore : class, IEventStore
     {
         var optionsBuilder = new EventStoreOptionsBuilder();
-        setupAction(optionsBuilder);
+        setupAction?.Invoke(optionsBuilder);
         var options = optionsBuilder.Build();
         services.TryAddSingleton(Options.Create(options));
         services.TryAddSingleton<TEventStore>();

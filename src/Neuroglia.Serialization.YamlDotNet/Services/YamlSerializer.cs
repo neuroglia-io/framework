@@ -84,14 +84,14 @@ public class YamlSerializer
     };
 
     /// <inheritdoc/>
-    public virtual void Serialize(object value, Stream stream, Type? type = null)
+    public virtual void Serialize(object? value, Stream stream, Type? type = null)
     {
         using var textWriter = new StreamWriter(stream, leaveOpen: true);
-        this.Serializer.Serialize(textWriter, value, type ?? value.GetType());
+        this.Serializer.Serialize(textWriter, value, type ?? value?.GetType()!);
     }
 
     /// <inheritdoc/>
-    public virtual string SerializeToText(object value, Type? type = null) => this.Serializer.Serialize(value);
+    public virtual string SerializeToText(object? value, Type? type = null) => this.Serializer.Serialize(value);
 
     /// <summary>
     /// Serializes the specified object to YAML

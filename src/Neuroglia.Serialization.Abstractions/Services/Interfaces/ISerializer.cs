@@ -12,7 +12,7 @@ public interface ISerializer
     /// <param name="value">The value to serialize</param>
     /// <param name="stream">The <see cref="Stream"/> to serialize the value to</param>
     /// <param name="type">The type to serialize the specified value as. If not specified, type is inferred</param>
-    void Serialize(object value, Stream stream, Type? type = null);
+    void Serialize(object? value, Stream stream, Type? type = null);
 
     /// <summary>
     /// Deserializes the value written on the specified <see cref="Stream"/>

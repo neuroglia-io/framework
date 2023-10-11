@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mapping", "src\Ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.EventSourcing.Redis", "src\Neuroglia.Data.EventSourcing.Redis\Neuroglia.Data.EventSourcing.Redis.csproj", "{3255C9DF-B091-49F4-941C-21774E90FF43}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.EventSourcing.EventStore", "src\Neuroglia.Data.EventSourcing.EventStore\Neuroglia.Data.EventSourcing.EventStore.csproj", "{5D45BAA3-3775-436E-A8C4-88226FC85375}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{3255C9DF-B091-49F4-941C-21774E90FF43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3255C9DF-B091-49F4-941C-21774E90FF43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3255C9DF-B091-49F4-941C-21774E90FF43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D45BAA3-3775-436E-A8C4-88226FC85375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D45BAA3-3775-436E-A8C4-88226FC85375}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D45BAA3-3775-436E-A8C4-88226FC85375}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D45BAA3-3775-436E-A8C4-88226FC85375}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -130,6 +136,7 @@ Global
 		{99C280BA-5AF8-493B-B091-53D5459EB8CB} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{26184251-0F35-41C4-A702-8CB52D53E4A3} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{3255C9DF-B091-49F4-941C-21774E90FF43} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{5D45BAA3-3775-436E-A8C4-88226FC85375} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}

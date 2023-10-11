@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using Neuroglia.Data.EventSourcing.DistributedCache.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Neuroglia.Data.EventSourcing.MemoryCache;
 
 namespace Neuroglia.UnitTests.Cases.EventSourcing;
 
@@ -8,6 +7,13 @@ public class MemoryEventStoreTests
     : EventStoreTestsBase
 {
 
-    public MemoryEventStoreTests() : base(new MemoryCacheEventStore(new MemoryCache(Options.Create(new MemoryCacheOptions())))) { }
+    public MemoryEventStoreTests() : base(BuildServices()) { }
+
+    public static IServiceCollection BuildServices()
+    {
+        var services = new ServiceCollection();
+        services.AddMemoryCacheEventStore(_ => { });
+        return services;
+    }
 
 }

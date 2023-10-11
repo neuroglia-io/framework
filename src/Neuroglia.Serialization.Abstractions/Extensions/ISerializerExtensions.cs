@@ -13,7 +13,7 @@ public static class ISerializerExtensions
     /// <param name="value">The value to serialize</param>
     /// <param name="type">The type to serialize the specified value as. If not specified, type is inferred</param>
     /// <returns>The binary representation of the serialized value</returns>
-    public static byte[] SerializeToByteArray(this ISerializer serializer, object value, Type? type = null)
+    public static byte[]? SerializeToByteArray(this ISerializer serializer, object? value, Type? type = null)
     {
         using var stream = new MemoryStream();
         serializer.Serialize(value, stream, type);
@@ -36,8 +36,9 @@ public static class ISerializerExtensions
     /// <param name="byteArray">The byte array to deserialize</param>
     /// <param name="type">The type to deserialize the byte array to</param>
     /// <returns>The deserialized value, if any</returns>
-    public static object? Deserialize(this ISerializer serializer, byte[] byteArray, Type type)
+    public static object? Deserialize(this ISerializer serializer, byte[]? byteArray, Type type)
     {
+        if (byteArray == null || !byteArray.Any()) return null;
         using var stream = new MemoryStream(byteArray);
         return serializer.Deserialize(stream, type);
     }
@@ -49,8 +50,9 @@ public static class ISerializerExtensions
     /// <param name="serializer">The extended <see cref="ISerializer"/></param>
     /// <param name="byteArray">The byte array to deserialize</param>
     /// <returns>The deserialized value, if any</returns>
-    public static T? Deserialize<T>(this ISerializer serializer, byte[] byteArray)
+    public static T? Deserialize<T>(this ISerializer serializer, byte[]? byteArray)
     {
+        if (byteArray == null || !byteArray.Any()) return default;
         using var stream = new MemoryStream(byteArray);
         return serializer.Deserialize<T>(stream);
     }

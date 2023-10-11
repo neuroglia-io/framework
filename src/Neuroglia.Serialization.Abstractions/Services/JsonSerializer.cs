@@ -68,10 +68,10 @@ public class JsonSerializer
     public virtual bool Supports(string mediaTypeName) => mediaTypeName == MediaTypeNames.Application.Json || mediaTypeName.EndsWith("+json");
 
     /// <inheritdoc/>
-    public virtual void Serialize(object value, Stream stream, Type? type = null) => System.Text.Json.JsonSerializer.Serialize(stream, value, type ?? value.GetType(), this.Options);
+    public virtual void Serialize(object? value, Stream stream, Type? type = null) => System.Text.Json.JsonSerializer.Serialize(stream, value, type ?? value?.GetType()!, this.Options);
 
     /// <inheritdoc/>
-    public virtual string SerializeToText(object value, Type? type = null) => System.Text.Json.JsonSerializer.Serialize(value, type ?? value.GetType(), this.Options);
+    public virtual string SerializeToText(object? value, Type? type = null) => System.Text.Json.JsonSerializer.Serialize(value, type ?? value?.GetType()!, this.Options);
 
     /// <summary>
     /// Serializes the specified object into a new <see cref="JsonNode"/>

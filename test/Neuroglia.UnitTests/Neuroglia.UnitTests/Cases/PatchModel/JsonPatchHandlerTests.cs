@@ -31,7 +31,7 @@ public class JsonPatchHandlerTests
 
         //assert
         patched.Should().NotBeNull();
-        patched.Street.Should().Be(street);
+        patched!.Street.Should().Be(street);
         patched.City.Should().Be(city);
         patched.ZipCode.Should().Be(zipCode);
         patched.Country.Should().Be(country);

@@ -51,7 +51,7 @@ public class MediatorTests
         result.Should().NotBeNull();
         result.Status.Should().Be((int)HttpStatusCode.OK);
         result.Data.Should().NotBeNull();
-        result.Data.FirstName.Should().Be(firstName);
+        result.Data!.FirstName.Should().Be(firstName);
         result.Data.LastName.Should().Be(lastName);
     }
 
@@ -91,7 +91,7 @@ public class MediatorTests
         result.Should().NotBeNull();
         result.Status.Should().Be((int)HttpStatusCode.OK);
         result.Data.Should().NotBeNull();
-        result.Data.FirstName.Should().Be($"Updated {firstName}");
+        result.Data!.FirstName.Should().Be($"Updated {firstName}");
         result.Data.LastName.Should().Be($"Updated {lastName}");
     }
 
@@ -133,7 +133,7 @@ public class MediatorTests
     public async Task Command_WithFluentValidationMiddleware_ShouldWork()
     {
         //arrange
-        var command = new TestCommandWithDomainExceptionHandlingMiddleware(null);
+        var command = new TestCommandWithDomainExceptionHandlingMiddleware(null!);
 
         //act
         var result = await this.Mediator.ExecuteAsync(command);
@@ -169,7 +169,7 @@ public class MediatorTests
         result.Should().NotBeNull();
         result.Status.Should().Be((int)HttpStatusCode.OK);
         result.Data.Should().NotBeNull();
-        result.Data.FirstName.Should().Be($"Updated {firstName}");
+        result.Data!.FirstName.Should().Be($"Updated {firstName}");
         result.Data.LastName.Should().Be($"Updated {lastName}");
     }
 

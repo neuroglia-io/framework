@@ -1,19 +1,35 @@
-﻿using Neuroglia.Data.Infrastructure.EventSourcing;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 
 namespace Neuroglia.UnitTests.Cases.EventSourcing;
 
 public abstract class EventStoreTestsBase
+    : IAsyncLifetime
 {
 
-    bool _disposed;
-
-    public EventStoreTestsBase(IEventStore eventStore)
+    public EventStoreTestsBase(IServiceCollection services)
     {
-        this.EventStore = eventStore;
+        this.ServiceProvider = services.BuildServiceProvider();
     }
 
-    protected IEventStore EventStore { get; }
+    protected ServiceProvider ServiceProvider { get; }
+
+    protected CancellationTokenSource CancellationTokenSource { get; } = new();
+
+    protected IEventStore EventStore { get; private set; } = null!;
+
+    public async Task InitializeAsync()
+    {
+        foreach(var hostedService in this.ServiceProvider.GetServices<IHostedService>())
+        {
+            await hostedService.StartAsync(this.CancellationTokenSource.Token).ConfigureAwait(false);
+        }
+        this.EventStore = this.ServiceProvider.GetRequiredService<IEventStore>();
+    }
+
+    public async Task DisposeAsync() => await this.ServiceProvider.DisposeAsync().ConfigureAwait(false);
 
     [Fact, Priority(1)]
     public async Task Append_Should_Work()
@@ -61,7 +77,7 @@ public abstract class EventStoreTestsBase
         await this.EventStore.AppendAsync(streamId, events);
 
         //act
-        await this.EventStore.AppendAsync(streamId, eventsToAppend, events.Count);
+        await this.EventStore.AppendAsync(streamId, eventsToAppend, events.Count - 1);
     }
 
     [Fact, Priority(4)]
@@ -146,14 +162,14 @@ public abstract class EventStoreTestsBase
         //arrange
         var streamId = "fake-stream";
         var events = EventStreamFactory.Create().ToList();
-        var offset = (long)events.Count() / 2;
+        var offset = (long)events.Count / 2;
         await this.EventStore.AppendAsync(streamId, events);
 
         //act
         var storedEvents = await this.EventStore.ReadAsync(streamId, StreamReadDirection.Forwards, offset).ToListAsync();
 
         //assert
-        storedEvents.Count.Should().Be((int)(events.Count() - offset));
+        storedEvents.Count.Should().Be((int)(events.Count - offset));
         storedEvents.First().Offset.Should().Be((ulong)offset);
 
         storedEvents.Last().Type.Should().Be(events.Last().Type);
@@ -187,22 +203,22 @@ public abstract class EventStoreTestsBase
         //arrange
         var streamId = "fake-stream";
         var events = EventStreamFactory.Create().ToList();
-        var offset = (long)events.Count / 2;
+        var offset = 2;
         await this.EventStore.AppendAsync(streamId, events);
 
         //act
         var storedEvents = await this.EventStore.ReadAsync(streamId, StreamReadDirection.Backwards, offset).ToListAsync();
 
         //assert
-        storedEvents.Count.Should().Be((int)(events.Count() - offset));
-        storedEvents.First().Offset.Should().Be((ulong)offset - 1);
+        storedEvents.Count.Should().Be(events.Count - offset + 1);
+        storedEvents.First().Offset.Should().Be((ulong)offset);
 
         storedEvents.Last().Type.Should().Be(events.First().Type);
         storedEvents.Last().Data.Should().BeEquivalentTo(events.First().Data);
     }
 
     [Fact, Priority(12)]
-    public async Task Read_Backwards_FromEnd_Should_BeEmpty()
+    public async Task Read_Backwards_FromStart_Should_BeEmpty()
     {
         //arrange
         var streamId = "fake-stream";
@@ -238,6 +254,7 @@ public abstract class EventStoreTestsBase
         var observable = (await this.EventStore.SubscribeAsync(streamId, StreamPosition.StartOfStream))
             .Subscribe(handledEvents.Add);
         await this.EventStore.AppendAsync(streamId, eventsToAppend);
+        await Task.Delay(100);
 
         //assert
         handledEvents.Should().HaveCount(events.Count + eventsToAppend.Count);
@@ -367,24 +384,6 @@ public abstract class EventStoreTestsBase
         //assert
         var action = async () => await this.EventStore.DeleteAsync("non-existing");
         await action.Should().ThrowAsync<StreamNotFoundException>();
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!this._disposed)
-        {
-            if (disposing)
-            {
-               
-            }
-            this._disposed = true;
-        }
-    }
-
-    public void Dispose()
-    {
-        this.Dispose(disposing: true);
-        GC.SuppressFinalize(this);
     }
 
 }

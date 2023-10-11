@@ -1,27 +1,28 @@
 ﻿using DotNet.Testcontainers.Containers;
+using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
-using Neuroglia.Data.EventSourcing.Redis;
+using Neuroglia.Data.EventSourcing;
 using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Containers;
-using StackExchange.Redis;
 
 namespace Neuroglia.UnitTests.Cases.EventSourcing;
 
 [TestCaseOrderer("Neuroglia.UnitTests.Services.PriorityTestCaseOrderer", "Neuroglia.UnitTests")]
-public class RedisEventStoreTests
+public class ESEventStoreTests
     : EventStoreTestsBase
 {
 
-    public RedisEventStoreTests() : base(BuildServices()) { }
+    public ESEventStoreTests() : base(BuildServices()) { }
 
     public static IServiceCollection BuildServices()
     {
         var services = new ServiceCollection();
+        services.AddLogging();
         services.AddSerialization();
-        services.AddSingleton(provider => RedisContainerBuilder.Build());
+        services.AddSingleton(EventStoreContainerBuilder.Build());
         services.AddHostedService(provider => new ContainerBootstrapper(provider.GetRequiredService<IContainer>()));
-        services.AddSingleton<IConnectionMultiplexer>(provider => ConnectionMultiplexer.Connect($"localhost:{provider.GetRequiredService<IContainer>().GetMappedPublicPort(RedisContainerBuilder.PublicPort)}"));
-        services.AddRedisEventStore(_ => { });
+        services.AddSingleton(provider => new EventStoreClient(EventStoreClientSettings.Create($"esdb://{provider.GetRequiredService<IContainer>().Hostname}:{provider.GetRequiredService<IContainer>().GetMappedPublicPort(EventStoreContainerBuilder.PublicPort2)}?tls=false")));
+        services.AddESEventStore();
         return services;
     }
 

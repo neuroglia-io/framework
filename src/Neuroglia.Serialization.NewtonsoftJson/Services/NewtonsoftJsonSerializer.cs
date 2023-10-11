@@ -29,7 +29,7 @@ public class NewtonsoftJsonSerializer
     public virtual bool Supports(string mediaTypeName) => mediaTypeName == MediaTypeNames.Application.Json || mediaTypeName.EndsWith("+json");
 
     /// <inheritdoc/>
-    public virtual void Serialize(object value, Stream stream, Type? type = null)
+    public virtual void Serialize(object? value, Stream stream, Type? type = null)
     {
         var serializer = JsonSerializer.Create(this.Settings.CurrentValue);
         using var streamWriter = new StreamWriter(stream, leaveOpen: true);
@@ -38,7 +38,7 @@ public class NewtonsoftJsonSerializer
     }
 
     /// <inheritdoc/>
-    public virtual string SerializeToText(object value, Type? type = null) => JsonConvert.SerializeObject(value, type, this.Settings.CurrentValue);
+    public virtual string SerializeToText(object? value, Type? type = null) => JsonConvert.SerializeObject(value, type, this.Settings.CurrentValue);
 
     /// <inheritdoc/>
     public virtual object? Deserialize(string input, Type type) => JsonConvert.DeserializeObject(input, type, this.Settings.CurrentValue);

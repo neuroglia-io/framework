@@ -14,6 +14,7 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="Testcontainers" Version="3.5.0" />
     <PackageReference Include="xunit" Version="2.5.1" />
@@ -28,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.EventSourcing.EventStore\Neuroglia.Data.EventSourcing.EventStore.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.EventSourcing.MemoryCache\Neuroglia.Data.EventSourcing.MemoryCache.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.EventSourcing.Redis\Neuroglia.Data.EventSourcing.Redis.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj" />

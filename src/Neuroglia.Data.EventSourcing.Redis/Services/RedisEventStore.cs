@@ -25,7 +25,7 @@ public class RedisEventStore
     public RedisEventStore(IOptions<EventStoreOptions> options, IConnectionMultiplexer redis, ISerializerProvider serializerProvider)
     {
         this.Options = options.Value;
-        this.Serializer = serializerProvider.GetSerializers().First(s => this.Options.SerializerType == null ? true : s.GetType() == this.Options.SerializerType);
+        this.Serializer = serializerProvider.GetSerializers().First(s => this.Options.SerializerType == null || s.GetType() == this.Options.SerializerType);
         this.Redis = redis;
         this.Database = redis.GetDatabase();
         this.Subscriber = redis.GetSubscriber();
@@ -63,7 +63,7 @@ public class RedisEventStore
         if (events == null || !events.Any()) throw new ArgumentNullException(nameof(events));
 
         var keys = (await this.Database.HashKeysAsync(streamId).ConfigureAwait(false)).Order().ToList();
-        var actualversion = keys == null || !keys.Any() ? (long?)null : (long)keys.Order().LastOrDefault() + 1;
+        var actualversion = keys == null || !keys.Any() ? (long?)null : (long)keys.Order().LastOrDefault();
 
         if (expectedVersion.HasValue)
         {
@@ -130,7 +130,7 @@ public class RedisEventStore
                 {
                     skip = hashKeys.IndexOf(offset);
                     if (skip < 0) yield break;
-                    hashKeys = hashKeys.Skip(skip + 1).ToList();
+                    hashKeys = hashKeys.Skip(skip).ToList();
                 }
                 break;
             default: throw new NotSupportedException($"The specified {nameof(StreamReadDirection)} '{readDirection}' is not supported");
@@ -182,6 +182,11 @@ public class RedisEventStore
         await this.Database.KeyDeleteAsync(streamId).ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Deserializes the specified <see cref="RedisValue"/> into a new <see cref="IEventRecord"/>
+    /// </summary>
+    /// <param name="value">The <see cref="RedisValue"/> to deserialize</param>
+    /// <returns>The deserialized <see cref="IEventRecord"/></returns>
     protected virtual IEventRecord DeserializeEventRecord(RedisValue value)
     {
         var byteArray = (byte[])value!;

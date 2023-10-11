@@ -18,10 +18,10 @@ public class DataContractSerializer
     };
 
     /// <inheritdoc/>
-    public virtual void Serialize(object value, Stream stream, Type? type = null) => new System.Runtime.Serialization.DataContractSerializer(type ?? value.GetType()).WriteObject(stream, value);
+    public virtual void Serialize(object? value, Stream stream, Type? type = null) => new System.Runtime.Serialization.DataContractSerializer(type ?? value?.GetType()!).WriteObject(stream, value);
 
     /// <inheritdoc/>
-    public virtual string SerializeToText(object value, Type? type = null)
+    public virtual string SerializeToText(object? value, Type? type = null)
     {
         using var stream = new MemoryStream();
         this.Serialize(value, stream, type);

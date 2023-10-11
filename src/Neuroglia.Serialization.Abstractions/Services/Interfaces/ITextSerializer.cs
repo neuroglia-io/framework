@@ -13,7 +13,7 @@ public interface ITextSerializer
     /// <param name="value">The value to serialize</param>
     /// <param name="type">The type to serialize the specified value as. If not specified, type is inferred</param>
     /// <returns>The text representation of the serialized value</returns>
-    string SerializeToText(object value, Type? type = null);
+    string SerializeToText(object? value, Type? type = null);
 
     /// <summary>
     /// Deserializes a value from its text representation

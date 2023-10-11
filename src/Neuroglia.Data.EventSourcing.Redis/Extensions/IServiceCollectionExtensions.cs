@@ -17,7 +17,7 @@ public static class IServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
     /// <param name="setup">An <see cref="Action{T}"/> used to configure the <see cref="RedisEventStore"/></param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddRedisEventStore(this IServiceCollection services, Action<IEventStoreOptionsBuilder> setup)
+    public static IServiceCollection AddRedisEventStore(this IServiceCollection services, Action<IEventStoreOptionsBuilder>? setup = null)
     {
         services.AddEventStore<RedisEventStore>(setup);
         return services;
