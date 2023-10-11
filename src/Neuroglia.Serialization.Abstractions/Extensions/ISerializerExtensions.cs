@@ -1,4 +1,6 @@
-﻿namespace Neuroglia.Serialization;
+﻿using System.Text;
+
+namespace Neuroglia.Serialization;
 
 /// <summary>
 /// Defines extensions for <see cref="ISerializer"/>s

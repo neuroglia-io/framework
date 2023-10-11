@@ -29,6 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Expressions.JavaScript\Neuroglia.Data.Expressions.JavaScript.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Expressions.JQ\Neuroglia.Data.Expressions.JQ.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Expressions\Neuroglia.Data.Expressions.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.EventStore\Neuroglia.Data.Infrastructure.EventSourcing.EventStore.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache\Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Redis\Neuroglia.Data.Infrastructure.EventSourcing.Redis.csproj" />
@@ -36,6 +39,60 @@
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\dogs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\inputWithEscapedJson.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\openapi.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\pets.expression.jq.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\pets.expression.js.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-concat.expression.jq.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-concat.expression.js.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-concat.input.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-interpolation.expression.jq.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-interpolation.expression.js.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-interpolation.input.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-quoted.expression.jq.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-quoted.expression.js.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-quoted.input.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-substitution.expression.jq.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-substitution.expression.js.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-substitution.input.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

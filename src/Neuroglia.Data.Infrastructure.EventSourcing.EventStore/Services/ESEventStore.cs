@@ -1,13 +1,11 @@
 ﻿using EventStore.Client;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Neuroglia.Data.Infrastructure.EventSourcing.EventStore;
-using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
+using Neuroglia.Data.Infrastructure.EventSourcing.EventStore;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 using Neuroglia.Serialization;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;

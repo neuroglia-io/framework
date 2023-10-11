@@ -8,7 +8,6 @@ namespace Neuroglia.UnitTests.Data;
 public class Person
     : AggregateRoot<Guid>
 {
-
     protected Person() : base(Guid.NewGuid()) { }
 
     public Person(Guid id, string firstName, string lastName)

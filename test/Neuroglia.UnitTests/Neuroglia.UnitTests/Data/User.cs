@@ -7,7 +7,7 @@ public class User
     : AggregateRoot<string>
 {
 
-    protected User() { }
+    public User() { }
 
     /// In real use-case, the constructor for the deprecated event should be removed
     public User(string firstName, string lastName, string email)
@@ -17,32 +17,32 @@ public class User
     }
 
     public User(string firstName, string lastName, string email, Address address)
-    : base(Guid.NewGuid().ToString("N")[..15])
+        : base(Guid.NewGuid().ToString("N")[..15])
     {
         this.On(this.RegisterEvent(new UserCreatedEventV2(this.Id, firstName, lastName, email, address)));
     }
 
-    public string FirstName { get; protected set; } = null!;
+    public string FirstName { get; set; } = null!;
 
-    public string LastName { get; protected set; } = null!;
+    public string LastName { get; set; } = null!;
 
-    public string Email { get; protected set; } = null!;
+    public string Email { get; set; } = null!;
 
-    public bool EmailVerified { get; protected set; }
+    public bool EmailVerified { get; set; }
 
-    public bool IsLoggedIn { get; protected set; }
+    public bool IsLoggedIn { get; set; }
 
-    public DateTimeOffset? LastOnline { get; protected set; }
+    public DateTimeOffset? LastOnline { get; set; }
 
-    public Address? Address { get; protected set; }
+    public Address? Address { get; set; }
 
-    public string? PhoneNumber { get; protected set; }
+    public string? PhoneNumber { get; set; }
 
-    public bool IsV1 { get; protected set; }
+    public bool IsV1 { get; set; }
 
-    public bool IsV2 { get; protected set; }
+    public bool IsV2 { get; set; }
 
-    public bool IsV3 { get; protected set; }
+    public bool IsV3 { get; set; }
 
     public void VerifyEmail()
     {

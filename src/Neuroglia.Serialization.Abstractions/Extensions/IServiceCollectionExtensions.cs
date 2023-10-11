@@ -47,7 +47,7 @@ public static class IServiceCollectionExtensions
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddJsonSerializer(this IServiceCollection services, Action<System.Text.Json.JsonSerializerOptions>? setup = null, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
-        setup ??= _ => { };
+        setup ??= JsonSerializer.DefaultOptionsConfiguration!;
         services.Configure(setup);
         services.AddSerializer<JsonSerializer>(lifetime);
         return services;
