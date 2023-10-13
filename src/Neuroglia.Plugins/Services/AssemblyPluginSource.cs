@@ -58,7 +58,7 @@ public class AssemblyPluginSource
             var pluginAttribute = type.GetCustomAttribute<PluginAttribute>();
             var name = pluginAttribute?.Name ?? type.FullName!;
             var version = pluginAttribute?.Version ?? assembly.GetName().Version ?? new(1, 0, 0);
-            this._plugins.Add(new Plugin(name, version, type, assembly));
+            this._plugins.Add(new Plugin(name, version, type, assembly, assemblyLoadContext));
         }
 
         this.IsLoaded = true;

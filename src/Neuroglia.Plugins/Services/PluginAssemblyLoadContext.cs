@@ -57,4 +57,17 @@ public class PluginAssemblyLoadContext
         return this.LoadUnmanagedDllFromPath(assemblyPath);
     }
 
+    /// <summary>
+    /// Creates a new instance of the specified type within the boundaries of the <see cref="PluginAssemblyLoadContext"/>
+    /// </summary>
+    /// <param name="type">The type to instantiate</param>
+    /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
+    /// <returns>A new instance of the specified type, activated within the boundaries of the <see cref="PluginAssemblyLoadContext"/></returns>
+    public object CreateInstance(IServiceProvider serviceProvider, Type type)
+    {
+        var loadedAssembly = this.Assemblies.FirstOrDefault(a => a.GetName() == type.Assembly.GetName()) ?? Default.LoadFromAssemblyName(type.Assembly.GetName());
+        var loadedType = loadedAssembly.GetType(type.FullName!) ?? throw new NullReferenceException($"Failed to find the specified type '{type.FullName}' in assembly '{loadedAssembly.FullName}'");
+        return ActivatorUtilities.CreateInstance(serviceProvider, loadedType);
+    }
+
 }

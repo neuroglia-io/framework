@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.Loader;
 
 namespace Neuroglia.Plugins;
 
@@ -27,5 +28,10 @@ public interface IPlugin
     /// Gets the plugin's assembly
     /// </summary>
     Assembly Assembly { get; }
+
+    /// <summary>
+    /// Gets the <see cref="IPlugin"/>'s <see cref="System.Runtime.Loader.AssemblyLoadContext"/>
+    /// </summary>
+    AssemblyLoadContext AssemblyLoadContext { get; }
 
 }

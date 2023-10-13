@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
+using System.Runtime.Loader;
 
 namespace Neuroglia.Plugins.Services;
 
@@ -79,7 +80,8 @@ public class PluginProvider
                 object? pluginInstance;
                 try
                 {
-                    pluginInstance = factory.Create();
+                    var pluginFactory = (IPluginFactory)((PluginAssemblyLoadContext)plugin.AssemblyLoadContext).CreateInstance(this.ServiceProvider, factoryType);
+                    pluginInstance = pluginFactory.Create();
                 }
                 catch (Exception ex)
                 {
@@ -94,7 +96,7 @@ public class PluginProvider
                 object? pluginInstance;
                 try
                 {
-                    pluginInstance = ActivatorUtilities.CreateInstance(this.ServiceProvider, pluginType);
+                    pluginInstance = ((PluginAssemblyLoadContext)plugin.AssemblyLoadContext).CreateInstance(this.ServiceProvider, pluginType);
                 }
                 catch (Exception ex)
                 {
