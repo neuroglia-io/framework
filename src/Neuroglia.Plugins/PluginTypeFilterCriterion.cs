@@ -55,13 +55,11 @@ public class PluginTypeFilterCriterion
             var expectedTypeAssembly = metadataLoadContext.GetAssemblies().FirstOrDefault(a => a.GetName().Name == expectedTypeAssemblyName) ?? metadataLoadContext.LoadFromAssemblyName(expectedTypeAssemblyName);
             expectedType = expectedTypeAssembly.GetType(expectedTypeName, true);
         }
-        if(expectedType == null) throw new Exception($"Failed to find the type '{Value}' expected by the plugin type filter criterion");
+        if(expectedType == null) throw new Exception($"Failed to find the type '{this.Value}' expected by the plugin type filter criterion");
         return this.Type switch
         {
-            PluginTypeFilterCriterionType.Assignable => expectedType.IsAssignableFrom(candidateType),
-            PluginTypeFilterCriterionType.Implements => candidateType.GetInterfaces().Contains(expectedType),
-            PluginTypeFilterCriterionType.Inherits => candidateType.InheritsFrom(expectedType),
-            _ => throw new NotSupportedException($"The specified {nameof(PluginTypeFilterCriterionType)} '{Type}' is not supported")
+            PluginTypeFilterCriterionType.Assignable or PluginTypeFilterCriterionType.Implements or PluginTypeFilterCriterionType.Inherits => expectedType.IsGenericTypeDefinition ? candidateType.IsGenericImplementationOf(expectedType) : expectedType.IsAssignableFrom(candidateType),
+            _ => throw new NotSupportedException($"The specified {nameof(PluginTypeFilterCriterionType)} '{this.Type}' is not supported")
         };
     }
 

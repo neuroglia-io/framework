@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Data.Infrastructure.EventSourcing.Redis;
 using Neuroglia.Serialization;
-using Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing;
 using Neuroglia.UnitTests.Containers;
 using StackExchange.Redis;
 

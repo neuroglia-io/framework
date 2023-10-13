@@ -34,7 +34,7 @@ public static class IServiceCollectionExtensions
     {
         services.AddPluginProvider();
 
-        services.TryAddEnumerable(new ServiceDescriptor(typeof(IPluginSource), pluginSource));
+        services.Add(new ServiceDescriptor(typeof(IPluginSource), pluginSource));
 
         return services;
     }
@@ -57,18 +57,32 @@ public static class IServiceCollectionExtensions
     /// <summary>
     /// Registers an plugin of the specified type
     /// </summary>
-    /// <typeparam name="TContract">The type of the contract implemented by sourced plugins. Must be an interface</typeparam>
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+    /// <param name="serviceType">The type of the contract implemented by sourced plugins. Must be an interface</param>
+    /// <param name="defaultImplementation">The default implementation, if any, of the service contract</param>
     /// <param name="serviceLifetime">The plugin service lifetime</param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddPlugin<TContract>(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
-        where TContract : class
+    public static IServiceCollection AddPlugin(this IServiceCollection services, Type serviceType, object? defaultImplementation = null, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
     {
-        if (!typeof(TContract).IsInterface) throw new ArgumentException("The plugin contract must be an interface", nameof(TContract));
+        if (!serviceType.IsInterface) throw new ArgumentException("The plugin contract must be an interface", nameof(serviceType));
         services.AddPluginProvider();
-        services.TryAdd(new ServiceDescriptor(typeof(IEnumerable<TContract>), provider => provider.GetRequiredService<IPluginProvider>().GetPlugins<TContract>(), serviceLifetime));
-        services.TryAdd(new ServiceDescriptor(typeof(TContract), provider => provider.GetRequiredService<IPluginProvider>().GetPlugins<TContract>().First(), serviceLifetime));
+        services.TryAdd(new ServiceDescriptor(typeof(IEnumerable<>).MakeGenericType(serviceType), provider => provider.GetRequiredService<IPluginProvider>().GetPlugins(serviceType), serviceLifetime));
+        services.TryAdd(new ServiceDescriptor(serviceType, provider => provider.GetRequiredService<IPluginProvider>().GetPlugins(serviceType).FirstOrDefault() ?? defaultImplementation ?? throw new NullReferenceException($"No plugin or implementation type registered for service type '{serviceType.Name}'"), serviceLifetime));
         return services;
+    }
+
+    /// <summary>
+    /// Registers an plugin of the specified type
+    /// </summary>
+    /// <typeparam name="TService">The type of the contract implemented by sourced plugins. Must be an interface</typeparam>
+    /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+    /// <param name="defaultImplementation">The default implementation, if any, of the service contract</param>
+    /// <param name="serviceLifetime">The plugin service lifetime</param>
+    /// <returns>The configured <see cref="IServiceCollection"/></returns>
+    public static IServiceCollection AddPlugin<TService>(this IServiceCollection services, TService? defaultImplementation = null, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
+        where TService : class
+    {
+        return services.AddPlugin(typeof(TService), defaultImplementation, serviceLifetime);
     }
 
 }

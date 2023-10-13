@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Neuroglia.Data.Infrastructure.Services;
 using Neuroglia.Plugins;
 using Neuroglia.Plugins.Services;
 
@@ -12,8 +13,11 @@ public class PluginProviderTests
     public PluginProviderTests()
     {
         var services = new ServiceCollection();
+        services.AddLogging();
         services.AddPluginSource(source => source.FromDirectory(plugin => plugin.Implements<IGreet>(), AppContext.BaseDirectory, "*.dll", SearchOption.TopDirectoryOnly));
+        services.AddPluginSource(source => source.FromDirectory(plugin => plugin.Implements(typeof(IRepository<,>)), AppContext.BaseDirectory, "*.dll", SearchOption.TopDirectoryOnly));
         services.AddPlugin<IGreet>();
+        services.AddPlugin(serviceType: typeof(IRepository<User, string>));
         this.ServiceProvider = services.BuildServiceProvider();
     }
 
@@ -44,6 +48,13 @@ public class PluginProviderTests
         //assert
         this.ServiceProvider.GetService<IGreet>().Should().NotBeNull();
         this.ServiceProvider.GetServices<IGreet>().Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public void Get_GenericPluginService_Should_Work()
+    {
+        //assert
+        this.ServiceProvider.GetService<IRepository<User, string>>().Should().NotBeNull();
     }
 
 }

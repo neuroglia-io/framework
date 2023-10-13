@@ -9,6 +9,13 @@ public interface IPluginTypeFilterBuilder
     /// <summary>
     /// Configures the filter to match types that are assignable to the specified type
     /// </summary>
+    /// <param name="type">The type filtered types must assignable to</param>
+    /// <returns>The configured <see cref="PluginTypeFilterBuilder"/></returns>
+    IPluginTypeFilterBuilder AssignableFrom(Type type);
+
+    /// <summary>
+    /// Configures the filter to match types that are assignable to the specified type
+    /// </summary>
     /// <typeparam name="T">The type filtered types must assignable to</typeparam>
     /// <returns>The configured <see cref="PluginTypeFilterBuilder"/></returns>
     IPluginTypeFilterBuilder AssignableFrom<T>()
@@ -17,18 +24,32 @@ public interface IPluginTypeFilterBuilder
     /// <summary>
     /// Configures the filter to match types that implement the specified interface
     /// </summary>
-    /// <typeparam name="TInterface">The type of interface filtered types must implement</typeparam>
+    /// <param name="type">The type of interface filtered types must implement</param>
     /// <returns>The configured <see cref="PluginTypeFilterBuilder"/></returns>
-    IPluginTypeFilterBuilder Implements<TInterface>()
-        where TInterface : class;
+    IPluginTypeFilterBuilder Implements(Type type);
+
+    /// <summary>
+    /// Configures the filter to match types that implement the specified interface
+    /// </summary>
+    /// <typeparam name="T">The type of interface filtered types must implement</typeparam>
+    /// <returns>The configured <see cref="PluginTypeFilterBuilder"/></returns>
+    IPluginTypeFilterBuilder Implements<T>()
+        where T : class;
 
     /// <summary>
     /// Configures the filter to match types that inherits from the specified type
     /// </summary>
-    /// <typeparam name="TBaseType">The type filtered types must inherit from</typeparam>
+    /// <param name="type">The type filtered types must inherit from</param>
     /// <returns>The configured <see cref="PluginTypeFilterBuilder"/></returns>
-    IPluginTypeFilterBuilder Inherits<TBaseType>()
-        where TBaseType : class;
+    IPluginTypeFilterBuilder Inherits(Type type);
+
+    /// <summary>
+    /// Configures the filter to match types that inherits from the specified type
+    /// </summary>
+    /// <typeparam name="T">The type filtered types must inherit from</typeparam>
+    /// <returns>The configured <see cref="PluginTypeFilterBuilder"/></returns>
+    IPluginTypeFilterBuilder Inherits<T>()
+        where T : class;
 
     /// <summary>
     /// Builds the <see cref="PluginTypeFilter"/>

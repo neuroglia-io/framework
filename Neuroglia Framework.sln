@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Serialization.New
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data", "src\Neuroglia.Data\Neuroglia.Data.csproj", "{50569E05-3E5F-4E2D-827D-1B517CAC3200}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure", "src\Neuroglia.Data.Infrastructure\Neuroglia.Data.Infrastructure.csproj", "{E24859DF-29A1-4EF1-B04E-3B17F44B0DCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.Abstractions", "src\Neuroglia.Data.Infrastructure.Abstractions\Neuroglia.Data.Infrastructure.Abstractions.csproj", "{E24859DF-29A1-4EF1-B04E-3B17F44B0DCF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing", "src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj", "{A632C6B5-81F2-48C9-8171-2EEE35277100}"
 EndProject
@@ -37,8 +37,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mapping", "src\Ne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing.EventStore", "src\Neuroglia.Data.Infrastructure.EventSourcing.EventStore\Neuroglia.Data.Infrastructure.EventSourcing.EventStore.csproj", "{2E8752CF-5A78-48EC-96B1-828B88287D1D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache", "src\Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache\Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache.csproj", "{F67B19C9-3894-4ACC-8B76-E24FADE0682C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing.Redis", "src\Neuroglia.Data.Infrastructure.EventSourcing.Redis\Neuroglia.Data.Infrastructure.EventSourcing.Redis.csproj", "{27A98088-995B-49F0-9E4E-F7C752A77907}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mediation.AspNetCore", "src\Neuroglia.Mediation.AspNetCore\Neuroglia.Mediation.AspNetCore.csproj", "{6023CDEF-0A3E-47A5-916F-C0A0A6111390}"
@@ -51,7 +49,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Expressions.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Plugins.Abstractions", "src\Neuroglia.Plugins.Abstractions\Neuroglia.Plugins.Abstractions.csproj", "{589F8368-4128-4F54-A957-7B0C9DA52D71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Plugins", "src\Neuroglia.Plugins\Neuroglia.Plugins.csproj", "{D4EF5206-B925-4A18-897B-CD07A3D8A914}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Plugins", "src\Neuroglia.Plugins\Neuroglia.Plugins.csproj", "{D4EF5206-B925-4A18-897B-CD07A3D8A914}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.Memory", "src\Neuroglia.Data.Infrastructure.Memory\Neuroglia.Data.Infrastructure.Memory.csproj", "{526BB65B-D65B-4DBD-8B3F-6C6968DE844E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing.Memory", "src\Neuroglia.Data.Infrastructure.EventSourcing.Memory\Neuroglia.Data.Infrastructure.EventSourcing.Memory.csproj", "{A0A242DD-C53B-4F3F-9A6F-137B370BD677}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.Infrastructure.Mongo", "src\Neuroglia.Data.Infrastructure.Mongo\Neuroglia.Data.Infrastructure.Mongo.csproj", "{71C7C854-2E70-470C-A812-6C7C27E9422C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -119,10 +123,6 @@ Global
 		{2E8752CF-5A78-48EC-96B1-828B88287D1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E8752CF-5A78-48EC-96B1-828B88287D1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E8752CF-5A78-48EC-96B1-828B88287D1D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F67B19C9-3894-4ACC-8B76-E24FADE0682C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F67B19C9-3894-4ACC-8B76-E24FADE0682C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F67B19C9-3894-4ACC-8B76-E24FADE0682C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F67B19C9-3894-4ACC-8B76-E24FADE0682C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{27A98088-995B-49F0-9E4E-F7C752A77907}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{27A98088-995B-49F0-9E4E-F7C752A77907}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27A98088-995B-49F0-9E4E-F7C752A77907}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -151,6 +151,18 @@ Global
 		{D4EF5206-B925-4A18-897B-CD07A3D8A914}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4EF5206-B925-4A18-897B-CD07A3D8A914}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4EF5206-B925-4A18-897B-CD07A3D8A914}.Release|Any CPU.Build.0 = Release|Any CPU
+		{526BB65B-D65B-4DBD-8B3F-6C6968DE844E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{526BB65B-D65B-4DBD-8B3F-6C6968DE844E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{526BB65B-D65B-4DBD-8B3F-6C6968DE844E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{526BB65B-D65B-4DBD-8B3F-6C6968DE844E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0A242DD-C53B-4F3F-9A6F-137B370BD677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A242DD-C53B-4F3F-9A6F-137B370BD677}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0A242DD-C53B-4F3F-9A6F-137B370BD677}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A242DD-C53B-4F3F-9A6F-137B370BD677}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71C7C854-2E70-470C-A812-6C7C27E9422C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71C7C854-2E70-470C-A812-6C7C27E9422C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71C7C854-2E70-470C-A812-6C7C27E9422C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71C7C854-2E70-470C-A812-6C7C27E9422C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,7 +183,6 @@ Global
 		{1518C91D-6DA2-4C50-B6F2-C19F0B920231} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{26184251-0F35-41C4-A702-8CB52D53E4A3} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{2E8752CF-5A78-48EC-96B1-828B88287D1D} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
-		{F67B19C9-3894-4ACC-8B76-E24FADE0682C} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{27A98088-995B-49F0-9E4E-F7C752A77907} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{6023CDEF-0A3E-47A5-916F-C0A0A6111390} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{A79B21C9-A688-46F7-B916-09540DE89609} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
@@ -179,6 +190,9 @@ Global
 		{6B5C985F-37B9-4137-A87F-DD4723EED5CF} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{589F8368-4128-4F54-A957-7B0C9DA52D71} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{D4EF5206-B925-4A18-897B-CD07A3D8A914} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{526BB65B-D65B-4DBD-8B3F-6C6968DE844E} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{A0A242DD-C53B-4F3F-9A6F-137B370BD677} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{71C7C854-2E70-470C-A812-6C7C27E9422C} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}

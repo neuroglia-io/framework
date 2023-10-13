@@ -3,7 +3,6 @@ using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Serialization;
-using Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing;
 using Neuroglia.UnitTests.Containers;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing.EventStores;

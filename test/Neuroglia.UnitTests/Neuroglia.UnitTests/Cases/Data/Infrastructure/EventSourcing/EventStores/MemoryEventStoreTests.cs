@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache;
+using Neuroglia.Data.Infrastructure.EventSourcing.Memory;
 using Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing.EventStores;

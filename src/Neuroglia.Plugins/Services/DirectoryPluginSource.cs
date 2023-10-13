@@ -104,7 +104,7 @@ public class DirectoryPluginSource
         var assembly = metadataContext.LoadFromAssemblyPath(assemblyFile.FullName);
 
         if (this._assemblies.SelectMany(a => a.Plugins).Any(p => p.Assembly.GetName().Name == assembly.GetName().Name)) return Task.FromResult(false);
-        else return Task.FromResult(assembly.GetTypes().Where(t => t.IsClass && !t.IsInterface && !t.IsAbstract && !t.IsGenericType).Any(t => this.Options.TypeFilter.Filters(t, metadataContext)));
+        else return Task.FromResult(assembly.GetTypes().Where(t => t.IsClass && !t.IsInterface && !t.IsAbstract).Any(t => this.Options.TypeFilter.Filters(t, metadataContext)));
     }
 
 }

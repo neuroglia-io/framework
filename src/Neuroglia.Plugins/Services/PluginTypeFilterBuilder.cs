@@ -13,31 +13,40 @@ public class PluginTypeFilterBuilder
     protected PluginTypeFilter Filter { get; } = new();
 
     /// <inheritdoc/>
-    public virtual IPluginTypeFilterBuilder AssignableFrom<T>()
-        where T : class
+    public IPluginTypeFilterBuilder AssignableFrom(Type type)
     {
-        if (!typeof(T).IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(T));
-        this.Filter.Criteria.Add(new(PluginTypeFilterCriterionType.Implements, typeof(T).AssemblyQualifiedName!));
+        if (type == null) throw new ArgumentNullException(nameof(type));
+        if (!type.IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(type));
+        this.Filter.Criteria.Add(new(PluginTypeFilterCriterionType.Implements, type.AssemblyQualifiedName!));
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IPluginTypeFilterBuilder Implements<TInterface>()
-        where TInterface : class
+    public virtual IPluginTypeFilterBuilder Implements(Type type)
     {
-        if (!typeof(TInterface).IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(TInterface));
-        this.Filter.Criteria.Add(new(PluginTypeFilterCriterionType.Implements, typeof(TInterface).AssemblyQualifiedName!));
+        if (type == null) throw new ArgumentNullException(nameof(type));
+        if (!type.IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(type));
+        this.Filter.Criteria.Add(new(PluginTypeFilterCriterionType.Implements, type.AssemblyQualifiedName!));
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IPluginTypeFilterBuilder Inherits<TBaseType>()
-        where TBaseType : class
+    public virtual IPluginTypeFilterBuilder Inherits(Type type)
     {
-        if (!typeof(TBaseType).IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(TBaseType));
-        this.Filter.Criteria.Add(new(PluginTypeFilterCriterionType.Inherits, typeof(TBaseType).AssemblyQualifiedName!));
+        if (type == null) throw new ArgumentNullException(nameof(type));
+        if (!type.IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(type));
+        this.Filter.Criteria.Add(new(PluginTypeFilterCriterionType.Inherits, type.AssemblyQualifiedName!));
         return this;
     }
+
+    /// <inheritdoc/>
+    public virtual IPluginTypeFilterBuilder AssignableFrom<T>() where T : class => this.AssignableFrom(typeof(T));
+
+    /// <inheritdoc/>
+    public virtual IPluginTypeFilterBuilder Implements<T>() where T : class => this.Implements(typeof(T));
+
+    /// <inheritdoc/>
+    public virtual IPluginTypeFilterBuilder Inherits<T>() where T : class => this.Inherits(typeof(T));
 
     /// <inheritdoc/>
     public virtual PluginTypeFilter Build() => this.Filter;

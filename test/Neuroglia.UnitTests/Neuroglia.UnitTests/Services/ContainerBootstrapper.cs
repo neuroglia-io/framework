@@ -7,10 +7,7 @@ public class ContainerBootstrapper
     : IHostedService
 {
 
-    public ContainerBootstrapper(IContainer container)
-    {
-        this.Container = container;
-    }
+    public ContainerBootstrapper(IContainer container) => this.Container = container;
 
     protected IContainer Container { get; }
 

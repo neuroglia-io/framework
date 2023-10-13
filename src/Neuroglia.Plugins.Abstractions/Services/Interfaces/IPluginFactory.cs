@@ -10,6 +10,6 @@ public interface IPluginFactory
     /// Creates the plugin
     /// </summary>
     /// <returns>A new instance of the plugin</returns>
-    object CreatePlugin();
+    object Create();
 
 }

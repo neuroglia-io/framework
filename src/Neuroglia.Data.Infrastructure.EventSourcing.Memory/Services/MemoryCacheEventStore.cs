@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
+using Neuroglia.Plugins;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Reactive.Linq;
@@ -11,6 +12,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.DistributedCache.Services;
 /// <summary>
 /// Represents an <see cref="IEventStore"/> implementation relying on an <see cref="IMemoryCache"/>
 /// </summary>
+[Plugin(FactoryType = typeof(MemoryCacheEventStoreFactory))]
 public class MemoryCacheEventStore
     : IEventStore
 {

@@ -13,6 +13,7 @@
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
@@ -33,9 +34,11 @@
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Expressions.JQ\Neuroglia.Data.Expressions.JQ.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Expressions\Neuroglia.Data.Expressions.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.EventStore\Neuroglia.Data.Infrastructure.EventSourcing.EventStore.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache\Neuroglia.Data.Infrastructure.EventSourcing.MemoryCache.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Memory\Neuroglia.Data.Infrastructure.EventSourcing.Memory.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Redis\Neuroglia.Data.Infrastructure.EventSourcing.Redis.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.Memory\Neuroglia.Data.Infrastructure.Memory.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.Mongo\Neuroglia.Data.Infrastructure.Mongo.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />

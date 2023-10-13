@@ -1,18 +1,33 @@
-﻿using Neuroglia.Data.Infrastructure.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Neuroglia.Data.Infrastructure.Services;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure;
 
-public abstract class RepositoryTestsBase
+public abstract class RepositoryTestsBase 
+    : IAsyncLifetime
 {
 
-    internal protected RepositoryTestsBase(IRepository<User, string> repository)
+    public RepositoryTestsBase(IServiceCollection services) { this.ServiceProvider = services.BuildServiceProvider(); }
+
+    protected ServiceProvider ServiceProvider { get; }
+
+    protected CancellationTokenSource CancellationTokenSource { get; } = new();
+
+    protected virtual IRepository<User, string> Repository { get; private set; } = null!;
+
+    public async Task InitializeAsync()
     {
-        Repository = repository;
+        foreach (var hostedService in this.ServiceProvider.GetServices<IHostedService>())
+        {
+            await hostedService.StartAsync(CancellationTokenSource.Token).ConfigureAwait(false);
+        }
+        this.Repository = this.ServiceProvider.GetRequiredService<IRepository<User, string>>();
     }
 
-    protected IRepository<User, string> Repository { get; }
+    public async Task DisposeAsync() => await ServiceProvider.DisposeAsync().ConfigureAwait(false);
 
-    [Fact]
+    [Fact, Priority(1)]
     public async Task Add_Should_Work()
     {
         //arrange
@@ -30,7 +45,7 @@ public abstract class RepositoryTestsBase
         result.Email.Should().Be(user.Email);
     }
 
-    [Fact]
+    [Fact, Priority(2)]
     public async Task Contains_Should_Work()
     {
         //arrange
@@ -44,7 +59,7 @@ public abstract class RepositoryTestsBase
         result.Should().BeTrue();
     }
 
-    [Fact]
+    [Fact, Priority(3)]
     public async Task Get_Should_Work()
     {
         //arrange
@@ -61,7 +76,7 @@ public abstract class RepositoryTestsBase
         result.Email?.Should().Be(user.Email);
     }
 
-    [Fact]
+    [Fact, Priority(4)]
     public async Task Update_Should_Work()
     {
         //arrange
@@ -78,7 +93,7 @@ public abstract class RepositoryTestsBase
         result.EmailVerified.Should().BeTrue();
     }
 
-    [Fact]
+    [Fact, Priority(5)]
     public async Task Remove_Should_Work()
     {
         //arrange

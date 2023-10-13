@@ -12,7 +12,7 @@ public interface IRepository
     /// <param name="key">The key of the entity to find</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The entity with the specified key</returns>
-    Task<object?> GetAsync(object key, CancellationToken cancellationToken = default);
+    Task<IIdentifiable?> GetAsync(object key, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Adds the specified entity to the <see cref="IRepository"/>
@@ -20,7 +20,7 @@ public interface IRepository
     /// <param name="entity">The entity to add</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The newly added entity</returns>
-    Task<object> AddAsync(object entity, CancellationToken cancellationToken = default);
+    Task<IIdentifiable> AddAsync(IIdentifiable entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates the specified entity
@@ -28,7 +28,7 @@ public interface IRepository
     /// <param name="entity">The entity to update</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The updated entity</returns>
-    Task<object> UpdateAsync(object entity, CancellationToken cancellationToken = default);
+    Task<IIdentifiable> UpdateAsync(IIdentifiable entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Removes the specified entity from the <see cref="IRepository"/>
@@ -36,7 +36,7 @@ public interface IRepository
     /// <param name="entity">The entity to remove</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A boolean indicating whether or not the entity could be removed</returns>
-    Task<bool> RemoveAsync(object entity, CancellationToken cancellationToken = default);
+    Task<bool> RemoveAsync(IIdentifiable entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Determines whether or not the <see cref="IRepository"/> contains an entity with the specified key

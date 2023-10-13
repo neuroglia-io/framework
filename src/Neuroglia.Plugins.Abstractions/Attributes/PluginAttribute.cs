@@ -25,17 +25,6 @@ public class PluginAttribute
     /// <summary>
     /// Gets/sets the <see cref="IPluginFactory"/> type to use, if any, in order to create new instances of the plugin
     /// </summary>
-    public Type? FactoryType
-    {
-        get
-        {
-            return this._factoryType;
-        }
-        set
-        {
-            if (value != null && !typeof(IPluginFactory).IsAssignableFrom(value.GetType())) throw new NotSupportedException($"The specified type must implement the {nameof(IPluginFactory)} interface");
-            this._factoryType = value;
-        }
-    }
+    public Type? FactoryType { get; set; }
 
 }

@@ -202,16 +202,16 @@ public class EventSourcingRepository<TAggregate, TKey>
     /// <returns>The id of the stream that corresponds to the specified aggregate key</returns>
     protected virtual string GetSnapshotStreamIdFor(TKey key) => $"{this.StreamPrefix}-snapshots-{key}";
 
-    async Task<object> IRepository.AddAsync(object entity, CancellationToken cancellationToken) => await this.AddAsync((TAggregate)entity, cancellationToken).ConfigureAwait(false);
+    async Task<IIdentifiable> IRepository.AddAsync(IIdentifiable entity, CancellationToken cancellationToken) => await this.AddAsync((TAggregate)entity, cancellationToken).ConfigureAwait(false);
 
     Task<bool> IRepository.ContainsAsync(object key, CancellationToken cancellationToken) => this.ContainsAsync((TKey)key, cancellationToken);
 
-    async Task<object?> IRepository.GetAsync(object key, CancellationToken cancellationToken) => await this.GetAsync((TKey)key, cancellationToken).ConfigureAwait(false);
+    async Task<IIdentifiable?> IRepository.GetAsync(object key, CancellationToken cancellationToken) => await this.GetAsync((TKey)key, cancellationToken).ConfigureAwait(false);
 
     Task<TAggregate?> IRepository<TAggregate>.GetAsync(object key, CancellationToken cancellationToken) => this.GetAsync((TKey)key, cancellationToken);
 
-    async Task<object> IRepository.UpdateAsync(object entity, CancellationToken cancellationToken) => await this.UpdateAsync((TAggregate)entity, cancellationToken).ConfigureAwait(false);
+    async Task<IIdentifiable> IRepository.UpdateAsync(IIdentifiable entity, CancellationToken cancellationToken) => await this.UpdateAsync((TAggregate)entity, cancellationToken).ConfigureAwait(false);
 
-    async Task<bool> IRepository.RemoveAsync(object entity, CancellationToken cancellationToken) => await this.RemoveAsync((TAggregate)entity, cancellationToken).ConfigureAwait(false);
+    async Task<bool> IRepository.RemoveAsync(IIdentifiable entity, CancellationToken cancellationToken) => await this.RemoveAsync((TAggregate)entity, cancellationToken).ConfigureAwait(false);
 
 }

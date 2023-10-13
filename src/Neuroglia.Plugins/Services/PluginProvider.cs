@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 namespace Neuroglia.Plugins.Services;
@@ -17,10 +18,12 @@ public class PluginProvider
     /// Initializes a new <see cref="PluginProvider"/>
     /// </summary>
     /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
+    /// <param name="loggerFactory">The service used to create <see cref="ILogger"/>s</param>
     /// <param name="sources">An <see cref="IEnumerable{T}"/> containing all registered <see cref="IPluginSource"/>s</param>
-    public PluginProvider(IServiceProvider serviceProvider, IEnumerable<IPluginSource> sources)
+    public PluginProvider(IServiceProvider serviceProvider, ILoggerFactory loggerFactory, IEnumerable<IPluginSource> sources)
     {
         this.ServiceProvider = serviceProvider;
+        this.Logger = loggerFactory.CreateLogger(this.GetType());
         this.Sources = sources;
     }
 
@@ -28,6 +31,11 @@ public class PluginProvider
     /// Gets the current <see cref="IServiceProvider"/>
     /// </summary>
     protected IServiceProvider ServiceProvider { get; }
+
+    /// <summary>
+    /// Gets the service used to perfrom logging
+    /// </summary>
+    protected ILogger Logger { get; }
 
     /// <summary>
     /// Gets an <see cref="IEnumerable{T}"/> containing all registered <see cref="IPluginSource"/>s
@@ -53,27 +61,56 @@ public class PluginProvider
     public virtual IEnumerable<IPlugin> GetPlugins() => this.Sources.SelectMany(s => s.Plugins);
 
     /// <inheritdoc/>
-    public virtual IEnumerable<TContract> GetPlugins<TContract>()
-        where TContract : class
+    public virtual IEnumerable<object> GetPlugins(Type serviceType)
     {
-        if (!typeof(TContract).IsInterface) throw new ArgumentException("The plugin contract type must be an interface", nameof(TContract));
+        if (serviceType == null) throw new ArgumentNullException(nameof(serviceType));
+        if (!serviceType.IsInterface) throw new ArgumentException("The plugin contract type must be an interface", nameof(serviceType));
+        var genericArguments = serviceType.GetGenericArguments();
 
-        foreach(var source in this.Sources)
+        var candidatePlugins = this.Sources.SelectMany(s => s.Plugins).Where(p => p.Type.IsGenericType && serviceType.IsGenericType ? serviceType.IsAssignableFrom(p.Type.MakeGenericType(genericArguments)) : serviceType.IsAssignableFrom(p.Type));
+
+        foreach (var plugin in candidatePlugins)
         {
-            foreach(var plugin in source.Plugins.Where(p => typeof(TContract).IsAssignableFrom(p.Type)))
+            var pluginAttribute = plugin.Type.GetCustomAttribute<PluginAttribute>();
+            if (pluginAttribute?.FactoryType != null)
             {
-                var pluginAttribute = plugin.Type.GetCustomAttribute<PluginAttribute>();
-                if(pluginAttribute?.FactoryType != null)
+                var factoryType = pluginAttribute.FactoryType.IsGenericTypeDefinition ? pluginAttribute.FactoryType.MakeGenericType(genericArguments) : pluginAttribute.FactoryType;
+                var factory = (IPluginFactory)ActivatorUtilities.CreateInstance(this.ServiceProvider, factoryType);
+                object? pluginInstance;
+                try
                 {
-                    var factory = (IPluginFactory)ActivatorUtilities.CreateInstance(this.ServiceProvider, pluginAttribute.FactoryType);
-                    yield return (TContract)factory.CreatePlugin();
+                    pluginInstance = factory.Create();
                 }
-                else
+                catch (Exception ex)
                 {
-                    yield return (TContract)ActivatorUtilities.CreateInstance(this.ServiceProvider, plugin.Type);
+                    this.Logger.LogWarning("An exception occured while instanciating plugin factory of type '{factoryType}': {ex}", factoryType, ex);
+                    continue;
                 }
+                yield return pluginInstance;
+            }
+            else
+            {
+                var pluginType = plugin.Type.IsGenericTypeDefinition ? plugin.Type.MakeGenericType(genericArguments) : plugin.Type;
+                object? pluginInstance;
+                try
+                {
+                    pluginInstance = ActivatorUtilities.CreateInstance(this.ServiceProvider, pluginType);
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.LogWarning("An exception occured while instanciating plugin of type '{factoryType}': {ex}", pluginType, ex);
+                    continue;
+                }
+                yield return pluginInstance;
             }
         }
+    }
+
+    /// <inheritdoc/>
+    public virtual IEnumerable<TService> GetPlugins<TService>()
+        where TService : class
+    {
+        foreach (var plugin in this.GetPlugins(typeof(TService))) yield return (TService)plugin;
     }
 
     /// <summary>
