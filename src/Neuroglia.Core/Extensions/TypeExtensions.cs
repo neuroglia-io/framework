@@ -249,4 +249,22 @@ public static class TypeExtensions
         return declaringType!;
     }
 
+    /// <summary>
+    /// Determines whether or not the type inherits from the specified type
+    /// </summary>
+    /// <param name="extended">The extended type</param>
+    /// <param name="baseType">The base type to check</param>
+    /// <returns>A boolean indicating whether or not the type inherits from the specified type</returns>
+    public static bool InheritsFrom(this Type extended, Type baseType)
+    {
+        if(extended == baseType) return true;
+        var super = extended.BaseType;
+        while (super != null)
+        {
+            if (super == baseType) return true;
+            super = super.BaseType;
+        }
+        return false;
+    }
+
 }

@@ -39,6 +39,7 @@
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Plugins\Neuroglia.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>

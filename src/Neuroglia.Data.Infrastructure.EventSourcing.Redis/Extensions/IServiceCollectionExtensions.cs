@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
-using Neuroglia.Data.Infrastructure.EventSourcing;
-using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 
 namespace Neuroglia.Data.Infrastructure.EventSourcing.Redis;
 
