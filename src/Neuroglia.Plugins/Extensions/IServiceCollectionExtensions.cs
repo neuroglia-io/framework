@@ -66,7 +66,7 @@ public static class IServiceCollectionExtensions
     {
         if (!serviceType.IsInterface) throw new ArgumentException("The plugin contract must be an interface", nameof(serviceType));
         services.AddPluginProvider();
-        services.TryAdd(new ServiceDescriptor(typeof(IEnumerable<>).MakeGenericType(serviceType), provider => provider.GetRequiredService<IPluginProvider>().GetPlugins(serviceType), serviceLifetime));
+        services.TryAdd(new ServiceDescriptor(typeof(IEnumerable<>).MakeGenericType(serviceType), provider => provider.GetRequiredService<IPluginProvider>().GetPlugins(serviceType).OfType(serviceType), serviceLifetime));
         services.TryAdd(new ServiceDescriptor(serviceType, provider => provider.GetRequiredService<IPluginProvider>().GetPlugins(serviceType).FirstOrDefault() ?? defaultImplementation ?? throw new NullReferenceException($"No plugin or implementation type registered for service type '{serviceType.Name}'"), serviceLifetime));
         return services;
     }

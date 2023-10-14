@@ -79,19 +79,23 @@ public class ESEventStore
     public virtual async Task<IEventStreamDescriptor> GetAsync(string streamId, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
-        var readResult = this.EventStoreClient.ReadStreamAsync(Direction.Forwards, streamId, Infrastructure.EventSourcing.StreamPosition.StartOfStream, cancellationToken: cancellationToken);
-        try
-        {
-            if (await readResult.ReadState.ConfigureAwait(false) == ReadState.StreamNotFound) throw new Infrastructure.EventSourcing.StreamNotFoundException(streamId);
-        }
-        catch (StreamDeletedException)
-        {
-            throw new Infrastructure.EventSourcing.StreamNotFoundException(streamId);
-        }
+
+        var streamMetadataResult = await this.EventStoreClient.GetStreamMetadataAsync(streamId, cancellationToken: cancellationToken).ConfigureAwait(false);
+        if (streamMetadataResult.StreamDeleted) throw new StreamNotFoundException(streamId);
+        var offset = streamMetadataResult.Metadata.TruncateBefore ?? StreamPosition.StartOfStream;
+
+        var readResult = this.EventStoreClient.ReadStreamAsync(Direction.Forwards, streamId, offset, 1, cancellationToken: cancellationToken);
+        ReadState? readState;
+
+        try { readState = await readResult.ReadState.ConfigureAwait(false); }
+        catch { throw new StreamNotFoundException(streamId); }
+        if (readState == ReadState.StreamNotFound) throw new StreamNotFoundException(streamId);
+
         var firstEvent = await readResult.FirstAsync(cancellationToken).ConfigureAwait(false);
-        readResult = this.EventStoreClient.ReadStreamAsync(Direction.Backwards, streamId, ESStreamPosition.End, cancellationToken: cancellationToken);
+        readResult = this.EventStoreClient.ReadStreamAsync(Direction.Backwards, streamId, ESStreamPosition.End, 1, cancellationToken: cancellationToken);
         var lastEvent = await readResult.FirstAsync(cancellationToken).ConfigureAwait(false);
-        return new EventStreamDescriptor(streamId, lastEvent.Event.EventNumber.ToInt64() + 1, firstEvent.Event.Created, lastEvent.Event.Created);
+
+        return new EventStreamDescriptor(streamId, lastEvent.Event.EventNumber.ToInt64() + 1 - offset.ToInt64(), firstEvent.Event.Created, lastEvent.Event.Created);
     }
 
     /// <inheritdoc/>
@@ -101,7 +105,7 @@ public class ESEventStore
         if (events == null || !events.Any()) throw new ArgumentNullException(nameof(events));
         
         var readResult = this.EventStoreClient.ReadStreamAsync(Direction.Backwards, streamId, ESStreamPosition.End, 1, cancellationToken: cancellationToken);
-        var shouldThrowIfNotExists = expectedVersion.HasValue && expectedVersion != Infrastructure.EventSourcing.StreamPosition.StartOfStream && expectedVersion != Infrastructure.EventSourcing.StreamPosition.EndOfStream;
+        var shouldThrowIfNotExists = expectedVersion.HasValue && expectedVersion != StreamPosition.StartOfStream && expectedVersion != StreamPosition.EndOfStream;
         try { if (await readResult.ReadState.ConfigureAwait(false) == ReadState.StreamNotFound && shouldThrowIfNotExists) throw new OptimisticConcurrencyException(expectedVersion, null); }
         catch (StreamDeletedException) { if(shouldThrowIfNotExists) throw new OptimisticConcurrencyException(expectedVersion, null); }
 
@@ -125,23 +129,27 @@ public class ESEventStore
             _ => throw new NotSupportedException($"The specified {nameof(StreamReadDirection)} '{readDirection}' is not supported")
         };
 
-        if (readDirection == StreamReadDirection.Forwards && offset == Infrastructure.EventSourcing.StreamPosition.EndOfStream) yield break;
-        else if(readDirection == StreamReadDirection.Backwards && offset == Infrastructure.EventSourcing.StreamPosition.StartOfStream) yield break;
+        var streamMetadataResult = await this.EventStoreClient.GetStreamMetadataAsync(streamId, cancellationToken: cancellationToken).ConfigureAwait(false);
+        if (streamMetadataResult.StreamDeleted) throw new StreamNotFoundException(streamId);
+        if (streamMetadataResult.Metadata.TruncateBefore.HasValue && offset != StreamPosition.EndOfStream && offset < streamMetadataResult.Metadata.TruncateBefore.Value.ToInt64()) offset = streamMetadataResult.Metadata.TruncateBefore.Value.ToInt64();
+
+        if (readDirection == StreamReadDirection.Forwards && offset == StreamPosition.EndOfStream) yield break;
+        else if(readDirection == StreamReadDirection.Backwards && offset == StreamPosition.StartOfStream) yield break;
 
         var readResult = this.EventStoreClient.ReadStreamAsync(direction, streamId, ESStreamPosition.FromInt64(offset), length.HasValue ? (long)length.Value : long.MaxValue, cancellationToken: cancellationToken);
-        try { if (await readResult.ReadState.ConfigureAwait(false) == ReadState.StreamNotFound) throw new Infrastructure.EventSourcing.StreamNotFoundException(streamId); }
-        catch (StreamDeletedException) { throw new Infrastructure.EventSourcing.StreamNotFoundException(streamId); }
+        try { if (await readResult.ReadState.ConfigureAwait(false) == ReadState.StreamNotFound) throw new StreamNotFoundException(streamId); }
+        catch (StreamDeletedException) { throw new StreamNotFoundException(streamId); }
 
         await foreach (var e in readResult) yield return this.DeserializeEventRecord(e);
     }
 
     /// <inheritdoc/>
-    public virtual async Task<IObservable<IEventRecord>> SubscribeAsync(string streamId, long offset = Infrastructure.EventSourcing.StreamPosition.EndOfStream, CancellationToken cancellationToken = default)
+    public virtual async Task<IObservable<IEventRecord>> SubscribeAsync(string streamId, long offset = StreamPosition.EndOfStream, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
-        if (!await this.StreamExistsAsync(streamId, cancellationToken).ConfigureAwait(false)) throw new Infrastructure.EventSourcing.StreamNotFoundException(streamId);
+        if (!await this.StreamExistsAsync(streamId, cancellationToken).ConfigureAwait(false)) throw new StreamNotFoundException(streamId);
 
-        var position = offset == Infrastructure.EventSourcing.StreamPosition.EndOfStream ? FromStream.End : FromStream.After(ESStreamPosition.FromInt64(offset));
+        var position = offset == StreamPosition.EndOfStream ? FromStream.End : FromStream.After(ESStreamPosition.FromInt64(offset));
         var records = new List<IEventRecord>();
         if (position != FromStream.End) records = await this.ReadAsync(streamId, StreamReadDirection.Forwards, offset, cancellationToken: cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false);
         var subject = new Subject<IEventRecord>();
@@ -157,7 +165,7 @@ public class ESEventStore
     public virtual async Task TruncateAsync(string streamId, ulong? beforeVersion = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
-        if (!await this.StreamExistsAsync(streamId, cancellationToken).ConfigureAwait(false)) throw new Infrastructure.EventSourcing.StreamNotFoundException(streamId);
+        if (!await this.StreamExistsAsync(streamId, cancellationToken).ConfigureAwait(false)) throw new StreamNotFoundException(streamId);
 
         var truncateBefore = beforeVersion.HasValue ? ESStreamPosition.FromInt64((long)beforeVersion.Value) : ESStreamPosition.End;
         await this.EventStoreClient.SetStreamMetadataAsync(streamId, StreamState.Any, new StreamMetadata(truncateBefore: truncateBefore), cancellationToken: cancellationToken).ConfigureAwait(false);
@@ -167,7 +175,7 @@ public class ESEventStore
     public virtual async Task DeleteAsync(string streamId, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
-        if (!await this.StreamExistsAsync(streamId, cancellationToken).ConfigureAwait(false)) throw new Infrastructure.EventSourcing.StreamNotFoundException(streamId);
+        if (!await this.StreamExistsAsync(streamId, cancellationToken).ConfigureAwait(false)) throw new StreamNotFoundException(streamId);
 
         await this.EventStoreClient.DeleteAsync(streamId, StreamState.Any, cancellationToken: cancellationToken).ConfigureAwait(false);
     }
@@ -185,7 +193,7 @@ public class ESEventStore
         var data = this.Serializer.Deserialize(e.Event.Data.ToArray(), clrType);
         metadata.Remove(EventRecordMetadata.ClrTypeName);
         if (!metadata.Any()) metadata = null;
-        return new Infrastructure.EventSourcing.EventRecord(e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Created, e.Event.EventType, data, metadata);
+        return new EventRecord(e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Created, e.Event.EventType, data, metadata);
     }
 
     /// <summary>

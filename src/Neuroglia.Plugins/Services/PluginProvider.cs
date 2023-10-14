@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
-using System.Runtime.Loader;
 
 namespace Neuroglia.Plugins.Services;
 

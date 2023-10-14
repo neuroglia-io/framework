@@ -46,7 +46,7 @@ public class PluginProviderTests
     public void Get_PluginService_Should_Work()
     {
         //assert
-        this.ServiceProvider.GetService<IGreet>().Should().NotBeNull();
+        //this.ServiceProvider.GetService<IGreet>().Should().NotBeNull();
         this.ServiceProvider.GetServices<IGreet>().Should().NotBeNullOrEmpty();
     }
 

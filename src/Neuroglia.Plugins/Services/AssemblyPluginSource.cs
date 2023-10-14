@@ -15,10 +15,8 @@ public class AssemblyPluginSource
     /// <summary>
     /// Initializes a new <see cref="AssemblyPluginSource"/>
     /// </summary>
-    /// <param name="path">The path to the <see cref="Assembly"/> file used to source <see cref="IPlugin"/>s</param>
-    /// <param name="searchPattern">The search pattern to use to find plugin assembly files</param>
-    /// <param name="searchOption">A value indicating whether to search all directories or only the top level ones</param>
     /// <param name="options">The source's options</param>
+    /// <param name="path">The path to the <see cref="Assembly"/> file used to source <see cref="IPlugin"/>s</param>
     public AssemblyPluginSource(PluginSourceOptions options, string path)
     {
         if(string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path));
@@ -53,7 +51,7 @@ public class AssemblyPluginSource
         var assemblyLoadContext = new PluginAssemblyLoadContext(assemblyFile.FullName);
         var assembly = assemblyLoadContext.Load();
 
-        foreach (var type in assembly.GetTypes().Where(t => this.Options.TypeFilter.Filters(t)))
+        foreach (var type in assembly.GetTypes().Where(t => t.IsClass && !t.IsInterface && !t.IsAbstract && this.Options.TypeFilter.Filters(t)))
         {
             var pluginAttribute = type.GetCustomAttribute<PluginAttribute>();
             var name = pluginAttribute?.Name ?? type.FullName!;
