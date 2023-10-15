@@ -12,7 +12,7 @@ public class AssemblyPluginSourceTests
     static IServiceCollection BuildServices()
     {
         var services = new ServiceCollection();
-        services.AddPluginSource(new AssemblyPluginSource(new() { TypeFilter = new PluginTypeFilterBuilder().Implements<IGreet>().Build() }, typeof(AssemblyPluginSourceTests).Assembly.Location));
+        services.AddPluginSource(new AssemblyPluginSource("source1", new() { Filter = (PluginTypeFilter)new PluginTypeFilterBuilder().Implements<IGreet>().Build() }, typeof(AssemblyPluginSourceTests).Assembly.Location));
         return services;
     }
 

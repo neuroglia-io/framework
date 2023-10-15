@@ -61,13 +61,15 @@ public class PluginProvider
     public virtual IEnumerable<IPlugin> GetPlugins() => this.Sources.SelectMany(s => s.Plugins);
 
     /// <inheritdoc/>
-    public virtual IEnumerable<object> GetPlugins(Type serviceType)
+    public virtual IEnumerable<object> GetPlugins(Type serviceType, string? sourceName = null, IEnumerable<string>? tags = null)
     {
         if (serviceType == null) throw new ArgumentNullException(nameof(serviceType));
         if (!serviceType.IsInterface) throw new ArgumentException("The plugin contract type must be an interface", nameof(serviceType));
         var genericArguments = serviceType.GetGenericArguments();
 
         var candidatePlugins = this.Sources.SelectMany(s => s.Plugins).Where(p => p.Type.IsGenericType && serviceType.IsGenericType ? serviceType.IsAssignableFrom(p.Type.MakeGenericType(genericArguments)) : serviceType.IsAssignableFrom(p.Type));
+        if(!string.IsNullOrWhiteSpace(sourceName)) candidatePlugins = candidatePlugins.Where(p => p.Source.Name == sourceName);
+        if (tags != null) candidatePlugins = candidatePlugins.Where(c => c.Tags != null && tags.All(c.Tags.Contains));
 
         foreach (var plugin in candidatePlugins)
         {
@@ -108,10 +110,10 @@ public class PluginProvider
     }
 
     /// <inheritdoc/>
-    public virtual IEnumerable<TService> GetPlugins<TService>()
+    public virtual IEnumerable<TService> GetPlugins<TService>(string? sourceName = null, IEnumerable<string>? tags = null)
         where TService : class
     {
-        foreach (var plugin in this.GetPlugins(typeof(TService))) yield return (TService)plugin;
+        foreach (var plugin in this.GetPlugins(typeof(TService), sourceName, tags)) yield return (TService)plugin;
     }
 
     /// <summary>

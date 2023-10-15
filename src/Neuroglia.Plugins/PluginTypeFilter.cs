@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using Neuroglia.Plugins.Services;
+using System.Reflection;
 
 namespace Neuroglia.Plugins;
 
@@ -6,6 +7,7 @@ namespace Neuroglia.Plugins;
 /// Represents an object used to configure how to filter plugin types
 /// </summary>
 public class PluginTypeFilter
+    : IPluginTypeFilter
 {
 
     /// <summary>

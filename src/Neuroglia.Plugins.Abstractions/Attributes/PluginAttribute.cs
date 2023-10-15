@@ -10,8 +10,6 @@ public class PluginAttribute
     : Attribute
 {
 
-    Type? _factoryType;
-
     /// <summary>
     /// Gets/sets the plugin's name
     /// </summary>
@@ -26,5 +24,10 @@ public class PluginAttribute
     /// Gets/sets the <see cref="IPluginFactory"/> type to use, if any, in order to create new instances of the plugin
     /// </summary>
     public Type? FactoryType { get; set; }
+
+    /// <summary>
+    /// Gets/sets an array containing the tags, if any, associated to the marked plugin type
+    /// </summary>
+    public string[]? Tags { get; set; }
 
 }

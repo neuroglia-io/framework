@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
-namespace Neuroglia.Plugins;
+namespace Neuroglia.Plugins.Services;
 
 /// <summary>
 /// Defines the fundamentals of a plugin
@@ -33,5 +33,15 @@ public interface IPlugin
     /// Gets the <see cref="IPlugin"/>'s <see cref="System.Runtime.Loader.AssemblyLoadContext"/>
     /// </summary>
     AssemblyLoadContext AssemblyLoadContext { get; }
+
+    /// <summary>
+    /// Gets the <see cref="IPluginSource"/> the <see cref="IPlugin"/> is sourced by
+    /// </summary>
+    IPluginSource Source { get; }
+
+    /// <summary>
+    /// Gets a list containing the plugin's tags, if any
+    /// </summary>
+    IEnumerable<string>? Tags { get; }
 
 }

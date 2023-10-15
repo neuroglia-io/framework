@@ -14,25 +14,19 @@ public class PluginTypeFilterCriterion
     public PluginTypeFilterCriterion() { }
 
     /// <summary>
-    /// Initializes a new <see cref="PluginTypeFilterCriterion"/>
+    /// Gets/sets the type filtered types should be be assignable to, if any
     /// </summary>
-    /// <param name="type">The criterion's type</param>
-    /// <param name="value">The criterion's value</param>
-    public PluginTypeFilterCriterion(PluginTypeFilterCriterionType type, string value)
-    {
-        this.Type = type;
-        this.Value = value;
-    }
+    public string? AssignableTo { get; set; }
 
     /// <summary>
-    /// Gets/sets the criterion's type
+    /// Gets/sets the type of the interface filtered types must implement, if any
     /// </summary>
-    public PluginTypeFilterCriterionType Type { get; set; }
+    public string? Implements { get; set; }
 
     /// <summary>
-    /// Gets/sets the criterion's value
+    /// Gets/sets the type of the interface filtered types must implement, if any
     /// </summary>
-    public string Value { get; set; } = null!;
+    public string? InheritsFrom { get; set; }
 
     /// <summary>
     /// Indicates whether or not the criterion is met by the specified type
@@ -42,25 +36,47 @@ public class PluginTypeFilterCriterion
     /// <returns>A boolean indicating whether or not the criterion is met by the specified type</returns>
     public bool IsMetBy(Type candidateType, MetadataLoadContext? metadataLoadContext = null)
     {
-        var expectedTypeNameComponents = this.Value.Split(", ", StringSplitOptions.RemoveEmptyEntries);
-        var expectedTypeName = expectedTypeNameComponents[0];
-        var expectedTypeAssemblyName = expectedTypeNameComponents[1];
-        Type? expectedType;
-        if(metadataLoadContext == null)
+        if (!string.IsNullOrWhiteSpace(this.AssignableTo))
         {
-            expectedType = System.Type.GetType(this.Value, true);
+            var expectedType = this.LoadType(this.AssignableTo, metadataLoadContext);
+            if (expectedType.IsGenericTypeDefinition) return candidateType.IsGenericImplementationOf(expectedType);
+            else return expectedType.IsAssignableFrom(candidateType);
         }
+        if (!string.IsNullOrWhiteSpace(this.Implements))
+        {
+            var expectedType = this.LoadType(this.Implements, metadataLoadContext);
+            if (expectedType.IsGenericTypeDefinition) return candidateType.IsGenericImplementationOf(expectedType);
+            else return candidateType.GetInterfaces().Contains(expectedType);
+        }
+        if (!string.IsNullOrWhiteSpace(this.InheritsFrom))
+        {
+            var expectedType = this.LoadType(this.InheritsFrom, metadataLoadContext);
+            if (expectedType.IsGenericTypeDefinition) return candidateType.IsGenericImplementationOf(expectedType);
+            else return candidateType.InheritsFrom(expectedType);
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Loads the specified type
+    /// </summary>
+    /// <param name="assemblyQualifiedName">The assembly-qualified name of the type to load</param>
+    /// <param name="metadataLoadContext">The <see cref="MetadataLoadContext"/> in which to load the type, if any</param>
+    /// <returns>The loaded type</returns>
+    protected virtual Type LoadType(string assemblyQualifiedName, MetadataLoadContext? metadataLoadContext = null)
+    {
+        if (string.IsNullOrWhiteSpace(assemblyQualifiedName)) throw new ArgumentNullException(nameof(assemblyQualifiedName));
+        Type? type;
+        if (metadataLoadContext == null) type = Type.GetType(assemblyQualifiedName, true);
         else
         {
-            var expectedTypeAssembly = metadataLoadContext.GetAssemblies().FirstOrDefault(a => a.GetName().Name == expectedTypeAssemblyName) ?? metadataLoadContext.LoadFromAssemblyName(expectedTypeAssemblyName);
-            expectedType = expectedTypeAssembly.GetType(expectedTypeName, true);
+            var nameComponents = assemblyQualifiedName.Split(", ", StringSplitOptions.RemoveEmptyEntries);
+            var typeName = nameComponents[0];
+            var assemblyName = nameComponents[1];
+            var contextAssembly = metadataLoadContext.GetAssemblies().FirstOrDefault(a => a.GetName().Name == assemblyName) ?? metadataLoadContext.LoadFromAssemblyName(assemblyName);
+            type = contextAssembly.GetType(typeName, true);
         }
-        if(expectedType == null) throw new Exception($"Failed to find the type '{this.Value}' expected by the plugin type filter criterion");
-        return this.Type switch
-        {
-            PluginTypeFilterCriterionType.Assignable or PluginTypeFilterCriterionType.Implements or PluginTypeFilterCriterionType.Inherits => expectedType.IsGenericTypeDefinition ? candidateType.IsGenericImplementationOf(expectedType) : expectedType.IsAssignableFrom(candidateType),
-            _ => throw new NotSupportedException($"The specified {nameof(PluginTypeFilterCriterionType)} '{this.Type}' is not supported")
-        };
+        return type ?? throw new NullReferenceException($"Failed to find the specified type '{assemblyQualifiedName}'");
     }
 
 }

@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Runtime.Serialization;
 
-namespace Neuroglia.Serialization.Services;
+namespace Neuroglia;
 
 /// <summary>
 /// Represents an <see cref="EnumConverter"/> used to convert enum using the values specified by <see cref="EnumMemberAttribute"/>s

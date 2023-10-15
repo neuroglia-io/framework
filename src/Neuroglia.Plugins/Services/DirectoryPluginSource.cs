@@ -18,20 +18,25 @@ public class DirectoryPluginSource
     /// <summary>
     /// Initializes a new <see cref="DirectoryPluginSource"/>
     /// </summary>
+    /// <param name="name">The name of the source, if any</param>
     /// <param name="options">The source's options</param>
     /// <param name="path">The path to the directory used to source <see cref="IPlugin"/>s</param>
     /// <param name="searchPattern">The search pattern to use to find plugin assembly files</param>
     /// <param name="searchOption">A value indicating whether to search all directories or only the top level ones</param>
-    public DirectoryPluginSource(PluginSourceOptions options, string path, string searchPattern = DeafultSearchPattern, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+    public DirectoryPluginSource(string? name, PluginSourceOptions options, string? path = null, string? searchPattern = null, SearchOption searchOption = SearchOption.TopDirectoryOnly)
     {
-        if (string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path));
+        if (string.IsNullOrWhiteSpace(path)) path = AppContext.BaseDirectory;
         if (!Directory.Exists(path)) throw new DirectoryNotFoundException($"Failed to find the specified directory '{path}'");
         if (string.IsNullOrWhiteSpace(searchPattern)) searchPattern = DeafultSearchPattern;
+        this.Name = name;
         this.Options = options ?? throw new ArgumentNullException(nameof(options));
         this.Path = path;
         this.SearchPattern = searchPattern;
         this.SearchOption = searchOption;
     }
+
+    /// <inheritdoc/>
+    public virtual string? Name { get; }
 
     /// <summary>
     /// Gets the source's options
@@ -70,7 +75,7 @@ public class DirectoryPluginSource
         foreach (var assemblyFilePath in Directory.GetFiles(this.Path, this.SearchPattern, this.SearchOption).ToList())
         {
             if (!await this.IsPluginAssemblyAsync(assemblyFilePath, cancellationToken).ConfigureAwait(false)) continue;
-            var assemblySource = new AssemblyPluginSource(this.Options, assemblyFilePath);
+            var assemblySource = new AssemblyPluginSource(this.Name, this.Options, assemblyFilePath);
             await assemblySource.LoadAsync(cancellationToken).ConfigureAwait(false);
             this._assemblies.Add(assemblySource);
         }
@@ -104,7 +109,9 @@ public class DirectoryPluginSource
         var assembly = metadataContext.LoadFromAssemblyPath(assemblyFile.FullName);
 
         if (this._assemblies.SelectMany(a => a.Plugins).Any(p => p.Assembly.GetName().Name == assembly.GetName().Name)) return Task.FromResult(false);
-        else return Task.FromResult(assembly.GetTypes().Where(t => t.IsClass && !t.IsInterface && !t.IsAbstract).Any(t => this.Options.TypeFilter.Filters(t, metadataContext)));
+        else return Task.FromResult(assembly.GetTypes()
+            .Where(t => t.IsClass && !t.IsInterface && !t.IsAbstract)
+            .Any(t => this.Options.Filter.Filters(t, metadataContext)));
     }
 
 }

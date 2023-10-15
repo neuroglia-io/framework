@@ -14,8 +14,9 @@ public class PluginProviderTests
     {
         var services = new ServiceCollection();
         services.AddLogging();
-        services.AddPluginSource(source => source.FromDirectory(plugin => plugin.Implements<IGreet>(), AppContext.BaseDirectory, "*.dll", SearchOption.TopDirectoryOnly));
-        services.AddPluginSource(source => source.FromDirectory(plugin => plugin.Implements(typeof(IRepository<,>)), AppContext.BaseDirectory, "*.dll", SearchOption.TopDirectoryOnly));
+        services.AddPluginProvider();
+        services.AddPluginSource(source => source.FromDirectory("source1", plugin => plugin.Implements<IGreet>(), AppContext.BaseDirectory, "*.dll", SearchOption.TopDirectoryOnly));
+        services.AddPluginSource(source => source.FromDirectory("source2", plugin => plugin.Implements(typeof(IRepository<,>)), AppContext.BaseDirectory, "*.dll", SearchOption.TopDirectoryOnly));
         services.AddPlugin<IGreet>();
         services.AddPlugin(serviceType: typeof(IRepository<User, string>));
         this.ServiceProvider = services.BuildServiceProvider();
@@ -46,7 +47,7 @@ public class PluginProviderTests
     public void Get_PluginService_Should_Work()
     {
         //assert
-        //this.ServiceProvider.GetService<IGreet>().Should().NotBeNull();
+        this.ServiceProvider.GetService<IGreet>().Should().NotBeNull();
         this.ServiceProvider.GetServices<IGreet>().Should().NotBeNullOrEmpty();
     }
 

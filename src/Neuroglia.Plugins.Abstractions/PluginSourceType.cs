@@ -1,8 +1,5 @@
-﻿using Neuroglia.Serialization.Json.Converters;
-using Neuroglia.Serialization.Services;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 
 namespace Neuroglia.Plugins;
 
@@ -10,14 +7,13 @@ namespace Neuroglia.Plugins;
 /// Enumerates supported plugin source types
 /// </summary>
 [TypeConverter(typeof(EnumMemberTypeConverter))]
-[JsonConverter(typeof(StringEnumConverter))]
 public enum PluginSourceType
 {
     /// <summary>
-    /// Indicates a file system based plugin source
+    /// Indicates a file system directory based plugin source
     /// </summary>
-    [EnumMember(Value = "folder")]
-    Folder,
+    [EnumMember(Value = "directory")]
+    Directory,
     /// <summary>
     /// Indicates an assembly based plugin source
     /// </summary>

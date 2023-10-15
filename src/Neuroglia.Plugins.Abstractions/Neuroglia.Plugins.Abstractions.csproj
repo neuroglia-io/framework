@@ -7,4 +7,12 @@
     <RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace(".Abstractions", ""))</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Core\Neuroglia.Core.csproj" />
+  </ItemGroup>
+
 </Project>

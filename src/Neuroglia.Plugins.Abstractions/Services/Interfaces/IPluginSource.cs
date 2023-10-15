@@ -7,6 +7,11 @@ public interface IPluginSource
 {
 
     /// <summary>
+    /// Gets the source's name, if any
+    /// </summary>
+    string? Name { get; }
+
+    /// <summary>
     /// Gets a boolean indicating whether or not the <see cref="IPluginSource"/> has been loaded
     /// </summary>
     bool IsLoaded { get; }

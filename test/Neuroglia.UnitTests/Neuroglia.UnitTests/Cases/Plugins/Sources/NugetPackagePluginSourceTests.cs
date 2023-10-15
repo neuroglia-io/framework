@@ -15,7 +15,7 @@ public class NugetPackagePluginSourceTests
     static IServiceCollection BuildServices()
     {
         var services = new ServiceCollection();
-        services.AddPluginSource(new NugetPackagePluginSource(new NullLoggerFactory(), new() { TypeFilter = new PluginTypeFilterBuilder().Implements<ILogger>().Build() }, "Microsoft.Extensions.Logging", "6.0.0"));
+        services.AddPluginSource(new NugetPackagePluginSource(new NullLoggerFactory(), "source1", new() { Filter = (PluginTypeFilter)new PluginTypeFilterBuilder().Implements<ILogger>().Build() }, "Microsoft.Extensions.Logging", "6.0.0"));
         return services;
     }
 

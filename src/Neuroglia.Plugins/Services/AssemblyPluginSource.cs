@@ -15,15 +15,20 @@ public class AssemblyPluginSource
     /// <summary>
     /// Initializes a new <see cref="AssemblyPluginSource"/>
     /// </summary>
+    /// <param name="name">The name of the source, if any</param>
     /// <param name="options">The source's options</param>
     /// <param name="path">The path to the <see cref="Assembly"/> file used to source <see cref="IPlugin"/>s</param>
-    public AssemblyPluginSource(PluginSourceOptions options, string path)
+    public AssemblyPluginSource(string? name, PluginSourceOptions options, string path)
     {
         if(string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path));
         if (!File.Exists(path)) throw new FileNotFoundException($"Failed to find the specified file '{path}'", path);
-        this.Options = options ?? throw new ArgumentNullException(nameof(options));
+        this.Name = name;
         this.Path = path;
+        this.Options = options ?? throw new ArgumentNullException(nameof(options));
     }
+
+    /// <inheritdoc/>
+    public virtual string? Name { get; }
 
     /// <summary>
     /// Gets the path to the <see cref="Assembly"/> file used to source <see cref="IPlugin"/>s
@@ -51,12 +56,13 @@ public class AssemblyPluginSource
         var assemblyLoadContext = new PluginAssemblyLoadContext(assemblyFile.FullName);
         var assembly = assemblyLoadContext.Load();
 
-        foreach (var type in assembly.GetTypes().Where(t => t.IsClass && !t.IsInterface && !t.IsAbstract && this.Options.TypeFilter.Filters(t)))
+        foreach (var type in assembly.GetTypes().Where(t => t.IsClass && !t.IsInterface && !t.IsAbstract && this.Options.Filter.Filters(t)))
         {
             var pluginAttribute = type.GetCustomAttribute<PluginAttribute>();
             var name = pluginAttribute?.Name ?? type.FullName!;
             var version = pluginAttribute?.Version ?? assembly.GetName().Version ?? new(1, 0, 0);
-            this._plugins.Add(new Plugin(name, version, type, assembly, assemblyLoadContext));
+            var tags = pluginAttribute?.Tags;
+            this._plugins.Add(new Plugin(name, version, type, assembly, assemblyLoadContext, this, tags));
         }
 
         this.IsLoaded = true;

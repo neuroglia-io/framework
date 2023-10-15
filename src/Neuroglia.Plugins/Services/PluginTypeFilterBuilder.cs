@@ -13,11 +13,11 @@ public class PluginTypeFilterBuilder
     protected PluginTypeFilter Filter { get; } = new();
 
     /// <inheritdoc/>
-    public IPluginTypeFilterBuilder AssignableFrom(Type type)
+    public IPluginTypeFilterBuilder AssignableTo(Type type)
     {
         if (type == null) throw new ArgumentNullException(nameof(type));
         if (!type.IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(type));
-        this.Filter.Criteria.Add(new(PluginTypeFilterCriterionType.Implements, type.AssemblyQualifiedName!));
+        this.Filter.Criteria.Add(new() { AssignableTo = type.AssemblyQualifiedName });
         return this;
     }
 
@@ -26,29 +26,31 @@ public class PluginTypeFilterBuilder
     {
         if (type == null) throw new ArgumentNullException(nameof(type));
         if (!type.IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(type));
-        this.Filter.Criteria.Add(new(PluginTypeFilterCriterionType.Implements, type.AssemblyQualifiedName!));
+        this.Filter.Criteria.Add(new() { Implements = type.AssemblyQualifiedName });
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IPluginTypeFilterBuilder Inherits(Type type)
+    public virtual IPluginTypeFilterBuilder InheritsFrom(Type type)
     {
         if (type == null) throw new ArgumentNullException(nameof(type));
         if (!type.IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(type));
-        this.Filter.Criteria.Add(new(PluginTypeFilterCriterionType.Inherits, type.AssemblyQualifiedName!));
+        this.Filter.Criteria.Add(new() { InheritsFrom = type.AssemblyQualifiedName });
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IPluginTypeFilterBuilder AssignableFrom<T>() where T : class => this.AssignableFrom(typeof(T));
+    public virtual IPluginTypeFilterBuilder AssignableTo<T>() where T : class => this.AssignableTo(typeof(T));
 
     /// <inheritdoc/>
     public virtual IPluginTypeFilterBuilder Implements<T>() where T : class => this.Implements(typeof(T));
 
     /// <inheritdoc/>
-    public virtual IPluginTypeFilterBuilder Inherits<T>() where T : class => this.Inherits(typeof(T));
+    public virtual IPluginTypeFilterBuilder Inherits<T>() where T : class => this.InheritsFrom(typeof(T));
 
     /// <inheritdoc/>
     public virtual PluginTypeFilter Build() => this.Filter;
+
+    IPluginTypeFilter IPluginTypeFilterBuilder.Build() => this.Build();
 
 }

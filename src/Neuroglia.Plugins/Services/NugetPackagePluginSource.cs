@@ -32,17 +32,19 @@ public class NugetPackagePluginSource
     /// Initializes a new <see cref="NugetPackagePluginSource"/>
     /// </summary>
     /// <param name="loggerFactory">The service used to create <see cref="ILogger"/>s</param>
+    /// <param name="name">The name of the source, if any</param>
     /// <param name="options">The source's options</param>
     /// <param name="packageId">The id of the Nuget package to use</param>
     /// <param name="packageVersion">The version, if any, of the Nuget package to use</param>
     /// <param name="packageSourceUri">The package source to use</param>
     /// <param name="includePreRelease">A boolean indicating whether or not to include pre-release packages</param>
-    public NugetPackagePluginSource(ILoggerFactory loggerFactory, PluginSourceOptions options, string packageId, string? packageVersion = null, Uri? packageSourceUri = null, bool includePreRelease = false, string? packagesDirectory = null)
+    public NugetPackagePluginSource(ILoggerFactory loggerFactory, string? name, PluginSourceOptions options, string packageId, string? packageVersion = null, Uri? packageSourceUri = null, bool includePreRelease = false, string? packagesDirectory = null)
     {
         if (string.IsNullOrWhiteSpace(packageId)) throw new ArgumentNullException(nameof(packageId));
 
         this.LoggerFactory = loggerFactory;
         this.Logger = loggerFactory.CreateLogger(this.GetType());
+        this.Name = name;
         this.NugetLogger = new LoggingExtensionLogger(this.Logger);
         this.Options = options ?? throw new ArgumentNullException(nameof(options));
         this.PackageId = packageId;
@@ -57,8 +59,11 @@ public class NugetPackagePluginSource
         if (!this.PluginDirectory.Exists) this.PluginDirectory.Create();
 
         this.PackageSource = this.PackageSourceUri == null ? null : this.BuildPackageSource(this.PackageSourceUri);
-        this.SourceRepository = packageSourceUri == null ? null : new(this.PackageSource, this.Providers);
+        this.SourceRepository = packageSourceUri == null ? null : new(this.PackageSource, global::Neuroglia.Plugins.Services.NugetPackagePluginSource.Providers);
     }
+
+    /// <inheritdoc/>
+    public virtual string? Name { get; }
 
     /// <summary>
     /// Gets the service used to create <see cref="ILogger"/>s
@@ -129,7 +134,7 @@ public class NugetPackagePluginSource
     /// <summary>
     /// Gets an <see cref="IEnumerable{T}"/> containing the <see cref="INuGetResourceProvider"/>s to use
     /// </summary>
-    protected IEnumerable<Lazy<INuGetResourceProvider>> Providers => Repository.Provider.GetCoreV3().ToList();
+    protected static IEnumerable<Lazy<INuGetResourceProvider>> Providers => Repository.Provider.GetCoreV3().ToList();
 
     /// <inheritdoc/>
     public virtual async Task LoadAsync(CancellationToken cancellationToken = default)
@@ -138,7 +143,7 @@ public class NugetPackagePluginSource
 
         var settings = Settings.LoadDefaultSettings(string.Empty, null, new MachineWideSettings());
         var packageSourceProvider = new PackageSourceProvider(settings);
-        var sourceRepositoryProvider = new SourceRepositoryProvider(packageSourceProvider, this.Providers);
+        var sourceRepositoryProvider = new SourceRepositoryProvider(packageSourceProvider, Providers);
         var framework = NuGetFramework.Parse(typeof(PluginManager).Assembly.GetCustomAttribute<TargetFrameworkAttribute>()!.FrameworkName!);
 
         var package = await this.GetPackageAsync(this.PackageId, this.PackageVersion, this.IncludePreRelease, false, cancellationToken).ConfigureAwait(false) ?? throw new ArgumentNullException($"Failed to find the specified package with id '{this.PackageId}' and version '{this.PackageVersion}'");
@@ -156,7 +161,7 @@ public class NugetPackagePluginSource
 
         foreach (var pluginAssemblyFilePath in project.PluginAssemblies)
         {
-            var assemblyCatalog = new AssemblyPluginSource(this.Options, Path.Combine(this.PluginDirectory.FullName, pluginAssemblyFilePath));
+            var assemblyCatalog = new AssemblyPluginSource(this.Name, this.Options, Path.Combine(this.PluginDirectory.FullName, pluginAssemblyFilePath));
             await assemblyCatalog.LoadAsync(cancellationToken).ConfigureAwait(false);
             this._assemblies.Add(assemblyCatalog);
         }
@@ -168,7 +173,7 @@ public class NugetPackagePluginSource
     {
         var settings = Settings.LoadDefaultSettings(string.Empty, null, new MachineWideSettings());
         var packageSourceProvider = new PackageSourceProvider(settings);
-        var sourceRepositoryProvider = new SourceRepositoryProvider(packageSourceProvider, this.Providers);
+        var sourceRepositoryProvider = new SourceRepositoryProvider(packageSourceProvider, Providers);
 
         if (this.SourceRepository != null) return await this.SearchPackageAsync(packageId, packageVersion, includePreRelease, this.SourceRepository, refreshCache, cancellationToken).ConfigureAwait(false);
 
