@@ -5,7 +5,7 @@ using System.Runtime.Loader;
 namespace Neuroglia.Plugins.Services;
 
 /// <summary>
-/// Represents an <see cref="AssemblyLoadContext"/> used to load <see cref="IPlugin"/> assemblies
+/// Represents an <see cref="AssemblyLoadContext"/> used to load <see cref="IPluginDescriptor"/> assemblies
 /// </summary>
 public class PluginAssemblyLoadContext
     : AssemblyLoadContext
@@ -65,7 +65,19 @@ public class PluginAssemblyLoadContext
     /// <returns>A new instance of the specified type, activated within the boundaries of the <see cref="PluginAssemblyLoadContext"/></returns>
     public object CreateInstance(IServiceProvider serviceProvider, Type type)
     {
-        var loadedAssembly = this.Assemblies.FirstOrDefault(a => a.GetName() == type.Assembly.GetName()) ?? Default.LoadFromAssemblyName(type.Assembly.GetName());
+        var loadedAssembly = this.Assemblies.FirstOrDefault(a => a.GetName() == type.Assembly.GetName());
+        if (loadedAssembly == null)
+        {
+            try
+            {
+                loadedAssembly = Default.LoadFromAssemblyName(type.Assembly.GetName());
+            }
+            catch(FileNotFoundException ex)
+            {
+                loadedAssembly = Default.LoadFromAssemblyPath(type.Assembly.Location);
+            }
+    
+        }
         var loadedType = loadedAssembly.GetType(type.FullName!) ?? throw new NullReferenceException($"Failed to find the specified type '{type.FullName}' in assembly '{loadedAssembly.FullName}'");
         return ActivatorUtilities.CreateInstance(serviceProvider, loadedType);
     }

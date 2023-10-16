@@ -19,7 +19,7 @@ public interface IPluginSource
     /// <summary>
     /// Gets a list containing of sourced plugins
     /// </summary>
-    IReadOnlyList<IPlugin> Plugins { get; }
+    IReadOnlyList<IPluginDescriptor> Plugins { get; }
 
     /// <summary>
     /// Loads the <see cref="IPluginSource"/>

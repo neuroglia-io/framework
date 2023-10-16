@@ -129,7 +129,7 @@ public class NugetPackagePluginSource
     protected SourceRepository? SourceRepository { get; }
 
     /// <inheritdoc/>
-    public virtual IReadOnlyList<IPlugin> Plugins => this.IsLoaded ? this._assemblies.SelectMany(a => a.Plugins).ToList().AsReadOnly() : throw new NotSupportedException("The plugin source has not yet been loaded");
+    public virtual IReadOnlyList<IPluginDescriptor> Plugins => this.IsLoaded ? this._assemblies.SelectMany(a => a.Plugins).ToList().AsReadOnly() : throw new NotSupportedException("The plugin source has not yet been loaded");
 
     /// <summary>
     /// Gets an <see cref="IEnumerable{T}"/> containing the <see cref="INuGetResourceProvider"/>s to use

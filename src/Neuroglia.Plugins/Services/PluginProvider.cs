@@ -58,7 +58,16 @@ public class PluginProvider
     public virtual Task StopAsync(CancellationToken cancellationToken) => Task.Run(() => this.CancellationTokenSource?.Cancel(), cancellationToken);
 
     /// <inheritdoc/>
-    public virtual IEnumerable<IPlugin> GetPlugins() => this.Sources.SelectMany(s => s.Plugins);
+    public virtual IEnumerable<IPluginDescriptor> GetPlugins() => this.Sources.SelectMany(s => s.Plugins);
+
+    /// <inheritdoc/>
+    public virtual TService GetPlugin<TService>(string name, Version version, string? sourceName = null)
+        where TService : class
+    {
+        var plugins = string.IsNullOrWhiteSpace(sourceName) ? this.GetPlugins() : this.Sources.FirstOrDefault(s => s.Name == sourceName)?.Plugins ?? throw new NullReferenceException($"Failed to find a plugin source with the specified name '{sourceName}'");
+        var plugin = plugins.FirstOrDefault(p => p.Name == name && p.Version == version) ?? throw new NullReferenceException($"Failed to find a plugin with name '{name}' and version '{version}'");
+        return (TService)this.CreatePluginInstance(plugin, typeof(TService));
+    }
 
     /// <inheritdoc/>
     public virtual IEnumerable<object> GetPlugins(Type serviceType, string? sourceName = null, IEnumerable<string>? tags = null)
@@ -73,39 +82,17 @@ public class PluginProvider
 
         foreach (var plugin in candidatePlugins)
         {
-            var pluginAttribute = plugin.Type.GetCustomAttribute<PluginAttribute>();
-            if (pluginAttribute?.FactoryType != null)
+            object? pluginInstance;
+            try
             {
-                var factoryType = pluginAttribute.FactoryType.IsGenericTypeDefinition ? pluginAttribute.FactoryType.MakeGenericType(genericArguments) : pluginAttribute.FactoryType;
-                var factory = (IPluginFactory)ActivatorUtilities.CreateInstance(this.ServiceProvider, factoryType);
-                object? pluginInstance;
-                try
-                {
-                    var pluginFactory = (IPluginFactory)((PluginAssemblyLoadContext)plugin.AssemblyLoadContext).CreateInstance(this.ServiceProvider, factoryType);
-                    pluginInstance = pluginFactory.Create();
-                }
-                catch (Exception ex)
-                {
-                    this.Logger.LogWarning("An exception occured while instanciating plugin factory of type '{factoryType}': {ex}", factoryType, ex);
-                    continue;
-                }
-                yield return pluginInstance;
+                pluginInstance = this.CreatePluginInstance(plugin, serviceType);
             }
-            else
+            catch (Exception ex)
             {
-                var pluginType = plugin.Type.IsGenericTypeDefinition ? plugin.Type.MakeGenericType(genericArguments) : plugin.Type;
-                object? pluginInstance;
-                try
-                {
-                    pluginInstance = ((PluginAssemblyLoadContext)plugin.AssemblyLoadContext).CreateInstance(this.ServiceProvider, pluginType);
-                }
-                catch (Exception ex)
-                {
-                    this.Logger.LogWarning("An exception occured while instanciating plugin of type '{factoryType}': {ex}", pluginType, ex);
-                    continue;
-                }
-                yield return pluginInstance;
+                this.Logger.LogWarning("An exception occured while instanciating plugin of type '{pluginType}': {ex}", plugin.Type, ex);
+                continue;
             }
+            yield return pluginInstance;
         }
     }
 
@@ -114,6 +101,24 @@ public class PluginProvider
         where TService : class
     {
         foreach (var plugin in this.GetPlugins(typeof(TService), sourceName, tags)) yield return (TService)plugin;
+    }
+
+    protected virtual object CreatePluginInstance(IPluginDescriptor plugin, Type serviceType)
+    {
+        var genericArguments = serviceType.GetGenericArguments();
+        var pluginAttribute = plugin.Type.GetCustomAttribute<PluginAttribute>();
+        if (pluginAttribute?.FactoryType != null)
+        {
+            var factoryType = pluginAttribute.FactoryType.IsGenericTypeDefinition ? pluginAttribute.FactoryType.MakeGenericType(genericArguments) : pluginAttribute.FactoryType;
+            var factory = (IPluginFactory)ActivatorUtilities.CreateInstance(this.ServiceProvider, factoryType);
+            var pluginFactory = (IPluginFactory)((PluginAssemblyLoadContext)plugin.AssemblyLoadContext).CreateInstance(this.ServiceProvider, factoryType);
+            return pluginFactory.Create();
+        }
+        else
+        {
+            var pluginType = plugin.Type.IsGenericTypeDefinition ? plugin.Type.MakeGenericType(genericArguments) : plugin.Type;
+            return ((PluginAssemblyLoadContext)plugin.AssemblyLoadContext).CreateInstance(this.ServiceProvider, pluginType);
+        }
     }
 
     /// <summary>

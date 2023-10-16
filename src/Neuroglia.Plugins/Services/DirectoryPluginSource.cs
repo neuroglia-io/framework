@@ -20,7 +20,7 @@ public class DirectoryPluginSource
     /// </summary>
     /// <param name="name">The name of the source, if any</param>
     /// <param name="options">The source's options</param>
-    /// <param name="path">The path to the directory used to source <see cref="IPlugin"/>s</param>
+    /// <param name="path">The path to the directory used to source <see cref="IPluginDescriptor"/>s</param>
     /// <param name="searchPattern">The search pattern to use to find plugin assembly files</param>
     /// <param name="searchOption">A value indicating whether to search all directories or only the top level ones</param>
     public DirectoryPluginSource(string? name, PluginSourceOptions options, string? path = null, string? searchPattern = null, SearchOption searchOption = SearchOption.TopDirectoryOnly)
@@ -44,7 +44,7 @@ public class DirectoryPluginSource
     protected PluginSourceOptions Options { get; }
 
     /// <summary>
-    /// Gets the path to the directory used to source <see cref="IPlugin"/>s
+    /// Gets the path to the directory used to source <see cref="IPluginDescriptor"/>s
     /// </summary>
     protected virtual string Path { get; }
 
@@ -62,7 +62,7 @@ public class DirectoryPluginSource
     public virtual bool IsLoaded { get; protected set; }
 
     /// <inheritdoc/>
-    public virtual IReadOnlyList<IPlugin> Plugins => this.IsLoaded ? this._assemblies.SelectMany(a => a.Plugins).ToList().AsReadOnly() : throw new NotSupportedException("The plugin source has not yet been loaded");
+    public virtual IReadOnlyList<IPluginDescriptor> Plugins => this.IsLoaded ? this._assemblies.SelectMany(a => a.Plugins).ToList().AsReadOnly() : throw new NotSupportedException("The plugin source has not yet been loaded");
 
     /// <inheritdoc/>
     public virtual async Task LoadAsync(CancellationToken cancellationToken = default)

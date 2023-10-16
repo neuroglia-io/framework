@@ -1,16 +1,27 @@
 ﻿namespace Neuroglia.Plugins.Services;
 
 /// <summary>
-/// Defines the fundamentals of a service used to provide <see cref="IPlugin"/>s
+/// Defines the fundamentals of a service used to provide <see cref="IPluginDescriptor"/>s
 /// </summary>
 public interface IPluginProvider
 {
 
     /// <summary>
-    /// Gets all sourced <see cref="IPlugin"/>s
+    /// Gets all sourced <see cref="IPluginDescriptor"/>s
     /// </summary>
-    /// <returns>A new <see cref="IEnumerable{T}"/> containing all sourced <see cref="IPlugin"/>s</returns>
-    IEnumerable<IPlugin> GetPlugins();
+    /// <returns>A new <see cref="IEnumerable{T}"/> containing all sourced <see cref="IPluginDescriptor"/>s</returns>
+    IEnumerable<IPluginDescriptor> GetPlugins();
+
+    /// <summary>
+    /// Gets the specified plugin
+    /// </summary>
+    /// <typeparam name="TService">The type of the contract implemented by the plugin to get. Must be an interface</typeparam>
+    /// <param name="name">The name of the plugin to get</param>
+    /// <param name="version">The version of the plugin to get</param>
+    /// <param name="sourceName">The name of the source, if any, to get the specified plugin from</param>
+    /// <returns>The specified plugin</returns>
+    TService GetPlugin<TService>(string name, Version version, string? sourceName = null)
+        where TService : class;
 
     /// <summary>
     /// Gets all sourced plugins that implement the specified contract

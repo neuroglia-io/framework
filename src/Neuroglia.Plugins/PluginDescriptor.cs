@@ -5,28 +5,28 @@ using System.Runtime.Loader;
 namespace Neuroglia.Plugins;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IPlugin"/> interface
+/// Represents the default implementation of the <see cref="IPluginDescriptor"/> interface
 /// </summary>
-public class Plugin
-    : IPlugin
+public class PluginDescriptor
+    : IPluginDescriptor
 {
 
     /// <summary>
-    /// Initializes a new <see cref="Plugin"/>
+    /// Initializes a new <see cref="PluginDescriptor"/>
     /// </summary>
-    protected Plugin() { }
+    protected PluginDescriptor() { }
 
     /// <summary>
-    /// Initializes a new <see cref="Plugin"/>
+    /// Initializes a new <see cref="PluginDescriptor"/>
     /// </summary>
-    /// <param name="name">The name of the <see cref="IPlugin"/></param>
-    /// <param name="version">The version of the <see cref="IPlugin"/></param>
-    /// <param name="type">The type of the <see cref="IPlugin"/></param>
-    /// <param name="assembly">The assembly of the <see cref="IPlugin"/></param>
-    /// <param name="assemblyLoadContext">The <see cref="IPlugin"/>'s <see cref="System.Runtime.Loader.AssemblyLoadContext"/></param>
-    /// <param name="source">The <see cref="IPluginSource"/> the <see cref="IPlugin"/> is sourced by</param>
-    /// <param name="tags">A list containing the <see cref="IPlugin"/>'s tags, if any</param>
-    public Plugin(string name, Version version, Type type, Assembly assembly, AssemblyLoadContext assemblyLoadContext, IPluginSource source, IEnumerable<string>? tags = null)
+    /// <param name="name">The name of the <see cref="IPluginDescriptor"/></param>
+    /// <param name="version">The version of the <see cref="IPluginDescriptor"/></param>
+    /// <param name="type">The type of the <see cref="IPluginDescriptor"/></param>
+    /// <param name="assembly">The assembly of the <see cref="IPluginDescriptor"/></param>
+    /// <param name="assemblyLoadContext">The <see cref="IPluginDescriptor"/>'s <see cref="System.Runtime.Loader.AssemblyLoadContext"/></param>
+    /// <param name="source">The <see cref="IPluginSource"/> the <see cref="IPluginDescriptor"/> is sourced by</param>
+    /// <param name="tags">A list containing the <see cref="IPluginDescriptor"/>'s tags, if any</param>
+    public PluginDescriptor(string name, Version version, Type type, Assembly assembly, AssemblyLoadContext assemblyLoadContext, IPluginSource source, IEnumerable<string>? tags = null)
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
         this.Name = name;

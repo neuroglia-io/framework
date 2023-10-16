@@ -1,13 +1,16 @@
 ﻿using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Neuroglia;
 
 /// <summary>
 /// Defines extensions for strings
 /// </summary>
-public static class StringExtensions
+public static partial class StringExtensions
 {
+
+    const string SubstitutionBlock = "§§";
 
     /// <summary>
     /// Converts the string to its camel case representation
@@ -17,8 +20,12 @@ public static class StringExtensions
     public static string ToCamelCase(this string input)
     {
         if(string.IsNullOrWhiteSpace(input)) return input;
-        var firstChar = input[0];
-        return char.ToLower(firstChar) + input[1..];
+        var result = input.RemoveDiacritics();
+        result = MatchNonAlphanumericCharactersExpression().Replace(result, SubstitutionBlock).Trim();
+        result = ReduceSpacesExpression().Replace(result, " ").Replace(" ", string.Empty);
+        result = ReplaceSubstitutionBlockExpression().Replace(result, string.Empty);
+        var firstChar = result[0];
+        return char.ToLower(firstChar) + result[1..];
     }
 
     /// <summary>
@@ -26,14 +33,38 @@ public static class StringExtensions
     /// </summary>
     /// <param name="input">The input to format</param>
     /// <returns>The formatted string</returns>
-    public static string ToKebabCase(this string input) => string.IsNullOrWhiteSpace(input) ? input : string.Concat(input.Select((c, i) => char.IsUpper(c) && i != 0 ? $"-{c}" : c.ToString())).ToLower();
+    public static string ToKebabCase(this string input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return input;
+        var delimiter = "-";
+        var result = input.RemoveDiacritics();
+        result = MatchNonAlphanumericCharactersExpression().Replace(result, SubstitutionBlock).Trim();
+        result = ReduceSpacesExpression().Replace(result, " ").Replace(" ", delimiter);
+        result = ReplaceSubstitutionBlockExpression().Replace(result, delimiter);
+        result = string.Concat(result.Select((c, i) => char.IsUpper(c) && i != 0 ? $"{delimiter}{c}" : c.ToString())).ToLower();
+        result = new Regex("\\-+", RegexOptions.Compiled).Replace(result, delimiter);
+        if (result.Last().ToString() == delimiter) result = result[..^1];
+        return result;
+    }
 
     /// <summary>
     /// Converts the string to its snake/undersocre case representation
     /// </summary>
     /// <param name="input">The input to format</param>
     /// <returns>The formatted string</returns>
-    public static string ToSnakeCase(this string input) => string.IsNullOrWhiteSpace(input) ? input : string.Concat(input.Select((c, i) => char.IsUpper(c) && i != 0 ? $"_{c}" : c.ToString())).ToLower();
+    public static string ToSnakeCase(this string input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return input;
+        var delimiter = "_";
+        var result = input.RemoveDiacritics();
+        result = MatchNonAlphanumericCharactersExpression().Replace(result, SubstitutionBlock).Trim();
+        result = ReduceSpacesExpression().Replace(result, " ").Replace(" ", delimiter);
+        result = ReplaceSubstitutionBlockExpression().Replace(result, delimiter);
+        result = string.Concat(result.Select((c, i) => char.IsUpper(c) && i != 0 ? $"{delimiter}{c}" : c.ToString())).ToLower();
+        result = new Regex("_+", RegexOptions.Compiled).Replace(result, delimiter);
+        if (result.Last().ToString() == delimiter) result = result[..^1];
+        return result;
+    }
 
     /// <summary>
     /// Replaces the upper case characters by their lowercase counterpart and prepend them with a whitespace character
@@ -55,7 +86,7 @@ public static class StringExtensions
             }
             if (char.IsUpper(currentChar))
             {
-                if (i != 0 && (!char.IsUpper(text[i - 1]) || (i != text.Length - 1 && !char.IsUpper(text[i + 1])))) result += " ";
+                if (i != 0 && (!char.IsUpper(text[i - 1]) || i != text.Length - 1 && !char.IsUpper(text[i + 1]))) result += " ";
                 if (toLowerCase && i != text.Length - 1 && !char.IsUpper(text[i + 1])) result += char.ToLower(currentChar);
                 else result += currentChar;
             }
@@ -83,5 +114,14 @@ public static class StringExtensions
         }
         return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
     }
+
+    [GeneratedRegex("[^a-zA-Z0-9\\s]", RegexOptions.Compiled)]
+    private static partial Regex MatchNonAlphanumericCharactersExpression();
+
+    [GeneratedRegex("\\s+", RegexOptions.Compiled)]
+    private static partial Regex ReduceSpacesExpression();
+
+    [GeneratedRegex("§§", RegexOptions.Compiled)]
+    private static partial Regex ReplaceSubstitutionBlockExpression();
 
 }
