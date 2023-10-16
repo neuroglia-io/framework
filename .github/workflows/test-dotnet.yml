@@ -30,4 +30,4 @@ jobs:
         run: dotnet restore "${{ env.SOLUTION }}"
 
       - name: Test
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --verbosity normal"
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --verbosity normal
