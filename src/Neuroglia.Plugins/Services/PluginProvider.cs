@@ -106,13 +106,12 @@ public class PluginProvider
     protected virtual object CreatePluginInstance(IPluginDescriptor plugin, Type serviceType)
     {
         var genericArguments = serviceType.GetGenericArguments();
-        var pluginAttribute = plugin.Type.GetCustomAttribute<PluginAttribute>();
-        if (pluginAttribute?.FactoryType != null)
+        var factoryAttribute = plugin.Type.GetCustomAttribute<FactoryAttribute>();
+        if (factoryAttribute?.FactoryType != null)
         {
-            var factoryType = pluginAttribute.FactoryType.IsGenericTypeDefinition ? pluginAttribute.FactoryType.MakeGenericType(genericArguments) : pluginAttribute.FactoryType;
-            var factory = (IPluginFactory)ActivatorUtilities.CreateInstance(this.ServiceProvider, factoryType);
-            var pluginFactory = (IPluginFactory)((PluginAssemblyLoadContext)plugin.AssemblyLoadContext).CreateInstance(this.ServiceProvider, factoryType);
-            return pluginFactory.Create();
+            var factoryType = factoryAttribute.FactoryType.IsGenericTypeDefinition ? factoryAttribute.FactoryType.MakeGenericType(genericArguments) : factoryAttribute.FactoryType;
+            var factory = (IFactory)((PluginAssemblyLoadContext)plugin.AssemblyLoadContext).CreateInstance(this.ServiceProvider, factoryType);
+            return factory.Create();
         }
         else
         {

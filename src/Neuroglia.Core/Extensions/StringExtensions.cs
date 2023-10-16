@@ -19,7 +19,7 @@ public static partial class StringExtensions
     /// <returns>The formatted string</returns>
     public static string ToCamelCase(this string input)
     {
-        if(string.IsNullOrWhiteSpace(input)) return input;
+        if (string.IsNullOrWhiteSpace(input)) return input;
         var result = input.RemoveDiacritics();
         result = MatchNonAlphanumericCharactersExpression().Replace(result, SubstitutionBlock).Trim();
         result = ReduceSpacesExpression().Replace(result, " ").Replace(" ", string.Empty);
@@ -42,7 +42,7 @@ public static partial class StringExtensions
         result = ReduceSpacesExpression().Replace(result, " ").Replace(" ", delimiter);
         result = ReplaceSubstitutionBlockExpression().Replace(result, delimiter);
         result = string.Concat(result.Select((c, i) => char.IsUpper(c) && i != 0 ? $"{delimiter}{c}" : c.ToString())).ToLower();
-        result = new Regex("\\-+", RegexOptions.Compiled).Replace(result, delimiter);
+        result = ReduceHyphenExpressions().Replace(result, delimiter);
         if (result.Last().ToString() == delimiter) result = result[..^1];
         return result;
     }
@@ -61,7 +61,7 @@ public static partial class StringExtensions
         result = ReduceSpacesExpression().Replace(result, " ").Replace(" ", delimiter);
         result = ReplaceSubstitutionBlockExpression().Replace(result, delimiter);
         result = string.Concat(result.Select((c, i) => char.IsUpper(c) && i != 0 ? $"{delimiter}{c}" : c.ToString())).ToLower();
-        result = new Regex("_+", RegexOptions.Compiled).Replace(result, delimiter);
+        result = ReduceUnderscoreExpressions().Replace(result, delimiter);
         if (result.Last().ToString() == delimiter) result = result[..^1];
         return result;
     }
@@ -123,5 +123,11 @@ public static partial class StringExtensions
 
     [GeneratedRegex("§§", RegexOptions.Compiled)]
     private static partial Regex ReplaceSubstitutionBlockExpression();
+
+    [GeneratedRegex("\\-+", RegexOptions.Compiled)]
+    private static partial Regex ReduceHyphenExpressions();
+
+    [GeneratedRegex("_+", RegexOptions.Compiled)]
+    private static partial Regex ReduceUnderscoreExpressions();
 
 }

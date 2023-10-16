@@ -72,7 +72,7 @@ public class PluginAssemblyLoadContext
             {
                 loadedAssembly = Default.LoadFromAssemblyName(type.Assembly.GetName());
             }
-            catch(FileNotFoundException ex)
+            catch(FileNotFoundException)
             {
                 loadedAssembly = Default.LoadFromAssemblyPath(type.Assembly.Location);
             }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
-using Neuroglia.Plugins;
 
 namespace Neuroglia.Data.Infrastructure.Services;
 
@@ -8,7 +7,7 @@ namespace Neuroglia.Data.Infrastructure.Services;
 /// </summary>
 /// <typeparam name="TEntity">The type of the managed entities</typeparam>
 /// <typeparam name="TKey">The type of key used to identify and distinct managed entities</typeparam>
-[Plugin(FactoryType = typeof(MemoryCacheRepositoryFactory<,>))]
+[Factory(typeof(MemoryCacheRepositoryFactory<,>))]
 public class MemoryCacheRepository<TEntity, TKey>
     : QueryableRepositoryBase<TEntity, TKey>
     where TEntity : class, IIdentifiable<TKey>

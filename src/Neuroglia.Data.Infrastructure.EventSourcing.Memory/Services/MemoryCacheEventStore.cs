@@ -11,7 +11,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.DistributedCache.Services;
 /// <summary>
 /// Represents an <see cref="IEventStore"/> implementation relying on an <see cref="IMemoryCache"/>
 /// </summary>
-[Plugin(FactoryType = typeof(MemoryCacheEventStoreFactory), Tags = new string[] { "event-store" })]
+[Plugin(Tags = new string[] { "event-store" }), Factory(typeof(MemoryCacheEventStoreFactory))]
 public class MemoryCacheEventStore
     : IEventStore
 {

@@ -1,6 +1,4 @@
-﻿using Neuroglia.Plugins.Services;
-
-namespace Neuroglia.Plugins;
+﻿namespace Neuroglia.Plugins;
 
 /// <summary>
 /// Represents the attribute used to configure plugin-specific behaviors
@@ -19,11 +17,6 @@ public class PluginAttribute
     /// Gets/sets the plugin's version
     /// </summary>
     public Version? Version { get; set; }
-
-    /// <summary>
-    /// Gets/sets the <see cref="IPluginFactory"/> type to use, if any, in order to create new instances of the plugin
-    /// </summary>
-    public Type? FactoryType { get; set; }
 
     /// <summary>
     /// Gets/sets an array containing the tags, if any, associated to the marked plugin type
