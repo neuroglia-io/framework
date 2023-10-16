@@ -117,7 +117,14 @@ public class PluginNugetProject
 
         foreach (var entry in matchingEntries)
         {
-            ZipFileExtensions.ExtractToFile(entry.Entry, Path.Combine(this.PluginDirectory, entry.Entry.Name));
+            try
+            {
+                ZipFileExtensions.ExtractToFile(entry.Entry, Path.Combine(this.PluginDirectory, entry.Entry.Name));
+            }
+            catch(IOException)
+            {
+                continue;
+            }
             if (packageIdentity.Id == this.PluginPackage.Id) this._pluginAssemblies.Add(entry.Entry.Name);
         }
 
