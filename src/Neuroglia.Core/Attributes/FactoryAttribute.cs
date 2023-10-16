@@ -27,7 +27,7 @@ public class FactoryAttribute
     /// <param name="factoryType">The type of the <see cref="IFactory"/> to use. Must be a non-generic concrete implementation of the <see cref="IFactory"/> interface</param>
     public FactoryAttribute(Type factoryType)
     {
-        if(!factoryType.IsClass || factoryType.IsAbstract || factoryType.IsInterface || factoryType.IsGenericType) throw new ArgumentException($"The specified type '{factoryType.FullName}' is not a non-generic concrete implementation of the {nameof(IFactory)} interface", nameof(factoryType));
+        if(!factoryType.IsClass || factoryType.IsAbstract || factoryType.IsInterface) throw new ArgumentException($"The specified type '{factoryType.FullName}' is not a non-generic concrete implementation of the {nameof(IFactory)} interface", nameof(factoryType));
         this.FactoryType = factoryType;
     }
 
