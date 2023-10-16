@@ -1,0 +1,105 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.7.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageReference Include="Testcontainers" Version="3.5.0" />
+    <PackageReference Include="xunit" Version="2.5.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Expressions.JavaScript\Neuroglia.Data.Expressions.JavaScript.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Expressions.JQ\Neuroglia.Data.Expressions.JQ.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.EventStore\Neuroglia.Data.Infrastructure.EventSourcing.EventStore.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Memory\Neuroglia.Data.Infrastructure.EventSourcing.Memory.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Redis\Neuroglia.Data.Infrastructure.EventSourcing.Redis.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.Memory\Neuroglia.Data.Infrastructure.Memory.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.Mongo\Neuroglia.Data.Infrastructure.Mongo.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Plugins\Neuroglia.Plugins.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\dogs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\inputWithEscapedJson.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\openapi.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\pets.expression.jq.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\pets.expression.js.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-concat.expression.jq.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-concat.expression.js.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-concat.input.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-interpolation.expression.jq.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-interpolation.expression.js.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-interpolation.input.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-quoted.expression.jq.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-quoted.expression.js.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-quoted.input.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-substitution.expression.jq.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-substitution.expression.js.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\string-substitution.input.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

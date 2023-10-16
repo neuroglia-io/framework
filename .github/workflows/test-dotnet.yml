@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet-version: ['6.0.x' ]
+        dotnet-version: ['7.0.x' ]
 
     steps:
       - name: Checkout
@@ -29,57 +29,5 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore "${{ env.SOLUTION }}"
 
-      # - name: Test
-      #   run: dotnet test "${{ env.SOLUTION }}" --no-restore --verbosity normal"
-
-      # Test "per domain" for ease of readability
-      - name: Test Core
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Core"
-
-      - name: Test Data.EventSourcing
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.EventSourcing"
-
-      - name: Test Data.Expressions
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Expressions"
-
-      - name: Test Data.Flux
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Flux"
-
-      - name: Test Data.OData
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.OData"
-
-      #- name: Test Data.Repositories
-      #  run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Repositories"
-
-      - name: Test Data.Repositories.DistributedCacheRepositoryTests
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~DistributedCacheRepositoryTests"
-
-      - name: Test Data.Repositories.EFCoreRepositoryTests
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~EFCoreRepositoryTests"
-
-      - name: Test Data.Repositories.EventSourcingRepositoryTests
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~EventSourcingRepositoryTests"
-
-      - name: Test Data.Repositories.MongoRepositoryTests
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~MongoRepositoryTests"
-
-      - name: Test Data.SchemaRegistry
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.SchemaRegistry"
-
-      - name: Test Data.Schemas
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Data.Schemas"
-
-      - name: Test Eventing
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Eventing"
-
-      - name: Test JsonPatch
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~JsonPatch"
-
-      - name: Test Mediation
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Mediation"
-
-      - name: Test Serialization
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Serialization"
-
-      #- name: Test Templating
-      #  run: dotnet test "${{ env.SOLUTION }}" --no-restore --filter "FullyQualifiedName~Templating"
+      - name: Test
+        run: dotnet test "${{ env.SOLUTION }}" --no-restore --verbosity normal"
