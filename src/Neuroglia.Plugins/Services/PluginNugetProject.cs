@@ -1,4 +1,17 @@
-﻿using NuGet.Frameworks;
+﻿// Copyright © 2021-Present Neuroglia SRL. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using NuGet.Frameworks;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.ProjectManagement;
@@ -20,6 +33,7 @@ public class PluginNugetProject
     /// Initializes a new <see cref="PluginNugetProject"/>
     /// </summary>
     /// <param name="root">The <see cref="PluginNugetProject"/>'s root path</param>
+    /// <param name="pluginDirectory">The plugin's directory</param>
     /// <param name="pluginPackage">The identity of the plugin package</param>
     /// <param name="targetFramework">The <see cref="PluginNugetProject"/>'s target <see cref="NuGetFramework"/></param>
     public PluginNugetProject(string root, string pluginDirectory, PackageIdentity pluginPackage, NuGetFramework targetFramework) 
@@ -32,8 +46,14 @@ public class PluginNugetProject
         this.FrameworkReducer = new FrameworkReducer(new DefaultFrameworkNameProvider(), this.CompatibilityProvider);
     }
 
+    /// <summary>
+    /// Gets the plugin's directory
+    /// </summary>
     protected string PluginDirectory { get; }
 
+    /// <summary>
+    /// Gets the identity of the plugin's package
+    /// </summary>
     protected PackageIdentity PluginPackage { get; }
 
     /// <summary>
@@ -41,8 +61,14 @@ public class PluginNugetProject
     /// </summary>
     protected NuGetFramework TargetFramework { get; }
 
+    /// <summary>
+    /// Gets the service used to perform package compatibility-related operations
+    /// </summary>
     protected CompatibilityProvider CompatibilityProvider { get; }
 
+    /// <summary>
+    /// Gets the service used to reduce package frameworks
+    /// </summary>
     protected FrameworkReducer FrameworkReducer { get; }
 
     /// <summary>
@@ -70,6 +96,13 @@ public class PluginNugetProject
     /// <inheritdoc/>
     public override Task<bool> UninstallPackageAsync(PackageIdentity packageIdentity, INuGetProjectContext nuGetProjectContext, CancellationToken cancellationToken) => base.UninstallPackageAsync(packageIdentity, nuGetProjectContext, cancellationToken);
 
+    /// <summary>
+    /// Extracts the specified package's assemblies
+    /// </summary>
+    /// <param name="packageIdentity">The identity of the package to extract the assemblies of</param>
+    /// <param name="zipArchiveEntries">A list containing the <see cref="ZipArchiveEntry"/> of the assemblies to extract</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
     protected virtual async Task ExtractAssembliesAsync(PackageIdentity packageIdentity, List<ZipArchiveEntry> zipArchiveEntries, CancellationToken cancellationToken)
     {
         var entriesWithTargetFramework = zipArchiveEntries.Select(e => new { TargetFramework = NuGetFramework.Parse(e.FullName.Split('/')[1]), Entry = e }).ToList();

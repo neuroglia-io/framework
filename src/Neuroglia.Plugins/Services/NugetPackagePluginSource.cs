@@ -1,4 +1,17 @@
-﻿using Microsoft.Extensions.Logging;
+﻿// Copyright © 2021-Present Neuroglia SRL. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using Microsoft.Extensions.Logging;
 using Neuroglia.Plugins.Configuration;
 using NuGet.Common;
 using NuGet.Configuration;
@@ -31,13 +44,14 @@ public class NugetPackagePluginSource
     /// <summary>
     /// Initializes a new <see cref="NugetPackagePluginSource"/>
     /// </summary>
-    /// <param name="loggerFactory">The service used to create <see cref="ILogger"/>s</param>
+    /// <param name="loggerFactory">The service used to create <see cref="Microsoft.Extensions.Logging.ILogger"/>s</param>
     /// <param name="name">The name of the source, if any</param>
     /// <param name="options">The source's options</param>
     /// <param name="packageId">The id of the Nuget package to use</param>
     /// <param name="packageVersion">The version, if any, of the Nuget package to use</param>
     /// <param name="packageSourceUri">The package source to use</param>
     /// <param name="includePreRelease">A boolean indicating whether or not to include pre-release packages</param>
+    /// <param name="packagesDirectory">The directory to output packages to</param>
     public NugetPackagePluginSource(ILoggerFactory loggerFactory, string? name, PluginSourceOptions options, string packageId, string? packageVersion = null, Uri? packageSourceUri = null, bool includePreRelease = false, string? packagesDirectory = null)
     {
         if (string.IsNullOrWhiteSpace(packageId)) throw new ArgumentNullException(nameof(packageId));
@@ -66,7 +80,7 @@ public class NugetPackagePluginSource
     public virtual string? Name { get; }
 
     /// <summary>
-    /// Gets the service used to create <see cref="ILogger"/>s
+    /// Gets the service used to create <see cref="Microsoft.Extensions.Logging.ILogger"/>s
     /// </summary>
     protected ILoggerFactory LoggerFactory { get; }
 
@@ -169,6 +183,15 @@ public class NugetPackagePluginSource
         this.IsLoaded = true;
     }
 
+    /// <summary>
+    /// Gets information about the specified Nuget package
+    /// </summary>
+    /// <param name="packageId">The id of the package to get</param>
+    /// <param name="packageVersion">The version, if any, of the package to get</param>
+    /// <param name="includePreRelease">A boolean indicating whether or not to include pre-release packages</param>
+    /// <param name="refreshCache">A boolean indicating whether or not to refresh the cache</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new <see cref="NugetPackageInfo"/> that describes the specified Nuget package</returns>
     protected virtual async Task<NugetPackageInfo?> GetPackageAsync(string packageId, string? packageVersion, bool includePreRelease, bool refreshCache, CancellationToken cancellationToken = default)
     {
         var settings = Settings.LoadDefaultSettings(string.Empty, null, new MachineWideSettings());
@@ -187,6 +210,16 @@ public class NugetPackagePluginSource
 
     }
 
+    /// <summary>
+    /// Searchs a <see cref="NuGet.Protocol.Core.Types.SourceRepository"/> for the specified Nuget package
+    /// </summary>
+    /// <param name="packageId">The id of the package to search for</param>
+    /// <param name="packageVersion">The version, if any, of the package to search for</param>
+    /// <param name="includePreRelease">A boolean indicating whether or not to include pre-release packages</param>
+    /// <param name="sourceRepository">The <see cref="NuGet.Protocol.Core.Types.SourceRepository"/> to search</param>
+    /// <param name="refreshCache">A boolean indicating whether or not to refresh the cache</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new <see cref="NugetPackageInfo"/> that describes the specified Nuget package, if found of the specified <see cref="NuGet.Protocol.Core.Types.SourceRepository"/></returns>
     protected virtual async Task<NugetPackageInfo?> SearchPackageAsync(string packageId, string? packageVersion, bool includePreRelease, SourceRepository sourceRepository, bool refreshCache, CancellationToken cancellationToken = default)
     {
         var packageMetadataResource = await sourceRepository.GetResourceAsync<PackageMetadataResource>();

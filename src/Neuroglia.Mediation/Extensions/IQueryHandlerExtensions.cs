@@ -1,10 +1,24 @@
-﻿using System.Net;
+﻿// Copyright © 2021-Present Neuroglia SRL. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System.Net;
 
 namespace Neuroglia.Mediation;
 
 /// <summary>
 /// Defines extensions for <see cref="IQueryHandler"/>s
 /// </summary>
+#pragma warning disable IDE0060 // Remove unused parameter
 public static class IQueryHandlerExtensions
 {
 
@@ -12,11 +26,12 @@ public static class IQueryHandlerExtensions
     /// Creates a new <see cref="OperationResult{T}"/> indicating that the <see cref="Command{T}"/> executed successfully
     /// </summary>
     /// <param name="handler">The extended <see cref="IQueryHandler"/></param>
+    /// <param name="data">The data, if any, returned by the operation, in case of success</param>
     /// <returns>A new <see cref="OperationResult{T}"/> indicating that the <see cref="Command{T}"/> executed successfully</returns>
-    public static IOperationResult<T> Ok<TQuery, T>(this IQueryHandler<TQuery, T> handler, T? result = default)
+    public static IOperationResult<T> Ok<TQuery, T>(this IQueryHandler<TQuery, T> handler, T? data = default)
         where TQuery : class, IQuery<IOperationResult<T>, T>
     {
-        return new OperationResult<T>((int)HttpStatusCode.OK, result);
+        return new OperationResult<T>((int)HttpStatusCode.OK, data);
     }
 
     /// <summary>
@@ -91,3 +106,4 @@ public static class IQueryHandlerExtensions
     }
 
 }
+#pragma warning restore IDE0060 // Remove unused parameter

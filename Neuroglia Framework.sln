@@ -41,8 +41,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mediation.AspNetCore", "src\Neuroglia.Mediation.AspNetCore\Neuroglia.Mediation.AspNetCore.csproj", "{6023CDEF-0A3E-47A5-916F-C0A0A6111390}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Expressions", "src\Neuroglia.Data.Expressions\Neuroglia.Data.Expressions.csproj", "{A79B21C9-A688-46F7-B916-09540DE89609}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Expressions.JQ", "src\Neuroglia.Data.Expressions.JQ\Neuroglia.Data.Expressions.JQ.csproj", "{5C673395-B9BD-49D5-801F-8F9C9A0C2280}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Expressions.JavaScript", "src\Neuroglia.Data.Expressions.JavaScript\Neuroglia.Data.Expressions.JavaScript.csproj", "{6B5C985F-37B9-4137-A87F-DD4723EED5CF}"
@@ -59,15 +57,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{3E6FD302-8B0E-4C9C-8C7A-0824E54E825C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PluginBasedConsoleApp", "samples\PluginBasedConsoleApp\PluginBasedConsoleApp.csproj", "{FDCE2453-FFB3-49CD-8977-94CB66E9E931}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginBasedConsoleApp", "samples\PluginBasedConsoleApp\PluginBasedConsoleApp.csproj", "{FDCE2453-FFB3-49CD-8977-94CB66E9E931}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "samples\Shared\Shared.csproj", "{127A576D-D586-4071-9FE5-1F3C8F651B39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "samples\Shared\Shared.csproj", "{127A576D-D586-4071-9FE5-1F3C8F651B39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamelCaseTextTransformPlugin", "samples\CamelCaseTextTransformPlugin\CamelCaseTextTransformPlugin.csproj", "{5AAEFEF3-187F-436E-A920-20CBE53FE192}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CamelCaseTextTransformPlugin", "samples\CamelCaseTextTransformPlugin\CamelCaseTextTransformPlugin.csproj", "{5AAEFEF3-187F-436E-A920-20CBE53FE192}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KebabCaseTextTransformPlugin", "samples\KebabCaseTextTransformPlugin\KebabCaseTextTransformPlugin.csproj", "{2FDA2787-1660-4787-8FA1-D77DB94BDB0B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnakeCaseTextTransformPlugin", "samples\SnakeCaseTextTransformPlugin\SnakeCaseTextTransformPlugin.csproj", "{1D09AF9B-E874-4EC4-B0B7-D9F4D51E51AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Expressions.Abstractions", "src\Neuroglia.Data.Expressions.Abstractions\Neuroglia.Data.Expressions.Abstractions.csproj", "{780D563C-909A-4DF8-9A26-D5DAC0B599CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{A1CAF88E-7219-4CCD-B1B0-110520EA5141}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,10 +148,6 @@ Global
 		{6023CDEF-0A3E-47A5-916F-C0A0A6111390}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6023CDEF-0A3E-47A5-916F-C0A0A6111390}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6023CDEF-0A3E-47A5-916F-C0A0A6111390}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A79B21C9-A688-46F7-B916-09540DE89609}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A79B21C9-A688-46F7-B916-09540DE89609}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A79B21C9-A688-46F7-B916-09540DE89609}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A79B21C9-A688-46F7-B916-09540DE89609}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C673395-B9BD-49D5-801F-8F9C9A0C2280}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5C673395-B9BD-49D5-801F-8F9C9A0C2280}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C673395-B9BD-49D5-801F-8F9C9A0C2280}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -195,6 +196,10 @@ Global
 		{1D09AF9B-E874-4EC4-B0B7-D9F4D51E51AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D09AF9B-E874-4EC4-B0B7-D9F4D51E51AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D09AF9B-E874-4EC4-B0B7-D9F4D51E51AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{780D563C-909A-4DF8-9A26-D5DAC0B599CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{780D563C-909A-4DF8-9A26-D5DAC0B599CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{780D563C-909A-4DF8-9A26-D5DAC0B599CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{780D563C-909A-4DF8-9A26-D5DAC0B599CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -217,7 +222,6 @@ Global
 		{2E8752CF-5A78-48EC-96B1-828B88287D1D} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{27A98088-995B-49F0-9E4E-F7C752A77907} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{6023CDEF-0A3E-47A5-916F-C0A0A6111390} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
-		{A79B21C9-A688-46F7-B916-09540DE89609} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{5C673395-B9BD-49D5-801F-8F9C9A0C2280} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{6B5C985F-37B9-4137-A87F-DD4723EED5CF} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{589F8368-4128-4F54-A957-7B0C9DA52D71} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
@@ -230,6 +234,7 @@ Global
 		{5AAEFEF3-187F-436E-A920-20CBE53FE192} = {3E6FD302-8B0E-4C9C-8C7A-0824E54E825C}
 		{2FDA2787-1660-4787-8FA1-D77DB94BDB0B} = {3E6FD302-8B0E-4C9C-8C7A-0824E54E825C}
 		{1D09AF9B-E874-4EC4-B0B7-D9F4D51E51AE} = {3E6FD302-8B0E-4C9C-8C7A-0824E54E825C}
+		{780D563C-909A-4DF8-9A26-D5DAC0B599CB} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}
