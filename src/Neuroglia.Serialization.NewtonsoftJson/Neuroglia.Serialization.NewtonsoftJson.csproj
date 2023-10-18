@@ -11,7 +11,7 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 	<PackageTags>neuroglia framework serialization newtonsoft json</PackageTags>
-    <Version>3.1.0</Version>
+    <Version>3.1.1</Version>
     <NeutralLanguage>en</NeutralLanguage>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
