@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Mapping;
+namespace Neuroglia;
 
 /// <summary>
 /// Represents an <see cref="Attribute"/> used to mark a type as mappable to another 
