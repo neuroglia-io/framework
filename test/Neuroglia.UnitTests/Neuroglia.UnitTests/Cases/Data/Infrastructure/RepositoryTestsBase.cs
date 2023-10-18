@@ -21,7 +21,7 @@ public abstract class RepositoryTestsBase
     : IAsyncLifetime
 {
 
-    public RepositoryTestsBase(IServiceCollection services) { this.ServiceProvider = services.BuildServiceProvider(); }
+    protected RepositoryTestsBase(IServiceCollection services) { this.ServiceProvider = services.BuildServiceProvider(); }
 
     protected ServiceProvider ServiceProvider { get; }
 

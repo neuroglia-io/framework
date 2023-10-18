@@ -66,8 +66,7 @@ public static class ProfileExtensions
         }
         foreach(var sourceType in types.Where(t => t.TryGetCustomAttribute<MapAttribute>(out _)))
         {
-            var mapAttribute = sourceType.GetCustomAttribute<MapAttribute>()!;
-            profile.CreateMap(sourceType, mapAttribute.DestinationType);
+            foreach(var mapAttribute in sourceType.GetCustomAttributes<MapAttribute>()) profile.CreateMap(sourceType, mapAttribute.DestinationType);
         }
     }
 

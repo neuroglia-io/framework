@@ -4,14 +4,13 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace(".Abstractions", ""))</RootNamespace>
-	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<Company>Neuroglia SRL</Company>
     <Copyright>Copyright © 2021-Present Neuroglia SRL. All rights reserved.</Copyright>
     <Authors>Neuroglia SRL</Authors>
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-	<PackageTags>neuroglia framework data infrastructure abstractions</PackageTags>
+	<PackageTags>neuroglia framework data infrastructure minio</PackageTags>
     <Version>3.1.1</Version>
     <NeutralLanguage>en</NeutralLanguage>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -29,11 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Minio" Version="6.0.0" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Neuroglia.Data\Neuroglia.Data.csproj" />
+    <ProjectReference Include="..\Neuroglia.Data.Infrastructure.ObjectStorage.Abstractions\Neuroglia.Data.Infrastructure.ObjectStorage.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
