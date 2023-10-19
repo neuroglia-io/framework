@@ -64,6 +64,28 @@ public interface IObjectStorage
     Task RemoveBucketAsync(string name, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Creates a new object into the specified bucket
+    /// </summary>
+    /// <param name="bucketName">The name of the bucket to add the object to</param>
+    /// <param name="name">The object's name</param>
+    /// <param name="contentType">The object's content type</param>
+    /// <param name="stream">The <see cref="Stream"/> that contains the object's data</param>
+    /// <param name="size">The size of the object to upload. If not set, defaults to the object's <see cref="Stream"/>'s length</param>
+    /// <param name="tags">A name/value mapping of the object's tags, if any</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new <see cref="IObjectDescriptor"/></returns>
+    Task<IObjectDescriptor> PutObjectAsync(string bucketName, string name, string contentType, Stream stream, ulong? size = null, IDictionary<string, string>? tags = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Determines whether or not the specified object exists
+    /// </summary>
+    /// <param name="bucketName">The name of the bucket the object to check belongs to</param>
+    /// <param name="name">The object to check</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A boolean indicating whether or not the specified object exists</returns>
+    Task<bool> ContainsObjectAsync(string bucketName, string name, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Lists all buckets contained by the specified bucket
     /// </summary>
     /// <param name="bucketName">The name of the bucket to list the objects of</param>
@@ -73,16 +95,23 @@ public interface IObjectStorage
     IAsyncEnumerable<IObjectDescriptor> ListObjectsAsync(string bucketName, string? prefix = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Creates a new object into the specified bucket
+    /// Gets the specified object
     /// </summary>
-    /// <param name="bucketName">The name of the bucket to add the object to</param>
-    /// <param name="name">The object's name</param>
-    /// <param name="contentType">The object's content type</param>
-    /// <param name="stream">The <see cref="Stream"/> that contains the object's data</param>
-    /// <param name="tags">A name/value mapping of the object's tags, if any</param>
+    /// <param name="bucketName">The name of the bucket to object to get belongs to</param>
+    /// <param name="name">The name of the object to get</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new <see cref="IObjectDescriptor"/></returns>
-    Task<IObjectDescriptor> PutObjectAsync(string bucketName, string name, string contentType, Stream stream, IDictionary<string, string>? tags = null, CancellationToken cancellationToken = default);
+    /// <returns>A new <see cref="IObjectDescriptor"/>, used to describe the specified object</returns>
+    Task<IObjectDescriptor> GetObjectAsync(string bucketName, string name, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Reads the specified object
+    /// </summary>
+    /// <param name="bucketName">The name of the bucket the object to read belongs to</param>
+    /// <param name="name">The name of the object to read</param>
+    /// <param name="stream">The <see cref="Stream"/> to read the object's data to</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    Task ReadObjectAsync(string bucketName, string name, Stream stream, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sets the tags of the specified object

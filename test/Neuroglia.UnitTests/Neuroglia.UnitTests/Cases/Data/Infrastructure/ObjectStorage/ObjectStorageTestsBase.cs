@@ -14,6 +14,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Neuroglia.Data.Infrastructure.ObjectStorage.Services;
+using System.Net.Mime;
+using System.Text;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.ObjectStorage;
 
@@ -139,6 +141,170 @@ public abstract class ObjectStorageTestsBase
 
         //assert
         bucket.Tags.Should().BeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task RemoveBucket_Should_Work()
+    {
+        //arrange
+        var bucketName = "fake-bucket";
+        await this.ObjectStorage.CreateBucketAsync(bucketName);
+
+        //act
+        await this.ObjectStorage.RemoveBucketAsync(bucketName);
+        var bucketExists = await this.ObjectStorage.ContainsBucketAsync(bucketName);
+
+        //assert
+        bucketExists.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task PutObject_Should_Work()
+    {
+        //arrange
+        var bucketName = "test-bucket";
+        var name = "test-object";
+        var contentType = MediaTypeNames.Text.Plain;
+        var tags = new Dictionary<string, string> { { "tag-1", "value 1" } };
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes("Hello, World!"));
+        await this.ObjectStorage.CreateBucketAsync(bucketName);
+
+        //act
+        var result = await this.ObjectStorage.PutObjectAsync(bucketName, name, contentType, stream, (ulong)stream.Length, tags);
+
+        //assert
+        result.Should().NotBeNull();
+        result.BucketName.Should().Be(bucketName);
+        result.Name.Should().Be(name);
+        result.ContentType.Should().Be(contentType);
+        result.Size.Should().Be((ulong)stream.Length);
+        result.Tags.Should().BeEquivalentTo(tags);
+    }
+
+    [Fact]
+    public async Task ListObjects_Should_Work()
+    {
+        //arrange
+        var bucketName = "test-bucket";
+        var objectsCount = 6;
+        await this.ObjectStorage.CreateBucketAsync(bucketName);
+        for (int i = 0; i < (objectsCount / 2); i++)
+        {
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes("Hello, World!"));
+            await this.ObjectStorage.PutObjectAsync(bucketName, $"fake-path-1/object-{i}", MediaTypeNames.Text.Plain, stream);
+        }
+        for (int i = 0; i < (objectsCount / 2); i++)
+        {
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes("Hello, World!"));
+            await this.ObjectStorage.PutObjectAsync(bucketName, $"fake-path-2/object-{i}", MediaTypeNames.Text.Plain, stream);
+        }
+
+        //act
+        var objects = await this.ObjectStorage.ListObjectsAsync(bucketName).ToListAsync();
+
+        //assert
+        objects.Should().NotBeNullOrEmpty();
+        objects.Should().HaveCount(objectsCount);
+    }
+
+    [Fact]
+    public async Task GetObject_Should_Work()
+    {
+        //arrange
+        var bucketName = "test-bucket";
+        var name = "test-object";
+        var contentType = MediaTypeNames.Text.Plain;
+        var tags = new Dictionary<string, string> { { "tag-1", "value 1" } };
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes("Hello, World!"));
+        await this.ObjectStorage.CreateBucketAsync(bucketName);
+        await this.ObjectStorage.PutObjectAsync(bucketName, name, MediaTypeNames.Text.Plain, stream, null, tags);
+
+        //act
+        var result = await this.ObjectStorage.GetObjectAsync(bucketName, name);
+
+        //assert
+        result.BucketName.Should().Be(bucketName);
+        result.Name.Should().Be(name);
+        result.ContentType.Should().Be(contentType);
+        result.Size.Should().Be((ulong)stream.Length);
+        result.Tags.Should().BeEquivalentTo(tags);
+    }
+
+    [Fact]
+    public async Task ReadObject_Should_Work()
+    {
+        //arrange
+        var bucketName = "test-bucket";
+        var name = "test-object";
+        var plainTextInput = "Hello, World!";
+        using var inputStream = new MemoryStream(Encoding.UTF8.GetBytes(plainTextInput));
+        await this.ObjectStorage.CreateBucketAsync(bucketName);
+        await this.ObjectStorage.PutObjectAsync(bucketName, name, MediaTypeNames.Text.Plain, inputStream);
+        using var outputStream = new MemoryStream();
+
+        //act
+        await this.ObjectStorage.ReadObjectAsync(bucketName, name, outputStream);
+        await outputStream.FlushAsync();
+        outputStream.Position = 0;
+        var plainTextOutput = Encoding.UTF8.GetString(outputStream.ToArray());
+
+        //assert
+        plainTextOutput.Should().Be(plainTextInput);
+    }
+
+    [Fact]
+    public async Task SetObjectTags_Should_Work()
+    {
+        //arrange
+        var bucketName = "test-bucket";
+        var name = "test-object";
+        var tags = new Dictionary<string, string> { { "tag-1", "value 1" } };
+        await this.ObjectStorage.CreateBucketAsync(bucketName);
+        await this.ObjectStorage.PutObjectAsync(bucketName, name, MediaTypeNames.Text.Plain, new MemoryStream(Encoding.UTF8.GetBytes("Hello, World!")));
+
+        //act
+        await this.ObjectStorage.SetObjectTagsAsync(bucketName, name, tags);
+        var result = await this.ObjectStorage.GetObjectAsync(bucketName, name);
+
+        //assert
+        result.Should().NotBeNull();
+        result.Tags.Should().BeEquivalentTo(tags);
+    }
+
+    [Fact]
+    public async Task RemoveObjectTags_Should_Work()
+    {
+        //arrange
+        var bucketName = "test-bucket";
+        var name = "test-object";
+        var tags = new Dictionary<string, string> { { "tag-1", "value 1" } };
+        await this.ObjectStorage.CreateBucketAsync(bucketName);
+        await this.ObjectStorage.PutObjectAsync(bucketName, name, MediaTypeNames.Text.Plain, new MemoryStream(Encoding.UTF8.GetBytes("Hello, World!")), null, tags);
+
+        //act
+        await this.ObjectStorage.RemoveObjectTagsAsync(bucketName, name);
+        var result = await this.ObjectStorage.GetObjectAsync(bucketName, name);
+
+        //assert
+        result.Should().NotBeNull();
+        result.Tags.Should().BeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task RemoveObject_Should_Work()
+    {
+        //arrange
+        var bucketName = "test-bucket";
+        var name = "test-object";
+        await this.ObjectStorage.CreateBucketAsync(bucketName);
+        await this.ObjectStorage.PutObjectAsync(bucketName, name, MediaTypeNames.Text.Plain, new MemoryStream(Encoding.UTF8.GetBytes("Hello, World!")));
+
+        //act
+        await this.ObjectStorage.RemoveObjectAsync(bucketName, name);
+        var objectExists = await this.ObjectStorage.ContainsObjectAsync(bucketName, name);
+
+        //assert
+        objectExists.Should().BeFalse();
     }
 
 }

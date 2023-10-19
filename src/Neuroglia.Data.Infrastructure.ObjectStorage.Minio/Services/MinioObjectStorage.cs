@@ -105,8 +105,51 @@ public class MinioObjectStorage
     public virtual Task RemoveBucketAsync(string name, CancellationToken cancellationToken = default) => this.MinioClient.RemoveBucketAsync(new RemoveBucketArgs().WithBucket(name), cancellationToken);
 
     /// <inheritdoc/>
-    public async IAsyncEnumerable<IObjectDescriptor> ListObjectsAsync(string bucketName, string? prefix = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    public virtual async Task<IObjectDescriptor> PutObjectAsync(string bucketName, string name, string contentType, Stream stream, ulong? size = null, IDictionary<string, string>? tags = null, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(bucketName)) throw new ArgumentNullException(nameof(bucketName));
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        if (string.IsNullOrWhiteSpace(contentType)) throw new ArgumentNullException(nameof(contentType));
+        if (stream == null) throw new ArgumentNullException(nameof(stream));
+        if (!size.HasValue) size = (ulong)stream.Length;
+
+        try
+        {
+            var args = new PutObjectArgs()
+                .WithBucket(bucketName)
+                .WithObject(name)
+                .WithContentType(contentType)
+                .WithStreamData(stream)
+                .WithObjectSize(stream.Length);
+            var obj = await this.MinioClient.PutObjectAsync(args, cancellationToken).ConfigureAwait(false);
+            if (tags != null) await this.SetObjectTagsAsync(bucketName, name, tags, cancellationToken).ConfigureAwait(false);
+            return new ObjectDescriptor(DateTimeOffset.Now, bucketName, name, contentType, size.Value, obj.Etag, tags);
+        }
+        catch (MinioException ex)
+        {
+            this.Logger.LogError("An error occured while putting the object with name '{object}' in bucket with name '{bucket}': {ex}", name, bucketName, ex);
+            throw;
+        }
+    }
+
+    /// <inheritdoc/>
+    public virtual async Task<bool> ContainsObjectAsync(string bucketName, string name, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var obj = await this.MinioClient.StatObjectAsync(new StatObjectArgs().WithBucket(bucketName).WithObject(name)).ConfigureAwait(false);
+            return obj != null;
+        }
+        catch(ObjectNotFoundException)
+        {
+            return false;
+        }
+    }
+
+    /// <inheritdoc/>
+    public virtual async IAsyncEnumerable<IObjectDescriptor> ListObjectsAsync(string bucketName, string? prefix = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(bucketName)) throw new ArgumentNullException(nameof(bucketName));
         IAsyncEnumerable<Item> items;
         try
         {
@@ -124,35 +167,42 @@ public class MinioObjectStorage
         await foreach (var item in items.Where(i => !i.IsDir))
         {
             var tagging = await this.MinioClient.GetObjectTagsAsync(new GetObjectTagsArgs().WithBucket(bucketName).WithObject(item.Key), cancellationToken).ConfigureAwait(false);
-            var objectInfo = await this.MinioClient.StatObjectAsync(new StatObjectArgs(), cancellationToken).ConfigureAwait(false);
+            var objectInfo = await this.MinioClient.StatObjectAsync(new StatObjectArgs().WithBucket(bucketName).WithObject(item.Key), cancellationToken).ConfigureAwait(false);
             yield return new ObjectDescriptor(item.LastModifiedDateTime, bucketName, item.Key, objectInfo.ContentType, item.Size, item.ETag, tagging.Tags);
         }
     }
 
     /// <inheritdoc/>
-    public virtual async Task<IObjectDescriptor> PutObjectAsync(string bucketName, string name, string contentType, Stream stream, IDictionary<string, string>? tags = null, CancellationToken cancellationToken = default)
+    public virtual async Task<IObjectDescriptor> GetObjectAsync(string bucketName, string name, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(bucketName)) throw new ArgumentNullException(nameof(bucketName));
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-        if (string.IsNullOrWhiteSpace(contentType)) throw new ArgumentNullException(nameof(contentType));
-        if (stream == null) throw new ArgumentNullException(nameof(stream));
 
         try
         {
-            var args = new PutObjectArgs()
-                .WithBucket(bucketName)
-                .WithObject(name)
-                .WithContentType(contentType)
-                .WithStreamData(stream);
-            var obj = await this.MinioClient.PutObjectAsync(args, cancellationToken).ConfigureAwait(false);
-            if (tags != null) await this.SetBucketTagsAsync(name, tags, cancellationToken).ConfigureAwait(false);
-            return new ObjectDescriptor(DateTimeOffset.Now, bucketName, name, contentType, (ulong)obj.Size, obj.Etag, tags);
+            var objectInfo = await this.MinioClient.StatObjectAsync(new StatObjectArgs().WithBucket(bucketName).WithObject(name), cancellationToken).ConfigureAwait(false);
+            var tagging = await this.MinioClient.GetObjectTagsAsync(new GetObjectTagsArgs().WithBucket(bucketName).WithObject(name), cancellationToken).ConfigureAwait(false);
+            return new ObjectDescriptor(objectInfo.LastModified, bucketName, name, objectInfo.ContentType, (ulong)objectInfo.Size, objectInfo.ETag, tagging?.Tags);
         }
         catch (MinioException ex)
         {
-            this.Logger.LogError("An error occured while putting the object with name '{object}' in bucket with name '{bucket}': {ex}", name, bucketName, ex);
+            this.Logger.LogError("An error occured while creating the bucket with name '{bucket}': {ex}", name, ex);
             throw;
         }
+    }
+
+    /// <inheritdoc/>
+    public virtual async Task ReadObjectAsync(string bucketName, string name, Stream stream, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(bucketName)) throw new ArgumentNullException(nameof(bucketName));
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+
+        var obj = await this.GetObjectAsync(bucketName, name, cancellationToken).ConfigureAwait(false);
+        var args = new GetObjectArgs()
+            .WithObject(name)
+            .WithBucket(bucketName)
+            .WithCallbackStream((source, token) => source.CopyToAsync(stream, (int)obj.Size, token));
+        await this.MinioClient.GetObjectAsync(args, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
