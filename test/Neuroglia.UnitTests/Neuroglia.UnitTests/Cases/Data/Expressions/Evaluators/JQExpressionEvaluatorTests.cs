@@ -71,7 +71,7 @@ public class JQExpressionEvaluatorTests
     public async Task Evaluate_StringExpression_WithArrayInput_Should_Work()
     {
         //arrange
-        var input = new User[] { new() { FirstName = "John", LastName = "Doe" }, new() { FirstName = "Jane", LastName = "Doe" } };
+        var input = new UserStateV1[] { new() { FirstName = "John", LastName = "Doe" }, new() { FirstName = "Jane", LastName = "Doe" } };
         var expression = "${ . }";
 
         //act
@@ -110,7 +110,7 @@ public class JQExpressionEvaluatorTests
         var expression = new { firstName = "${ .firstName }", lastName = "${ .lastName }" };
 
         //act
-        var result = (await ExpressionEvaluator.EvaluateAsync<User>(expression, input))!;
+        var result = (await ExpressionEvaluator.EvaluateAsync<UserStateV1>(expression, input))!;
 
         //assert
         result.FirstName.Should().Be(firstName);

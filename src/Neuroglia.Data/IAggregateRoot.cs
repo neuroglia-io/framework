@@ -26,6 +26,11 @@ public interface IAggregateRoot
     IReadOnlyList<IDomainEvent> PendingEvents { get; }
 
     /// <summary>
+    /// Gets the <see cref="IAggregateRoot"/>'s state
+    /// </summary>
+    IAggregateState State { get; }
+
+    /// <summary>
     /// Clears all pending <see cref="IDomainEvent"/>
     /// </summary>
     void ClearPendingEvents();
@@ -41,6 +46,27 @@ public interface IAggregateRoot<TKey>
     where TKey : IEquatable<TKey>
 {
 
+    /// <summary>
+    /// Gets the <see cref="IAggregateRoot"/>'s state
+    /// </summary>
+    new IAggregateState<TKey> State { get; }
 
+}
+
+/// <summary>
+/// Defines the fundamentals of an aggregate root
+/// </summary>
+/// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="IAggregateRoot"/></typeparam>
+/// <typeparam name="TState">The type of the <see cref="IAggregateRoot"/>'s state</typeparam>
+public interface IAggregateRoot<TKey, TState>
+    : IAggregateRoot<TKey>
+    where TKey : IEquatable<TKey>
+    where TState : class, IAggregateState<TKey>, new()
+{
+
+    /// <summary>
+    /// Gets the <see cref="IAggregateRoot"/>'s state
+    /// </summary>
+    new TState State { get; }
 
 }

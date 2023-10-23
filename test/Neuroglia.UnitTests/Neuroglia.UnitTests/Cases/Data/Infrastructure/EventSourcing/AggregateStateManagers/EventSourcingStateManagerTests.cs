@@ -12,27 +12,28 @@
 // limitations under the License.
 
 using Microsoft.Extensions.DependencyInjection;
-using Neuroglia.Data.Infrastructure.EventSourcing;
+using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
 using Neuroglia.Data.Infrastructure.EventSourcing.Memory;
-using Neuroglia.Mediation;
+using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 using Neuroglia.Serialization;
 
-namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.Repositories;
+namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing.AggregateStateManagers;
 
-public class EventSourcingRepositoryTests
-    : RepositoryTestsBase
+public class EventSourcingStateManagerTests
+    : AggregateStateManagerTestsBase
 {
 
-    public EventSourcingRepositoryTests() : base(BuildServices()) { }
+    public EventSourcingStateManagerTests() : base(BuildServices()) { }
 
     static IServiceCollection BuildServices()
     {
-        var serviceCollection = new ServiceCollection();
-        serviceCollection.AddMediator();
-        serviceCollection.AddJsonSerializer();
-        serviceCollection.AddMemoryCacheEventStore();
-        serviceCollection.AddEventSourcingRepository<User, string>();
-        return serviceCollection;
+        var services = new ServiceCollection();
+        services.AddLogging();
+        services.AddJsonSerializer();
+        services.AddMemoryCacheEventStore();
+        services.Configure<StateManagementOptions<User, string>>(options => options.SnapshotFrequency = 0);
+        services.AddSingleton<IAggregateStateManager<User, string>, EventSourcingStateManager<User, string>>();
+        return services;
     }
 
 }

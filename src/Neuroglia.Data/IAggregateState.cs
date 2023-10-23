@@ -14,29 +14,22 @@
 namespace Neuroglia.Data;
 
 /// <summary>
-/// Defines the fundamentals of an entity
+/// Defines the fundamentals of an <see cref="IAggregateRoot"/>'s state
 /// </summary>
-public interface IEntity
-    : IIdentifiable
+public interface IAggregateState
+    : IEntity, IVersionedState
 {
 
-    /// <summary>
-    /// Gets the date and time at which the entity has been created
-    /// </summary>
-    DateTimeOffset CreatedAt { get; }
 
-    /// <summary>
-    /// Gets the date and time, if any, at which the entity has last been modified
-    /// </summary>
-    DateTimeOffset? LastModified { get; }
 
 }
 
 /// <summary>
-/// Defines the fundamentals of an entity
+/// Defines the fundamentals of an <see cref="IAggregateRoot"/>'s state
 /// </summary>
-public interface IEntity<TKey>
-    : IEntity, IIdentifiable<TKey>
+/// <typeparam name="TKey">The type of key used to identify the <see cref="IAggregateRoot"/> the state belongs to</typeparam>
+public interface IAggregateState<TKey>
+    : IAggregateState, IIdentifiable<TKey>
     where TKey : IEquatable<TKey>
 {
 
