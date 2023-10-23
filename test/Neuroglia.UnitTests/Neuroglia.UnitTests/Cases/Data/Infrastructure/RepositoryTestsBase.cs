@@ -53,9 +53,9 @@ public abstract class RepositoryTestsBase
         //assert
         result.Should().NotBeNull();
         result.Id.Should().Be(user.Id);
-        result.FirstName.Should().Be(user.FirstName);
-        result.LastName.Should().Be(user.LastName);
-        result.Email.Should().Be(user.Email);
+        result.State.FirstName.Should().Be(user.State.FirstName);
+        result.State.LastName.Should().Be(user.State.LastName);
+        result.State.Email.Should().Be(user.State.Email);
     }
 
     [Fact, Priority(2)]
@@ -84,9 +84,9 @@ public abstract class RepositoryTestsBase
 
         //assert
         result.Should().NotBeNull();
-        result!.FirstName.Should().Be(user.FirstName);
-        result.LastName.Should().Be(user.LastName);
-        result.Email?.Should().Be(user.Email);
+        result!.State.FirstName.Should().Be(user.State.FirstName);
+        result.State.LastName.Should().Be(user.State.LastName);
+        result.State.Email?.Should().Be(user.State.Email);
     }
 
     [Fact, Priority(4)]
@@ -103,7 +103,7 @@ public abstract class RepositoryTestsBase
 
         //assert
         result.Should().NotBeNull();
-        result.EmailVerified.Should().BeTrue();
+        result.State.EmailVerified.Should().BeTrue();
     }
 
     [Fact, Priority(5)]

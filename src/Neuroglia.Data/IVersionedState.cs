@@ -20,7 +20,7 @@ public interface IVersionedState
 {
 
     /// <summary>
-    /// Gets the object's state version
+    /// Gets/sets the object's state version number
     /// </summary>
     ulong StateVersion { get; set; }
 

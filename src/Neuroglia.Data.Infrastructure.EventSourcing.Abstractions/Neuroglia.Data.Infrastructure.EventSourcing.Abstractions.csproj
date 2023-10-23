@@ -4,14 +4,15 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<RootNamespace>$(MSBuildProjectName.Replace(" ", "_").Replace(".Abstractions", ""))</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<Company>Neuroglia SRL</Company>
     <Copyright>Copyright © 2021-Present Neuroglia SRL. All rights reserved.</Copyright>
     <Authors>Neuroglia SRL</Authors>
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-	<PackageTags>neuroglia framework data infrastructure event-sourcing es</PackageTags>
-    <Version>3.2.0</Version>
+	<PackageTags>neuroglia framework data infrastructure event-sourcing es abstractions</PackageTags>
+    <Version>3.1.1</Version>
     <NeutralLanguage>en</NeutralLanguage>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -28,7 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Neuroglia.Data.Infrastructure.EventSourcing.Abstractions\Neuroglia.Data.Infrastructure.EventSourcing.Abstractions.csproj" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Data.Infrastructure.Abstractions\Neuroglia.Data.Infrastructure.Abstractions.csproj" />
+    <ProjectReference Include="..\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
+    <ProjectReference Include="..\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.csproj" />
   </ItemGroup>
 
 </Project>

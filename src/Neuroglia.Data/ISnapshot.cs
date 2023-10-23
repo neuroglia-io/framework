@@ -11,23 +11,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Data.Infrastructure.EventSourcing;
+namespace Neuroglia.Data;
 
 /// <summary>
-/// Defines the fundamentals of an <see cref="IAggregateRoot"/> snapshot
+/// Defines the fundamentals of a point-in-time copy of an object's state
 /// </summary>
 public interface ISnapshot
 {
 
     /// <summary>
-    /// Gets the version of the <see cref="ISnapshot"/>'s <see cref="IAggregateRoot"/>
+    /// Gets the version of the <see cref="ISnapshot"/>'s state
     /// </summary>
-    ulong Version { get; }
+    ulong StateVersion { get; }
 
     /// <summary>
-    /// Gets the <see cref="ISnapshot"/>'s <see cref="IAggregateRoot"/>
+    /// Gets the <see cref="ISnapshot"/>'s state
     /// </summary>
-    IAggregateRoot Data { get; }
+    object State { get; }
 
     /// <summary>
     /// Gets the <see cref="ISnapshot"/>'s metadata, if any
@@ -37,17 +37,17 @@ public interface ISnapshot
 }
 
 /// <summary>
-/// Defines the fundamentals of an <see cref="IAggregateRoot"/> snapshot
+/// Defines the fundamentals of a point-in-time copy of an object's state
 /// </summary>
-/// <typeparam name="TAggregate">The type of the snapshot <see cref="IAggregateRoot"/></typeparam>
-public interface ISnapshot<TAggregate>
+/// <typeparam name="TState">The type of the snapshot <see cref="IAggregateRoot"/></typeparam>
+public interface ISnapshot<TState>
     : ISnapshot
-    where TAggregate : class, IAggregateRoot
+    where TState : class
 {
 
     /// <summary>
-    /// Gets the <see cref="ISnapshot"/>'s <see cref="IAggregateRoot"/>
+    /// Gets the <see cref="ISnapshot"/>'s state
     /// </summary>
-    new TAggregate Data { get; }
+    new TState State { get; }
 
 }
