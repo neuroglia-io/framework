@@ -116,7 +116,9 @@ public class EventAggregator<TState, TEvent>
     {
         if (string.IsNullOrWhiteSpace(reducerMethodName)) reducerMethodName = DefaultReducerMethodName;
         this.StateFactory = stateFactory ?? DefaultStateFactory;
-        this.Reducers = typeof(TState).GetMethods(BindingFlags.Default | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+        var aggregateRootType = typeof(TState).GetGenericType(typeof(IAggregateRoot<,>));
+        var stateType = aggregateRootType == null ? typeof(TState) : aggregateRootType.GetGenericArguments()[1];
+        this.Reducers = stateType.GetMethods(BindingFlags.Default | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
             .Where(m => m.Name == reducerMethodName && m.GetParameters().Length == 1 && typeof(TEvent).IsAssignableFrom(m.GetParameters()[0].ParameterType))
             .ToDictionary(m => m.GetParameters().First().ParameterType, this.CreateReducer);
     }
@@ -134,7 +136,7 @@ public class EventAggregator<TState, TEvent>
     /// <inheritdoc/>
     public virtual TState Aggregate(IEnumerable<TEvent> events, TState? state = null)
     {
-        state ??= (TState)this.StateFactory.Invoke();
+        state ??= this.StateFactory.Invoke();
         foreach (var e in events)
         {
             if (e == null || !this.Reducers.TryGetValue(e.GetType(), out var reducer) || reducer == null) continue;

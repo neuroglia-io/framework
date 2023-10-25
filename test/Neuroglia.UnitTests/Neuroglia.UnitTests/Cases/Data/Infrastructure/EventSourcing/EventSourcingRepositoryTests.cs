@@ -18,6 +18,7 @@ using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 using Neuroglia.Mapping;
 using Neuroglia.Mediation;
 using Neuroglia.UnitTests.Data.Events;
+using Neuroglia.Serialization;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing;
 
@@ -29,37 +30,38 @@ public class EventSourcingRepositoryTests
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddMediator();
         serviceCollection.AddMapper(typeof(EventSourcingRepositoryTests).Assembly);
-        serviceCollection.AddMemoryCacheEventStore(_ => { });
+        serviceCollection.AddJsonSerializer();
+        serviceCollection.AddMemoryCacheEventStore();
         serviceCollection.AddEventSourcingRepository<User, string>();
-        ServiceScope = serviceCollection.BuildServiceProvider().CreateScope();
+        this.ServiceScope = serviceCollection.BuildServiceProvider().CreateScope();
     }
 
     protected IServiceScope ServiceScope { get; }
 
-    protected IServiceProvider ServiceProvider => ServiceScope.ServiceProvider;
+    protected IServiceProvider ServiceProvider => this.ServiceScope.ServiceProvider;
 
-    protected IEventStore EventStore => ServiceProvider.GetRequiredService<IEventStore>();
+    protected IEventStore EventStore => this.ServiceProvider.GetRequiredService<IEventStore>();
 
-    protected IEventMigrationManager MigrationManager => ServiceProvider.GetRequiredService<IEventMigrationManager>();
+    protected IEventMigrationManager MigrationManager => this.ServiceProvider.GetRequiredService<IEventMigrationManager>();
 
-    protected EventSourcingRepository<User, string> Repository => ServiceProvider.GetRequiredService<EventSourcingRepository<User, string>>();
+    protected EventSourcingRepository<User, string> Repository => this.ServiceProvider.GetRequiredService<EventSourcingRepository<User, string>>();
 
     [Fact]
     public async Task Migrate_UsingSingleMigration_Should_Work()
     {
         //arrange
         var user = User.Create();
-        await Repository.AddAsync(user);
-        await Repository.SaveChangesAsync();
-        MigrationManager.RegisterEventMigration(typeof(UserCreatedEvent), (provider, e) => provider.GetRequiredService<IMapper>().Map<UserCreatedEventV2>(e));
+        await this.Repository.AddAsync(user);
+        await this.Repository.SaveChangesAsync();
+        this.MigrationManager.RegisterEventMigration(typeof(UserCreatedEvent), (provider, e) => provider.GetRequiredService<IMapper>().Map<UserCreatedEventV2>(e));
 
         //act
-        var result = await Repository.GetAsync(user.Id);
+        var result = await this.Repository.GetAsync(user.Id);
 
         //assert
         result.Should().NotBeNull();
-        result!.IsV1.Should().BeFalse();
-        result.IsV2.Should().BeTrue();
+        result!.State.IsV1.Should().BeFalse();
+        result.State.IsV2.Should().BeTrue();
     }
 
     [Fact]
@@ -67,19 +69,19 @@ public class EventSourcingRepositoryTests
     {
         //arrange
         var user = User.Create();
-        await Repository.AddAsync(user);
-        await Repository.SaveChangesAsync();
-        MigrationManager.RegisterEventMigration(typeof(UserCreatedEvent), (provider, e) => provider.GetRequiredService<IMapper>().Map<UserCreatedEventV2>(e));
-        MigrationManager.RegisterEventMigration(typeof(UserCreatedEventV2), (provider, e) => provider.GetRequiredService<IMapper>().Map<UserCreatedEventV3>(e));
+        await this.Repository.AddAsync(user);
+        await this.Repository.SaveChangesAsync();
+        this.MigrationManager.RegisterEventMigration(typeof(UserCreatedEvent), (provider, e) => provider.GetRequiredService<IMapper>().Map<UserCreatedEventV2>(e));
+        this.MigrationManager.RegisterEventMigration(typeof(UserCreatedEventV2), (provider, e) => provider.GetRequiredService<IMapper>().Map<UserCreatedEventV3>(e));
 
         //act
-        var result = await Repository.GetAsync(user.Id);
+        var result = await this.Repository.GetAsync(user.Id);
 
         //assert
         result.Should().NotBeNull();
-        result!.IsV1.Should().BeFalse();
-        result.IsV2.Should().BeFalse();
-        result.IsV3.Should().BeTrue();
+        result!.State.IsV1.Should().BeFalse();
+        result.State.IsV2.Should().BeFalse();
+        result.State.IsV3.Should().BeTrue();
     }
 
 }

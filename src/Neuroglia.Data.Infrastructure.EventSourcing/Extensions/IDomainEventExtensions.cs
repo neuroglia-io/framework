@@ -30,15 +30,4 @@ public static class IDomainEventExtensions
         return new EventDescriptor(e.GetTypeName(), e);
     }
 
-    /// <summary>
-    /// Gets the <see cref="IDomainEvent"/>'s type name
-    /// </summary>
-    /// <param name="e">The <see cref="IDomainEvent"/> to get the type name of</param>
-    /// <returns>The <see cref="IDomainEvent"/>'s type name</returns>
-    public static string GetTypeName(this IDomainEvent e)
-    {
-        if (e == null) throw new ArgumentNullException(nameof(e));
-        return e.GetType().Name.Replace("DomainEvent", "").SplitCamelCase().ToKebabCase();
-    }
-
 }

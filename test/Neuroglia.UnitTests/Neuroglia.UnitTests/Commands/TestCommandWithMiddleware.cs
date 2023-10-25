@@ -44,8 +44,8 @@ public class TestPipelineMiddleware
     public async Task<IOperationResult<Person>> HandleAsync(TestCommandWithMiddleware request, RequestHandlerDelegate<IOperationResult<Person>> next, CancellationToken cancellationToken = default)
     {
         var result = (await next());
-        result.Data!.FirstName = $"Updated {request.Person.FirstName}";
-        result.Data.LastName = $"Updated {request.Person.LastName}";
+        result.Data!.State.FirstName = $"Updated {request.Person.State.FirstName}";
+        result.Data.State.LastName = $"Updated {request.Person.State.LastName}";
         return result;
     }
 

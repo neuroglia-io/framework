@@ -11,17 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.ComponentModel;
-using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
-
 namespace Neuroglia.Data;
 
 /// <summary>
 /// Defines the fundamentals of an entity
 /// </summary>
 public interface IEntity
-    : IIdentifiable, IVersionedState
+    : IIdentifiable
 {
 
     /// <summary>

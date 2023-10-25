@@ -33,7 +33,7 @@ public abstract class QueryableRepositoryTestsBase
 
         //assert
         this.Repository.AsQueryable()
-            .Where(u => u.FirstName == "John" && u.LastName == "Doe")
+            .Where(u => u.State.FirstName == "John" && u.State.LastName == "Doe")
             .ToList()
             .Should()
             .NotBeNullOrEmpty();

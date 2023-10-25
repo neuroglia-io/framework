@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Data.Infrastructure.EventSourcing.Memory;
 using Neuroglia.Mediation;
+using Neuroglia.Serialization;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.Repositories;
 
@@ -28,7 +29,8 @@ public class EventSourcingRepositoryTests
     {
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddMediator();
-        serviceCollection.AddMemoryCacheEventStore(_ => { });
+        serviceCollection.AddJsonSerializer();
+        serviceCollection.AddMemoryCacheEventStore();
         serviceCollection.AddEventSourcingRepository<User, string>();
         return serviceCollection;
     }

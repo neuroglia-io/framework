@@ -17,9 +17,11 @@ namespace Neuroglia.Data;
 /// Represents the default implementation of the <see cref="IAggregateRoot"/> interface
 /// </summary>
 /// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="IAggregateRoot"/></typeparam>
-public abstract class AggregateRoot<TKey>
-    : Entity<TKey>, IAggregateRoot<TKey>
+/// <typeparam name="TState">The type of the <see cref="IAggregateRoot"/>'s state</typeparam>
+public abstract class AggregateRoot<TKey, TState>
+    : IEntity<TKey>, IAggregateRoot<TKey, TState>
     where TKey : IEquatable<TKey>
+    where TState : class, IAggregateState<TKey>, new()
 {
 
     /// <summary>
@@ -27,19 +29,27 @@ public abstract class AggregateRoot<TKey>
     /// </summary>
     protected AggregateRoot() { }
 
-    /// <summary>
-    /// Initializes a new <see cref="AggregateRoot{TKey}"/>
-    /// </summary>
-    /// <param name="id">The <see cref="AggregateRoot{TKey}"/>'s unique identifier</param>
-    protected AggregateRoot(TKey id)
-        : base(id)
-    {
+    /// <inheritdoc/>
+    public virtual TKey Id => this.State.Id;
 
-    }
+    object IIdentifiable.Id => this.Id;
+
+    /// <inheritdoc/>
+    public virtual DateTimeOffset CreatedAt => this.State.CreatedAt;
+
+    /// <inheritdoc/>
+    public virtual DateTimeOffset? LastModified => this.State.LastModified;
 
     private readonly List<IDomainEvent> _pendingEvents = new();
     /// <inheritdoc/>
     public virtual IReadOnlyList<IDomainEvent> PendingEvents => this._pendingEvents.AsReadOnly();
+
+    /// <inheritdoc/>
+    public virtual TState State { get; protected set; } = new();
+
+    IAggregateState<TKey> IAggregateRoot<TKey>.State => this.State;
+
+    IAggregateState IAggregateRoot.State => this.State;
 
     /// <summary>
     /// Registers the specified <see cref="IDomainEvent"/>
@@ -56,9 +66,9 @@ public abstract class AggregateRoot<TKey>
     }
 
     /// <inheritdoc/>
-    public virtual void ClearPendingEvents()
-    {
-        this._pendingEvents.Clear();
-    }
+    public virtual void ClearPendingEvents() => this._pendingEvents.Clear();
+
+    /// <inheritdoc/>
+    public bool Equals(IIdentifiable<TKey>? other) => other?.Id.Equals(this.Id) == true;
 
 }

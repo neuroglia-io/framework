@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data", "src\Neuro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.Abstractions", "src\Neuroglia.Data.Infrastructure.Abstractions\Neuroglia.Data.Infrastructure.Abstractions.csproj", "{E24859DF-29A1-4EF1-B04E-3B17F44B0DCF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing", "src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj", "{A632C6B5-81F2-48C9-8171-2EEE35277100}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing.Abstractions", "src\Neuroglia.Data.Infrastructure.EventSourcing.Abstractions\Neuroglia.Data.Infrastructure.EventSourcing.Abstractions.csproj", "{A632C6B5-81F2-48C9-8171-2EEE35277100}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mediation", "src\Neuroglia.Mediation\Neuroglia.Mediation.csproj", "{717A609C-9070-48B2-9805-DBEE63ADCE5B}"
 EndProject
@@ -74,11 +74,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "assets", "assets", "{A1CAF8
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.Infrastructure.ObjectStorage.Abstractions", "src\Neuroglia.Data.Infrastructure.ObjectStorage.Abstractions\Neuroglia.Data.Infrastructure.ObjectStorage.Abstractions.csproj", "{F3F2841C-E22C-4011-A0F5-CF08DE3DE857}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.ObjectStorage.Abstractions", "src\Neuroglia.Data.Infrastructure.ObjectStorage.Abstractions\Neuroglia.Data.Infrastructure.ObjectStorage.Abstractions.csproj", "{F3F2841C-E22C-4011-A0F5-CF08DE3DE857}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.ObjectStorage.Minio", "src\Neuroglia.Data.Infrastructure.ObjectStorage.Minio\Neuroglia.Data.Infrastructure.ObjectStorage.Minio.csproj", "{74370890-7E61-473E-9E84-DDCBB0A8F0D1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.EventSourcing", "src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj", "{14AAAC6A-A70B-4004-8067-233D8E6292EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.Infrastructure.EventSourcing", "src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj", "{14AAAC6A-A70B-4004-8067-233D8E6292EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Reactive", "src\Neuroglia.Reactive\Neuroglia.Reactive.csproj", "{DA5EC237-E502-4D54-A963-28C1B1F8DA78}"
 EndProject

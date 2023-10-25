@@ -11,14 +11,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Neuroglia.Data.Infrastructure.EventSourcing.Services;
-
 namespace Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
 
 /// <summary>
-/// Represents the options used to configure an <see cref="EventSourcingRepository{TAggregate, TKey}"/>
+/// Represents the options used to configure state management for the specified <see cref="IAggregateRoot"/> type
 /// </summary>
-public class EventSourcingRepositoryOptions
+public class StateManagementOptions
 {
 
     /// <summary>
@@ -32,28 +30,26 @@ public class EventSourcingRepositoryOptions
     public virtual ulong? SnapshotFrequency { get; set; } = DefaultSnapshotFrequency;
 
     /// <summary>
-    /// Gets/sets the type of <see cref="IEventAggregatorFactory"/> to use to create <see cref="IEventAggregator"/>s
+    /// Gets/sets the <see cref="Func{T, TResult}"/> to use to create new instances of the <see cref="IAggregateRoot"/>s to manage the state of
     /// </summary>
-    public Type AggregatorFactoryType { get; set; } = typeof(EventAggregatorFactory);
-
-    /// <summary>
-    /// Gets/sets the type of <see cref="IEventMigrationManager"/> to use to migrate events
-    /// </summary>
-    public Type MigrationManagerType { get; set; } = typeof(EventMigrationManager);
+    public virtual Func<IServiceProvider, IAggregateRoot>? AggregateFactory { get; set; }
 
 }
 
 /// <summary>
-/// Represents the options used to configure an <see cref="EventSourcingRepository{TAggregate, TKey}"/>
+/// Represents the options used to configure state management for the specified <see cref="IAggregateRoot"/> type
 /// </summary>
-/// <typeparam name="TAggregate">The type of <see cref="IAggregateRoot"/> managed by the <see cref="EventSourcingRepository{TAggregate, TKey}"/> to configure</typeparam>
-/// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="IAggregateRoot"/> managed by the <see cref="EventSourcingRepository{TAggregate, TKey}"/> to configure</typeparam>
-public class EventSourcingRepositoryOptions<TAggregate, TKey>
-    : EventSourcingRepositoryOptions
+/// <typeparam name="TAggregate">The type of <see cref="IAggregateRoot{TKey}"/> to configure state management for</typeparam>
+/// <typeparam name="TKey">The type of key used to identify the <see cref="IAggregateRoot{TKey}"/> to configure state management for</typeparam>
+public class StateManagementOptions<TAggregate, TKey>
+    : StateManagementOptions
     where TAggregate : class, IAggregateRoot<TKey>
     where TKey : IEquatable<TKey>
 {
 
-
+    /// <summary>
+    /// Gets/sets the <see cref="Func{T, TResult}"/> to use to create new instances of the <see cref="IAggregateRoot"/>s to manage the state of
+    /// </summary>
+    public virtual new Func<IServiceProvider, TAggregate>? AggregateFactory { get; set; } 
 
 }

@@ -64,8 +64,8 @@ public class MediatorTests
         result.Should().NotBeNull();
         result.Status.Should().Be((int)HttpStatusCode.OK);
         result.Data.Should().NotBeNull();
-        result.Data!.FirstName.Should().Be(firstName);
-        result.Data.LastName.Should().Be(lastName);
+        result.Data!.State.FirstName.Should().Be(firstName);
+        result.Data.State.LastName.Should().Be(lastName);
     }
 
     [Fact]
@@ -104,8 +104,8 @@ public class MediatorTests
         result.Should().NotBeNull();
         result.Status.Should().Be((int)HttpStatusCode.OK);
         result.Data.Should().NotBeNull();
-        result.Data!.FirstName.Should().Be($"Updated {firstName}");
-        result.Data.LastName.Should().Be($"Updated {lastName}");
+        result.Data!.State.FirstName.Should().Be($"Updated {firstName}");
+        result.Data.State.LastName.Should().Be($"Updated {lastName}");
     }
 
     [Fact]
@@ -182,8 +182,8 @@ public class MediatorTests
         result.Should().NotBeNull();
         result.Status.Should().Be((int)HttpStatusCode.OK);
         result.Data.Should().NotBeNull();
-        result.Data!.FirstName.Should().Be($"Updated {firstName}");
-        result.Data.LastName.Should().Be($"Updated {lastName}");
+        result.Data!.State.FirstName.Should().Be($"Updated {firstName}");
+        result.Data.State.LastName.Should().Be($"Updated {lastName}");
     }
 
     [Fact]

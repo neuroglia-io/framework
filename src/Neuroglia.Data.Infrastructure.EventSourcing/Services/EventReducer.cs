@@ -44,7 +44,7 @@ public class EventReducer<TEvent, TState>
     {
         if (e == null) throw new ArgumentNullException(nameof(e));
         if (state == null) throw new ArgumentNullException(nameof(state));
-        this.ReducerMethod.Invoke(state, new object[] { e });
+        this.ReducerMethod.Invoke(state is IAggregateRoot aggregate ? aggregate.State : state, new object[] { e });
         return state;
     }
 
