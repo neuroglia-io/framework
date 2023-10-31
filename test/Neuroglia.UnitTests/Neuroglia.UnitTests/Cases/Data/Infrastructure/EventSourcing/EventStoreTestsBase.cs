@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Esprima;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Neuroglia.Data.Infrastructure.EventSourcing;
@@ -134,7 +135,7 @@ public abstract class EventStoreTestsBase
     }
 
     [Fact, Priority(7)]
-    public async Task Read_Forwards_FromStart_Should_Work()
+    public async Task Read_FromStream_Forwards_FromStart_Should_Work()
     {
         //arrange
         var streamId = "fake-stream";
@@ -152,10 +153,11 @@ public abstract class EventStoreTestsBase
 
         storedEvents.Last().Type.Should().Be(events.Last().Type);
         storedEvents.Last().Data.Should().BeEquivalentTo(events.Last().Data);
+        storedEvents.Should().BeInAscendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
     }
 
     [Fact, Priority(8)]
-    public async Task Read_Forwards_FromEnd_Should_BeEmpty()
+    public async Task Read_FromStream_Forwards_FromEnd_Should_BeEmpty()
     {
         //arrange
         var streamId = "fake-stream";
@@ -170,7 +172,7 @@ public abstract class EventStoreTestsBase
     }
 
     [Fact, Priority(9)]
-    public async Task Read_Forwards_FromOffset_Should_Work()
+    public async Task Read_FromStream_Forwards_FromOffset_Should_Work()
     {
         //arrange
         var streamId = "fake-stream";
@@ -187,10 +189,11 @@ public abstract class EventStoreTestsBase
 
         storedEvents.Last().Type.Should().Be(events.Last().Type);
         storedEvents.Last().Data.Should().BeEquivalentTo(events.Last().Data);
+        storedEvents.Should().BeInAscendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
     }
 
     [Fact, Priority(10)]
-    public async Task Read_Backwards_FromEnd_Should_Work()
+    public async Task Read_FromStream_Backwards_FromEnd_Should_Work()
     {
         //arrange
         var streamId = "fake-stream";
@@ -208,10 +211,11 @@ public abstract class EventStoreTestsBase
 
         storedEvents.Last().Type.Should().Be(events.First().Type);
         storedEvents.Last().Data.Should().BeEquivalentTo(events.First().Data);
+        storedEvents.Should().BeInDescendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
     }
 
     [Fact, Priority(11)]
-    public async Task Read_Backwards_FromOffset_Should_Work()
+    public async Task Read_FromStream_Backwards_FromOffset_Should_Work()
     {
         //arrange
         var streamId = "fake-stream";
@@ -228,10 +232,11 @@ public abstract class EventStoreTestsBase
 
         storedEvents.Last().Type.Should().Be(events.First().Type);
         storedEvents.Last().Data.Should().BeEquivalentTo(events.First().Data);
+        storedEvents.Should().BeInDescendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
     }
 
     [Fact, Priority(12)]
-    public async Task Read_Backwards_FromStart_Should_BeEmpty()
+    public async Task Read_FromStream_Backwards_FromStart_Should_BeEmpty()
     {
         //arrange
         var streamId = "fake-stream";
@@ -246,7 +251,7 @@ public abstract class EventStoreTestsBase
     }
 
     [Fact, Priority(13)]
-    public async Task Read_NonExisting_Should_Throw_StreamNotFoundException()
+    public async Task Read_FromStream_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
         var action = async () => await EventStore.ReadAsync("non-existing", StreamReadDirection.Forwards, 0).ToListAsync();
@@ -254,7 +259,133 @@ public abstract class EventStoreTestsBase
     }
 
     [Fact, Priority(14)]
-    public async Task Subscribe_FromStart_Should_Work()
+    public async Task Read_FromAll_Forwards_FromStart_Should_Work()
+    {
+        //arrange
+        var length = 3;
+        var allEvents = new List<IEventDescriptor>();
+        for(int i = 0; i< length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+            allEvents.AddRange(events);
+        }
+
+        //act
+        var storedEvents = await EventStore.ReadAsync(null, StreamReadDirection.Forwards, StreamPosition.StartOfStream).ToListAsync();
+
+        //assert
+        storedEvents.Should().HaveSameCount(allEvents);
+    }
+
+    [Fact, Priority(15)]
+    public async Task Read_FromAll_Forwards_FromEnd_Should_BeEmpty()
+    {
+        //arrange
+        var length = 3;
+        for (int i = 0; i < length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+        }
+
+        //act
+        var storedEvents = await EventStore.ReadAsync(null, StreamReadDirection.Forwards, StreamPosition.EndOfStream).ToListAsync();
+
+        //assert
+        storedEvents.Should().BeEmpty();
+    }
+
+    [Fact, Priority(16)]
+    public async Task Read_FromAll_Forwards_FromOffset_Should_Work()
+    {
+        //arrange
+        var length = 10;
+        var allEvents = new List<IEventDescriptor>();
+        for (int i = 0; i < length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+            allEvents.AddRange(events);
+        }
+        var offset = allEvents.Count / 2;
+
+        //act
+        var storedEvents = await EventStore.ReadAsync(null, StreamReadDirection.Forwards, offset).ToListAsync();
+
+        //assert
+        storedEvents.Count.Should().Be(allEvents.Count - offset);
+    }
+
+    [Fact, Priority(17)]
+    public async Task Read_FromAll_Backwards_FromEnd_Should_Work()
+    {
+        //arrange
+        var length = 3;
+        var allEvents = new List<IEventDescriptor>();
+        for (int i = 0; i < length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+            allEvents.AddRange(events);
+        }
+
+        //act
+        var storedEvents = await EventStore.ReadAsync(null, StreamReadDirection.Backwards, StreamPosition.EndOfStream).ToListAsync();
+
+        //assert
+        storedEvents.Should().HaveSameCount(allEvents);
+        storedEvents.Should().BeInDescendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
+    }
+
+    [Fact, Priority(18)]
+    public async Task Read_FromAll_Backwards_FromOffset_Should_Work()
+    {
+        //arrange
+        var length = 10;
+        var allEvents = new List<IEventDescriptor>();
+        for (int i = 0; i < length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+            allEvents.AddRange(events);
+        }
+        var offset = allEvents.Count / 2;
+
+        //act
+        var storedEvents = await EventStore.ReadAsync(null, StreamReadDirection.Backwards, offset).ToListAsync();
+
+        //assert
+        storedEvents.Count.Should().Be(allEvents.Count - offset + 1);
+        storedEvents.Should().BeInDescendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
+    }
+
+    [Fact, Priority(19)]
+    public async Task Read_FromAll_Backwards_FromStart_Should_BeEmpty()
+    {
+        //arrange
+        var length = 3;
+        for (int i = 0; i < length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+        }
+
+        //act
+        var storedEvents = await EventStore.ReadAsync(null, StreamReadDirection.Backwards, StreamPosition.StartOfStream).ToListAsync();
+
+        //assert
+        storedEvents.Should().BeEmpty();
+    }
+
+    [Fact, Priority(20)]
+    public async Task Subscribe_ToStream_FromStart_Should_Work()
     {
         //arrange
         var streamId = "fake-stream";
@@ -264,8 +395,7 @@ public abstract class EventStoreTestsBase
         await EventStore.AppendAsync(streamId, events);
 
         //act
-        var observable = (await EventStore.SubscribeAsync(streamId, StreamPosition.StartOfStream))
-            .Subscribe(handledEvents.Add);
+        var observable = (await EventStore.SubscribeAsync(streamId, StreamPosition.StartOfStream)).Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(streamId, eventsToAppend);
         await Task.Delay(100);
 
@@ -273,8 +403,8 @@ public abstract class EventStoreTestsBase
         handledEvents.Should().HaveCount(events.Count + eventsToAppend.Count);
     }
 
-    [Fact, Priority(15)]
-    public async Task Subscribe_FromOffset_Should_Work()
+    [Fact, Priority(21)]
+    public async Task Subscribe_ToStream_FromOffset_Should_Work()
     {
         //arrange
         var streamId = "fake-stream";
@@ -294,8 +424,8 @@ public abstract class EventStoreTestsBase
         handledEvents.Should().HaveSameCount(eventsToAppend);
     }
 
-    [Fact, Priority(16)]
-    public async Task Subscribe_FromEnd_Should_Work()
+    [Fact, Priority(22)]
+    public async Task Subscribe_ToStream_FromEnd_Should_Work()
     {
         //arrange
         var streamId = "fake-stream";
@@ -314,15 +444,93 @@ public abstract class EventStoreTestsBase
         handledEvents.Should().HaveSameCount(eventsToAppend);
     }
 
-    [Fact, Priority(17)]
-    public async Task Subscribe_NonExisting_Should_Throw_StreamNotFoundException()
+    [Fact, Priority(23)]
+    public async Task Subscribe_ToStream_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
         var action = async () => await EventStore.SubscribeAsync("non-existing");
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact, Priority(18)]
+    [Fact, Priority(24)]
+    public async Task Subscribe_ToAll_FromStart_Should_Work()
+    {
+        //arrange
+        var length = 10;
+        var allEvents = new List<IEventDescriptor>();
+        for (int i = 0; i < length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+            allEvents.AddRange(events);
+        }
+        var eventsToAppend = EventStreamFactory.Create().ToList();
+        var handledEvents = new List<IEventRecord>();
+
+        //act
+        var observable = (await EventStore.SubscribeAsync(offset: StreamPosition.StartOfStream)).Subscribe(handledEvents.Add);
+        await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
+        await Task.Delay(100);
+
+        //assert
+        handledEvents.Should().HaveCount(allEvents.Count + eventsToAppend.Count);
+        handledEvents.Should().BeInAscendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
+    }
+
+    [Fact, Priority(21)]
+    public async Task Subscribe_ToAll_FromOffset_Should_Work()
+    {
+        //arrange
+        var length = 10;
+        var allEvents = new List<IEventDescriptor>();
+        for (int i = 0; i < length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+            allEvents.AddRange(events);
+        }
+        var offset = allEvents.Count;
+        var eventsToAppend = EventStreamFactory.Create().ToList();
+        var handledEvents = new List<IEventRecord>();
+
+        //act
+        var observable = (await EventStore.SubscribeAsync(offset: offset)).Subscribe(handledEvents.Add);
+        await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
+        await Task.Delay(100);
+
+        //assert
+        handledEvents.Should().HaveSameCount(eventsToAppend);
+    }
+
+    [Fact, Priority(22)]
+    public async Task Subscribe_ToAll_FromEnd_Should_Work()
+    {
+        //arrange
+        var length = 10;
+        var allEvents = new List<IEventDescriptor>();
+        for (int i = 0; i < length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+            allEvents.AddRange(events);
+        }
+        var offset = allEvents.Count;
+        var eventsToAppend = EventStreamFactory.Create().ToList();
+        var handledEvents = new List<IEventRecord>();
+
+        //act
+        var observable = (await EventStore.SubscribeAsync()).Subscribe(handledEvents.Add);
+        await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
+        await Task.Delay(100);
+
+        //assert
+        handledEvents.Should().HaveSameCount(eventsToAppend);
+    }
+
+    [Fact, Priority(24)]
     public async Task Truncate_ToZero_Should_Work()
     {
         //arrange
@@ -348,7 +556,7 @@ public abstract class EventStoreTestsBase
         stream.LastEventAt.Should().BeNull();
     }
 
-    [Fact, Priority(19)]
+    [Fact, Priority(25)]
     public async Task Truncate_Partially_Should_Work()
     {
         //arrange
@@ -367,7 +575,7 @@ public abstract class EventStoreTestsBase
         stream.LastEventAt.Should().NotBeNull();
     }
 
-    [Fact, Priority(20)]
+    [Fact, Priority(26)]
     public async Task Truncate_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
@@ -375,7 +583,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact, Priority(21)]
+    [Fact, Priority(27)]
     public async Task Delete_Should_Work()
     {
         //arrange
@@ -391,7 +599,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact, Priority(22)]
+    [Fact, Priority(28)]
     public async Task Delete_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert

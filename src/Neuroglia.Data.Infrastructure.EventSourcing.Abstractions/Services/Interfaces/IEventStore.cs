@@ -40,22 +40,33 @@ public interface IEventStore
     /// <summary>
     /// Reads recorded events
     /// </summary>
-    /// <param name="streamId">The id of the stream to read events from</param>
+    /// <param name="streamId">The id of the stream, if any, to read events from. If not set, reads all events</param>
     /// <param name="readDirection">The direction in which to read the stream</param>
     /// <param name="offset">The offset starting from which to read events</param>
     /// <param name="length">The amount of events to read</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new <see cref="IAsyncEnumerable{T}"/> containing the events read from the store</returns>
-    IAsyncEnumerable<IEventRecord> ReadAsync(string streamId, StreamReadDirection readDirection, long offset, ulong? length = null, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<IEventRecord> ReadAsync(string? streamId, StreamReadDirection readDirection, long offset, ulong? length = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Subscribes to events
     /// </summary>
-    /// <param name="streamId">The id of the stream to subscribe to</param>
+    /// <param name="streamId">The id of the stream, if any, to subscribe to. If not set, subscribes to all events</param>
     /// <param name="offset">The offset starting from which to receive events. Defaults to <see cref="StreamPosition.EndOfStream"/></param>
+    /// <param name="consumerGroup">The name of the consumer group, if any, in case the subscription is persistent</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new <see cref="IObservable{T}"/> used to observe events</returns>
-    Task<IObservable<IEventRecord>> SubscribeAsync(string streamId, long offset = StreamPosition.EndOfStream, CancellationToken cancellationToken = default);
+    Task<IObservable<IEventRecord>> SubscribeAsync(string? streamId = null, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Sets the specified consumer group's offset
+    /// </summary>
+    /// <param name="consumerGroup">The name of the consumer group to set the offset of</param>
+    /// <param name="streamId">The id of the stream, if any, to set the consumer group offset for</param>
+    /// <param name="offset">The offset to set</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    Task SetOffsetAsync(string consumerGroup, long offset, string? streamId = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Truncates the specified stream

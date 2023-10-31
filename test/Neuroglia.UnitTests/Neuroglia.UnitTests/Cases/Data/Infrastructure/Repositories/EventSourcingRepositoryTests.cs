@@ -30,7 +30,7 @@ public class EventSourcingRepositoryTests
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddMediator();
         serviceCollection.AddJsonSerializer();
-        serviceCollection.AddMemoryCacheEventStore();
+        serviceCollection.AddMemoryEventStore();
         serviceCollection.AddEventSourcingRepository<User, string>();
         return serviceCollection;
     }

@@ -17,14 +17,14 @@ using Microsoft.Extensions.Options;
 namespace Neuroglia.Data.Infrastructure.EventSourcing.DistributedCache.Services;
 
 /// <summary>
-/// Represents the service used to create <see cref="MemoryCacheEventStore"/>s
+/// Represents the service used to create <see cref="MemoryEventStore"/>s
 /// </summary>
 public class MemoryCacheEventStoreFactory
-    : IFactory<MemoryCacheEventStore>
+    : IFactory<MemoryEventStore>
 {
 
     /// <inheritdoc/>
-    public virtual MemoryCacheEventStore Create() => new(new MemoryCache(Options.Create(new MemoryCacheOptions())));
+    public virtual MemoryEventStore Create() => new(new MemoryCache(Options.Create(new MemoryCacheOptions())));
 
     object IFactory.Create() => this.Create();
 

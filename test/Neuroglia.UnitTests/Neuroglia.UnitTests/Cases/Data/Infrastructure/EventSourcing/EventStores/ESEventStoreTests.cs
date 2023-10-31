@@ -34,7 +34,9 @@ public class ESEventStoreTests
         services.AddSerialization();
         services.AddSingleton(EventStoreContainerBuilder.Build());
         services.AddHostedService(provider => new ContainerBootstrapper(provider.GetRequiredService<IContainer>()));
-        services.AddSingleton(provider => new EventStoreClient(EventStoreClientSettings.Create($"esdb://{provider.GetRequiredService<IContainer>().Hostname}:{provider.GetRequiredService<IContainer>().GetMappedPublicPort(EventStoreContainerBuilder.PublicPort2)}?tls=false")));
+        services.AddSingleton(provider => EventStoreClientSettings.Create($"esdb://{provider.GetRequiredService<IContainer>().Hostname}:{provider.GetRequiredService<IContainer>().GetMappedPublicPort(EventStoreContainerBuilder.PublicPort2)}?tls=false"));
+        services.AddSingleton(provider => new EventStoreClient(provider.GetRequiredService<EventStoreClientSettings>()));
+        services.AddSingleton(provider => new EventStorePersistentSubscriptionsClient(provider.GetRequiredService<EventStoreClientSettings>()));
         services.AddESEventStore();
         return services;
     }

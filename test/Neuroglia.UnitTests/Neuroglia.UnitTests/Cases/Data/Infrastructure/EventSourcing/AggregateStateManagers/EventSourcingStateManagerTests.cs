@@ -30,7 +30,7 @@ public class EventSourcingStateManagerTests
         var services = new ServiceCollection();
         services.AddLogging();
         services.AddJsonSerializer();
-        services.AddMemoryCacheEventStore();
+        services.AddMemoryEventStore();
         services.Configure<StateManagementOptions<User, string>>(options => options.SnapshotFrequency = 0);
         services.AddSingleton<IAggregateStateManager<User, string>, EventSourcingStateManager<User, string>>();
         return services;

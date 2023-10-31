@@ -31,7 +31,7 @@ public class EventSourcingRepositoryTests
         serviceCollection.AddMediator();
         serviceCollection.AddMapper(typeof(EventSourcingRepositoryTests).Assembly);
         serviceCollection.AddJsonSerializer();
-        serviceCollection.AddMemoryCacheEventStore();
+        serviceCollection.AddMemoryEventStore();
         serviceCollection.AddEventSourcingRepository<User, string>();
         this.ServiceScope = serviceCollection.BuildServiceProvider().CreateScope();
     }

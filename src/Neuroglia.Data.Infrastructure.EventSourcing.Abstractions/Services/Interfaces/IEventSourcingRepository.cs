@@ -22,6 +22,23 @@ public interface IEventSourcingRepository
     : IRepository
 {
 
+    /// <summary>
+    /// Gets the aggregate with the specified key, if any
+    /// </summary>
+    /// <param name="id">The key of the aggregate to find</param>
+    /// <param name="version">The version of the aggregate to get</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The aggregate with the specified key</returns>
+    Task<IAggregateRoot?> GetAsync(object id, ulong version, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates the specified aggregate
+    /// </summary>
+    /// <param name="aggregate">The aggregate to update</param>
+    /// <param name="expectedVersion">The expected version of the aggregate</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The updated aggregate</returns>
+    Task<IAggregateRoot> UpdateAsync(IAggregateRoot aggregate, ulong expectedVersion, CancellationToken cancellationToken = default);
 
 }
 
@@ -34,7 +51,23 @@ public interface IEventSourcingRepository<TAggregate>
     where TAggregate : class, IAggregateRoot
 {
 
+    /// <summary>
+    /// Gets the aggregate with the specified key, if any
+    /// </summary>
+    /// <param name="id">The key of the aggregate to find</param>
+    /// <param name="version">The version of the aggregate to get</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The aggregate with the specified key</returns>
+    new Task<TAggregate?> GetAsync(object id, ulong version, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Updates the specified aggregate
+    /// </summary>
+    /// <param name="aggregate">The aggregate to update</param>
+    /// <param name="expectedVersion">The expected version of the aggregate</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The updated aggregate</returns>
+    Task<TAggregate> UpdateAsync(TAggregate aggregate, ulong expectedVersion, CancellationToken cancellationToken = default);
 
 }
 
@@ -49,6 +82,13 @@ public interface IEventSourcingRepository<TAggregate, TKey>
     where TKey : IEquatable<TKey>
 {
 
-
+    /// <summary>
+    /// Gets the aggregate with the specified key, if any
+    /// </summary>
+    /// <param name="id">The key of the aggregate to find</param>
+    /// <param name="version">The version of the aggregate to get</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The aggregate with the specified key</returns>
+    Task<TAggregate?> GetAsync(TKey id, ulong version, CancellationToken cancellationToken = default);
 
 }

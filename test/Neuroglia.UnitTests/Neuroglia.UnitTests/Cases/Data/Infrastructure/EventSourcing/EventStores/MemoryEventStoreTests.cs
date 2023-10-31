@@ -26,7 +26,7 @@ public class MemoryEventStoreTests
     public static IServiceCollection BuildServices()
     {
         var services = new ServiceCollection();
-        services.AddMemoryCacheEventStore(_ => { });
+        services.AddMemoryEventStore(_ => { });
         return services;
     }
 

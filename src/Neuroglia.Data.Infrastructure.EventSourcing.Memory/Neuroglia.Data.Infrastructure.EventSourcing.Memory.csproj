@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj" />
     <ProjectReference Include="..\Neuroglia.Plugins.Abstractions\Neuroglia.Plugins.Abstractions.csproj" />
+    <ProjectReference Include="..\Neuroglia.Reactive\Neuroglia.Reactive.csproj" />
   </ItemGroup>
 
 </Project>

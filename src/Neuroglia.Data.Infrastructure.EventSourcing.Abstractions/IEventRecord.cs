@@ -20,6 +20,11 @@ public interface IEventRecord
 {
 
     /// <summary>
+    /// Gets the id of the stream the recorded event belongs to
+    /// </summary>
+    string StreamId { get; }
+
+    /// <summary>
     /// Gets the id of the recorded event
     /// </summary>
     string Id { get; }
