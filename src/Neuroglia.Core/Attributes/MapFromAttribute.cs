@@ -14,22 +14,22 @@
 namespace Neuroglia;
 
 /// <summary>
-/// Represents an <see cref="Attribute"/> used to mark a type as mappable to another 
+/// Represents an <see cref="Attribute"/> used to mark a type as mappable from another 
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class MapAttribute
+public class MapFromAttribute
     : Attribute
 {
 
     /// <summary>
-    /// Initializes a new <see cref="MapAttribute"/>
+    /// Initializes a new <see cref="MapFromAttribute"/>
     /// </summary>
-    /// <param name="destinationType">The type to which the class is mappable</param>
-    public MapAttribute(Type destinationType) { this.DestinationType = destinationType ?? throw new ArgumentNullException(nameof(destinationType)); }
+    /// <param name="sourceType">The type from which the class is mappable</param>
+    public MapFromAttribute(Type sourceType) { this.SourceType = sourceType ?? throw new ArgumentNullException(nameof(sourceType)); }
 
     /// <summary>
-    /// Gets the type to which the class is mappable
+    /// Gets the type from which the class is mappable
     /// </summary>
-    public virtual Type DestinationType { get; }
+    public virtual Type SourceType { get; }
 
 }

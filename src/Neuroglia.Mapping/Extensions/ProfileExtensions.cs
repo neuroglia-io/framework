@@ -51,7 +51,7 @@ public static class ProfileExtensions
     }
 
     /// <summary>
-    /// Applies all <see cref="IMappingConfiguration"/>s found in the specified assemblies and registers all type maps configured using <see cref="MapAttribute"/>s
+    /// Applies all <see cref="IMappingConfiguration"/>s found in the specified assemblies and registers all type maps configured using <see cref="MapToAttribute"/>s
     /// </summary>
     /// <param name="profile">The extended <see cref="AutoMapper.Profile"/></param>
     /// <param name="assemblies">An array containing the assemblies to search for <see cref="IMappingConfiguration"/>s. If null or empty, will search the calling <see cref="Assembly"/></param>
@@ -63,9 +63,13 @@ public static class ProfileExtensions
         {
             profile.ApplyConfiguration((IMappingConfiguration)Activator.CreateInstance(mappingConfigurationType, true)!);
         }
-        foreach (var sourceType in types.Where(t => t.TryGetCustomAttribute<MapAttribute>(out _)))
+        foreach (var sourceType in types.Where(t => t.TryGetCustomAttribute<MapToAttribute>(out _)))
         {
-            foreach (var mapAttribute in sourceType.GetCustomAttributes<MapAttribute>()) profile.CreateMap(sourceType, mapAttribute.DestinationType);
+            foreach (var mapAttribute in sourceType.GetCustomAttributes<MapToAttribute>()) profile.CreateMap(sourceType, mapAttribute.DestinationType);
+        }
+        foreach (var targetType in types.Where(t => t.TryGetCustomAttribute<MapFromAttribute>(out _)))
+        {
+            foreach (var mapAttribute in targetType.GetCustomAttributes<MapFromAttribute>()) profile.CreateMap(mapAttribute.SourceType, targetType);
         }
     }
 
