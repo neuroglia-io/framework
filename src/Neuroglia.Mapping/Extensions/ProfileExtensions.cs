@@ -54,19 +54,18 @@ public static class ProfileExtensions
     /// Applies all <see cref="IMappingConfiguration"/>s found in the specified assemblies and registers all type maps configured using <see cref="MapAttribute"/>s
     /// </summary>
     /// <param name="profile">The extended <see cref="AutoMapper.Profile"/></param>
-    /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
     /// <param name="assemblies">An array containing the assemblies to search for <see cref="IMappingConfiguration"/>s. If null or empty, will search the calling <see cref="Assembly"/></param>
-    public static void Configure(this AutoMapper.Profile profile, IServiceProvider serviceProvider, params Assembly[] assemblies)
+    public static void Configure(this AutoMapper.Profile profile, params Assembly[] assemblies)
     {
-        if(assemblies == null || !assemblies.Any()) assemblies = new Assembly[] { Assembly.GetCallingAssembly() };
+        if (assemblies == null || !assemblies.Any()) assemblies = new Assembly[] { Assembly.GetCallingAssembly() };
         var types = assemblies.SelectMany(a => a.GetTypes());
-        foreach(var mappingConfigurationType in types.Where(t => !t.IsAbstract && !t.IsInterface && t.IsClass && typeof(IMappingConfiguration).IsAssignableFrom(t)))
+        foreach (var mappingConfigurationType in types.Where(t => !t.IsAbstract && !t.IsInterface && t.IsClass && typeof(IMappingConfiguration).IsAssignableFrom(t)))
         {
-            profile.ApplyConfiguration((IMappingConfiguration)ActivatorUtilities.CreateInstance(serviceProvider, mappingConfigurationType));
+            profile.ApplyConfiguration((IMappingConfiguration)Activator.CreateInstance(mappingConfigurationType, true)!);
         }
-        foreach(var sourceType in types.Where(t => t.TryGetCustomAttribute<MapAttribute>(out _)))
+        foreach (var sourceType in types.Where(t => t.TryGetCustomAttribute<MapAttribute>(out _)))
         {
-            foreach(var mapAttribute in sourceType.GetCustomAttributes<MapAttribute>()) profile.CreateMap(sourceType, mapAttribute.DestinationType);
+            foreach (var mapAttribute in sourceType.GetCustomAttributes<MapAttribute>()) profile.CreateMap(sourceType, mapAttribute.DestinationType);
         }
     }
 

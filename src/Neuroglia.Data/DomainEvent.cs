@@ -11,6 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+
 namespace Neuroglia.Data;
 
 /// <summary>
@@ -45,6 +48,7 @@ public abstract class DomainEvent<TAggregate, TKey>
     object IDomainEvent.AggregateId => this.AggregateId;
 
     /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
     public virtual Type AggregateType => typeof(TAggregate);
 
     /// <inheritdoc/>
