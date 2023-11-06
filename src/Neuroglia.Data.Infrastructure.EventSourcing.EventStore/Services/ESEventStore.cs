@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using EventStore.Client;
+using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
@@ -242,15 +243,9 @@ public class ESEventStore
         else
         {
             var position = offset == StreamPosition.EndOfStream ? ESStreamPosition.End : ESStreamPosition.FromInt64(offset);
-            var settings = new PersistentSubscriptionSettings(true, position);
-            try
-            {
-                await this.EventStorePersistentSubscriptionsClient.CreateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false);
-            }
-            catch(Exception ex)
-            {
-
-            }
+            var settings = new PersistentSubscriptionSettings(true, position, checkPointLowerBound: 1, checkPointUpperBound: 1);
+            try { await this.EventStorePersistentSubscriptionsClient.CreateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { }
             var persistentSubscription = await this.EventStorePersistentSubscriptionsClient.SubscribeToStreamAsync(streamId, consumerGroup, (sub, e, retry, token) => this.OnEventConsumedAsync(subject, sub, e, retry, token), cancellationToken: cancellationToken).ConfigureAwait(false);
             return Observable.Using(() => persistentSubscription, watch => subject);
         }
@@ -272,7 +267,7 @@ public class ESEventStore
         {
             var position = offset == StreamPosition.EndOfStream ? FromAll.End : FromAll.Start;
             var filterOptions = new SubscriptionFilterOptions(EventTypeFilter.ExcludeSystemEvents());
-            var subscription = await this.EventStoreClient.SubscribeToAllAsync(position, (sub, e, token) => this.OnEventConsumedAsync(subject, sub, e, token), filterOptions: filterOptions, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var subscription = await this.EventStoreClient.SubscribeToAllAsync(position, (sub, e, token) => this.OnEventConsumedAsync(subject, sub, e, token), true, (sub, reason, ex) => this.OnSubscriptionDropped(subject, sub, reason, ex), filterOptions, cancellationToken: cancellationToken).ConfigureAwait(false);
             var observable = Observable.Using(() => subscription, _ => subject);
             var streamOffset = 0;
             if (offset != StreamPosition.StartOfStream && offset != StreamPosition.EndOfStream) observable = observable.SkipWhile(e => 
@@ -285,18 +280,12 @@ public class ESEventStore
         }
         else
         {
-            var position = offset == StreamPosition.EndOfStream ? ESStreamPosition.End : ESStreamPosition.FromInt64(offset);
+            var position = offset == StreamPosition.EndOfStream ? Position.End : Position.Start;
             var filter = EventTypeFilter.ExcludeSystemEvents();
             var settings = new PersistentSubscriptionSettings(true, position);
-            try
-            {
-                await this.EventStorePersistentSubscriptionsClient.CreateToAllAsync(consumerGroup, filter, settings, cancellationToken: cancellationToken).ConfigureAwait(false);
-            }
-            catch(Exception ex)
-            {
-
-            }
-            var persistentSubscription = await this.EventStorePersistentSubscriptionsClient.SubscribeToAllAsync(consumerGroup, (sub, e, retry, token) => this.OnEventConsumedAsync(subject, sub, e, retry, token), cancellationToken: cancellationToken);
+            try { await this.EventStorePersistentSubscriptionsClient.CreateToAllAsync(consumerGroup, filter, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { }
+            var persistentSubscription = await this.EventStorePersistentSubscriptionsClient.SubscribeToAllAsync(consumerGroup, (sub, e, retry, token) => this.OnEventConsumedAsync(subject, sub, e, retry, token), (sub, reason, ex) => this.OnSubscriptionDropped(subject, sub, reason, ex), cancellationToken: cancellationToken);
             return Observable.Using(() => persistentSubscription, watch => subject);
         }
     }
@@ -307,10 +296,19 @@ public class ESEventStore
         if (string.IsNullOrWhiteSpace(consumerGroup)) throw new ArgumentNullException(nameof(consumerGroup));
         if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
 
-        var position = offset == StreamPosition.EndOfStream ? ESStreamPosition.End : ESStreamPosition.FromInt64(offset);
-        var settings = new PersistentSubscriptionSettings(true, position);
-        if(string.IsNullOrWhiteSpace(streamId)) await this.EventStorePersistentSubscriptionsClient.UpdateToAllAsync(consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false);
-        else await this.EventStorePersistentSubscriptionsClient.UpdateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false);
+        IPosition position = string.IsNullOrWhiteSpace(streamId) ? (offset == StreamPosition.EndOfStream ? Position.End : Position.Start) : (offset == StreamPosition.EndOfStream ? ESStreamPosition.End : ESStreamPosition.FromInt64(offset));
+        var settings = new PersistentSubscriptionSettings(true, position, checkPointLowerBound: 1, checkPointUpperBound: 1);
+
+        if (string.IsNullOrWhiteSpace(streamId))
+        {
+            await this.EventStorePersistentSubscriptionsClient.DeleteToAllAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false);
+            await this.EventStorePersistentSubscriptionsClient.UpdateToAllAsync(consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            await this.EventStorePersistentSubscriptionsClient.DeleteToStreamAsync(streamId, consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false);
+            await this.EventStorePersistentSubscriptionsClient.UpdateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false);
+        }
     }
 
     /// <inheritdoc/>
@@ -369,7 +367,53 @@ public class ESEventStore
     /// <param name="retryCount">The retry count, if any</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    protected virtual Task OnEventConsumedAsync(ISubject<IEventRecord> subject, PersistentSubscription subscription, ResolvedEvent e, int? retryCount, CancellationToken cancellationToken) => Task.Run(() => subject.OnNext(this.DeserializeEventRecord(e, subscription)), cancellationToken);
+    protected virtual Task OnEventConsumedAsync(ISubject<IEventRecord> subject, PersistentSubscription subscription, ResolvedEvent e, int? retryCount, CancellationToken cancellationToken) 
+    {
+        if (e.OriginalStreamId.StartsWith("$") || e.Event.Metadata.Length < 1) return subscription.Ack(e);
+        return Task.Run(() => subject.OnNext(this.DeserializeEventRecord(e, subscription)), cancellationToken);
+    }
+
+    /// <summary>
+    /// Handles a dropped subscription
+    /// </summary>
+    /// <param name="subject">The <see cref="ISubject{T}"/> to stream <see cref="IEventRecord"/>s to</param>
+    /// <param name="subscription">The <see cref="StreamSubscription"/> that has dropped</param>
+    /// <param name="reason">The reason why the <see cref="StreamSubscription"/> has dropped</param>
+    /// <param name="ex">The <see cref="Exception"/>, if any, that has occured</param>
+    protected virtual void OnSubscriptionDropped(ISubject<IEventRecord> subject, StreamSubscription subscription, SubscriptionDroppedReason reason, Exception? ex)
+    {
+        switch (reason)
+        {
+            case SubscriptionDroppedReason.Disposed:
+                subject.OnCompleted();
+                break;
+            case SubscriptionDroppedReason.SubscriberError:
+            case SubscriptionDroppedReason.ServerError:
+                subject.OnError(ex ?? new());
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Handles a dropped subscription
+    /// </summary>
+    /// <param name="subject">The <see cref="ISubject{T}"/> to stream <see cref="IEventRecord"/>s to</param>
+    /// <param name="subscription">The <see cref="PersistentSubscription"/> that has dropped</param>
+    /// <param name="reason">The reason why the <see cref="PersistentSubscription"/> has dropped</param>
+    /// <param name="ex">The <see cref="Exception"/>, if any, that has occured</param>
+    protected virtual void OnSubscriptionDropped(ISubject<IEventRecord> subject, PersistentSubscription subscription, SubscriptionDroppedReason reason, Exception? ex)
+    {
+        switch (reason)
+        {
+            case SubscriptionDroppedReason.Disposed:
+                subject.OnCompleted();
+                break;
+            case SubscriptionDroppedReason.SubscriberError:
+            case SubscriptionDroppedReason.ServerError:
+                subject.OnError(ex ?? new());
+                break;
+        }
+    }
 
     /// <summary>
     /// Exposes constants about event related metadata used by the <see cref="ESEventStore"/>

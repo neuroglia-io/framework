@@ -80,7 +80,7 @@ public class EventSourcingStateManager<TAggregate, TKey>
     /// <inheritdoc/>
     public virtual async Task<TAggregate> RestoreStateAsync(TKey aggregateId, CancellationToken cancellationToken)
     {
-        var factory = this.Options.AggregateFactory ?? ((IServiceProvider provider) => ActivatorUtilities.CreateInstance<TAggregate>(provider));
+        var factory = this.Options.AggregateFactory ?? ((IServiceProvider provider) => (TAggregate)Activator.CreateInstance(typeof(TAggregate), true)!);
         var aggregate = factory.Invoke(this.ServiceProvider);
 
         var snapshot = await this.GetSnapshotAsync(aggregateId, cancellationToken).ConfigureAwait(false);
