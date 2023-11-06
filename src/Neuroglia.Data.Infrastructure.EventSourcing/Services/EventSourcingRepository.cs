@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Microsoft.Extensions.Options;
+using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
 using Neuroglia.Data.Infrastructure.Services;
 using Neuroglia.Mediation;
 
@@ -30,19 +32,26 @@ public class EventSourcingRepository<TAggregate, TKey>
     /// <summary>
     /// Initializes a new <see cref="EventSourcingRepository{TAggregate, TKey}"/>
     /// </summary>
+    /// <param name="options">The service used to access the current <see cref="EventSourcingRepositoryOptions{TAggregate, TKey}"/></param>
     /// <param name="mediator">The service used to mediate calls</param>
     /// <param name="eventStore">The service used to persist events</param>
     /// <param name="aggregatorFactory">The service used to create <see cref="IEventAggregator"/>s</param>
     /// <param name="migrationManager">The service used to manage event migrations</param>
     /// <param name="stateManager">The service used to manage <see cref="ISnapshot"/>s</param>
-    public EventSourcingRepository(IMediator mediator, IEventStore eventStore, IEventAggregatorFactory aggregatorFactory, IEventMigrationManager migrationManager, IAggregateStateManager<TAggregate, TKey> stateManager)
+    public EventSourcingRepository(IOptions<EventSourcingRepositoryOptions<TAggregate, TKey>> options, IMediator mediator, IEventStore eventStore, IEventAggregatorFactory aggregatorFactory, IEventMigrationManager migrationManager, IAggregateStateManager<TAggregate, TKey> stateManager)
     {
+        this.Options = options.Value;
         this.Mediator = mediator;
         this.EventStore = eventStore;
         this.Aggregator = aggregatorFactory.CreateAggregator<TAggregate, IDomainEvent>();
         this.MigrationManager = migrationManager;
         this.StateManager = stateManager;
     }
+
+    /// <summary>
+    /// Gets the current <see cref="EventSourcingRepositoryOptions{TAggregate, TKey}"/>
+    /// </summary>
+    protected EventSourcingRepositoryOptions<TAggregate, TKey> Options { get; }
 
     /// <summary>
     /// Gets the service used to persist events
@@ -83,10 +92,7 @@ public class EventSourcingRepository<TAggregate, TKey>
         aggregate.State.StateVersion = (ulong)events.Count;
         aggregate.ClearPendingEvents();
         await this.StateManager.TakeSnapshotAsync(aggregate, cancellationToken).ConfigureAwait(false);
-        foreach (var e in events)
-        {
-            await this.Mediator.PublishAsync((dynamic)e, cancellationToken).ConfigureAwait(false);
-        }
+        if(this.Options.PublishEvents) foreach (var e in events) await this.Mediator.PublishAsync((dynamic)e, cancellationToken).ConfigureAwait(false);
         return aggregate;
     }
 
@@ -140,7 +146,7 @@ public class EventSourcingRepository<TAggregate, TKey>
         aggregate.State.StateVersion += (ulong)events.Count;
         aggregate.ClearPendingEvents();
         await this.StateManager.TakeSnapshotAsync(aggregate, cancellationToken).ConfigureAwait(false);
-        foreach (var e in events) await this.Mediator.PublishAsync((dynamic)e, cancellationToken).ConfigureAwait(false);
+        if (this.Options.PublishEvents) foreach (var e in events) await this.Mediator.PublishAsync((dynamic)e, cancellationToken).ConfigureAwait(false);
         return aggregate;
     }
 

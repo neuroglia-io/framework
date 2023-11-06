@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
+using Neuroglia.Reactive;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing;
 
@@ -529,6 +530,40 @@ public abstract class EventStoreTestsBase
         //assert
         handledEvents.Should().HaveSameCount(eventsToAppend);
     }
+
+    [Fact, Priority(23)]
+    public async Task Subscribe_ToAll_WithConsumerGroup_Should_Work()
+    {
+        //arrange
+        var length = 10;
+        var allEvents = new List<IEventDescriptor>();
+        for (int i = 0; i < length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+            allEvents.AddRange(events);
+        }
+        var eventsToAppend = EventStreamFactory.Create().ToList();
+        var handledEvents = new List<IEventRecord>();
+        var consumerGroup = "test";
+
+        //act
+        var observable = (await EventStore.SubscribeAsync(offset: StreamPosition.StartOfStream, consumerGroup: consumerGroup))
+            .SubscribeAsync(async e => 
+            {
+                var ack = (IAckableEventRecord)e;
+                handledEvents.Add(e);
+                if (ack != null) await ack.AckAsync();
+            });
+        await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
+        await Task.Delay(100);
+
+        //assert
+        handledEvents.Should().HaveCount(allEvents.Count + eventsToAppend.Count);
+        handledEvents.Should().BeInAscendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
+    }
+
 
     [Fact, Priority(24)]
     public async Task Truncate_ToZero_Should_Work()
