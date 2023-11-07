@@ -49,14 +49,14 @@ public interface IEventStore
     IAsyncEnumerable<IEventRecord> ReadAsync(string? streamId, StreamReadDirection readDirection, long offset, ulong? length = null, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Subscribes to events
+    /// Creates a new <see cref="IObservable{T}"/> used to observe <see cref="IEventRecord"/>s
     /// </summary>
-    /// <param name="streamId">The id of the stream, if any, to subscribe to. If not set, subscribes to all events</param>
-    /// <param name="offset">The offset starting from which to receive events. Defaults to <see cref="StreamPosition.EndOfStream"/></param>
-    /// <param name="consumerGroup">The name of the consumer group, if any, in case the subscription is persistent</param>
+    /// <param name="streamId">The id of the stream, if any, to observe. If not set, observes to all events</param>
+    /// <param name="offset">The offset starting from which to push notifications for recorded events. Defaults to <see cref="StreamPosition.EndOfStream"/></param>
+    /// <param name="consumerGroup">The name of the consumer group, if any, that observes <see cref="IEventRecord"/>s concurrently</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new <see cref="IObservable{T}"/> used to observe events</returns>
-    Task<IObservable<IEventRecord>> SubscribeAsync(string? streamId = null, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default);
+    /// <returns>A new <see cref="IObservable{T}"/> used to observe <see cref="IEventRecord"/>s</returns>
+    Task<IObservable<IEventRecord>> ObserveAsync(string? streamId = null, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sets the specified consumer group's offset

@@ -17,6 +17,7 @@ using Neuroglia.Plugins;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -174,10 +175,10 @@ public class MemoryEventStore
     }
 
     /// <inheritdoc/>
-    public virtual Task<IObservable<IEventRecord>> SubscribeAsync(string? streamId, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
+    public virtual Task<IObservable<IEventRecord>> ObserveAsync(string? streamId, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(streamId)) return this.SubscribeToAllAsync(offset, consumerGroup, cancellationToken);
-        else return this.SubscribeToStreamAsync(streamId, offset, consumerGroup, cancellationToken);
+        if (string.IsNullOrWhiteSpace(streamId)) return this.ObserveAllAsync(offset, consumerGroup, cancellationToken);
+        else return this.ObserveStreamAsync(streamId, offset, consumerGroup, cancellationToken);
     }
 
     /// <summary>
@@ -188,7 +189,7 @@ public class MemoryEventStore
     /// <param name="consumerGroup">The name of the consumer group, if any, in case the subscription is persistent</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new <see cref="IObservable{T}"/> used to observe events</returns>
-    protected virtual async Task<IObservable<IEventRecord>> SubscribeToStreamAsync(string streamId, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
+    protected virtual async Task<IObservable<IEventRecord>> ObserveStreamAsync(string streamId, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
         if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
@@ -213,11 +214,12 @@ public class MemoryEventStore
     /// <param name="consumerGroup">The name of the consumer group, if any, in case the subscription is persistent</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new <see cref="IObservable{T}"/> used to observe events</returns>
-    protected virtual async Task<IObservable<IEventRecord>> SubscribeToAllAsync(long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
+    protected virtual async Task<IObservable<IEventRecord>> ObserveAllAsync(long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
         if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
 
-        var events = offset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(null, StreamReadDirection.Forwards, offset, cancellationToken: cancellationToken)).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false) ?? offset;
+        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(null, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken)).ToListAsync(cancellationToken).ConfigureAwait(false);
         var subject = new ReplaySubject<IEventRecord>();
         var subscription = Observable.StartWith(this.Subject, events).Subscribe(e => this.OnEventConsumed(subject, e, null, consumerGroup));
         return Observable.Using(() => subscription, _ => subject);

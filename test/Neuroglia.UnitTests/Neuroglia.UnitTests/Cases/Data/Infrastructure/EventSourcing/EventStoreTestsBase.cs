@@ -386,7 +386,7 @@ public abstract class EventStoreTestsBase
     }
 
     [Fact, Priority(20)]
-    public async Task Subscribe_ToStream_FromStart_Should_Work()
+    public async Task Observe_Stream_FromStart_Should_Work()
     {
         //arrange
         var streamId = "fake-stream";
@@ -396,7 +396,7 @@ public abstract class EventStoreTestsBase
         await EventStore.AppendAsync(streamId, events);
 
         //act
-        var observable = (await EventStore.SubscribeAsync(streamId, StreamPosition.StartOfStream)).Subscribe(handledEvents.Add);
+        var observable = (await EventStore.ObserveAsync(streamId, StreamPosition.StartOfStream)).Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(streamId, eventsToAppend);
         await Task.Delay(100);
 
@@ -405,7 +405,7 @@ public abstract class EventStoreTestsBase
     }
 
     [Fact, Priority(21)]
-    public async Task Subscribe_ToStream_FromOffset_Should_Work()
+    public async Task Observe_Stream_FromOffset_Should_Work()
     {
         //arrange
         var streamId = "fake-stream";
@@ -416,7 +416,7 @@ public abstract class EventStoreTestsBase
         await EventStore.AppendAsync(streamId, events);
 
         //act
-        var observable = (await EventStore.SubscribeAsync(streamId, offset))
+        var observable = (await EventStore.ObserveAsync(streamId, offset))
             .Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(streamId, eventsToAppend);
         await Task.Delay(100);
@@ -426,7 +426,7 @@ public abstract class EventStoreTestsBase
     }
 
     [Fact, Priority(22)]
-    public async Task Subscribe_ToStream_FromEnd_Should_Work()
+    public async Task Observe_Stream_FromEnd_Should_Work()
     {
         //arrange
         var streamId = "fake-stream";
@@ -436,7 +436,7 @@ public abstract class EventStoreTestsBase
         await EventStore.AppendAsync(streamId, events);
 
         //act
-        var observable = (await EventStore.SubscribeAsync(streamId))
+        var observable = (await EventStore.ObserveAsync(streamId))
             .Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(streamId, eventsToAppend);
         await Task.Delay(100);
@@ -446,15 +446,15 @@ public abstract class EventStoreTestsBase
     }
 
     [Fact, Priority(23)]
-    public async Task Subscribe_ToStream_NonExisting_Should_Throw_StreamNotFoundException()
+    public async Task Observe_Stream_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
-        var action = async () => await EventStore.SubscribeAsync("non-existing");
+        var action = async () => await EventStore.ObserveAsync("non-existing");
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
     [Fact, Priority(24)]
-    public async Task Subscribe_ToAll_FromStart_Should_Work()
+    public async Task Observe_All_FromStart_Should_Work()
     {
         //arrange
         var length = 10;
@@ -470,7 +470,7 @@ public abstract class EventStoreTestsBase
         var handledEvents = new List<IEventRecord>();
 
         //act
-        var observable = (await EventStore.SubscribeAsync(offset: StreamPosition.StartOfStream)).Subscribe(handledEvents.Add);
+        var observable = (await EventStore.ObserveAsync(offset: StreamPosition.StartOfStream)).Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
         await Task.Delay(100);
 
@@ -479,8 +479,8 @@ public abstract class EventStoreTestsBase
         handledEvents.Should().BeInAscendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
     }
 
-    [Fact, Priority(21)]
-    public async Task Subscribe_ToAll_FromOffset_Should_Work()
+    [Fact, Priority(25)]
+    public async Task Observe_All_FromOffset_Should_Work()
     {
         //arrange
         var length = 10;
@@ -497,7 +497,7 @@ public abstract class EventStoreTestsBase
         var handledEvents = new List<IEventRecord>();
 
         //act
-        var observable = (await EventStore.SubscribeAsync(offset: offset)).Subscribe(handledEvents.Add);
+        var observable = (await EventStore.ObserveAsync(offset: offset)).Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
         await Task.Delay(100);
 
@@ -505,8 +505,8 @@ public abstract class EventStoreTestsBase
         handledEvents.Should().HaveSameCount(eventsToAppend);
     }
 
-    [Fact, Priority(22)]
-    public async Task Subscribe_ToAll_FromEnd_Should_Work()
+    [Fact, Priority(26)]
+    public async Task Observe_All_FromEnd_Should_Work()
     {
         //arrange
         var length = 10;
@@ -523,7 +523,7 @@ public abstract class EventStoreTestsBase
         var handledEvents = new List<IEventRecord>();
 
         //act
-        var observable = (await EventStore.SubscribeAsync()).Subscribe(handledEvents.Add);
+        var observable = (await EventStore.ObserveAsync()).Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
         await Task.Delay(100);
 
@@ -531,8 +531,8 @@ public abstract class EventStoreTestsBase
         handledEvents.Should().HaveSameCount(eventsToAppend);
     }
 
-    [Fact, Priority(23)]
-    public async Task Subscribe_ToAll_WithConsumerGroup_Should_Work()
+    [Fact, Priority(27)]
+    public async Task Observe_All_WithConsumerGroup_Should_Work()
     {
         //arrange
         var length = 10;
@@ -549,7 +549,7 @@ public abstract class EventStoreTestsBase
         var consumerGroup = "test";
 
         //act
-        var observable = (await EventStore.SubscribeAsync(offset: StreamPosition.StartOfStream, consumerGroup: consumerGroup))
+        var observable = (await EventStore.ObserveAsync(offset: StreamPosition.StartOfStream, consumerGroup: consumerGroup))
             .SubscribeAsync(async e => 
             {
                 var ack = (IAckableEventRecord)e;
@@ -564,8 +564,7 @@ public abstract class EventStoreTestsBase
         handledEvents.Should().BeInAscendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
     }
 
-
-    [Fact, Priority(24)]
+    [Fact, Priority(28)]
     public async Task Truncate_ToZero_Should_Work()
     {
         //arrange
@@ -591,7 +590,7 @@ public abstract class EventStoreTestsBase
         stream.LastEventAt.Should().BeNull();
     }
 
-    [Fact, Priority(25)]
+    [Fact, Priority(29)]
     public async Task Truncate_Partially_Should_Work()
     {
         //arrange
@@ -610,7 +609,7 @@ public abstract class EventStoreTestsBase
         stream.LastEventAt.Should().NotBeNull();
     }
 
-    [Fact, Priority(26)]
+    [Fact, Priority(30)]
     public async Task Truncate_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
@@ -618,7 +617,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact, Priority(27)]
+    [Fact, Priority(31)]
     public async Task Delete_Should_Work()
     {
         //arrange
@@ -634,7 +633,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact, Priority(28)]
+    [Fact, Priority(32)]
     public async Task Delete_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert

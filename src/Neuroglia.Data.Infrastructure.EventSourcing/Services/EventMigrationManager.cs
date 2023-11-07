@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Microsoft.Extensions.Options;
+using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
 using System.Collections.Concurrent;
 
 namespace Neuroglia.Data.Infrastructure.EventSourcing.Services;
@@ -26,9 +28,12 @@ public class EventMigrationManager
     /// Initializes a new <see cref="EventMigrationManager"/>
     /// </summary>
     /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
-    public EventMigrationManager(IServiceProvider serviceProvider)
+    /// <param name="options">The current <see cref="EventMigrationOptions"/></param>
+    public EventMigrationManager(IServiceProvider serviceProvider, IOptions<EventMigrationOptions> options)
     {
         this.ServiceProvider = serviceProvider;
+        this.Options = options.Value;
+        this.Migrations = new(this.Options.Migrations);
     }
 
     /// <summary>
@@ -37,9 +42,14 @@ public class EventMigrationManager
     protected IServiceProvider ServiceProvider { get; }
 
     /// <summary>
+    /// Gets the current <see cref="EventMigrationOptions"/>
+    /// </summary>
+    protected EventMigrationOptions Options { get; }
+
+    /// <summary>
     /// Gets a type/handler mapping of events for which a migration has been registered 
     /// </summary>
-    protected ConcurrentDictionary<Type, Func<IServiceProvider, object, object>> Migrations { get; } = new();
+    protected ConcurrentDictionary<Type, Func<IServiceProvider, object, object>> Migrations { get; }
 
     /// <inheritdoc/>
     public virtual void RegisterEventMigration(Type sourceType, Func<IServiceProvider, object, object> handler)

@@ -236,10 +236,10 @@ public class RedisEventStore
     }
 
     /// <inheritdoc/>
-    public virtual Task<IObservable<IEventRecord>> SubscribeAsync(string? streamId, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
+    public virtual Task<IObservable<IEventRecord>> ObserveAsync(string? streamId, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(streamId)) return this.SubscribeToAllAsync(offset, consumerGroup, cancellationToken);
-        else return this.SubscribeToStreamAsync(streamId, offset, consumerGroup, cancellationToken);
+        if (string.IsNullOrWhiteSpace(streamId)) return this.ObserveAllAsync(offset, consumerGroup, cancellationToken);
+        else return this.ObserveStreamAsync(streamId, offset, consumerGroup, cancellationToken);
     }
 
     /// <summary>
@@ -250,13 +250,14 @@ public class RedisEventStore
     /// <param name="consumerGroup">The name of the consumer group, if any, in case the subscription is persistent</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new <see cref="IObservable{T}"/> used to observe events</returns>
-    public virtual async Task<IObservable<IEventRecord>> SubscribeToStreamAsync(string streamId, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
+    public virtual async Task<IObservable<IEventRecord>> ObserveStreamAsync(string streamId, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
         if (!await this.Database.KeyExistsAsync(streamId).ConfigureAwait(false)) throw new StreamNotFoundException(streamId);
         if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
 
-        var events = offset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(streamId, StreamReadDirection.Forwards, offset, cancellationToken: cancellationToken)).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false) ?? offset;
+        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(streamId, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken).Select(e => this.WrapEvent(e, null, consumerGroup))).ToListAsync(cancellationToken).ConfigureAwait(false);
         var messageQueue = await this.Subscriber.SubscribeAsync(this.GetRedisChannel(streamId));
         var subject = new Subject<IEventRecord>();
         var redisSubscription = new RedisSubscription(messageQueue);
@@ -273,11 +274,12 @@ public class RedisEventStore
     /// <param name="consumerGroup">The name of the consumer group, if any, in case the subscription is persistent</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new <see cref="IObservable{T}"/> used to observe events</returns>
-    public virtual async Task<IObservable<IEventRecord>> SubscribeToAllAsync(long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
+    public virtual async Task<IObservable<IEventRecord>> ObserveAllAsync(long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
         if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
 
-        var events = offset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(null, StreamReadDirection.Forwards, offset, cancellationToken: cancellationToken)).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false) ?? offset;
+        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(null, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken).Select(e => this.WrapEvent(e, null, consumerGroup))).ToListAsync(cancellationToken).ConfigureAwait(false);
         var messageQueue = await this.Subscriber.SubscribeAsync(this.GetRedisChannel());
         var subject = new ReplaySubject<IEventRecord>();
         var redisSubscription = new RedisSubscription(messageQueue);
@@ -372,19 +374,27 @@ public class RedisEventStore
     protected virtual string GetConsumerGroupCacheKey(string consumerGroup, string? streamId = null) => string.IsNullOrWhiteSpace(streamId) ? $"rx-cg:{consumerGroup}-$all" : $"rx-cg::{consumerGroup}-{streamId}";
 
     /// <summary>
+    /// Wraps the specified <see cref="IEventRecord"/> into a new <see cref="IAckableEventRecord"/> if the consumer group is not null
+    /// </summary>
+    /// <param name="e">The <see cref="IEventRecord"/> to wrap</param>
+    /// <param name="streamId">The id of the stream the <see cref="IEventRecord"/> belongs to</param>
+    /// <param name="consumerGroup">The name of the concurrent consumer group to wrap the event for</param>
+    /// <returns>The wrapped <see cref="IEventRecord"/></returns>
+    protected virtual IEventRecord WrapEvent(IEventRecord e, string? streamId, string? consumerGroup)
+    {
+        var ackDelegate = () => string.IsNullOrWhiteSpace(consumerGroup) ? null : this.SetOffsetAsync(consumerGroup, (long)e.Offset, streamId);
+        var nackDelegate = (string? reason) => string.IsNullOrWhiteSpace(consumerGroup) ? null : Task.CompletedTask;
+        return string.IsNullOrEmpty(consumerGroup) ? e : new AckableEventRecord(e.StreamId, e.Id, e.Offset, e.Timestamp, e.Type, e.Data, e.Metadata, ackDelegate, nackDelegate);
+    }
+
+    /// <summary>
     /// Handles the consumption of a <see cref="IEventRecord"/> on a subscription
     /// </summary>
     /// <param name="subject">The <see cref="ISubject{T}"/> used to stream <see cref="IEventRecord"/>s</param>
     /// <param name="streamId">The id of the stream <see cref="IEventRecord"/> belongs to</param>
     /// <param name="e">The <see cref="IEventRecord"/> to handle</param>
     /// <param name="consumerGroup">The name of the group, if any, that consumes the <see cref="IEventRecord"/></param>
-    protected void OnEventConsumed(ISubject<IEventRecord> subject, IEventRecord e, string? streamId, string? consumerGroup)
-    {
-        var ackDelegate = () => string.IsNullOrWhiteSpace(consumerGroup) ? null : this.SetOffsetAsync(consumerGroup, (long)e.Offset, streamId);
-        var nackDelegate = (string? reason) => string.IsNullOrWhiteSpace(consumerGroup) ? null : Task.Run(() => this.OnEventConsumed(subject, e, null, consumerGroup));
-        var record = string.IsNullOrEmpty(consumerGroup) ? e : new AckableEventRecord(e.StreamId, e.Id, e.Offset, e.Timestamp, e.Type, e.Data, e.Metadata, ackDelegate, nackDelegate);
-        subject.OnNext(record);
-    }
+    protected void OnEventConsumed(ISubject<IEventRecord> subject, IEventRecord e, string? streamId, string? consumerGroup) => subject.OnNext(this.WrapEvent(e, streamId, consumerGroup));
 
     /// <summary>
     /// Exposes constants about event related metadata used by the <see cref="RedisEventStore"/>
