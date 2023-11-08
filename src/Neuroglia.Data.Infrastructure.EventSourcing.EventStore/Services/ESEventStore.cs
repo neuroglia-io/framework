@@ -267,7 +267,7 @@ public class ESEventStore
         {
             var position = offset == StreamPosition.EndOfStream ? FromAll.End : FromAll.Start;
             var filterOptions = new SubscriptionFilterOptions(EventTypeFilter.ExcludeSystemEvents());
-            var subscription = await this.EventStoreClient.SubscribeToAllAsync(position, (sub, e, token) => this.OnEventConsumedAsync(subject, sub, e, token), filterOptions: filterOptions, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var subscription = await this.EventStoreClient.SubscribeToAllAsync(position, (sub, e, token) => this.OnEventConsumedAsync(subject, sub, e, token), true, (sub, reason, ex) => this.OnSubscriptionDropped(subject, sub, reason, ex), filterOptions: filterOptions, cancellationToken: cancellationToken).ConfigureAwait(false);
             var observable = Observable.Using(() => subscription, _ => subject);
             var streamOffset = 0;
             if (offset != StreamPosition.StartOfStream && offset != StreamPosition.EndOfStream) observable = observable.SkipWhile(e => 
@@ -285,7 +285,7 @@ public class ESEventStore
             var settings = new PersistentSubscriptionSettings(true, position, checkPointLowerBound: 1, checkPointUpperBound: 1);
             try { await this.EventStorePersistentSubscriptionsClient.CreateToAllAsync(consumerGroup, filter, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { }
-            var persistentSubscription = await this.EventStorePersistentSubscriptionsClient.SubscribeToAllAsync(consumerGroup, (sub, e, retry, token) => this.OnEventConsumedAsync(subject, sub, e, retry, token), cancellationToken: cancellationToken);
+            var persistentSubscription = await this.EventStorePersistentSubscriptionsClient.SubscribeToAllAsync(consumerGroup, (sub, e, retry, token) => this.OnEventConsumedAsync(subject, sub, e, retry, token), (sub, reason, ex) => this.OnSubscriptionDropped(subject, sub, reason, ex), cancellationToken: cancellationToken);
             return Observable.Using(() => persistentSubscription, watch => subject);
         }
     }
@@ -301,12 +301,14 @@ public class ESEventStore
         if (string.IsNullOrWhiteSpace(streamId))
         {
             await this.EventStorePersistentSubscriptionsClient.DeleteToAllAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false);
-            await this.EventStorePersistentSubscriptionsClient.UpdateToAllAsync(consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false);
+            try { await this.EventStorePersistentSubscriptionsClient.CreateToAllAsync(consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); } //it occured in tests that EventStore would only eventually delete the subscription, resulting in caught exception, thus the need for the try/catch block
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { await this.EventStorePersistentSubscriptionsClient.UpdateToAllAsync(consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
         }
         else
         {
             await this.EventStorePersistentSubscriptionsClient.DeleteToStreamAsync(streamId, consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false);
-            await this.EventStorePersistentSubscriptionsClient.UpdateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false);
+            try { await this.EventStorePersistentSubscriptionsClient.CreateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); } //it occured in tests that EventStore would only eventually delete the subscription, resulting in caught exception, thus the need for the try/catch block
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { await this.EventStorePersistentSubscriptionsClient.UpdateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
         }
     }
 
@@ -334,8 +336,9 @@ public class ESEventStore
     /// </summary>
     /// <param name="e">The <see cref="ResolvedEvent"/> to deserialize</param>
     /// <param name="subscription">The <see cref="PersistentSubscription"/> the <see cref="ResolvedEvent"/> has been produced by, if any</param>
+    /// <param name="subject">The <see cref="ISubject{T}"/> to stream <see cref="IEventRecord"/>s to</param>
     /// <returns>The deserialized <see cref="IEventRecord"/></returns>
-    protected virtual IEventRecord DeserializeEventRecord(ResolvedEvent e, PersistentSubscription? subscription = null)
+    protected virtual IEventRecord DeserializeEventRecord(ResolvedEvent e, PersistentSubscription? subscription = null, ISubject<IEventRecord>? subject = null)
     {
         var metadata = this.Serializer.Deserialize<IDictionary<string, object>>(e.Event.Metadata.ToArray());
         var clrTypeName = metadata![EventRecordMetadata.ClrTypeName].ToString()!;
@@ -344,7 +347,7 @@ public class ESEventStore
         metadata.Remove(EventRecordMetadata.ClrTypeName);
         if (!metadata.Any()) metadata = null;
         if (subscription == null) return new EventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Created, e.Event.EventType, data, metadata);
-        else return new AckableEventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Created, e.Event.EventType, data, metadata, () => subscription.Ack(e.Event.EventId), reason => subscription.Nack(PersistentSubscriptionNakEventAction.Retry, reason!, e.Event.EventId));
+        else return new AckableEventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Created, e.Event.EventType, data, metadata, () => this.OnAckEventAsync(subject!, subscription, e), reason => this.OnNackEventAsync(subject!, subscription, e, reason));
     }
 
     /// <summary>
@@ -368,8 +371,43 @@ public class ESEventStore
     /// <returns>A new awaitable <see cref="Task"/></returns>
     protected virtual Task OnEventConsumedAsync(ISubject<IEventRecord> subject, PersistentSubscription subscription, ResolvedEvent e, int? retryCount, CancellationToken cancellationToken)
     {
-        if (e.OriginalStreamId.StartsWith("$") || e.Event.Metadata.Length < 1) return subscription.Ack(e);
-        return Task.Run(() => subject.OnNext(this.DeserializeEventRecord(e, subscription)), cancellationToken); 
+        try
+        {
+            if (e.OriginalStreamId.StartsWith("$") || e.Event.Metadata.Length < 1) return subscription.Ack(e);
+            return Task.Run(() => subject.OnNext(this.DeserializeEventRecord(e, subscription, subject)), cancellationToken);
+        }
+        catch(Exception ex)
+        {
+            subject.OnError(ex);
+            return Task.CompletedTask;
+        }
+    }
+
+    /// <summary>
+    /// Acks the specified <see cref="ResolvedEvent"/>
+    /// </summary>
+    /// <param name="subject">The <see cref="ISubject{T}"/> to stream <see cref="IEventRecord"/>s to</param>
+    /// <param name="subscription">The <see cref="PersistentSubscription"/> the <see cref="ResolvedEvent"/> to ack has been received by</param>
+    /// <param name="e">The <see cref="ResolvedEvent"/> to ack</param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    protected virtual async Task OnAckEventAsync(ISubject<IEventRecord> subject, PersistentSubscription subscription, ResolvedEvent e)
+    {
+        try { await subscription.Ack(e.Event.EventId).ConfigureAwait(false); }
+        catch (ObjectDisposedException ex) { subject.OnError(ex); }
+    }
+
+    /// <summary>
+    /// Nacks the specified <see cref="ResolvedEvent"/>
+    /// </summary>
+    /// <param name="subject">The <see cref="ISubject{T}"/> to stream <see cref="IEventRecord"/>s to</param>
+    /// <param name="subscription">The <see cref="PersistentSubscription"/> the <see cref="ResolvedEvent"/> to nack has been received by</param>
+    /// <param name="e">The <see cref="ResolvedEvent"/> to nack</param>
+    /// <param name="reason">The reason why to nack the <see cref="ResolvedEvent"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    protected virtual async Task OnNackEventAsync(ISubject<IEventRecord> subject, PersistentSubscription subscription, ResolvedEvent e, string? reason)
+    {
+        try { await subscription.Nack(PersistentSubscriptionNakEventAction.Retry, reason ?? "Unknown", e.Event.EventId).ConfigureAwait(false); }
+        catch (ObjectDisposedException ex) { subject.OnError(ex); }
     }
 
     /// <summary>
