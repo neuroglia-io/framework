@@ -31,14 +31,16 @@ public record AckableEventRecord
     /// <param name="streamId">The id of the stream the recorded event belongs to</param>
     /// <param name="id">The id of the recorded event</param>
     /// <param name="offset">The offset of the recorded event</param>
+    /// <param name="position">The global position of the recorded event</param>
     /// <param name="timestamp">The date and time at which the event has been recorded</param>
     /// <param name="type">The type of the recorded event. Should be a non-versioned reverse uri made out alphanumeric, '-' and '.' characters</param>
     /// <param name="data">The data of the recorded event</param>
     /// <param name="metadata">The metadata of the recorded event</param>
     /// <param name="ackDelegate">The <see cref="Func{TResult}"/>, if any, used to ack the record</param>
     /// <param name="nackDelegate">The <see cref="Func{TResult}"/>, if any, used to nack the record</param>
-    public AckableEventRecord(string streamId, string id, ulong offset, DateTimeOffset timestamp, string type, object? data = null, IDictionary<string, object>? metadata = null, Func<Task>? ackDelegate = null, Func<string?, Task>? nackDelegate = null) 
-        : base(streamId, id, offset, timestamp, type, data, metadata)
+    /// <param name="replayed">A boolean indicating whether or not the recorded event is being replayed to its consumer(s)</param>
+    public AckableEventRecord(string streamId, string id, ulong offset, ulong position, DateTimeOffset timestamp, string type, object? data = null, IDictionary<string, object>? metadata = null, bool? replayed = false, Func<Task>? ackDelegate = null, Func<string?, Task>? nackDelegate = null) 
+        : base(streamId, id, offset, position, timestamp, type, data, metadata, replayed)
     {
         this.AckDelegate = ackDelegate;
         this.NackDelegate = nackDelegate;

@@ -30,9 +30,14 @@ public interface IEventRecord
     string Id { get; }
 
     /// <summary>
-    /// Gets the offset of the recorded event
+    /// Gets the offset of the recorded event in the stream it belongs to
     /// </summary>
     ulong Offset { get; }
+
+    /// <summary>
+    /// Gets the global position of the recorded event
+    /// </summary>
+    ulong Position { get; }
 
     /// <summary>
     /// Gets the date and time at which the event has been recorded
@@ -48,6 +53,11 @@ public interface IEventRecord
     /// Gets the data of the recorded event
     /// </summary>
     object? Data { get; }
+
+    /// <summary>
+    /// Gets a boolean indicating whether or not the recorded event is being replayed to the subscriber. Null if not consumed by a persistent subscription.
+    /// </summary>
+    bool? Replayed { get; }
 
     /// <summary>
     /// Gets the metadata of the recorded event

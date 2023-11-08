@@ -96,7 +96,7 @@ public class RedisEventStore
         var offset = actualversion.HasValue ? (ulong)actualversion.Value + 1 : StreamPosition.StartOfStream;
         foreach (var e in events)
         {
-            var record = new EventRecord(streamId, Guid.NewGuid().ToShortString(), offset, DateTimeOffset.Now, e.Type, e.Data, e.Metadata);
+            var record = new EventRecord(streamId, Guid.NewGuid().ToShortString(), offset, (ulong)(await this.Database.HashKeysAsync(GlobalStreamKey).ConfigureAwait(false)).Length, DateTimeOffset.Now, e.Type, e.Data, e.Metadata);
             record.Metadata ??= new Dictionary<string, object>();
             record.Metadata[EventRecordMetadata.ClrTypeName] = e.Data?.GetType().AssemblyQualifiedName!;
             var entryValue = this.Serializer.SerializeToByteArray(record);
@@ -256,12 +256,16 @@ public class RedisEventStore
         if (!await this.Database.KeyExistsAsync(streamId).ConfigureAwait(false)) throw new StreamNotFoundException(streamId);
         if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
 
+        var checkpointedPosition = (ulong?)null;
+        if (!string.IsNullOrWhiteSpace(consumerGroup)) checkpointedPosition = await this.GetConsumerCheckpointedPositionAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false);
+
         var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false) ?? offset;
-        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(streamId, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken).Select(e => this.WrapEvent(e, null, consumerGroup))).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(streamId, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken).Select(e => this.WrapEvent(e, streamId, consumerGroup, checkpointedPosition.HasValue ? checkpointedPosition.Value > e.Offset : string.IsNullOrWhiteSpace(consumerGroup) ? null : false))).ToListAsync(cancellationToken).ConfigureAwait(false);
         var messageQueue = await this.Subscriber.SubscribeAsync(this.GetRedisChannel(streamId));
         var subject = new Subject<IEventRecord>();
+
         var redisSubscription = new RedisSubscription(messageQueue);
-        var subscription = messageQueue.ToObservable().Select(m => this.DeserializeEventRecord(m.Message)).Subscribe(e => this.OnEventConsumed(subject, e, streamId, consumerGroup));
+        var subscription = messageQueue.ToObservable().Select(m => this.DeserializeEventRecord(m.Message)).Subscribe(e => this.OnEventConsumed(subject, e, streamId, consumerGroup, checkpointedPosition.HasValue ? checkpointedPosition.Value > e.Offset : string.IsNullOrWhiteSpace(consumerGroup) ? null : false));
         var observable = Observable.Using(() => new CompositeDisposable(subscription, redisSubscription), _ => subject);
 
         return Observable.StartWith(observable, events);
@@ -278,12 +282,16 @@ public class RedisEventStore
     {
         if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
 
+        var checkpointedPosition = (ulong?)null;
+        if (!string.IsNullOrWhiteSpace(consumerGroup)) checkpointedPosition = await this.GetConsumerCheckpointedPositionAsync(consumerGroup, null, cancellationToken).ConfigureAwait(false);
+
         var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false) ?? offset;
-        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(null, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken).Select(e => this.WrapEvent(e, null, consumerGroup))).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(null, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken).Select(e => this.WrapEvent(e, null, consumerGroup, checkpointedPosition.HasValue ? checkpointedPosition.Value > e.Offset : string.IsNullOrWhiteSpace(consumerGroup) ? null : false))).ToListAsync(cancellationToken).ConfigureAwait(false);
         var messageQueue = await this.Subscriber.SubscribeAsync(this.GetRedisChannel());
         var subject = new ReplaySubject<IEventRecord>();
+
         var redisSubscription = new RedisSubscription(messageQueue);
-        var subscription = messageQueue.ToObservable().Select(m => this.DeserializeEventRecord(m.Message)).Subscribe(m => this.OnEventConsumed(subject, m, null, consumerGroup));
+        var subscription = messageQueue.ToObservable().Select(m => this.DeserializeEventRecord(m.Message)).Subscribe(e => this.OnEventConsumed(subject, e, null, consumerGroup, checkpointedPosition.HasValue ? checkpointedPosition.Value >= e.Position : string.IsNullOrWhiteSpace(consumerGroup) ? null : false));
         var observable = Observable.Using(() => new CompositeDisposable(subscription, redisSubscription), _ => subject);
 
         return Observable.StartWith(observable, events);
@@ -338,6 +346,10 @@ public class RedisEventStore
     {
         if (string.IsNullOrWhiteSpace(consumerGroup)) throw new ArgumentNullException(nameof(consumerGroup));
         if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+
+        var checkpointedPosition = (ulong?)await this.GetOffsetAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false);
+        if (checkpointedPosition.HasValue) await this.SetConsumerCheckpointPositionAsync(consumerGroup, streamId, checkpointedPosition.Value, cancellationToken).ConfigureAwait(false);
+
         await this.Database.StringSetAsync(this.GetConsumerGroupCacheKey(consumerGroup, streamId), offset.ToString());
     }
 
@@ -374,17 +386,50 @@ public class RedisEventStore
     protected virtual string GetConsumerGroupCacheKey(string consumerGroup, string? streamId = null) => string.IsNullOrWhiteSpace(streamId) ? $"rx-cg:{consumerGroup}-$all" : $"rx-cg::{consumerGroup}-{streamId}";
 
     /// <summary>
+    /// Gets the last checkpointed position, if any, of the specified consumer group
+    /// </summary>
+    /// <param name="consumerGroup">The consumer group to get the highest checkpointed position for</param>
+    /// <param name="streamId">The id of the stream, if any, to get the consumer group's checkpointed position for</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    protected virtual async Task<ulong?> GetConsumerCheckpointedPositionAsync(string consumerGroup, string? streamId = null, CancellationToken cancellationToken = default)
+    {
+        var key = this.GetConsumerCheckpointCacheKey(consumerGroup, streamId);
+        if (await this.Database.KeyExistsAsync(key).ConfigureAwait(false) && ulong.TryParse(await this.Database.StringGetAsync(key).ConfigureAwait(false), out var checkpointedPosition)) return checkpointedPosition;
+        else return null;
+    }
+
+    /// <summary>
+    /// Sets the last checkpointed position of the specified consumer group
+    /// </summary>
+    /// <param name="consumerGroup">The consumer group to set the last checkpointed position for</param>
+    /// <param name="streamId">The id of the stream, if any, to get the consumer group's checkpointed position for</param>
+    /// <param name="position">The last checkpointed position</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    protected virtual Task SetConsumerCheckpointPositionAsync(string consumerGroup, string? streamId, ulong position, CancellationToken cancellationToken = default) => this.Database.StringSetAsync(this.GetConsumerCheckpointCacheKey(consumerGroup, streamId), position.ToString());
+
+    /// <summary>
+    /// Gets the cache key used to store the checkpoints of the specified consumer group, and optionally stream
+    /// </summary>
+    /// <param name="consumerGroup">The consumer group to get the checkpoint cache key for</param>
+    /// <param name="streamId">The id of the stream, if any, to get the consumer group's checkpoint cache key for</param>
+    /// <returns></returns>
+    protected virtual string GetConsumerCheckpointCacheKey(string consumerGroup, string? streamId) => $"${consumerGroup}:{streamId ?? "$all"}_checkpoints";
+
+    /// <summary>
     /// Wraps the specified <see cref="IEventRecord"/> into a new <see cref="IAckableEventRecord"/> if the consumer group is not null
     /// </summary>
     /// <param name="e">The <see cref="IEventRecord"/> to wrap</param>
     /// <param name="streamId">The id of the stream the <see cref="IEventRecord"/> belongs to</param>
     /// <param name="consumerGroup">The name of the concurrent consumer group to wrap the event for</param>
+    /// <param name="replayed">A boolean indicating whether or not the consumed <see cref="IEventRecord"/> is being replayed to its consumers</param>
     /// <returns>The wrapped <see cref="IEventRecord"/></returns>
-    protected virtual IEventRecord WrapEvent(IEventRecord e, string? streamId, string? consumerGroup)
+    protected virtual IEventRecord WrapEvent(IEventRecord e, string? streamId, string? consumerGroup, bool? replayed)
     {
-        var ackDelegate = () => string.IsNullOrWhiteSpace(consumerGroup) ? null : this.SetOffsetAsync(consumerGroup, (long)e.Offset, streamId);
+        var ackDelegate = () => string.IsNullOrWhiteSpace(consumerGroup) ? null : this.SetOffsetAsync(consumerGroup, string.IsNullOrWhiteSpace(streamId) ? (long)e.Position : (long)e.Offset, streamId);
         var nackDelegate = (string? reason) => string.IsNullOrWhiteSpace(consumerGroup) ? null : Task.CompletedTask;
-        return string.IsNullOrEmpty(consumerGroup) ? e : new AckableEventRecord(e.StreamId, e.Id, e.Offset, e.Timestamp, e.Type, e.Data, e.Metadata, ackDelegate, nackDelegate);
+        return string.IsNullOrEmpty(consumerGroup) ? e : new AckableEventRecord(e.StreamId, e.Id, e.Offset, e.Position, e.Timestamp, e.Type, e.Data, e.Metadata, replayed, ackDelegate, nackDelegate);
     }
 
     /// <summary>
@@ -393,8 +438,9 @@ public class RedisEventStore
     /// <param name="subject">The <see cref="ISubject{T}"/> used to stream <see cref="IEventRecord"/>s</param>
     /// <param name="streamId">The id of the stream <see cref="IEventRecord"/> belongs to</param>
     /// <param name="e">The <see cref="IEventRecord"/> to handle</param>
+    /// <param name="replayed">A boolean indicating whether or not the consumed <see cref="IEventRecord"/> is being replayed to its consumers</param>
     /// <param name="consumerGroup">The name of the group, if any, that consumes the <see cref="IEventRecord"/></param>
-    protected void OnEventConsumed(ISubject<IEventRecord> subject, IEventRecord e, string? streamId, string? consumerGroup) => subject.OnNext(this.WrapEvent(e, streamId, consumerGroup));
+    protected void OnEventConsumed(ISubject<IEventRecord> subject, IEventRecord e, string? streamId, string? consumerGroup, bool? replayed = null) => subject.OnNext(this.WrapEvent(e, streamId, consumerGroup, replayed));
 
     /// <summary>
     /// Exposes constants about event related metadata used by the <see cref="RedisEventStore"/>

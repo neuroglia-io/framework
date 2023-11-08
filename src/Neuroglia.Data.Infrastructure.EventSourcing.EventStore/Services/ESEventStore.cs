@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 using Neuroglia.Serialization;
+using System.IO;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
@@ -246,7 +247,8 @@ public class ESEventStore
             var settings = new PersistentSubscriptionSettings(true, position, checkPointLowerBound: 1, checkPointUpperBound: 1);
             try { await this.EventStorePersistentSubscriptionsClient.CreateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { }
-            var persistentSubscription = await this.EventStorePersistentSubscriptionsClient.SubscribeToStreamAsync(streamId, consumerGroup, (sub, e, retry, token) => this.OnEventConsumedAsync(subject, sub, e, retry, token), (sub, reason, ex) => this.OnSubscriptionDropped(subject, sub, reason, ex), cancellationToken: cancellationToken).ConfigureAwait(false);
+            var checkpointedPosition = await this.GetConsumerCheckpointedPositionAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false);
+            var persistentSubscription = await this.EventStorePersistentSubscriptionsClient.SubscribeToStreamAsync(streamId, consumerGroup, (sub, e, retry, token) => this.OnEventConsumedAsync(subject, streamId, sub, e, retry, checkpointedPosition, token), (sub, reason, ex) => this.OnSubscriptionDropped(subject, sub, reason, ex), cancellationToken: cancellationToken).ConfigureAwait(false);
             return Observable.Using(() => persistentSubscription, watch => subject);
         }
     }
@@ -285,7 +287,8 @@ public class ESEventStore
             var settings = new PersistentSubscriptionSettings(true, position, checkPointLowerBound: 1, checkPointUpperBound: 1);
             try { await this.EventStorePersistentSubscriptionsClient.CreateToAllAsync(consumerGroup, filter, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { }
-            var persistentSubscription = await this.EventStorePersistentSubscriptionsClient.SubscribeToAllAsync(consumerGroup, (sub, e, retry, token) => this.OnEventConsumedAsync(subject, sub, e, retry, token), (sub, reason, ex) => this.OnSubscriptionDropped(subject, sub, reason, ex), cancellationToken: cancellationToken);
+            var checkpointedPosition = await this.GetConsumerCheckpointedPositionAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var persistentSubscription = await this.EventStorePersistentSubscriptionsClient.SubscribeToAllAsync(consumerGroup, (sub, e, retry, token) => this.OnEventConsumedAsync(subject, null, sub, e, retry, checkpointedPosition, token), (sub, reason, ex) => this.OnSubscriptionDropped(subject, sub, reason, ex), cancellationToken: cancellationToken);
             return Observable.Using(() => persistentSubscription, watch => subject);
         }
     }
@@ -298,14 +301,23 @@ public class ESEventStore
 
         IPosition position = string.IsNullOrWhiteSpace(streamId) ? offset == StreamPosition.EndOfStream ? Position.End : Position.Start : offset == StreamPosition.EndOfStream ? ESStreamPosition.End : ESStreamPosition.FromInt64(offset);
         var settings = new PersistentSubscriptionSettings(true, position, checkPointLowerBound: 1, checkPointUpperBound: 1);
+        PersistentSubscriptionInfo subscription;
         if (string.IsNullOrWhiteSpace(streamId))
         {
+            try { subscription = await this.EventStorePersistentSubscriptionsClient.GetInfoToAllAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false); }
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound) { throw new StreamNotFoundException(); }
+            if (subscription.Stats.LastCheckpointedEventPosition != null) await this.SetConsumerCheckpointPositionAsync(consumerGroup, streamId, subscription.Stats.LastCheckpointedEventPosition, cancellationToken).ConfigureAwait(false);
+           
             await this.EventStorePersistentSubscriptionsClient.DeleteToAllAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false);
             try { await this.EventStorePersistentSubscriptionsClient.CreateToAllAsync(consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); } //it occured in tests that EventStore would only eventually delete the subscription, resulting in caught exception, thus the need for the try/catch block
             catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { await this.EventStorePersistentSubscriptionsClient.UpdateToAllAsync(consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
         }
         else
         {
+            try { subscription = await this.EventStorePersistentSubscriptionsClient.GetInfoToStreamAsync(consumerGroup, streamId, cancellationToken: cancellationToken).ConfigureAwait(false); }
+            catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound) { throw new StreamNotFoundException(); }
+            if (subscription.Stats.LastCheckpointedEventPosition != null) await this.SetConsumerCheckpointPositionAsync(consumerGroup, streamId, subscription.Stats.LastCheckpointedEventPosition, cancellationToken).ConfigureAwait(false);
+
             await this.EventStorePersistentSubscriptionsClient.DeleteToStreamAsync(streamId, consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false);
             try { await this.EventStorePersistentSubscriptionsClient.CreateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); } //it occured in tests that EventStore would only eventually delete the subscription, resulting in caught exception, thus the need for the try/catch block
             catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { await this.EventStorePersistentSubscriptionsClient.UpdateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
@@ -337,8 +349,9 @@ public class ESEventStore
     /// <param name="e">The <see cref="ResolvedEvent"/> to deserialize</param>
     /// <param name="subscription">The <see cref="PersistentSubscription"/> the <see cref="ResolvedEvent"/> has been produced by, if any</param>
     /// <param name="subject">The <see cref="ISubject{T}"/> to stream <see cref="IEventRecord"/>s to</param>
+    /// <param name="replayed">A boolean indicating whether or not the <see cref="ResolvedEvent"/> is being replayed to its consumer. Ignore if 'subscription' is null</param>
     /// <returns>The deserialized <see cref="IEventRecord"/></returns>
-    protected virtual IEventRecord DeserializeEventRecord(ResolvedEvent e, PersistentSubscription? subscription = null, ISubject<IEventRecord>? subject = null)
+    protected virtual IEventRecord DeserializeEventRecord(ResolvedEvent e, PersistentSubscription? subscription = null, ISubject<IEventRecord>? subject = null, bool? replayed = null)
     {
         var metadata = this.Serializer.Deserialize<IDictionary<string, object>>(e.Event.Metadata.ToArray());
         var clrTypeName = metadata![EventRecordMetadata.ClrTypeName].ToString()!;
@@ -346,9 +359,48 @@ public class ESEventStore
         var data = this.Serializer.Deserialize(e.Event.Data.ToArray(), clrType);
         metadata.Remove(EventRecordMetadata.ClrTypeName);
         if (!metadata.Any()) metadata = null;
-        if (subscription == null) return new EventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Created, e.Event.EventType, data, metadata);
-        else return new AckableEventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Created, e.Event.EventType, data, metadata, () => this.OnAckEventAsync(subject!, subscription, e), reason => this.OnNackEventAsync(subject!, subscription, e, reason));
+        if (subscription == null) return new EventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Position.CommitPosition, e.Event.Created, e.Event.EventType, data, metadata);
+        else return new AckableEventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Position.CommitPosition, e.Event.Created, e.Event.EventType, data, metadata, replayed, () => this.OnAckEventAsync(subject!, subscription, e), reason => this.OnNackEventAsync(subject!, subscription, e, reason));
     }
+
+    /// <summary>
+    /// Gets the last checkpointed position, if any, of the specified consumer group
+    /// </summary>
+    /// <param name="consumerGroup">The consumer group to get the highest checkpointed position for</param>
+    /// <param name="streamId">The id of the stream, if any, to get the consumer group's checkpointed position for</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    protected virtual async Task<ulong?> GetConsumerCheckpointedPositionAsync(string consumerGroup, string? streamId = null, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await this.ReadAsync(this.GetConsumerCheckpointStreamId(consumerGroup, streamId), StreamReadDirection.Forwards, StreamPosition.StartOfStream, cancellationToken: cancellationToken)
+                .Select(e => e.Data)
+                .OfType<ulong>()
+                .OrderByDescending(u => u)
+                .FirstOrDefaultAsync(cancellationToken)
+                .ConfigureAwait(false);
+        }
+        catch (StreamNotFoundException) { return null; }
+    }
+
+    /// <summary>
+    /// Sets the last checkpointed position of the specified consumer group
+    /// </summary>
+    /// <param name="consumerGroup">The consumer group to set the last checkpointed position for</param>
+    /// <param name="streamId">The id of the stream, if any, to get the consumer group's checkpointed position for</param>
+    /// <param name="position">The last checkpointed position</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    protected virtual Task SetConsumerCheckpointPositionAsync(string consumerGroup, string? streamId, IPosition position, CancellationToken cancellationToken = default) => this.AppendAsync(this.GetConsumerCheckpointStreamId(consumerGroup, streamId), new EventDescriptor[] { new("$checkpoint", ((Position)position).CommitPosition) }, cancellationToken: cancellationToken);
+
+    /// <summary>
+    /// Gets the id of the stream used to store the checkpoints of the specified consumer group, and optionally stream
+    /// </summary>
+    /// <param name="consumerGroup">The consumer group to get the checkpoint stream id for</param>
+    /// <param name="streamId">The id of the stream, if any, to get the consumer group's checkpoint stream for</param>
+    /// <returns></returns>
+    protected virtual string GetConsumerCheckpointStreamId(string consumerGroup, string? streamId) => $"${consumerGroup}:{streamId ?? "$all"}_checkpoints";
 
     /// <summary>
     /// Handles the consumption of a <see cref="ResolvedEvent"/> on a <see cref="PersistentSubscription"/>
@@ -364,17 +416,19 @@ public class ESEventStore
     /// Handles the consumption of a <see cref="ResolvedEvent"/> on a <see cref="PersistentSubscription"/>
     /// </summary>
     /// <param name="subject">The <see cref="ISubject{T}"/> to stream <see cref="IEventRecord"/>s to</param>
+    /// <param name="streamId">The id of the stream, if any, to consume <see cref="IEventRecord"/>s from</param>
     /// <param name="subscription">The <see cref="PersistentSubscription"/> the <see cref="ResolvedEvent"/> has been received by</param>
     /// <param name="e">The <see cref="ResolvedEvent"/> to handle</param>
     /// <param name="retryCount">The retry count, if any</param>
+    /// <param name="checkpointedPosition">The highest position ever checkpointed by the consumer group</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    protected virtual Task OnEventConsumedAsync(ISubject<IEventRecord> subject, PersistentSubscription subscription, ResolvedEvent e, int? retryCount, CancellationToken cancellationToken)
+    protected virtual Task OnEventConsumedAsync(ISubject<IEventRecord> subject, string? streamId, PersistentSubscription subscription, ResolvedEvent e, int? retryCount, ulong? checkpointedPosition, CancellationToken cancellationToken)
     {
         try
         {
             if (e.OriginalStreamId.StartsWith("$") || e.Event.Metadata.Length < 1) return subscription.Ack(e);
-            return Task.Run(() => subject.OnNext(this.DeserializeEventRecord(e, subscription, subject)), cancellationToken);
+            return Task.Run(() => subject.OnNext(this.DeserializeEventRecord(e, subscription, subject, checkpointedPosition > (string.IsNullOrWhiteSpace(streamId) ? e.Event.Position.CommitPosition : e.Event.EventNumber.ToUInt64()))), cancellationToken);
         }
         catch(Exception ex)
         {

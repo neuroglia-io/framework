@@ -83,7 +83,7 @@ public class MemoryEventStore
         ulong offset = actualversion.HasValue ? (ulong)actualversion.Value + 1 : StreamPosition.StartOfStream;
         foreach(var e in events)
         {
-            var record = new EventRecord(streamId, Guid.NewGuid().ToString(), offset, DateTimeOffset.Now, e.Type, e.Data, e.Metadata);
+            var record = new EventRecord(streamId, Guid.NewGuid().ToString(), offset, (ulong)this.Stream.Count, DateTimeOffset.Now, e.Type, e.Data, e.Metadata);
             stream.Add(record);
             offset++;
             this.Stream.AddOrUpdate((ulong)this.Stream.Count + 1, record, (key, value) => record);
@@ -199,10 +199,14 @@ public class MemoryEventStore
         var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false) ?? offset;
         var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(streamId, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken)).ToListAsync(cancellationToken).ConfigureAwait(false);
         var subject = new Subject<IEventRecord>();
+        
+        var checkpointedPosition = (ulong?)null;
+        if(!string.IsNullOrWhiteSpace(consumerGroup)) checkpointedPosition = await this.GetConsumerCheckpointedPositionAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false);
+
         var subscription = Observable.StartWith(Observable.FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(h => stream.CollectionChanged += h, h => stream.CollectionChanged -= h)
             .Where(e => e.EventArgs.Action == NotifyCollectionChangedAction.Add)
             .SelectMany(e => e.EventArgs.NewItems!.Cast<IEventRecord>()!), events)
-            .Subscribe(e => this.OnEventConsumed(subject, e, streamId, consumerGroup));
+            .Subscribe(e => this.OnEventConsumed(subject, e, streamId, consumerGroup, checkpointedPosition.HasValue ? checkpointedPosition.Value > e.Offset : string.IsNullOrWhiteSpace(consumerGroup) ? null : false));
         var observable = Observable.Using(() => subscription, _ => subject);
         return Observable.StartWith(observable, events);
     }
@@ -221,7 +225,11 @@ public class MemoryEventStore
         var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false) ?? offset;
         var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(null, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken)).ToListAsync(cancellationToken).ConfigureAwait(false);
         var subject = new ReplaySubject<IEventRecord>();
-        var subscription = Observable.StartWith(this.Subject, events).Subscribe(e => this.OnEventConsumed(subject, e, null, consumerGroup));
+
+        var checkpointedPosition = (ulong?)null;
+        if (!string.IsNullOrWhiteSpace(consumerGroup)) checkpointedPosition = await this.GetConsumerCheckpointedPositionAsync(consumerGroup, null, cancellationToken).ConfigureAwait(false);
+
+        var subscription = Observable.StartWith(this.Subject, events).Subscribe(e => this.OnEventConsumed(subject, e, null, consumerGroup, checkpointedPosition.HasValue ? checkpointedPosition.Value >= this.Stream.First(kvp => kvp.Value == e).Key : string.IsNullOrWhiteSpace(consumerGroup) ? null : false));
         return Observable.Using(() => subscription, _ => subject);
     }
 
@@ -241,11 +249,15 @@ public class MemoryEventStore
     }
 
     /// <inheritdoc/>
-    public virtual Task SetOffsetAsync(string consumerGroup, long offset, string? streamId = null, CancellationToken cancellationToken = default)
+    public virtual async Task SetOffsetAsync(string consumerGroup, long offset, string? streamId = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(consumerGroup)) throw new ArgumentNullException(nameof(consumerGroup));
         if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
-        return Task.Run(() => this.Cache.Set(this.GetConsumerGroupCacheKey(consumerGroup, streamId), offset), cancellationToken);
+
+        var checkpointedPosition = (ulong?)await this.GetOffsetAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false);
+        if (checkpointedPosition.HasValue) await this.SetConsumerCheckpointPositionAsync(consumerGroup, streamId, checkpointedPosition.Value, cancellationToken).ConfigureAwait(false);
+
+        this.Cache.Set(this.GetConsumerGroupCacheKey(consumerGroup, streamId), offset);
     }
 
     /// <summary>
@@ -255,6 +267,40 @@ public class MemoryEventStore
     /// <param name="streamId">The id of the stream, if any, to get the cache key for</param>
     /// <returns>The cache key for the specified consumer group and stream</returns>
     protected virtual string GetConsumerGroupCacheKey(string consumerGroup, string? streamId = null) => string.IsNullOrWhiteSpace(streamId) ? $"cs:{consumerGroup}-$all" : $"cs:{consumerGroup}-{streamId}";
+
+    /// <summary>
+    /// Gets the last checkpointed position, if any, of the specified consumer group
+    /// </summary>
+    /// <param name="consumerGroup">The consumer group to get the highest checkpointed position for</param>
+    /// <param name="streamId">The id of the stream, if any, to get the consumer group's checkpointed position for</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    protected virtual Task<ulong?> GetConsumerCheckpointedPositionAsync(string consumerGroup, string? streamId = null, CancellationToken cancellationToken = default)
+    {
+        return Task.Run(() =>
+        {
+            if (this.Cache.TryGetValue(this.GetConsumerCheckpointCacheKey(consumerGroup, streamId), out ulong? checkpointPosition)) return checkpointPosition;
+            else return null;
+        }, cancellationToken);
+    }
+
+    /// <summary>
+    /// Sets the last checkpointed position of the specified consumer group
+    /// </summary>
+    /// <param name="consumerGroup">The consumer group to set the last checkpointed position for</param>
+    /// <param name="streamId">The id of the stream, if any, to get the consumer group's checkpointed position for</param>
+    /// <param name="position">The last checkpointed position</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    protected virtual Task SetConsumerCheckpointPositionAsync(string consumerGroup, string? streamId, ulong position, CancellationToken cancellationToken = default) => Task.Run(() => this.Cache.Set(this.GetConsumerCheckpointCacheKey(consumerGroup, streamId), position), cancellationToken);
+
+    /// <summary>
+    /// Gets the cache key used to store the checkpoints of the specified consumer group, and optionally stream
+    /// </summary>
+    /// <param name="consumerGroup">The consumer group to get the checkpoint cache key for</param>
+    /// <param name="streamId">The id of the stream, if any, to get the consumer group's checkpoint cache key for</param>
+    /// <returns></returns>
+    protected virtual string GetConsumerCheckpointCacheKey(string consumerGroup, string? streamId) => $"${consumerGroup}:{streamId ?? "$all"}_checkpoints";
 
     /// <inheritdoc/>
     public virtual Task TruncateAsync(string streamId, ulong? beforeVersion = null, CancellationToken cancellationToken = default)
@@ -295,12 +341,13 @@ public class MemoryEventStore
     /// <param name="subject">The <see cref="ISubject{T}"/> used to stream <see cref="IEventRecord"/>s</param>
     /// <param name="streamId">The id of the stream <see cref="IEventRecord"/> belongs to</param>
     /// <param name="e">The <see cref="IEventRecord"/> to handle</param>
+    /// <param name="replayed">A boolean indicating whether or not the <see cref="IEventRecord"/> is being replayed to its subscriber</param>
     /// <param name="consumerGroup">The name of the group, if any, that consumes the <see cref="IEventRecord"/></param>
-    protected void OnEventConsumed(ISubject<IEventRecord> subject, IEventRecord e, string? streamId = null, string? consumerGroup = null)
+    protected void OnEventConsumed(ISubject<IEventRecord> subject, IEventRecord e, string? streamId = null, string? consumerGroup = null, bool? replayed = null)
     {
-        var ackDelegate = () => string.IsNullOrWhiteSpace(consumerGroup) ? null : this.SetOffsetAsync(consumerGroup, (long)e.Offset, streamId);
+        var ackDelegate = () => string.IsNullOrWhiteSpace(consumerGroup) ? null : this.SetOffsetAsync(consumerGroup, string.IsNullOrWhiteSpace(streamId) ? (long)this.Stream.First(kvp => kvp.Value == e).Key : (long)e.Offset, streamId);
         var nackDelegate = (string? reason) => string.IsNullOrWhiteSpace(consumerGroup) ? null : Task.Run(() => this.OnEventConsumed(subject, e, streamId, consumerGroup));
-        var record = string.IsNullOrEmpty(consumerGroup) ? e : new AckableEventRecord(e.StreamId, e.Id, e.Offset, e.Timestamp, e.Type, e.Data, e.Metadata, ackDelegate, nackDelegate);
+        var record = string.IsNullOrEmpty(consumerGroup) ? e : new AckableEventRecord(e.StreamId, e.Id, e.Offset, e.Position, e.Timestamp, e.Type, e.Data, e.Metadata, replayed, ackDelegate, nackDelegate);
         subject.OnNext(record);
     }
 

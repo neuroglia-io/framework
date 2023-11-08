@@ -17,6 +17,7 @@ using Microsoft.Extensions.Hosting;
 using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 using Neuroglia.Reactive;
+using Org.BouncyCastle.Bcpg;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing;
 
@@ -549,7 +550,7 @@ public abstract class EventStoreTestsBase
         var consumerGroup = "test";
 
         //act
-        var observable = (await EventStore.ObserveAsync(offset: StreamPosition.StartOfStream, consumerGroup: consumerGroup))
+        using var subscription = (await EventStore.ObserveAsync(offset: StreamPosition.StartOfStream, consumerGroup: consumerGroup))
             .SubscribeAsync(async e => 
             {
                 var ack = (IAckableEventRecord)e;
@@ -564,7 +565,57 @@ public abstract class EventStoreTestsBase
         handledEvents.Should().BeInAscendingOrder((e1, e2) => e1.Timestamp.CompareTo(e2.Timestamp));
     }
 
-    [Fact, Priority(28)]
+    [Fact(Skip = "Skip because of ES-related bugs/inconsistencies"), Priority(28)]
+    public async Task ObserveAndReplay_All_WithConsumerGroup_Should_Work()
+    {
+        //arrange
+        var length = 10;
+        var allEvents = new List<IEventDescriptor>();
+        for (int i = 0; i < length; i++)
+        {
+            var streamId = $"fake-stream-{i}";
+            var events = EventStreamFactory.Create().ToList();
+            await EventStore.AppendAsync(streamId, events);
+            allEvents.AddRange(events);
+        }
+        var handledEvents = new List<IEventRecord>();
+        var replayedEvents = new List<IEventRecord>();
+        var consumerGroup = "test";
+        var acked = 0;
+        var doWork = new TaskCompletionSource();
+
+        //act
+        var subscription = (await EventStore.ObserveAsync(offset: StreamPosition.StartOfStream, consumerGroup: consumerGroup))
+            .SubscribeAsync(async e =>
+            {
+                var ack = (IAckableEventRecord)e;
+                handledEvents.Add(e);
+                if (ack != null) await ack.AckAsync();
+                acked++;
+                if (acked == allEvents.Count) doWork.SetResult();
+            });
+        await doWork.Task;
+        doWork = new();
+        acked = 0;
+        await EventStore.SetOffsetAsync(consumerGroup, offset: StreamPosition.StartOfStream);
+        subscription = (await EventStore.ObserveAsync(offset: StreamPosition.StartOfStream, consumerGroup: consumerGroup))
+            .SubscribeAsync(async e =>
+            {
+                var ack = (IAckableEventRecord)e;
+                replayedEvents.Add(e);
+                if (ack != null) await ack.AckAsync();
+                acked++;
+                if (acked == allEvents.Count) doWork.SetResult();
+            });
+        await doWork.Task;
+
+        //assert
+        handledEvents.Should().HaveSameCount(replayedEvents);
+        handledEvents.Should().AllSatisfy(e => e.Replayed.Should().BeFalse());
+        replayedEvents.Should().AllSatisfy(e => e.Replayed.Should().BeTrue());
+    }
+
+    [Fact, Priority(29)]
     public async Task Truncate_ToZero_Should_Work()
     {
         //arrange
@@ -590,7 +641,7 @@ public abstract class EventStoreTestsBase
         stream.LastEventAt.Should().BeNull();
     }
 
-    [Fact, Priority(29)]
+    [Fact, Priority(30)]
     public async Task Truncate_Partially_Should_Work()
     {
         //arrange
@@ -609,7 +660,7 @@ public abstract class EventStoreTestsBase
         stream.LastEventAt.Should().NotBeNull();
     }
 
-    [Fact, Priority(30)]
+    [Fact, Priority(31)]
     public async Task Truncate_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
@@ -617,7 +668,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact, Priority(31)]
+    [Fact, Priority(32)]
     public async Task Delete_Should_Work()
     {
         //arrange
@@ -633,7 +684,7 @@ public abstract class EventStoreTestsBase
         await action.Should().ThrowAsync<StreamNotFoundException>();
     }
 
-    [Fact, Priority(32)]
+    [Fact, Priority(33)]
     public async Task Delete_NonExisting_Should_Throw_StreamNotFoundException()
     {
         //assert
