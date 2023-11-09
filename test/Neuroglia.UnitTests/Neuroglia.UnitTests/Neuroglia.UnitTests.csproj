@@ -42,6 +42,7 @@
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.ObjectStorage.Minio\Neuroglia.Data.Infrastructure.ObjectStorage.Minio.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
+    <ProjectReference Include="..\..\..\src\Neuroglia.Measurements\Neuroglia.Measurements.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
     <ProjectReference Include="..\..\..\src\Neuroglia.Plugins\Neuroglia.Plugins.csproj" />
   </ItemGroup>
