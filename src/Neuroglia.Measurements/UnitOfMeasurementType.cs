@@ -1,10 +1,14 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Neuroglia.Measurements;
 
 /// <summary>
 /// Enumerates all types of units of measure
 /// </summary>
+[TypeConverter(typeof(EnumMemberTypeConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum UnitOfMeasurementType
 {
     /// <summary>
