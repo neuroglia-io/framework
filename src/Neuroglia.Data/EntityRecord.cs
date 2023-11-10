@@ -17,7 +17,7 @@ namespace Neuroglia.Data;
 /// Represents the default abstract implementation of the <see cref="IEntity{TKey}"/> interface
 /// </summary>
 /// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="IEntity{TKey}"/></typeparam>
-public abstract class EntityRecord<TKey>
+public abstract record EntityRecord<TKey>
     : IdentifiableRecord<TKey>, IEntity<TKey>
     where TKey : IEquatable<TKey>
 {

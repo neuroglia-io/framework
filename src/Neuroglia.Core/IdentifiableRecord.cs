@@ -17,7 +17,7 @@ namespace Neuroglia;
 /// Represents the default abstract implementation of the <see cref="IIdentifiable{TKey}"/> interface
 /// </summary>
 /// <typeparam name="TKey">The type of key used to uniquely identify the object</typeparam>
-public abstract class IdentifiableRecord<TKey>
+public abstract record IdentifiableRecord<TKey>
     : IIdentifiable<TKey>
     where TKey : IEquatable<TKey>
 {
