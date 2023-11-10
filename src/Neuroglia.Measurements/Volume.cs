@@ -126,7 +126,7 @@ public class Volume
     /// </summary>
     /// <param name="unit">The <see cref="UnitOfMeasurement"/> to convert the <see cref="Volume"/> to</param>
     /// <returns>A new <see cref="Volume"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
-    public virtual Volume ConvertTo(UnitOfMeasurement unit)
+    public new virtual Volume ConvertTo(UnitOfMeasurement unit)
     {
         if (unit == null) throw new ArgumentNullException(nameof(unit));
         if (unit.Type != UnitOfMeasurementType.Volume) throw new ArgumentException("The specified unit of measurement must be of type 'volume'", nameof(unit));

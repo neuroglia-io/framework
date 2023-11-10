@@ -111,9 +111,9 @@ public class Length
     /// </summary>
     /// <param name="unit">The <see cref="UnitOfMeasurement"/> to convert the <see cref="Length"/> to</param>
     /// <returns>A new <see cref="Length"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
-    public virtual Length ConvertTo(UnitOfMeasurement unit)
+    public new virtual Length ConvertTo(UnitOfMeasurement unit)
     {
-        if(unit == null) throw new ArgumentNullException(nameof(unit));
+        if (unit == null) throw new ArgumentNullException(nameof(unit));
         if (unit.Type != UnitOfMeasurementType.Length) throw new ArgumentException("The specified unit of measurement must be of type 'length'", nameof(unit));
         return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }

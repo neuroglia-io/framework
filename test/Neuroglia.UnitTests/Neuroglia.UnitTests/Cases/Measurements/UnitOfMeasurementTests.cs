@@ -28,13 +28,13 @@ public class UnitOfMeasurementTests
         var ratio = 5;
 
         //act
-        var uom = new UnitOfMeasurement(type, name, symbol, ratio);
+        var unit = new UnitOfMeasurement(type, name, symbol, ratio);
 
         //assert
-        uom.Type.Should().Be(type);
-        uom.Name.Should().Be(name);
-        uom.Symbol.Should().Be(symbol);
-        uom.Ratio.Should().Be(ratio);
+        unit.Type.Should().Be(type);
+        unit.Name.Should().Be(name);
+        unit.Symbol.Should().Be(symbol);
+        unit.Ratio.Should().Be(ratio);
     }
 
     [Fact]
@@ -65,16 +65,16 @@ public class UnitOfMeasurementTests
     public void Compare_Measurements_Should_Work()
     {
         //arrange
-        var uom1 = new UnitOfMeasurement(UnitOfMeasurementType.Surface, "fake-name", "fake", 2);
-        var uom2 = new UnitOfMeasurement(UnitOfMeasurementType.Surface, "fake-name-1", "fake", 7);
-        var uom3 = new UnitOfMeasurement(UnitOfMeasurementType.Volume, "fake-name-1", "fake", 7);
+        var unit1 = new UnitOfMeasurement(UnitOfMeasurementType.Surface, "fake-name", "fake", 2);
+        var unit2 = new UnitOfMeasurement(UnitOfMeasurementType.Surface, "fake-name-1", "fake", 7);
+        var unit3 = new UnitOfMeasurement(UnitOfMeasurementType.Volume, "fake-name-1", "fake", 7);
 
         //assert
-        uom1.Should().Be(uom2);
-        uom1.GetHashCode().Should().Be(uom2.GetHashCode());
-        uom2.Equals((object)uom1).Should().BeTrue();
-        uom2.Equals(uom1).Should().BeTrue();
-        uom2.Equals(uom3).Should().BeFalse();
+        unit1.Should().Be(unit2);
+        unit1.GetHashCode().Should().Be(unit2.GetHashCode());
+        unit2.Equals((object)unit1).Should().BeTrue();
+        unit2.Equals(unit1).Should().BeTrue();
+        unit2.Equals(unit3).Should().BeFalse();
     }
 
     [Fact]

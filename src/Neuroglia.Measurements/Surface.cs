@@ -111,7 +111,7 @@ public class Surface
     /// </summary>
     /// <param name="unit">The <see cref="UnitOfMeasurement"/> to convert the <see cref="Surface"/> to</param>
     /// <returns>A new <see cref="Surface"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
-    public virtual Surface ConvertTo(UnitOfMeasurement unit)
+    public new virtual Surface ConvertTo(UnitOfMeasurement unit)
     {
         if (unit == null) throw new ArgumentNullException(nameof(unit));
         if (unit.Type != UnitOfMeasurementType.Surface) throw new ArgumentException("The specified unit of measurement must be of type 'surface'", nameof(unit));

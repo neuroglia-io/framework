@@ -131,7 +131,7 @@ public class Capacity
     /// </summary>
     /// <param name="unit">The <see cref="UnitOfMeasurement"/> to convert the <see cref="Capacity"/> to</param>
     /// <returns>A new <see cref="Capacity"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
-    public virtual Capacity ConvertTo(UnitOfMeasurement unit)
+    public new virtual Capacity ConvertTo(UnitOfMeasurement unit)
     {
         if (unit == null) throw new ArgumentNullException(nameof(unit));
         if (unit.Type != UnitOfMeasurementType.Capacity) throw new ArgumentException("The specified unit of measurement must be of type 'capacity'", nameof(unit));

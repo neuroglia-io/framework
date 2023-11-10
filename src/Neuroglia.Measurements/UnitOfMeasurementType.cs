@@ -37,8 +37,13 @@ public enum UnitOfMeasurementType
     [EnumMember(Value = "surface")]
     Surface = 16,
     /// <summary>
+    /// Indicates a unit used to measure unfractable units
+    /// </summary>
+    [EnumMember(Value = "unit")]
+    Unit = 32,
+    /// <summary>
     /// Indicates a unit used to measure volumes
     /// </summary>
     [EnumMember(Value = "volume")]
-    Volume = 32
+    Volume = 64
 }

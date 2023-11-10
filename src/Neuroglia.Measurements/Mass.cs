@@ -131,7 +131,7 @@ public class Mass
     /// </summary>
     /// <param name="unit">The <see cref="UnitOfMeasurement"/> to convert the <see cref="Mass"/> to</param>
     /// <returns>A new <see cref="Mass"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
-    public virtual Mass ConvertTo(UnitOfMeasurement unit)
+    public new virtual Mass ConvertTo(UnitOfMeasurement unit)
     {
         if (unit == null) throw new ArgumentNullException(nameof(unit));
         if (unit.Type != UnitOfMeasurementType.Mass) throw new ArgumentException("The specified unit of measurement must be of type 'mass'", nameof(unit));

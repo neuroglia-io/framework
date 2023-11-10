@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Metrics;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace Neuroglia.Measurements;
@@ -97,6 +96,18 @@ public class Measurement
         var value1 = this.Value * (1m / this.Unit.Ratio);
         var value2 = other.Value * (1m / other.Unit.Ratio);
         return value1.CompareTo(value2);
+    }
+
+    /// <summary>
+    /// Converts the <see cref="Measurement"/> into a new <see cref="Measurement"/> measured using the specified <see cref="UnitOfMeasurement"/>
+    /// </summary>
+    /// <param name="unit">The <see cref="UnitOfMeasurement"/> to convert the <see cref="Measurement"/> to</param>
+    /// <returns>A new <see cref="Measurement"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
+    public virtual Measurement ConvertTo(UnitOfMeasurement unit)
+    {
+        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        if (unit.Type != this.Unit.Type) throw new ArgumentException($"The specified unit of measurement must be of type '{EnumHelper.Stringify(this.Unit.Type)}'", nameof(unit));
+        return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }
 
     /// <inheritdoc/>
