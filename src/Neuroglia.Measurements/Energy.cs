@@ -293,6 +293,22 @@ public class Energy
     public static Energy operator /(Energy energy, int divider) => new(energy.Value / divider, energy.Unit);
 
     /// <summary>
+    /// Checks whether or not a <see cref="Energy"/> is lower than another one
+    /// </summary>
+    /// <param name="energy1">The <see cref="Energy"/> to check</param>
+    /// <param name="energy2">The <see cref="Energy"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Energy"/> is lower than another one</returns>
+    public static bool operator <(Energy energy1, Energy energy2) => energy1.CompareTo(energy2) < 0;
+
+    /// <summary>
+    /// Checks whether or not a <see cref="Energy"/> is higher than another one
+    /// </summary>
+    /// <param name="energy1">The <see cref="Energy"/> to check</param>
+    /// <param name="energy2">The <see cref="Energy"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Energy"/> is higher than another one</returns>
+    public static bool operator >(Energy energy1, Energy energy2) => energy1.CompareTo(energy2) > 0;
+
+    /// <summary>
     /// Exposes default energy units
     /// </summary>
     public static class Units

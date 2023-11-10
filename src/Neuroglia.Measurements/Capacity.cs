@@ -292,6 +292,22 @@ public class Capacity
     public static Capacity operator /(Capacity capacity, int divider) => new(capacity.Value / divider, capacity.Unit);
 
     /// <summary>
+    /// Checks whether or not a <see cref="Capacity"/> is lower than another one
+    /// </summary>
+    /// <param name="capacity1">The <see cref="Capacity"/> to check</param>
+    /// <param name="capacity2">The <see cref="Capacity"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Capacity"/> is lower than another one</returns>
+    public static bool operator <(Capacity capacity1, Capacity capacity2) => capacity1.CompareTo(capacity2) < 0;
+
+    /// <summary>
+    /// Checks whether or not a <see cref="Capacity"/> is higher than another one
+    /// </summary>
+    /// <param name="capacity1">The <see cref="Capacity"/> to check</param>
+    /// <param name="capacity2">The <see cref="Capacity"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Capacity"/> is higher than another one</returns>
+    public static bool operator >(Capacity capacity1, Capacity capacity2) => capacity1.CompareTo(capacity2) > 0;
+
+    /// <summary>
     /// Exposes default capacity units
     /// </summary>
     public static class Units

@@ -150,4 +150,20 @@ public class Measurement
     /// <returns>The division's result</returns>
     public static Measurement operator /(Measurement measurement, int divider) => new(measurement.Value / divider, measurement.Unit);
 
+    /// <summary>
+    /// Checks whether or not a <see cref="Measurement"/> is lower than another one
+    /// </summary>
+    /// <param name="measurement1">The <see cref="Measurement"/> to check</param>
+    /// <param name="measurement2">The <see cref="Measurement"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Measurement"/> is lower than another one</returns>
+    public static bool operator <(Measurement measurement1, Measurement measurement2) => measurement1.CompareTo(measurement2) < 0;
+
+    /// <summary>
+    /// Checks whether or not a <see cref="Measurement"/> is higher than another one
+    /// </summary>
+    /// <param name="measurement1">The <see cref="Measurement"/> to check</param>
+    /// <param name="measurement2">The <see cref="Measurement"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Measurement"/> is higher than another one</returns>
+    public static bool operator >(Measurement measurement1, Measurement measurement2) => measurement1.CompareTo(measurement2) > 0;
+
 }

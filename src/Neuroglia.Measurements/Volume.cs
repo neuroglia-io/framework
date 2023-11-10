@@ -280,6 +280,22 @@ public class Volume
     public static Volume operator /(Volume volume, int divider) => new(volume.Value / divider, volume.Unit);
 
     /// <summary>
+    /// Checks whether or not a <see cref="Volume"/> is lower than another one
+    /// </summary>
+    /// <param name="volume1">The <see cref="Volume"/> to check</param>
+    /// <param name="volume2">The <see cref="Volume"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Volume"/> is lower than another one</returns>
+    public static bool operator <(Volume volume1, Volume volume2) => volume1.CompareTo(volume2) < 0;
+
+    /// <summary>
+    /// Checks whether or not a <see cref="Volume"/> is higher than another one
+    /// </summary>
+    /// <param name="volume1">The <see cref="Volume"/> to check</param>
+    /// <param name="volume2">The <see cref="Volume"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Volume"/> is higher than another one</returns>
+    public static bool operator >(Volume volume1, Volume volume2) => volume1.CompareTo(volume2) > 0;
+
+    /// <summary>
     /// Exposes default volume units
     /// </summary>
     public static class Units

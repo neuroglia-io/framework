@@ -244,6 +244,22 @@ public class Surface
     public static Surface operator /(Surface surface, int divider) => new(surface.Value / divider, surface.Unit);
 
     /// <summary>
+    /// Checks whether or not a <see cref="Surface"/> is lower than another one
+    /// </summary>
+    /// <param name="surface1">The <see cref="Surface"/> to check</param>
+    /// <param name="surface2">The <see cref="Surface"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Surface"/> is lower than another one</returns>
+    public static bool operator <(Surface surface1, Surface surface2) => surface1.CompareTo(surface2) < 0;
+
+    /// <summary>
+    /// Checks whether or not a <see cref="Surface"/> is higher than another one
+    /// </summary>
+    /// <param name="surface1">The <see cref="Surface"/> to check</param>
+    /// <param name="surface2">The <see cref="Surface"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Surface"/> is higher than another one</returns>
+    public static bool operator >(Surface surface1, Surface surface2) => surface1.CompareTo(surface2) > 0;
+
+    /// <summary>
     /// Exposes default surface units
     /// </summary>
     public static class Units

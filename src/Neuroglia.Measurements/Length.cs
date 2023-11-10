@@ -244,6 +244,22 @@ public class Length
     public static Length operator /(Length length, int divider) => new(length.Value / divider, length.Unit);
 
     /// <summary>
+    /// Checks whether or not a <see cref="Length"/> is lower than another one
+    /// </summary>
+    /// <param name="length1">The <see cref="Length"/> to check</param>
+    /// <param name="length2">The <see cref="Length"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Length"/> is lower than another one</returns>
+    public static bool operator <(Length length1, Length length2) => length1.CompareTo(length2) < 0;
+
+    /// <summary>
+    /// Checks whether or not a <see cref="Length"/> is higher than another one
+    /// </summary>
+    /// <param name="length1">The <see cref="Length"/> to check</param>
+    /// <param name="length2">The <see cref="Length"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Length"/> is higher than another one</returns>
+    public static bool operator >(Length length1, Length length2) => length1.CompareTo(length2) > 0;
+
+    /// <summary>
     /// Exposes default length units
     /// </summary>
     public static class Units

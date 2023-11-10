@@ -292,6 +292,22 @@ public class Mass
     public static Mass operator /(Mass mass, int divider) => new(mass.Value / divider, mass.Unit);
 
     /// <summary>
+    /// Checks whether or not a <see cref="Mass"/> is lower than another one
+    /// </summary>
+    /// <param name="mass1">The <see cref="Mass"/> to check</param>
+    /// <param name="mass2">The <see cref="Mass"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Mass"/> is lower than another one</returns>
+    public static bool operator <(Mass mass1, Mass mass2) => mass1.CompareTo(mass2) < 0;
+
+    /// <summary>
+    /// Checks whether or not a <see cref="Mass"/> is higher than another one
+    /// </summary>
+    /// <param name="mass1">The <see cref="Mass"/> to check</param>
+    /// <param name="mass2">The <see cref="Mass"/> to compare to</param>
+    /// <returns>A boolean indicating whether or not a <see cref="Mass"/> is higher than another one</returns>
+    public static bool operator >(Mass mass1, Mass mass2) => mass1.CompareTo(mass2) > 0;
+
+    /// <summary>
     /// Exposes default mass units
     /// </summary>
     public static class Units
