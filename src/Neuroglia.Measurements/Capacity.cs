@@ -107,7 +107,7 @@ public class Capacity
     public virtual Capacity Add(Capacity capacity)
     {
         if (capacity == null) throw new ArgumentNullException(nameof(capacity));
-        if (capacity.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare capacities with different types of unit", nameof(capacity));
+        if (capacity.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(capacity), "Cannot compare capacities with different types of unit");
         return new Capacity(this.Value + capacity.Value * (this.Unit.Ratio / capacity.Unit.Ratio), this.Unit);
     }
 
@@ -119,7 +119,7 @@ public class Capacity
     public virtual Capacity Subtract(Capacity capacity)
     {
         if (capacity == null) throw new ArgumentNullException(nameof(capacity));
-        if (capacity.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare capacities with different types of unit", nameof(capacity));
+        if (capacity.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(capacity), "Cannot compare capacities with different types of unit");
         return new Capacity(this.Value - capacity.Value * (this.Unit.Ratio / capacity.Unit.Ratio), this.Unit);
     }
 

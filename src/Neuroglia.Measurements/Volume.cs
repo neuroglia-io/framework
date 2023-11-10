@@ -102,7 +102,7 @@ public class Volume
     public virtual Volume Add(Volume volume)
     {
         if (volume == null) throw new ArgumentNullException(nameof(volume));
-        if (volume.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare volumes with different types of unit", nameof(volume));
+        if (volume.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(volume), "Cannot compare volumes with different types of unit");
         return new Volume(this.Value + volume.Value * (this.Unit.Ratio / volume.Unit.Ratio), this.Unit);
     }
 
@@ -114,7 +114,7 @@ public class Volume
     public virtual Volume Subtract(Volume volume)
     {
         if (volume == null) throw new ArgumentNullException(nameof(volume));
-        if (volume.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare volumes with different types of unit", nameof(volume));
+        if (volume.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(volume), "Cannot compare volumes with different types of unit");
         return new Volume(this.Value - volume.Value * (this.Unit.Ratio / volume.Unit.Ratio), this.Unit);
     }
 

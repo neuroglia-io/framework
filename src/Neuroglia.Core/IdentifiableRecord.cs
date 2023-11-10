@@ -17,21 +17,21 @@ namespace Neuroglia;
 /// Represents the default abstract implementation of the <see cref="IIdentifiable{TKey}"/> interface
 /// </summary>
 /// <typeparam name="TKey">The type of key used to uniquely identify the object</typeparam>
-public abstract class Identifiable<TKey>
+public abstract class IdentifiableRecord<TKey>
     : IIdentifiable<TKey>
     where TKey : IEquatable<TKey>
 {
 
     /// <summary>
-    /// Initializes a new <see cref="Identifiable{TKey}"/>
+    /// Initializes a new <see cref="IdentifiableRecord{TKey}"/>
     /// </summary>
-    protected Identifiable() { }
+    protected IdentifiableRecord() { }
 
     /// <summary>
-    /// Initializes a new <see cref="Identifiable{TKey}"/>
+    /// Initializes a new <see cref="IdentifiableRecord{TKey}"/>
     /// </summary>
     /// <param name="id">The key used to identify the object</param>
-    protected Identifiable(TKey id)
+    protected IdentifiableRecord(TKey id)
     {
         this.Id = id;
     }

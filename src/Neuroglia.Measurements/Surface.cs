@@ -87,7 +87,7 @@ public class Surface
     public virtual Surface Add(Surface surface)
     {
         if (surface == null) throw new ArgumentNullException(nameof(surface));
-        if (surface.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare surfaces with different types of unit", nameof(surface));
+        if (surface.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(surface), "Cannot compare surfaces with different types of unit");
         return new Surface(this.Value + surface.Value * (this.Unit.Ratio / surface.Unit.Ratio), this.Unit);
     }
 
@@ -99,7 +99,7 @@ public class Surface
     public virtual Surface Subtract(Surface surface)
     {
         if (surface == null) throw new ArgumentNullException(nameof(surface));
-        if (surface.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare surfaces with different types of unit", nameof(surface));
+        if (surface.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(surface), "Cannot compare surfaces with different types of unit");
         return new Surface(this.Value - surface.Value * (this.Unit.Ratio / surface.Unit.Ratio), this.Unit);
     }
 

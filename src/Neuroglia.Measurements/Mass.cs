@@ -107,7 +107,7 @@ public class Mass
     public virtual Mass Add(Mass mass)
     {
         if (mass == null) throw new ArgumentNullException(nameof(mass));
-        if (mass.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare masses with different types of unit", nameof(mass));
+        if (mass.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(mass), "Cannot compare masses with different types of unit");
         return new Mass(this.Value + mass.Value * (this.Unit.Ratio / mass.Unit.Ratio), this.Unit);
     }
 
@@ -119,7 +119,7 @@ public class Mass
     public virtual Mass Subtract(Mass mass)
     {
         if (mass == null) throw new ArgumentNullException(nameof(mass));
-        if (mass.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare masses with different types of unit", nameof(mass));
+        if (mass.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(mass), "Cannot compare masses with different types of unit");
         return new Mass(this.Value - mass.Value * (this.Unit.Ratio / mass.Unit.Ratio), this.Unit);
     }
 

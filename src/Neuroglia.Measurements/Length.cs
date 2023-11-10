@@ -87,7 +87,7 @@ public class Length
     public virtual Length Add(Length length)
     {
         if (length == null) throw new ArgumentNullException(nameof(length));
-        if (length.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare lengths with different types of unit", nameof(length));
+        if (length.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(length), "Cannot compare lengths with different types of unit");
         return new Length(this.Value + length.Value * (this.Unit.Ratio / length.Unit.Ratio), this.Unit);
     }
 
@@ -99,7 +99,7 @@ public class Length
     public virtual Length Subtract(Length length)
     {
         if (length == null) throw new ArgumentNullException(nameof(length));
-        if (length.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare lengths with different types of unit", nameof(length));
+        if (length.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(length), "Cannot compare lengths with different types of unit");
         return new Length(this.Value - length.Value * (this.Unit.Ratio / length.Unit.Ratio), this.Unit);
     }
 

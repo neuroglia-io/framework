@@ -115,7 +115,7 @@ public class Energy
     public virtual Energy Add(Energy energy)
     {
         if (energy == null) throw new ArgumentNullException(nameof(energy));
-        if (energy.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare energies with different types of unit", nameof(energy));
+        if (energy.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(energy), "Cannot compare energies with different types of unit");
         return new Energy(this.Value + energy.Value * (this.Unit.Ratio / energy.Unit.Ratio), this.Unit);
     }
 
@@ -127,7 +127,7 @@ public class Energy
     public virtual Energy Subtract(Energy energy)
     {
         if (energy == null) throw new ArgumentNullException(nameof(energy));
-        if (energy.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare energies with different types of unit", nameof(energy));
+        if (energy.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(energy), "Cannot compare energies with different types of unit");
         return new Energy(this.Value - energy.Value * (this.Unit.Ratio / energy.Unit.Ratio), this.Unit);
     }
 

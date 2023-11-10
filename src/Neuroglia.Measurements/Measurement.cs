@@ -49,7 +49,7 @@ public class Measurement
     public virtual Measurement Add(Measurement measurement)
     {
         if (measurement == null) throw new ArgumentNullException(nameof(measurement));
-        if (measurement.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare measurements with different types of unit", nameof(measurement));
+        if (measurement.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(measurement), "Cannot compare measurements with different types of unit");
         return new Measurement(this.Value + measurement.Value * (this.Unit.Ratio / measurement.Unit.Ratio), this.Unit);
     }
 
@@ -61,7 +61,7 @@ public class Measurement
     public virtual Measurement Subtract(Measurement measurement)
     {
         if (measurement == null) throw new ArgumentNullException(nameof(measurement));
-        if (measurement.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare measurements with different types of unit", nameof(measurement));
+        if (measurement.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(measurement), "Cannot compare measurements with different types of unit");
         return new Measurement(this.Value - measurement.Value * (this.Unit.Ratio / measurement.Unit.Ratio), this.Unit);
     }
 
@@ -93,7 +93,7 @@ public class Measurement
     public virtual int CompareTo(Measurement? other)
     {
         if (other == null) return this.Value.CompareTo(other?.Value);
-        if (other.Unit.Type != this.Unit.Type) throw new ArgumentNullException("Cannot compare measurements with different types of unit", nameof(other));
+        if (other.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(other), "Cannot compare measurements with different types of unit");
         var value1 = this.Value * (1m / this.Unit.Ratio);
         var value2 = other.Value * (1m / other.Unit.Ratio);
         return value1.CompareTo(value2);
