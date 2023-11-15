@@ -21,6 +21,6 @@ internal class UserLoggedOutEvent
 
     protected UserLoggedOutEvent() { }
 
-    public UserLoggedOutEvent(string id) : base(id) { }
+    public UserLoggedOutEvent(string aggregateId) : base(aggregateId) { }
 
 }

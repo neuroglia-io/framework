@@ -29,7 +29,7 @@ public class JsonSerializerTests
         var deserialized = JsonSerializer.Default.Deserialize<IDictionary<string, object>>(serialized)!;
 
         //assert
-        deserialized.ElementAt(0).Key.Should().BeEquivalentTo("name");
+        deserialized.ElementAt(0).Key.Should().BeEquivalentTo(nameof(Mammal.Family));
 
     }
 

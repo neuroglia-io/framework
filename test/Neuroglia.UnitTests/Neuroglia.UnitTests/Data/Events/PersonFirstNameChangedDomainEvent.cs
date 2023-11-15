@@ -20,8 +20,8 @@ public class PersonFirstNameChangedDomainEvent
 {
 
     protected PersonFirstNameChangedDomainEvent() { }
-    public PersonFirstNameChangedDomainEvent(Guid personId, string firstName)
-        : base(personId)
+    public PersonFirstNameChangedDomainEvent(Guid aggregateId, string firstName)
+        : base(aggregateId)
     {
         this.FirstName = firstName;
     }

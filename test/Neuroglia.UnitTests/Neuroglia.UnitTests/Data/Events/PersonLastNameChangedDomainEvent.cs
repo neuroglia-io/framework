@@ -21,8 +21,8 @@ public class PersonLastNameChangedDomainEvent
 
     protected PersonLastNameChangedDomainEvent() { }
 
-    public PersonLastNameChangedDomainEvent(Guid personId, string lastName)
-        : base(personId)
+    public PersonLastNameChangedDomainEvent(Guid aggregateId, string lastName)
+        : base(aggregateId)
     {
         this.LastName = lastName;
     }
