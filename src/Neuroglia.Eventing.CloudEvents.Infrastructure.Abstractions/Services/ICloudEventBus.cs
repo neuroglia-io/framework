@@ -11,22 +11,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Data.Infrastructure.ObjectStorage;
+using Neuroglia.CloudEvents;
+using System.Reactive.Subjects;
+
+namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
 
 /// <summary>
-/// Defines the fundamentals of an object used to describe a bucket
+/// Defines the fundamentals of a service used to manage incoming and outgoing streams of <see cref="CloudEvent"/>s
 /// </summary>
-public interface IBucketDescriptor
+public interface ICloudEventBus
+    : IDisposable
 {
 
     /// <summary>
-    /// Gets the bucket's name
+    /// Gets the stream of events ingested by the application
     /// </summary>
-    string Name { get; }
+    ISubject<CloudEvent> InputStream { get; }
 
     /// <summary>
-    /// Gets the bucket's tags, if any
+    /// Gets the stream of events published by the application
     /// </summary>
-    IDictionary<string, string>? Tags { get; }
+    ISubject<CloudEvent> OutputStream { get; }
 
 }

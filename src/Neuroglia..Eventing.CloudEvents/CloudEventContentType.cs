@@ -11,22 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Data.Infrastructure.ObjectStorage;
+namespace Neuroglia.CloudEvents;
 
 /// <summary>
-/// Defines the fundamentals of an object used to describe a bucket
+/// Exposes <see cref="ICloudEvent"/> content types
 /// </summary>
-public interface IBucketDescriptor
+public static class CloudEventContentType
 {
 
     /// <summary>
-    /// Gets the bucket's name
+    /// Gets the media type name for cloud events
     /// </summary>
-    string Name { get; }
+    public const string Prefix = "application/cloudevents";
 
     /// <summary>
-    /// Gets the bucket's tags, if any
+    /// Gets the media type name for cloud events formatted in JSON
     /// </summary>
-    IDictionary<string, string>? Tags { get; }
+    public const string Json = Prefix + "+json";
 
 }
