@@ -11,22 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Data.Infrastructure.ObjectStorage;
+namespace Neuroglia.CloudEvents;
 
 /// <summary>
-/// Defines the fundamentals of an object used to describe a bucket
+/// Enumerates all supported version of the <see href="https://cloudevents.io/">Cloud Event spec</see>
 /// </summary>
-public interface IBucketDescriptor
+public static class CloudEventSpecVersion
 {
 
     /// <summary>
-    /// Gets the bucket's name
+    /// Specifies version 1.0
     /// </summary>
-    string Name { get; }
-
-    /// <summary>
-    /// Gets the bucket's tags, if any
-    /// </summary>
-    IDictionary<string, string>? Tags { get; }
+    public const string v1 = "1.0";
 
 }

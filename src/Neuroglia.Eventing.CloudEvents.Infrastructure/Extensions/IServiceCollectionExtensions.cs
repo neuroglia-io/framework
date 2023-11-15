@@ -11,22 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Data.Infrastructure.ObjectStorage;
+using Microsoft.Extensions.DependencyInjection;
+using Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
+
+namespace Neuroglia.Eventing.CloudEvents.Infrastructure;
 
 /// <summary>
-/// Defines the fundamentals of an object used to describe a bucket
+/// Defines extensions for <see cref="IServiceCollection"/>s
 /// </summary>
-public interface IBucketDescriptor
+public static class IServiceCollectionExtensions
 {
 
     /// <summary>
-    /// Gets the bucket's name
+    /// Adds and configures an <see cref="CloudEventBus"/>
     /// </summary>
-    string Name { get; }
-
-    /// <summary>
-    /// Gets the bucket's tags, if any
-    /// </summary>
-    IDictionary<string, string>? Tags { get; }
+    /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+    /// <returns>The configured <see cref="IServiceCollection"/></returns>
+    public static IServiceCollection AddCloudEventBus(this IServiceCollection services) => services.AddCloudEventBus<CloudEventBus>();
 
 }
