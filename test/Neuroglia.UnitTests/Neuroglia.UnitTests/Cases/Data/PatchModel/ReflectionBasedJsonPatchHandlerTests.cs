@@ -71,13 +71,13 @@ public class ReflectionBasedJsonPatchHandlerTests
 
         public string? Description { get; set; }
 
-        private List<Category> _categories = new();
+        private readonly List<Category> _categories = new();
         public IReadOnlyCollection<Category> Categories => this._categories.AsReadOnly();
 
-        private List<string> _activeTags = new();
+        private readonly List<string> _activeTags = new();
         public IReadOnlyCollection<string> ActiveTags => this._activeTags.AsReadOnly();
 
-        private List<string> _retiredTags = new();
+        private readonly List<string> _retiredTags = new();
         public IReadOnlyCollection<string> RetiredTags => this._retiredTags.AsReadOnly();
 
         public List<string> Contacts { get; set; } = new();
@@ -186,7 +186,7 @@ public class ReflectionBasedJsonPatchHandlerTests
         : AggregateState<string>
     {
 
-        public string Name { get; internal protected set; }
+        public string Name { get; internal protected set; } = null!;
 
         public string? Description { get; internal protected set; }
 

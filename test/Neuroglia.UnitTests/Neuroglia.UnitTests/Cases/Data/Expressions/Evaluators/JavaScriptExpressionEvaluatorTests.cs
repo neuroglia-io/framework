@@ -172,7 +172,7 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_String_Interpolation_ShouldWork()
     {
         //arrange
-        var data = NJsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-interpolation.input.json")))!;
+        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-interpolation.input.json")))!;
         var expression = File.ReadAllText(Path.Combine("Assets", "string-interpolation.expression.js.txt"));
 
         //act

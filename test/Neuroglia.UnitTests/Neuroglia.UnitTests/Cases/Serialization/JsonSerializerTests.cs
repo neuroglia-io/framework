@@ -33,4 +33,30 @@ public class JsonSerializerTests
 
     }
 
+    abstract class Mammal
+    {
+
+        protected Mammal(string family)
+        {
+            this.Family = family;
+        }
+
+        public string Family { get; protected set; }
+
+    }
+
+    class Dog
+        : Mammal
+    {
+
+        public Dog(string breed)
+            : base("Canidae")
+        {
+            this.Breed = breed;
+        }
+
+        public string Breed { get; protected set; }
+
+    }
+
 }
