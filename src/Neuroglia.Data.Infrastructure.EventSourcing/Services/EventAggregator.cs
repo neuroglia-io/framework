@@ -142,7 +142,8 @@ public class EventAggregator<TState, TEvent>
             if (e == null || !this.Reducers.TryGetValue(e.GetType(), out var reducer) || reducer == null) continue;
             reducer.Reduce(e, state);
         }
-        if (state is IVersionedState versionedState) versionedState.StateVersion += (ulong)events.Count();
+        if (state is IAggregateRoot aggregateRoot) aggregateRoot.State.StateVersion += (ulong)events.Count();
+        else if (state is IVersionedState versionedState) versionedState.StateVersion += (ulong)events.Count();
         return state;
     }
 

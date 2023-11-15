@@ -16,6 +16,7 @@ using Neuroglia.Data.Expressions;
 using Neuroglia.Data.Expressions.JavaScript;
 using Neuroglia.Data.Expressions.Services;
 using Neuroglia.Serialization;
+using Neuroglia.Serialization.Json;
 using System.Dynamic;
 
 namespace Neuroglia.UnitTests.Cases.Data.Expressions.Evaluators;
@@ -98,7 +99,7 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_LargeData_ShouldWork()
     {
         //arrange
-        var data = Serialization.Json.JsonSerializer.Default.Deserialize<List<object>>(File.ReadAllText(Path.Combine("Assets", "dogs.json")))!;
+        var data = JsonSerializer.Default.Deserialize<List<object>>(File.ReadAllText(Path.Combine("Assets", "dogs.json")))!;
         var expression = "input.filter(i => i.category?.name === CONST.category)[0]";
         var args = new Dictionary<string, object>() { { "CONST", new { category = "Pugal" } } };
 
@@ -157,7 +158,7 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_String_Concatenation_ShouldWork()
     {
         //arrange
-        var data = Serialization.Json.JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-concat.input.json")))!;
+        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-concat.input.json")))!;
         var expression = File.ReadAllText(Path.Combine("Assets", "string-concat.expression.js.txt"));
 
         //act
@@ -171,7 +172,7 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_String_Interpolation_ShouldWork()
     {
         //arrange
-        var data = Serialization.Json.JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-interpolation.input.json")))!;
+        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-interpolation.input.json")))!;
         var expression = File.ReadAllText(Path.Combine("Assets", "string-interpolation.expression.js.txt"));
 
         //act
@@ -185,7 +186,7 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_Complex_String_Substitution_ShouldWork()
     {
         //arrange
-        var data = Serialization.Json.JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-substitution.input.json")))!;
+        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-substitution.input.json")))!;
         var expression = File.ReadAllText(Path.Combine("Assets", "string-substitution.expression.js.txt"));
 
         //act
@@ -199,7 +200,7 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_String_With_Escaped_Quotes_ShouldWork()
     {
         //arrange
-        var data = Serialization.Json.JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-quoted.input.json")))!;
+        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-quoted.input.json")))!;
         var expression = File.ReadAllText(Path.Combine("Assets", "string-quoted.expression.js.txt"));
 
         //act

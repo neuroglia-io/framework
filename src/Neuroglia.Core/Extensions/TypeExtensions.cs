@@ -280,4 +280,24 @@ public static class TypeExtensions
         return false;
     }
 
+    /// <summary>
+    /// Gets the ascendency level of the specified ancestor type compared to the type
+    /// </summary>
+    /// <param name="extended">The type to check</param>
+    /// <param name="ancestor">The ancestor type to compare the type to</param>
+    /// <returns>The anscendency level of the specified ancestor type</returns>
+    public static int GetAscendencyLevel(this Type extended, Type ancestor)
+    {
+        if (extended == ancestor) return 0;
+        Type? baseType = extended;
+        var level = 0;
+        do
+        {
+            level++;
+            baseType = baseType?.BaseType;
+        }
+        while (baseType != null && baseType != ancestor);
+        return level;
+    }
+
 }

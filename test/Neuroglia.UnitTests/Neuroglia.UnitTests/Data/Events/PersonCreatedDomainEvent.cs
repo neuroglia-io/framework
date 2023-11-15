@@ -22,8 +22,8 @@ public class PersonCreatedDomainEvent
 
     protected PersonCreatedDomainEvent() { }
 
-    public PersonCreatedDomainEvent(Guid personId, string firstName, string lastName)
-        : base(personId)
+    public PersonCreatedDomainEvent(Guid aggregateId, string firstName, string lastName)
+        : base(aggregateId)
     {
         this.FirstName = firstName;
         this.LastName = lastName;

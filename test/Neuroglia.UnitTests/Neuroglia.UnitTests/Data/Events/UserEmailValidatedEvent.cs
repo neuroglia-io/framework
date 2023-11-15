@@ -21,6 +21,6 @@ internal class UserEmailValidatedEvent
 
     protected UserEmailValidatedEvent() { }
 
-    public UserEmailValidatedEvent(string id) : base(id) { }
+    public UserEmailValidatedEvent(string aggregateId) : base(aggregateId) { }
 
 }

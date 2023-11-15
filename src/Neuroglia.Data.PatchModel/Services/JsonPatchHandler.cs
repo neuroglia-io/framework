@@ -17,7 +17,7 @@ using Neuroglia.Serialization.Json;
 namespace Neuroglia.Data.PatchModel.Services;
 
 /// <summary>
-/// Represents the <see cref="IPatchHandler"/> implementation used to handle Json Patches
+/// Represents the <see cref="IPatchHandler"/> implementation used to handle <see href="https://www.rfc-editor.org/rfc/rfc6902">Json Patches</see>
 /// </summary>
 public class JsonPatchHandler
     : IPatchHandler

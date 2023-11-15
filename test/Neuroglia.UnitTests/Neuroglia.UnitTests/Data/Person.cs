@@ -13,7 +13,8 @@
 
 using Json.Patch;
 using Neuroglia.Data;
-using Neuroglia.Data.PatchModel.Attributes;
+using Neuroglia.Data.PatchModel;
+using Neuroglia.Data.PatchModel.Services;
 using Neuroglia.UnitTests.Data.Events;
 
 namespace Neuroglia.UnitTests.Data;
@@ -30,7 +31,7 @@ public class Person
 
     public Person(string firstName, string lastName) : this(Guid.NewGuid(), firstName, lastName) { }
 
-    [JsonPatchOperation(OperationType.Replace, nameof(PersonStateV1.FirstName))]
+    [JsonPatchOperation(JsonPatchOperationType.Replace, nameof(PersonStateV1.FirstName))]
     public virtual bool SetFirstName(string firstName)
     {
         if (this.State.FirstName == firstName) return false;
@@ -38,7 +39,7 @@ public class Person
         return true;
     }
 
-    [JsonPatchOperation(OperationType.Replace, nameof(PersonStateV1.LastName))]
+    [JsonPatchOperation(JsonPatchOperationType.Replace, nameof(PersonStateV1.LastName))]
     public virtual bool SetLastName(string lastName)
     {
         if (this.State.LastName == lastName) return false;
@@ -46,51 +47,51 @@ public class Person
         return true;
     }
 
-    [JsonPatchOperation(OperationType.Add, nameof(PersonStateV1.Addresses))]
+    [JsonPatchOperation(JsonPatchOperationType.Add, nameof(PersonStateV1.Addresses))]
     public virtual void AddAddress(string address)
     {
         this.State.Addresses.Add(address);
     }
 
-    [JsonPatchOperation(OperationType.Add, nameof(PersonStateV1.FriendsIds), ReferencedType = typeof(Person))]
+    [JsonPatchOperation(JsonPatchOperationType.Add, nameof(PersonStateV1.FriendsIds), ReferencedType = typeof(Person))]
     public virtual void AddFriend(Person friend)
     {
         this.State.FriendsIds.Add(friend.Id);
     }
 
-    [JsonPatchOperation(OperationType.Remove, nameof(PersonStateV1.FriendsIds), ReferencedType = typeof(Person))]
+    [JsonPatchOperation(JsonPatchOperationType.Remove, nameof(PersonStateV1.FriendsIds), ReferencedType = typeof(Person))]
     public virtual void RemoveFriend(Person friend)
     {
         this.State.FriendsIds.Remove(friend.Id);
     }
 
-    [JsonPatchOperation(OperationType.Replace, nameof(PersonStateV1.Birthday))]
+    [JsonPatchOperation(JsonPatchOperationType.Replace, nameof(PersonStateV1.Birthday))]
     public virtual void SetBirthday(DateTime birthDay)
     {
         this.State.Birthday = birthDay;
     }
 
-    [JsonPatchOperation(OperationType.Add, nameof(PersonStateV1.Contacts))]
+    [JsonPatchOperation(JsonPatchOperationType.Add, nameof(PersonStateV1.Contacts))]
     public virtual void AddContact(Contact contact)
     {
         this.State.Contacts.Add(contact);
     }
 
-    [JsonPatchOperation(OperationType.Replace, nameof(PersonStateV1.Contacts) + "/" + nameof(Contact.Tel))]
+    [JsonPatchOperation(JsonPatchOperationType.Replace, nameof(PersonStateV1.Contacts) + "/" + nameof(Contact.Tel))]
     public virtual void UpdateContactTelephoneNumber(Guid contactId, string tel)
     {
         var contact = this.State.Contacts.First(c => c.Id == contactId);
         contact.Tel = tel;
     }
 
-    [JsonPatchOperation(OperationType.Replace, nameof(PersonStateV1.Traits) + "/" + nameof(PersonTrait.Name))]
+    [JsonPatchOperation(JsonPatchOperationType.Replace, nameof(PersonStateV1.Traits) + "/" + nameof(PersonTrait.Name))]
     public virtual void SetPreferenceName(Guid id, string name)
     {
         var trait = this.State.Traits.First(t => t.Id == id);
         trait.Name = name;
     }
 
-    [JsonPatchOperation(OperationType.Replace, nameof(PersonStateV1.Traits) + "/" + nameof(PersonTrait.Value))]
+    [JsonPatchOperation(JsonPatchOperationType.Replace, nameof(PersonStateV1.Traits) + "/" + nameof(PersonTrait.Value))]
     public virtual void SetPreferenceValue(Guid id, decimal value)
     {
         var trait = this.State.Traits.First(t => t.Id == id);

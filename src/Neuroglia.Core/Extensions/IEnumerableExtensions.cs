@@ -23,6 +23,7 @@ public static class IEnumerableExtensions
 {
 
     static readonly MethodInfo OfTypeMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.OfType))!;
+    static readonly MethodInfo ToListMethod = typeof(Enumerable).GetMethod(nameof(Enumerable.ToList))!;
 
     /// <summary>
     /// Converts the <see cref="IEnumerable{T}"/> into a new <see cref="EquatableList{T}"/>
@@ -31,7 +32,23 @@ public static class IEnumerableExtensions
     /// <param name="source">The <see cref="IEnumerable{T}"/> to convert</param>
     /// <returns>A new <see cref="EquatableList{T}"/></returns>
     public static EquatableList<T> WithValueSemantics<T>(this IEnumerable<T> source) => new(source);
-    
+
+    /// <summary>
+    /// Gets the element at the specified index
+    /// </summary>
+    /// <param name="enumerable">The extended collection</param>
+    /// <param name="index">The index of the element to get</param>
+    /// <returns>The element at the specified index</returns>
+    public static object GetElementAt(this IEnumerable enumerable, int index)
+    {
+        var i = 0;
+        foreach (var item in enumerable)
+        {
+            if (i == index) return item;
+        }
+        throw new ArgumentOutOfRangeException(nameof(index));
+    }
+
     /// <summary>
     /// Filters the elements of a sequence based on a specified type
     /// </summary>
@@ -39,5 +56,12 @@ public static class IEnumerableExtensions
     /// <param name="type">The type to filter the sequence by</param>
     /// <returns>A new <see cref="IEnumerable"/></returns>
     public static IEnumerable OfType(this IEnumerable enumerable, Type type) => (IEnumerable)OfTypeMethod.MakeGenericMethod(type).Invoke(null, new object[] { enumerable })!;
+
+    /// <summary>
+    /// Converts the <see cref="IEnumerable"/> into a new <see cref="IList"/>
+    /// </summary>
+    /// <param name="enumerable">The <see cref="IEnumerable"/> to convert</param>
+    /// <returns>A new <see cref="IList"/></returns>
+    public static IList ToNonGenericList(this IEnumerable enumerable) => (IList)ToListMethod.MakeGenericMethod(enumerable.GetType().GetEnumerableElementType()).Invoke(null, new object[] { enumerable })!;
 
 }

@@ -21,8 +21,8 @@ internal class UserCreatedEventV2
 
     protected UserCreatedEventV2() { }
 
-    public UserCreatedEventV2(string id, string firstName, string lastName, string email, Address address)
-        : base(id)
+    public UserCreatedEventV2(string aggregateId, string firstName, string lastName, string email, Address address)
+        : base(aggregateId)
     {
         this.FirstName = firstName;
         this.LastName = lastName;

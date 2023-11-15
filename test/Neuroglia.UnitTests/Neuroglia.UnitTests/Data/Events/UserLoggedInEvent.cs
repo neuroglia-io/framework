@@ -21,6 +21,6 @@ internal class UserLoggedInEvent
 
     protected UserLoggedInEvent() { }
 
-    public UserLoggedInEvent(string id) : base(id) { }
+    public UserLoggedInEvent(string aggregateId) : base(aggregateId) { }
 
 }
