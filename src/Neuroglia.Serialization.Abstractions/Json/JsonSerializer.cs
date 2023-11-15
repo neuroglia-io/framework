@@ -34,6 +34,7 @@ public class JsonSerializer
     {
         options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.TypeInfoResolver = new InheritancePriorityJsonTypeInfoResolver();
         options.Converters.Add(new DictionaryConverter());
         options.Converters.Add(new ExpandoObjectConverter());
     };
@@ -128,10 +129,18 @@ public class JsonSerializer
     public virtual Task SerializeAsync(Stream stream, object graph, Type type, CancellationToken cancellationToken = default) => System.Text.Json.JsonSerializer.SerializeAsync(stream, graph, type, this.Options, cancellationToken);
 
     /// <inheritdoc/>
-    public virtual object? Deserialize(string input, Type type) => System.Text.Json.JsonSerializer.Deserialize(input, type, this.Options);
+    public virtual object? Deserialize(string json, Type type) => System.Text.Json.JsonSerializer.Deserialize(json, type, this.Options);
 
     /// <inheritdoc/>
     public virtual object? Deserialize(Stream stream, Type type) => System.Text.Json.JsonSerializer.Deserialize(stream, type, this.Options);
+
+    /// <summary>
+    /// Deserializes the specified <see cref="JsonElement"/>
+    /// </summary>
+    /// <param name="element">The <see cref="JsonElement"/> to deserialize</param>
+    /// <param name="type">The type to deserialize the specified <see cref="JsonElement"/> into</param>
+    /// <returns>The deserialized value</returns>
+    public virtual object? Deserialize(JsonElement element, Type type) => System.Text.Json.JsonSerializer.Deserialize(element, type, this.Options);
 
     /// <summary>
     /// Deserializes the specified <see cref="JsonElement"/>
@@ -152,10 +161,26 @@ public class JsonSerializer
     /// <summary>
     /// Deserializes the specified <see cref="JsonNode"/>
     /// </summary>
+    /// <param name="node">The <see cref="JsonNode"/> to deserialize</param>
+    /// <param name="type">The type to deserialize the specified <see cref="JsonNode"/> into</param>
+    /// <returns>The deserialized value</returns>
+    public virtual object? Deserialize(JsonNode node, Type type) => System.Text.Json.JsonSerializer.Deserialize(node, type, this.Options);
+
+    /// <summary>
+    /// Deserializes the specified <see cref="JsonNode"/>
+    /// </summary>
     /// <typeparam name="T">The type to deserialize the specified <see cref="JsonNode"/> into</typeparam>
     /// <param name="node">The <see cref="JsonNode"/> to deserialize</param>
     /// <returns>The deserialized value</returns>
     public virtual T? Deserialize<T>(JsonNode node) => System.Text.Json.JsonSerializer.Deserialize<T>(node, this.Options);
+
+    /// <summary>
+    /// Deserializes the specified JSON input
+    /// </summary>
+    /// <param name="buffer">The JSON input to deserialize</param>
+    /// <param name="type">The type to deserialize the specified JSON into</param>
+    /// <returns>The deserialized value</returns>
+    public virtual object? Deserialize(ReadOnlySpan<byte> buffer, Type type) => System.Text.Json.JsonSerializer.Deserialize(buffer, type, this.Options);
 
     /// <summary>
     /// Deserializes the specified JSON input

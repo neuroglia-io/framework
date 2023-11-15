@@ -280,4 +280,18 @@ public static class TypeExtensions
         return false;
     }
 
+    public static int GetAscendencyLevel(this Type extended, Type ancestor)
+    {
+        if (extended == ancestor) return 0;
+        Type? baseType = extended;
+        var level = 0;
+        do
+        {
+            level++;
+            baseType = baseType?.BaseType;
+        }
+        while (baseType != null && baseType != ancestor);
+        return level;
+    }
+
 }
