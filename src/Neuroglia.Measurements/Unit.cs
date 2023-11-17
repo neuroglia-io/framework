@@ -45,21 +45,25 @@ public class Unit
     /// <summary>
     /// Gets the total amount of units
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal TotalUnits => this.Value * (Units.Unit.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of pairs
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Pairs => this.Value * (Units.Pair.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of half dozens
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal HalfDozens => this.Value * (Units.HalfDozen.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of dozens
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Dozens => this.Value * (Units.Dozen.Ratio / this.Unit.Ratio);
 
     /// <summary>

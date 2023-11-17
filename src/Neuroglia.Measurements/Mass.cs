@@ -40,76 +40,91 @@ public class Mass
     /// <summary>
     /// Gets the total amount of milligrams
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Milligrams => this.Value * (Units.Milligram.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of centigrams
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Centigrams => this.Value * (Units.Centigram.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of decigrams
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Decigrams => this.Value * (Units.Decigram.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of grams
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Grams => this.Value * (Units.Gram.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of decagrams
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Decagrams => this.Value * (Units.Decagram.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of hectograms
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Hectograms => this.Value * (Units.Hectogram.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of kilograms
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Kilograms => this.Value * (Units.Kilogram.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of tons
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Tons => this.Value * (Units.Ton.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of kilotons
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Kilotons => this.Value * (Units.Kiloton.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of megatons
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Megatons => this.Value * (Units.Megaton.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of grains
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Grains => this.Value * (Units.Grain.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of drams
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Drams => this.Value * (Units.Dram.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of ounces
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Ounces => this.Value * (Units.Ounce.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of pounds
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Pounds => this.Value * (Units.Pound.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of stones
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Stones => this.Value * (Units.Stone.Ratio / this.Unit.Ratio);
 
     /// <summary>

@@ -40,71 +40,85 @@ public class Energy
     /// <summary>
     /// Gets the total amount of millicalories
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Millicalories => this.Value * (Units.Millicalorie.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of centicalories
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Centicalories => this.Value * (Units.Centicalorie.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of decicalories
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Decicalories => this.Value * (Units.Decicalorie.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of calories
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Calories => this.Value * (Units.Calorie.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of decacalories
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Decacalories => this.Value * (Units.Decacalorie.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of hectocalories
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Hectocalories => this.Value * (Units.Hectocalorie.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of kilocalories
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Kilocalories => this.Value * (Units.Kilocalorie.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of millijoules
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Millijoules => this.Value * (Units.Millijoule.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of centijoules
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Centijoules => this.Value * (Units.Centijoule.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of decijoules
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Decijoules => this.Value * (Units.Decijoule.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of joules
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Joules => this.Value * (Units.Joule.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of decajoules
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Decajoules => this.Value * (Units.Decajoule.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of hectojoules
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Hectojoules => this.Value * (Units.Hectojoule.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of kilojoules
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Kilojoules => this.Value * (Units.Kilojoule.Ratio / this.Unit.Ratio);
 
     /// <summary>
