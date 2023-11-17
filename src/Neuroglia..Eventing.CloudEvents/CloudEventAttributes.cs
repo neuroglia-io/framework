@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.CloudEvents;
+namespace Neuroglia.Eventing.CloudEvents;
 
 /// <summary>
 /// Exposes constants about <see cref="ICloudEvent"/> attributes

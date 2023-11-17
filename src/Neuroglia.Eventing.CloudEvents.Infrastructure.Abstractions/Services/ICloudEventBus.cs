@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Neuroglia.CloudEvents;
+using Neuroglia.Eventing.CloudEvents;
 using System.Reactive.Subjects;
 
 namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Services;

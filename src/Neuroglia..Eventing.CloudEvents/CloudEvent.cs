@@ -17,7 +17,7 @@ using System.Net.Mime;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
-namespace Neuroglia.CloudEvents;
+namespace Neuroglia.Eventing.CloudEvents;
 
 /// <summary>
 /// Represents a <see href="https://cloudevents.io/">Cloud Event</see>
@@ -32,71 +32,71 @@ public record CloudEvent
     /// </summary>
     [Required, JsonRequired]
     [DataMember(Order = 1, Name = "id", IsRequired = true), JsonPropertyOrder(1), JsonPropertyName("id")]
-    public virtual string Id { get; protected set; } = null!;
+    public virtual string Id { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the version of the CloudEvents specification which the event uses. Defaults to <see cref="CloudEventSpecVersion.v1"/>
     /// </summary>
     [DefaultValue(CloudEventSpecVersion.v1)]
     [DataMember(Order = 2, Name = "specversion", IsRequired = true), JsonPropertyOrder(2), JsonPropertyName("specversion")]
-    public virtual string SpecVersion { get; protected set; } = CloudEventSpecVersion.v1;
+    public virtual string SpecVersion { get; set; } = CloudEventSpecVersion.v1;
 
     /// <summary>
     /// Gets/sets the date and time at which the event has been produced
     /// </summary>
     [DataMember(Order = 3, Name = "time"), JsonPropertyOrder(3), JsonPropertyName("time")]
-    public virtual DateTimeOffset? Time { get; protected set; }
+    public virtual DateTimeOffset? Time { get; set; }
 
     /// <summary>
     /// Gets/sets the cloud event's type
     /// </summary>
     [Required, JsonRequired]
     [DataMember(Order = 4, Name = "source", IsRequired = true), JsonPropertyOrder(4), JsonPropertyName("source")]
-    public virtual Uri Source { get; protected set; } = null!;
+    public virtual Uri Source { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the cloud event's type
     /// </summary>
     [Required, JsonRequired]
     [DataMember(Order = 5, Name = "type", IsRequired = true), JsonPropertyOrder(5), JsonPropertyName("type")]
-    public virtual string Type { get; protected set; } = null!;
+    public virtual string Type { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets a value that describes the subject of the event in the context of the event producer. Used as correlation id by default.
     /// </summary>
     [DataMember(Order = 6, Name = "subject"), JsonPropertyOrder(6), JsonPropertyName("subject")]
-    public virtual string? Subject { get; protected set; }
+    public virtual string? Subject { get; set; }
 
     /// <summary>
     /// Gets/sets the cloud event's data content type. Defaults to <see cref="MediaTypeNames.Application.Json"/>
     /// </summary>
     [DefaultValue(MediaTypeNames.Application.Json)]
     [DataMember(Order = 7, Name = "datacontenttype"), JsonPropertyOrder(7), JsonPropertyName("datacontenttype")]
-    public virtual string? DataContentType { get; protected set; } = MediaTypeNames.Application.Json;
+    public virtual string? DataContentType { get; set; } = MediaTypeNames.Application.Json;
 
     /// <summary>
     /// Gets/sets an <see cref="Uri"/> that references the versioned schema of the event's data
     /// </summary>
     [DataMember(Order = 8, Name = "dataschema"), JsonPropertyOrder(8), JsonPropertyName("dataschema")]
-    public virtual Uri? DataSchema { get; protected set; }
+    public virtual Uri? DataSchema { get; set; }
 
     /// <summary>
     /// Gets/sets the event's data, if any. Only used if the event has been formatted using the structured mode
     /// </summary>
     [DataMember(Order = 9, Name = "data"), JsonPropertyOrder(9), JsonPropertyName("data")]
-    public virtual object? Data { get; protected set; }
+    public virtual object? Data { get; set; }
 
     /// <summary>
     /// Gets/sets the event's binary data, encoded in base 64. Only used if the event has been formatted using the binary mode
     /// </summary>
     [DataMember(Order = 10, Name = "data_base64"), JsonPropertyOrder(10), JsonPropertyName("data_base64")]
-    public virtual string? DataBase64 { get; protected set; }
+    public virtual string? DataBase64 { get; set; }
 
     /// <summary>
     /// Gets/sets an <see cref="IDictionary{TKey, TValue}"/> that contains the event's extension attributes
     /// </summary>
     [DataMember(Order = 11, Name = "extensionAttributes"), JsonExtensionData]
-    public virtual IDictionary<string, object>? ExtensionAttributes { get; protected set; }
+    public virtual IDictionary<string, object>? ExtensionAttributes { get; set; }
 
     /// <summary>
     /// Gets/sets the specified attribute
