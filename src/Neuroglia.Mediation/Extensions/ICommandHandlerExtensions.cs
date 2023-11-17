@@ -89,8 +89,8 @@ public static class ICommandHandlerExtensions
     /// <param name="handler">The extended <see cref="ICommandHandler"/></param>
     /// <param name="errors">An array containing the <see cref="Error"/>s that have occured</param>
     /// <returns>A new <see cref="IOperationResult"/> indicating that an object related to the <see cref="ICommand"/> could not be found</returns>
-    public static IOperationResult<T> NotFound<TCommand, T>(this ICommandHandler<TCommand> handler, params Error[] errors)
-        where TCommand : class, ICommand<IOperationResult>
+    public static IOperationResult<T> NotFound<TCommand, T>(this ICommandHandler<TCommand, T> handler, params Error[] errors)
+        where TCommand : class, ICommand<IOperationResult<T>>
     {
         return new OperationResult<T>((int)HttpStatusCode.NotFound, errors: errors);
     }
@@ -111,8 +111,8 @@ public static class ICommandHandlerExtensions
     /// </summary>
     /// <param name="handler">The extended <see cref="ICommandHandler"/></param>
     /// <returns>A new <see cref="IOperationResult"/> indicating that an object related to the <see cref="ICommand"/> was not modified</returns>
-    public static IOperationResult<T> NotModified<TCommand, T>(this ICommandHandler<TCommand> handler)
-        where TCommand : class, ICommand<IOperationResult>
+    public static IOperationResult<T> NotModified<TCommand, T>(this ICommandHandler<TCommand, T> handler)
+        where TCommand : class, ICommand<IOperationResult<T>>
     {
         return new OperationResult<T>((int)HttpStatusCode.NotModified);
     }
@@ -135,8 +135,8 @@ public static class ICommandHandlerExtensions
     /// <param name="handler">The extended <see cref="ICommandHandler"/></param>
     /// <param name="errors">An array containing the <see cref="Error"/>s that have occured</param>
     /// <returns>A new <see cref="IOperationResult"/> indicating that the operation the current user is unauthorized</returns>
-    public static IOperationResult<T> Unauthorized<TCommand, T>(this ICommandHandler<TCommand> handler, params Error[] errors)
-        where TCommand : class, ICommand<IOperationResult>
+    public static IOperationResult<T> Unauthorized<TCommand, T>(this ICommandHandler<TCommand, T> handler, params Error[] errors)
+        where TCommand : class, ICommand<IOperationResult<T>>
     {
         return new OperationResult<T>((int)HttpStatusCode.Unauthorized, errors);
     }
@@ -159,8 +159,8 @@ public static class ICommandHandlerExtensions
     /// <param name="handler">The extended <see cref="ICommandHandler"/></param>
     /// <param name="errors">An array containing the <see cref="Error"/>s that have occured</param>
     /// <returns>A new <see cref="IOperationResult"/> indicating that the operation is forbidden to the current user</returns>
-    public static IOperationResult<T> Forbidden<TCommand, T>(this ICommandHandler<TCommand> handler, params Error[] errors)
-        where TCommand : class, ICommand<IOperationResult>
+    public static IOperationResult<T> Forbidden<TCommand, T>(this ICommandHandler<TCommand, T> handler, params Error[] errors)
+        where TCommand : class, ICommand<IOperationResult<T>>
     {
         return new OperationResult<T>((int)HttpStatusCode.Forbidden, errors);
     }
@@ -183,8 +183,8 @@ public static class ICommandHandlerExtensions
     /// <param name="handler">The extended <see cref="ICommandHandler"/></param>
     /// <param name="errors">An array containing the <see cref="Error"/>s that have occured</param>
     /// <returns>A new <see cref="IOperationResult"/> indicating that an internal error occured while handling the <see cref="ICommand"/></returns>
-    public static IOperationResult<T> InternalError<TCommand, T>(this ICommandHandler<TCommand> handler, params Error[] errors)
-        where TCommand : class, ICommand<IOperationResult>
+    public static IOperationResult<T> InternalError<TCommand, T>(this ICommandHandler<TCommand, T> handler, params Error[] errors)
+        where TCommand : class, ICommand<IOperationResult<T>>
     {
         return new OperationResult<T>((int)HttpStatusCode.InternalServerError, errors: errors);
     }

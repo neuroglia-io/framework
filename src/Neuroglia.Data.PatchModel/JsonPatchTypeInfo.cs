@@ -19,6 +19,7 @@ using Neuroglia.Data.PatchModel.Services;
 using Neuroglia.Serialization.Json;
 using System.Collections;
 using System.Collections.Concurrent;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Neuroglia.Data.PatchModel;
@@ -46,7 +47,7 @@ public class JsonPatchTypeInfo
     {
         var pathStr = path.ToString();
         if (int.TryParse(path.Segments.Last().Value, out var index)) pathStr = JsonPointer.Create(path.Segments[..^1]).ToString();
-        return Properties.First(p => p.Path.Equals(pathStr, StringComparison.OrdinalIgnoreCase));
+        return Properties.FirstOrDefault(p => p.Path.Equals(pathStr, StringComparison.OrdinalIgnoreCase));
     }
 
     /// <summary>
@@ -111,8 +112,18 @@ public class JsonPatchTypeInfo
         foreach (var method in type.GetMethods().Where(m => m.TryGetCustomAttribute<JsonPatchOperationAttribute>(out _)))
         {
             var jsonPatchOperationAttribute = method.GetCustomAttribute<JsonPatchOperationAttribute>()!;
-            var property = type.GetProperty(jsonPatchOperationAttribute.Path, BindingFlags.Default | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)!;
-            var propertyInfo = typeInfo.GetProperty(JsonPointer.Parse($"/{jsonPatchOperationAttribute.Path}")) ?? new JsonPatchPropertyInfo($"/{property.Name.ToCamelCase()}", property.PropertyType, BuildGetValueDelegateFor(property));
+            if (!PropertyPath.TryParse(jsonPatchOperationAttribute.Path.Replace('/', '.'), out var propertyPath) || propertyPath == null) throw new Exception($"Failed to parse the specified path '{jsonPatchOperationAttribute.Path}' into a new property path for type '{type.Name}'");
+            var parameterExpression = Expression.Parameter(propertyContainerType);
+            var memberExpression = propertyPath.ToExpression(parameterExpression);
+            var lambdaExpression = Expression.Lambda(memberExpression, parameterExpression);
+            var getValueDelegate = lambdaExpression.Compile();
+            var property = (PropertyInfo)memberExpression.Member;
+            var propertyInfo = typeInfo.GetProperty(JsonPointer.Parse($"/{jsonPatchOperationAttribute.Path}"));
+            if (propertyInfo == null)
+            {
+                propertyInfo = new JsonPatchPropertyInfo($"/{jsonPatchOperationAttribute.Path}", property.PropertyType, BuildGetValueDelegateFor(getValueDelegate));
+                typeInfo._properties.Add(propertyInfo);
+            }
             foreach (var operationType in EnumHelper.GetFlags(jsonPatchOperationAttribute.Type))
             {
                 switch (operationType)
@@ -133,7 +144,7 @@ public class JsonPatchTypeInfo
                         propertyInfo.ReplaceAsync = BuildReplaceOperationDelegateFor(method, jsonPatchOperationAttribute);
                         break;
                     case JsonPatchOperationType.Test:
-                        BuildTestOperationDelegateFor(property);
+                        BuildTestOperationDelegateFor(getValueDelegate);
                         break;
                     default: throw new NotSupportedException($"The specified {nameof(OperationType)} '{operationType}' is not supported");
                 }
@@ -157,6 +168,13 @@ public class JsonPatchTypeInfo
     /// <param name="property">The <see cref="PropertyInfo"/> to build the delegate for</param>
     /// <returns>A new delegate for getting the value of the specified <see cref="PropertyInfo"/></returns>
     public static Func<IServiceProvider, object, CancellationToken, Task<object?>> BuildGetValueDelegateFor(PropertyInfo property) => (provider, source, cancellationToken) => Task.FromResult(property.GetValue(source is IAggregateRoot aggregate ? aggregate.State : source));
+
+    /// <summary>
+    /// Builds a new delegate for getting the value of the specified <see cref="PropertyInfo"/>
+    /// </summary>
+    /// <param name="getValueDelegate">The <see cref="Delegate"/> to build the delegate for</param>
+    /// <returns>A new delegate for getting the value of the specified <see cref="PropertyInfo"/></returns>
+    public static Func<IServiceProvider, object, CancellationToken, Task<object?>> BuildGetValueDelegateFor(Delegate getValueDelegate) => (provider, source, cancellationToken) => Task.FromResult(getValueDelegate.GetMethodInfo().Invoke(source is IAggregateRoot aggregate ? aggregate.State : source, Array.Empty<object>()));
 
     /// <summary>
     /// Builds a new delegate for handling a JSON Patch operation of type <see cref="OperationType.Add"/>
@@ -482,6 +500,32 @@ public class JsonPatchTypeInfo
                 var propertySource = source is IAggregateRoot aggregate ? aggregate.State : source;
                 var value = property.GetValue(propertySource);
                 var valueType = property.PropertyType;
+                if (operation.Path.IsArrayIndexer())
+                {
+                    var enumerableType = valueType.GetGenericType(typeof(IEnumerable<>)) ?? throw new InvalidOperationException($"The targeted property at path '{operation.Path}' is not an enumerable and does not support indexing items"); ;
+                    valueType = enumerableType.GetEnumerableElementType();
+                    if (value is IEnumerable enumerable) value = enumerable.GetElementAt(int.Parse(operation.Path.Segments.Last().Value));
+                }
+                var other = operation.Value == null ? null : JsonSerializer.Default.Deserialize(operation.Value, valueType);
+                if (value?.Equals(other) != true) throw new OptimisticConcurrencyException($"The JSON Patch operation of type '{OperationType.Test}' failed for property at '{operation.Path}'.\r\nExpected value '{other}'\r\nActual value: '{value}'");
+            }, cancellationToken);
+        };
+    }
+
+    /// <summary>
+    /// Builds a new delegate for handling a JSON Patch operation of type <see cref="OperationType.Test"/>
+    /// </summary>
+    /// <param name="getValueDelegate">The <see cref="Delegate"/> to build the delegate for</param>
+    /// <returns>A new delegate for handling a JSON Patch operation of type <see cref="OperationType.Test"/></returns>
+    public static Func<IServiceProvider, object, PatchOperation, CancellationToken, Task> BuildTestOperationDelegateFor(Delegate getValueDelegate)
+    {
+        return (provider, source, operation, cancellationToken) =>
+        {
+            return Task.Run(() =>
+            {
+                var propertySource = source is IAggregateRoot aggregate ? aggregate.State : source;
+                var value = getValueDelegate.GetMethodInfo().Invoke(propertySource, Array.Empty<object>());
+                var valueType = getValueDelegate.GetMethodInfo().ReturnType;
                 if (operation.Path.IsArrayIndexer())
                 {
                     var enumerableType = valueType.GetGenericType(typeof(IEnumerable<>)) ?? throw new InvalidOperationException($"The targeted property at path '{operation.Path}' is not an enumerable and does not support indexing items"); ;
