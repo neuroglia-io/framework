@@ -40,56 +40,67 @@ public class Surface
     /// <summary>
     /// Gets the total amount of square millimeters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareMillimeters => this.Value * (Units.SquareMillimeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of square centimeters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareCentimeters => this.Value * (Units.SquareCentimeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of square decimeters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareDecimeters => this.Value * (Units.SquareDecimeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of square meters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareMeters => this.Value * (Units.SquareMeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of square decameters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareDecameters => this.Value * (Units.SquareDecameter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of square hectometers
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareHectometers => this.Value * (Units.SquareHectometer.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of square kilometers
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareKilometers => this.Value * (Units.SquareKilometer.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of square inches
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareInches => this.Value * (Units.SquareInch.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of square feet
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareFeet => this.Value * (Units.SquareFoot.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of square yards
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareYards => this.Value * (Units.SquareYard.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of square miles
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal SquareMiles => this.Value * (Units.SquareMile.Ratio / this.Unit.Ratio);
 
     /// <summary>

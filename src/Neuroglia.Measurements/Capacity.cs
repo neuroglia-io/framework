@@ -40,76 +40,91 @@ public class Capacity
     /// <summary>
     /// Gets the total amount of milliliters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Milliliters => this.Value * (Units.Milliliter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of centiliters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Centiliters => this.Value * (Units.Centiliter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of deciliters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Deciliters => this.Value * (Units.Deciliter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of liters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Liters => this.Value * (Units.Liter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of decaliters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Decaliters => this.Value * (Units.Decaliter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of hectoliters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Hectoliters => this.Value * (Units.Hectoliter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of kiloliters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Kiloliters => this.Value * (Units.Kiloliter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of U.S. fluid drams
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal USFluidDrams => this.Value * (Units.USFluidDram.Ratio / this.Unit.Ratio);
-    
+
     /// <summary>
     /// Gets the total amount of U.S. fluid ounces
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal USFluidOunces => this.Value * (Units.USFluidOunce.Ratio / this.Unit.Ratio);
-    
+
     /// <summary>
     /// Gets the total amount of U.S. gills
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal USGills => this.Value * (Units.USGill.Ratio / this.Unit.Ratio);
-    
+
     /// <summary>
     /// Gets the total amount of U.S. pints
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal USPints => this.Value * (Units.USPint.Ratio / this.Unit.Ratio);
-    
+
     /// <summary>
     /// Gets the total amount of U.S. quarts
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal USQuarts => this.Value * (Units.USQuart.Ratio / this.Unit.Ratio);
-    
+
     /// <summary>
     /// Gets the total amount of U.S. gallons
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal USGallons => this.Value * (Units.USGallon.Ratio / this.Unit.Ratio);
-    
+
     /// <summary>
     /// Gets the total amount of U.S. pecks
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal USPecks => this.Value * (Units.USPeck.Ratio / this.Unit.Ratio);
-    
+
     /// <summary>
     /// Gets the total amount of U.S. bushels
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal USBushels => this.Value * (Units.USBushel.Ratio / this.Unit.Ratio);
 
     /// <summary>

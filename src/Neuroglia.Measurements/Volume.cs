@@ -40,71 +40,85 @@ public class Volume
     /// <summary>
     /// Gets the total amount of cubic millimeters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicMillimeters => this.Value * (Units.CubicMillimeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of cubic centimeters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicCentimeters => this.Value * (Units.CubicCentimeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of cubic decimeters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicDecimeters => this.Value * (Units.CubicDecimeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of cubic meters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicMeters => this.Value * (Units.CubicMeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of cubic decameters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicDecameters => this.Value * (Units.CubicDecameter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of cubic hectometers
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicHectometers => this.Value * (Units.CubicHectometer.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of cubic kilometers
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicKilometers => this.Value * (Units.CubicKilometer.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of cubic inches
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicInches => this.Value * (Units.CubicInch.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of cubic feet
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicFeet => this.Value * (Units.CubicFoot.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of cubic yards
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicYards => this.Value * (Units.CubicYard.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of cubic miles
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal CubicMiles => this.Value * (Units.CubicMile.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of fluid ounces
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal FluidOunces => this.Value * (Units.FluidOunce.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of imperial gallons
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal ImperialGallons => this.Value * (Units.ImperialGallon.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of U.S. gallons
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal USGallons => this.Value * (Units.USGallon.Ratio / this.Unit.Ratio);
 
     /// <summary>

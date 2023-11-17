@@ -40,56 +40,67 @@ public class Length
     /// <summary>
     /// Gets the total amount of millimeters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore] 
     public virtual decimal Millimeters => this.Value * (Units.Millimeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of centimeters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Centimeters => this.Value * (Units.Centimeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of decimeters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Decimeters => this.Value * (Units.Decimeter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of meters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Meters => this.Value * (Units.Meter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of decameters
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Decameters => this.Value * (Units.Decameter.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of hectometers
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Hectometers => this.Value * (Units.Hectometer.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of kilometers
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Kilometers => this.Value * (Units.Kilometer.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of inches
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Inches => this.Value * (Units.Inch.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of feet
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Feet => this.Value * (Units.Foot.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of yards
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Yards => this.Value * (Units.Yard.Ratio / this.Unit.Ratio);
 
     /// <summary>
     /// Gets the total amount of miles
     /// </summary>
+    [IgnoreDataMember, JsonIgnore]
     public virtual decimal Miles => this.Value * (Units.Mile.Ratio / this.Unit.Ratio);
 
     /// <summary>
