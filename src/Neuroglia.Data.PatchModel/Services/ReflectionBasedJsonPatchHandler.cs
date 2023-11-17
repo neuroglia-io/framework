@@ -12,7 +12,6 @@
 // limitations under the License.
 
 using Json.Patch;
-using Json.Pointer;
 using Neuroglia.Serialization.Json;
 
 namespace Neuroglia.Data.PatchModel.Services;

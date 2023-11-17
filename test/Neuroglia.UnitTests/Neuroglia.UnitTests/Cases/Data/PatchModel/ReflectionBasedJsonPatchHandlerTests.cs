@@ -34,11 +34,13 @@ public class ReflectionBasedJsonPatchHandlerTests
         var product = new ProductAggregate("Fake Name", "Fake Description", tags: new string[] { tagToRemove });
         var updatedName = "Updated Fake Product Name";
         var updatedDescription = "Updated Fake Product Description";
+        var updatedTypeName = "Updated Type Name";
         var newTag = "New Fake Tag";
         var patchOperations = new List<PatchOperation>()
         {
             PatchOperation.Replace(JsonPointer.Create<ProductState>(p => p.Name), JsonSerializer.Default.SerializeToNode(updatedName)),
             PatchOperation.Replace(JsonPointer.Create<ProductState>(p => p.Description!), JsonSerializer.Default.SerializeToNode(updatedDescription)),
+            PatchOperation.Replace(JsonPointer.Create<ProductState>(p => p.Type.Name), JsonSerializer.Default.SerializeToNode(updatedTypeName)),
             PatchOperation.Add(JsonPointer.Create<ProductState>(p => p.Tags), JsonSerializer.Default.SerializeToNode(newTag)),
             PatchOperation.Remove(JsonPointer.Create<ProductState>(p => p.Tags).Combine(JsonPointer.Parse("/0"))),
             PatchOperation.Test(JsonPointer.Create<ProductState>(p => p.StateVersion), JsonSerializer.Default.SerializeToNode(0))
@@ -51,6 +53,7 @@ public class ReflectionBasedJsonPatchHandlerTests
         //assert
         product!.State.Name.Should().Be(updatedName);
         product.State.Description.Should().Be(updatedDescription);
+        product.State.Type.Name.Should().Be(updatedTypeName);
         product.State.Tags.Should().ContainSingle();
         product.State.Tags.Should().Contain(newTag);
     }
@@ -180,6 +183,12 @@ public class ReflectionBasedJsonPatchHandlerTests
             this.State._tags.RemoveAt(index);
         }
 
+        [JsonPatchOperation(JsonPatchOperationType.Add | JsonPatchOperationType.Replace, $"{nameof(ProductState.Type)}/{nameof(ProductType.Name)}")]
+        public void SetProductTypeName(string name)
+        {
+            this.State.Type.Name = name;
+        }
+
     }
 
     record ProductState
@@ -190,11 +199,20 @@ public class ReflectionBasedJsonPatchHandlerTests
 
         public string? Description { get; internal protected set; }
 
+        public ProductType Type { get; internal protected set; } = new();
+
         internal List<string> _categories = new();
         public IReadOnlyCollection<string> Categories => this._categories.AsReadOnly();
 
         internal List<string> _tags = new();
         public IReadOnlyCollection<string> Tags => this._tags.AsReadOnly();
+
+    }
+
+    record ProductType
+    {
+
+        public string Name { get; internal protected set; } = null!;
 
     }
 
