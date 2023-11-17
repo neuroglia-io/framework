@@ -13,7 +13,7 @@
 
 using System.Net.Mime;
 
-namespace Neuroglia.CloudEvents;
+namespace Neuroglia.Eventing.CloudEvents;
 
 /// <summary>
 /// Defines the fundamentals of a <see href="https://cloudevents.io/">Cloud Event</see>

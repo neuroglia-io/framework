@@ -14,7 +14,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Neuroglia.CloudEvents;
+using Neuroglia.Eventing.CloudEvents;
 using Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
 using Neuroglia.Serialization;
 using System.Net;
