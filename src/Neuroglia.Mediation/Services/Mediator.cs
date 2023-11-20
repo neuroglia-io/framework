@@ -29,8 +29,8 @@ public class Mediator
     /// </summary>
     public const string ActivitySourceName = "Neuroglia.Mediation.Diagnostics.ActivitySource";
 
-    private static readonly ActivitySource _ActivitySource = new(ActivitySourceName);
-    private static readonly ConcurrentDictionary<Type, object> _RequestHandlers = new();
+    static readonly ActivitySource _activitySource = new(ActivitySourceName);
+    static readonly ConcurrentDictionary<Type, object> _requestHandlers = [];
 
     /// <summary>
     /// Initializes a new <see cref="Mediator"/>
@@ -52,10 +52,10 @@ public class Mediator
     {
         if (request == null) throw new ArgumentNullException(nameof(request));
         var requestType = request.GetType();
-        using var activity = _ActivitySource.StartActivity(requestType.Name);
+        using var activity = _activitySource.StartActivity(requestType.Name);
         activity?.AddTag("request.type", requestType.FullName);
         activity?.AddTag("request.cqrs_type", request is ICommand ? "command" : "query");
-        var pipeline = (RequestPipeline<TResult>)_RequestHandlers.GetOrAdd(requestType, t => Activator.CreateInstance(typeof(RequestPipeline<,>).MakeGenericType(requestType, typeof(TResult)))!);
+        var pipeline = (RequestPipeline<TResult>)_requestHandlers.GetOrAdd(requestType, t => Activator.CreateInstance(typeof(RequestPipeline<,>).MakeGenericType(requestType, typeof(TResult)))!);
         var result = await pipeline.HandleAsync(request, this.ServiceProvider, cancellationToken).ConfigureAwait(false);
         return result;
     }
@@ -64,7 +64,7 @@ public class Mediator
     public virtual async Task PublishAsync<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
     {
         if (notification == null) throw new ArgumentNullException(nameof(notification));
-        using var activity = _ActivitySource.StartActivity(typeof(TNotification).Name);
+        using var activity = _activitySource.StartActivity(typeof(TNotification).Name);
         activity?.AddTag("notification.type", typeof(TNotification).FullName);
         foreach (var handler in this.ServiceProvider.GetServices<INotificationHandler<TNotification>>())
         {

@@ -47,7 +47,7 @@ public static class ControllerBaseExtensions
             if (result.Status == (int)HttpStatusCode.Forbidden) return controller.StatusCode((int)HttpStatusCode.Forbidden);
             if (result.Status == (int)HttpStatusCode.BadRequest)
             {
-                result.Errors?.ToList().ForEach(e => controller.ModelState.AddModelError(e.Title!, e.Detail!));
+                result.Errors?.ToList().SelectMany(e => e.Errors == null ? new Dictionary<string, string[]>() { { e.Title!, new string[] { e.Detail! } } }.ToList() : e.Errors.ToList()).ToList().ForEach(e => controller.ModelState.AddModelError(e.Key, string.Join(Environment.NewLine, e.Value)));
                 return controller.ValidationProblem(controller.ModelState);
             }
             if (result.Status == (int)HttpStatusCode.NotFound)

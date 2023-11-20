@@ -62,7 +62,7 @@ public class GuardExceptionHandlingMiddleware<TRequest, TResult>
             result = default!;
             return false;
         }
-        result = (TResult)Activator.CreateInstance(responseType, resultCode, errors)!;
+        result = (TResult)Activator.CreateInstance(responseType, resultCode, null, errors)!;
         return true;
     }
 
