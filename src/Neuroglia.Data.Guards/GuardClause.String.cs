@@ -19,7 +19,7 @@ public static class StringGuardClauses
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="message">The exception message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<string> WhenNullOrWhitespace(this IGuardClause<string> guard, string message) => guard.WhenNullOrWhitespace(new GuardException(message));
+    public static IGuardClause<string> WhenNullOrWhitespace(this IGuardClause<string> guard, string message) => guard.WhenNullOrWhitespace(new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is null or whitespace
@@ -50,7 +50,7 @@ public static class StringGuardClauses
     /// <param name="comparisonType">The type of comparison to perform</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<string> WhenStartsWith(this IGuardClause<string> guard, string prefix, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenStartsWith(prefix, new GuardException(message), comparisonType);
+    public static IGuardClause<string> WhenStartsWith(this IGuardClause<string> guard, string prefix, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenStartsWith(prefix, new GuardException(message, guard.ArgumentName), comparisonType);
 
     /// <summary>
     /// Throws when the value starts with the specified string
@@ -83,7 +83,7 @@ public static class StringGuardClauses
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <param name="comparisonType">The type of comparison to perform</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<string> WhenNotStartsWith(this IGuardClause<string> guard, string prefix, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenNotStartsWith(prefix, new GuardException(message), comparisonType);
+    public static IGuardClause<string> WhenNotStartsWith(this IGuardClause<string> guard, string prefix, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenNotStartsWith(prefix, new GuardException(message, guard.ArgumentName), comparisonType);
 
     /// <summary>
     /// Throws when the value does not start with the specified string
@@ -116,7 +116,7 @@ public static class StringGuardClauses
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <param name="comparisonType">The type of comparison to perform</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<string> WhenEndsWith(this IGuardClause<string> guard, string prefix, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenEndsWith(prefix, new GuardException(message), comparisonType);
+    public static IGuardClause<string> WhenEndsWith(this IGuardClause<string> guard, string prefix, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenEndsWith(prefix, new GuardException(message, guard.ArgumentName), comparisonType);
 
     /// <summary>
     /// Throws when the value ends with the specified string
@@ -149,7 +149,7 @@ public static class StringGuardClauses
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <param name="comparisonType">The type of comparison to perform</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<string> WhenNotEndsWith(this IGuardClause<string> guard, string prefix, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenNotEndsWith(prefix, new GuardException(message), comparisonType);
+    public static IGuardClause<string> WhenNotEndsWith(this IGuardClause<string> guard, string prefix, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenNotEndsWith(prefix, new GuardException(message, guard.ArgumentName), comparisonType);
 
     /// <summary>
     /// Throws when the value does not end with the specified string
@@ -180,7 +180,7 @@ public static class StringGuardClauses
     /// <param name="value">The string the value must not be equivalent to</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<string> WhenEquivalentTo(this IGuardClause<string> guard, string value, string message) => guard.WhenEquivalentTo(value, new GuardException(message));
+    public static IGuardClause<string> WhenEquivalentTo(this IGuardClause<string> guard, string value, string message) => guard.WhenEquivalentTo(value, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is equivalent to the specified string
@@ -210,7 +210,7 @@ public static class StringGuardClauses
     /// <param name="value">The string the value must be equivalent to</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<string> WhenNotEquivalentTo(this IGuardClause<string> guard, string value, string message) => guard.WhenNotEquivalentTo(value, new GuardException(message));
+    public static IGuardClause<string> WhenNotEquivalentTo(this IGuardClause<string> guard, string value, string message) => guard.WhenNotEquivalentTo(value, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is not equivalent to the specified string
@@ -242,7 +242,7 @@ public static class StringGuardClauses
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <param name="comparisonType">The type of comparison to perform</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<string> WhenContains(this IGuardClause<string> guard, string value, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenContains(value, new GuardException(message), comparisonType);
+    public static IGuardClause<string> WhenContains(this IGuardClause<string> guard, string value, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenContains(value, new GuardException(message, guard.ArgumentName), comparisonType);
 
     /// <summary>
     /// Throws when the value contains a specific item
@@ -275,7 +275,7 @@ public static class StringGuardClauses
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <param name="comparisonType">The type of comparison to perform</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<string> WhenNotContains(this IGuardClause<string> guard, string value, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenNotContains(value, new GuardException(message), comparisonType);
+    public static IGuardClause<string> WhenNotContains(this IGuardClause<string> guard, string value, string message, StringComparison comparisonType = StringComparison.CurrentCulture) => guard.WhenNotContains(value, new GuardException(message, guard.ArgumentName), comparisonType);
 
     /// <summary>
     /// Throws when the value does not contain a specific item

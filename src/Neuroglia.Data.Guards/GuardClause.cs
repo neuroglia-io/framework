@@ -23,7 +23,7 @@ public class GuardClause<T>(T value, string? argumentName = null)
     public IGuardClause<T> WhenNull() => this.WhenNull("The specified value cannot be null");
 
     /// <inheritdoc/>
-    public IGuardClause<T> WhenNull(string message) => this.WhenNull(new GuardException(message));
+    public IGuardClause<T> WhenNull(string message) => this.WhenNull(new GuardException(message, this.ArgumentName));
 
     /// <inheritdoc/>
     public IGuardClause<T> WhenNull(GuardException ex)
@@ -36,7 +36,7 @@ public class GuardClause<T>(T value, string? argumentName = null)
     public IGuardClause<T> WhenNotNull() => this.WhenNotNull("The specified value cannot be null");
 
     /// <inheritdoc/>
-    public IGuardClause<T> WhenNotNull(string message) => this.WhenNotNull(new GuardException(message));
+    public IGuardClause<T> WhenNotNull(string message) => this.WhenNotNull(new GuardException(message, this.ArgumentName));
 
     /// <inheritdoc/>
     public IGuardClause<T> WhenNotNull(GuardException ex)

@@ -32,7 +32,7 @@ public static class BooleanGuardClause
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<bool> WhenTrue(this IGuardClause<bool> guard, string message) => guard.WhenTrue(new GuardException(message));
+    public static IGuardClause<bool> WhenTrue(this IGuardClause<bool> guard, string message) => guard.WhenTrue(new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is true
@@ -59,7 +59,7 @@ public static class BooleanGuardClause
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<bool> WhenFalse(this IGuardClause<bool> guard, string message) => guard.WhenFalse(new GuardException(message));
+    public static IGuardClause<bool> WhenFalse(this IGuardClause<bool> guard, string message) => guard.WhenFalse(new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is false

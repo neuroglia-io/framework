@@ -21,7 +21,7 @@ public static class EnumerableGuardClauses
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="message">The exception message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenNullOrEmpty<TEnumerable>(this IGuardClause<TEnumerable> guard, string message) where TEnumerable : IEnumerable => guard.WhenNullOrEmpty(new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenNullOrEmpty<TEnumerable>(this IGuardClause<TEnumerable> guard, string message) where TEnumerable : IEnumerable => guard.WhenNullOrEmpty(new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value to guard against is null or empty
@@ -51,7 +51,7 @@ public static class EnumerableGuardClauses
     /// <param name="minimum">The minimum amount of items the value should contain</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenCountLowerThan<TEnumerable>(this IGuardClause<TEnumerable> guard, int minimum, string message) where TEnumerable : IEnumerable => guard.WhenCountLowerThan(minimum, new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenCountLowerThan<TEnumerable>(this IGuardClause<TEnumerable> guard, int minimum, string message) where TEnumerable : IEnumerable => guard.WhenCountLowerThan(minimum, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value contains less than a specified amount of items
@@ -82,7 +82,7 @@ public static class EnumerableGuardClauses
     /// <param name="maximum">The maximum amount of items the value should contain</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenCountHigherThan<TEnumerable>(this IGuardClause<TEnumerable> guard, int maximum, string message) where TEnumerable : IEnumerable => guard.WhenCountHigherThan(maximum, new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenCountHigherThan<TEnumerable>(this IGuardClause<TEnumerable> guard, int maximum, string message) where TEnumerable : IEnumerable => guard.WhenCountHigherThan(maximum, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value contains more than a specified amount of items
@@ -113,7 +113,7 @@ public static class EnumerableGuardClauses
     /// <param name="count">The amount of items the value should contain</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenCountEquals<TEnumerable>(this IGuardClause<TEnumerable> guard, int count, string message) where TEnumerable : IEnumerable => guard.WhenCountEquals(count, new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenCountEquals<TEnumerable>(this IGuardClause<TEnumerable> guard, int count, string message) where TEnumerable : IEnumerable => guard.WhenCountEquals(count, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value contains a specific amount of items
@@ -144,7 +144,7 @@ public static class EnumerableGuardClauses
     /// <param name="count">The amount of items the value should contain</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenCountNotEquals<TEnumerable>(this IGuardClause<TEnumerable> guard, int count, string message) where TEnumerable : IEnumerable => guard.WhenCountNotEquals(count, new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenCountNotEquals<TEnumerable>(this IGuardClause<TEnumerable> guard, int count, string message) where TEnumerable : IEnumerable => guard.WhenCountNotEquals(count, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value does not contain a specific amount of items
@@ -175,7 +175,7 @@ public static class EnumerableGuardClauses
     /// <param name="item">The item the value must contain</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenContains<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, TItem item, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenContains(item, new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenContains<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, TItem item, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenContains(item, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value contains a specific item
@@ -206,7 +206,7 @@ public static class EnumerableGuardClauses
     /// <param name="item">The item the value must contain</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenNotContains<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, TItem item, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenNotContains(item, new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenNotContains<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, TItem item, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenNotContains(item, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value does not contain a specific item
@@ -229,7 +229,7 @@ public static class EnumerableGuardClauses
     /// <param name="predicate">The predicate no item should match</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenAny<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, Func<TItem, bool> predicate, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenAny(predicate, new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenAny<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, Func<TItem, bool> predicate, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenAny(predicate, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value contains any item matching the specified predicate
@@ -252,7 +252,7 @@ public static class EnumerableGuardClauses
     /// <param name="predicate">The predicate at least one item should match</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenNone<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, Func<TItem, bool> predicate, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenNone(predicate, new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenNone<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, Func<TItem, bool> predicate, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenNone(predicate, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value does not contain any item matching the specified predicate
@@ -275,7 +275,7 @@ public static class EnumerableGuardClauses
     /// <param name="predicate">The predicate no item should match</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenAll<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, Func<TItem, bool> predicate, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenAll(predicate, new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenAll<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, Func<TItem, bool> predicate, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenAll(predicate, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when all the items the value is made out of match the specified predicate
@@ -298,7 +298,7 @@ public static class EnumerableGuardClauses
     /// <param name="predicate">The predicate at least one item should match</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenNotAll<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, Func<TItem, bool> predicate, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenNotAll(predicate, new GuardException(message));
+    public static IGuardClause<TEnumerable> WhenNotAll<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, Func<TItem, bool> predicate, string message) where TEnumerable : IEnumerable<TItem> => guard.WhenNotAll(predicate, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when all the items the value is made out of do not match the specified predicate

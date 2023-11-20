@@ -32,7 +32,7 @@ public static class IntegerGuardClause
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<int> WhenNegative(this IGuardClause<int> guard, string message) => guard.WhenNegative(new GuardException(message));
+    public static IGuardClause<int> WhenNegative(this IGuardClause<int> guard, string message) => guard.WhenNegative(new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is negative
@@ -59,7 +59,7 @@ public static class IntegerGuardClause
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<int> WhenPositive(this IGuardClause<int> guard, string message) => guard.WhenPositive(new GuardException(message));
+    public static IGuardClause<int> WhenPositive(this IGuardClause<int> guard, string message) => guard.WhenPositive(new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is positive
@@ -88,7 +88,7 @@ public static class IntegerGuardClause
     /// <param name="minimum">The minimum value allowed</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<int> WhenLowerThan(this IGuardClause<int> guard, int minimum, string message) => guard.WhenLowerThan(minimum, new GuardException(message));
+    public static IGuardClause<int> WhenLowerThan(this IGuardClause<int> guard, int minimum, string message) => guard.WhenLowerThan(minimum, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is lower than a specified integer
@@ -118,7 +118,7 @@ public static class IntegerGuardClause
     /// <param name="maximum">The maximum value allowed</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<int> WhenHigherThan(this IGuardClause<int> guard, int maximum, string message) => guard.WhenHigherThan(maximum, new GuardException(message));
+    public static IGuardClause<int> WhenHigherThan(this IGuardClause<int> guard, int maximum, string message) => guard.WhenHigherThan(maximum, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is higher than a specified integer
@@ -150,7 +150,7 @@ public static class IntegerGuardClause
     /// <param name="maximum">The exclusive upper bounds of the range</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<int> WhenWithinRange(this IGuardClause<int> guard, int minimum, int maximum, string message) => guard.WhenWithinRange(minimum, maximum, new GuardException(message));
+    public static IGuardClause<int> WhenWithinRange(this IGuardClause<int> guard, int minimum, int maximum, string message) => guard.WhenWithinRange(minimum, maximum, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value falls within a specified range
@@ -183,7 +183,7 @@ public static class IntegerGuardClause
     /// <param name="maximum">The exclusive upper bounds of the range</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<int> WhenNotWithinRange(this IGuardClause<int> guard, int minimum, int maximum, string message) => guard.WhenNotWithinRange(minimum, maximum, new GuardException(message));
+    public static IGuardClause<int> WhenNotWithinRange(this IGuardClause<int> guard, int minimum, int maximum, string message) => guard.WhenNotWithinRange(minimum, maximum, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value does not fall within a specified range
