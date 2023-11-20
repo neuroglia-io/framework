@@ -612,4 +612,16 @@ public class GuardTests
         guardAgainstValidValue.Should().NotThrow();
     }
 
+    [Fact]
+    public void Guard_Against_Object_WhenNullReference_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((object?)null).WhenNullReference("fake-id");
+        var guardAgainstValidValue = () => Guard.Against(new { }).WhenNullReference("fake-id");
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
 }

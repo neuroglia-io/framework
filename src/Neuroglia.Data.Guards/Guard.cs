@@ -14,7 +14,7 @@ public static class Guard
     /// <typeparam name="T">The type of value to validate</typeparam>
     /// <param name="value">The value to validate</param>
     /// <returns>The configured <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<T> Against<T>(T value) => new GuardClause<T>(value);
+    public static IGuardClause<T> Against<T>(T? value) => new GuardClause<T>(value);
 
     /// <summary>
     /// Guards against the value

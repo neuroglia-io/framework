@@ -126,27 +126,27 @@ public class MediatorTests
     }
 
     [Fact]
-    public async Task Command_WithDomainExceptionHandlingMiddleware_ShouldWork()
+    public async Task Command_WithGuardExceptionHandlingMiddleware_ShouldWork()
     {
         //arrange
         var firstName = "Fake First Name";
         var lastName = "Fake Last Name";
         var person = new Person(firstName, lastName);
-        var command = new TestCommandWithDomainExceptionHandlingMiddleware(person);
+        var command = new TestCommandWithGuardExceptionHandlingMiddleware(person);
 
         //act
         var result = await this.Mediator.ExecuteAsync(command);
 
         //arrange
         result.Should().NotBeNull();
-        result.Status.Should().Be((int)HttpStatusCode.NotFound);
+        result.Status.Should().Be((int)HttpStatusCode.BadRequest);
     }
 
     [Fact]
     public async Task Command_WithFluentValidationMiddleware_ShouldWork()
     {
         //arrange
-        var command = new TestCommandWithDomainExceptionHandlingMiddleware(null!);
+        var command = new TestCommandWithGuardExceptionHandlingMiddleware(null!);
 
         //act
         var result = await this.Mediator.ExecuteAsync(command);

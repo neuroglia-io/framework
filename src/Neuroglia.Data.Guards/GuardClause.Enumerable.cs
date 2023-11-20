@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Neuroglia.Data.Guards.Properties;
+using System.Collections;
 
 namespace Neuroglia.Data.Guards;
 
@@ -13,7 +14,7 @@ public static class EnumerableGuardClauses
     /// </summary>
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenNullOrEmpty<TEnumerable>(this IGuardClause<TEnumerable> guard) where TEnumerable : IEnumerable => guard.WhenNullOrEmpty("The specified value cannot be null or empty");
+    public static IGuardClause<TEnumerable> WhenNullOrEmpty<TEnumerable>(this IGuardClause<TEnumerable> guard) where TEnumerable : IEnumerable => guard.WhenNullOrEmpty(GuardExceptionMessages.when_null_or_empty);
 
     /// <summary>
     /// Throws when the value to guard against is null or empty
@@ -42,7 +43,7 @@ public static class EnumerableGuardClauses
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="minimum">The minimum amount of items the value should contain</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenCountLowerThan<TEnumerable>(this IGuardClause<TEnumerable> guard, int minimum) where TEnumerable : IEnumerable => guard.WhenCountLowerThan(minimum, $"The specified must have at least '{minimum}' items");
+    public static IGuardClause<TEnumerable> WhenCountLowerThan<TEnumerable>(this IGuardClause<TEnumerable> guard, int minimum) where TEnumerable : IEnumerable => guard.WhenCountLowerThan(minimum, StringFormatter.Format(GuardExceptionMessages.when_count_lower_than, minimum));
 
     /// <summary>
     /// Throws when the value contains less than a specified amount of items
@@ -73,7 +74,7 @@ public static class EnumerableGuardClauses
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="maximum">The maximum amount of items the value should contain</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenCountHigherThan<TEnumerable>(this IGuardClause<TEnumerable> guard, int maximum) where TEnumerable : IEnumerable => guard.WhenCountHigherThan(maximum, $"The specified must have a maximum of '{maximum}' items");
+    public static IGuardClause<TEnumerable> WhenCountHigherThan<TEnumerable>(this IGuardClause<TEnumerable> guard, int maximum) where TEnumerable : IEnumerable => guard.WhenCountHigherThan(maximum, StringFormatter.Format(GuardExceptionMessages.when_higher_than, maximum));
 
     /// <summary>
     /// Throws when the value contains more than a specified amount of items
@@ -104,7 +105,7 @@ public static class EnumerableGuardClauses
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="count">The amount of items the value should contain</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenCountEquals<TEnumerable>(this IGuardClause<TEnumerable> guard, int count) where TEnumerable : IEnumerable => guard.WhenCountEquals(count, $"The specified value must not contain {count} items");
+    public static IGuardClause<TEnumerable> WhenCountEquals<TEnumerable>(this IGuardClause<TEnumerable> guard, int count) where TEnumerable : IEnumerable => guard.WhenCountEquals(count, StringFormatter.Format(GuardExceptionMessages.when_count_equals, count));
 
     /// <summary>
     /// Throws when the value contains a specific amount of items
@@ -135,7 +136,7 @@ public static class EnumerableGuardClauses
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="count">The amount of items the value should contain</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenCountNotEquals<TEnumerable>(this IGuardClause<TEnumerable> guard, int count) where TEnumerable : IEnumerable => guard.WhenCountNotEquals(count, $"The specified value does not contain exactly {count} items");
+    public static IGuardClause<TEnumerable> WhenCountNotEquals<TEnumerable>(this IGuardClause<TEnumerable> guard, int count) where TEnumerable : IEnumerable => guard.WhenCountNotEquals(count, StringFormatter.Format(GuardExceptionMessages.when_count_not_equals, count));
 
     /// <summary>
     /// Throws when the value does not contain a specific amount of items
@@ -166,7 +167,7 @@ public static class EnumerableGuardClauses
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="item">The item the value must contain</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenContains<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, TItem item) where TEnumerable : IEnumerable<TItem> => guard.WhenContains(item, $"The specified value must not contain '{item}'");
+    public static IGuardClause<TEnumerable> WhenContains<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, TItem item) where TEnumerable : IEnumerable<TItem> => guard.WhenContains(item, StringFormatter.Format(GuardExceptionMessages.when_contains, item!));
 
     /// <summary>
     /// Throws when the value contains a specific item
@@ -197,7 +198,7 @@ public static class EnumerableGuardClauses
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="item">The item the value must contain</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<TEnumerable> WhenNotContains<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, TItem item) where TEnumerable : IEnumerable<TItem> => guard.WhenNotContains(item, $"The specified value must contain '{item}'");
+    public static IGuardClause<TEnumerable> WhenNotContains<TEnumerable, TItem>(this IGuardClause<TEnumerable> guard, TItem item) where TEnumerable : IEnumerable<TItem> => guard.WhenNotContains(item, StringFormatter.Format(GuardExceptionMessages.when_not_contains, item!));
 
     /// <summary>
     /// Throws when the value does not contain a specific item

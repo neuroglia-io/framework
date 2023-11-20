@@ -14,6 +14,7 @@
 using Json.Patch;
 using Json.Pointer;
 using Microsoft.Extensions.DependencyInjection;
+using Neuroglia.Data.Guards;
 using Neuroglia.Data.Infrastructure.Services;
 using Neuroglia.Data.PatchModel.Services;
 using Neuroglia.Serialization.Json;
@@ -247,7 +248,7 @@ public class JsonPatchTypeInfo
                     var key = (operation.Value == null ? null : JsonSerializer.Default.Deserialize(operation.Value, keyType)) ?? throw new NullReferenceException($"A JSON Patch operation of type '{OperationType.Add}' must set the '{nameof(operation.Value)}' property when using references");
                     var repositoryType = typeof(IRepository<,>).MakeGenericType(referencedType, keyType);
                     var repository = (IRepository)provider.GetRequiredService(repositoryType);
-                    value = await repository.GetAsync(key, cancellationToken).ConfigureAwait(false) ?? throw DomainException.NullReference(referencedType, key);
+                    value = Guard.Against(await repository.GetAsync(key, cancellationToken).ConfigureAwait(false)).WhenNullReference(key).Value;
                 }
 
                 args = indexParameter == null ? new object[] { value! } : new object[] { value!, index! };

@@ -11,17 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Neuroglia.Data;
+using Neuroglia.Data.Guards;
 using System.Net;
 
 namespace Neuroglia.Mediation.Services;
 
 /// <summary>
-/// Represents an <see cref="IMiddleware{TRequest, TResult}"/> used to handle <see cref="DomainException"/>s during the execution of an <see cref="IRequest"/>
+/// Represents an <see cref="IMiddleware{TRequest, TResult}"/> used to handle <see cref="GuardException"/>s during the execution of an <see cref="IRequest"/>
 /// </summary>
 /// <typeparam name="TRequest">The type of <see cref="IRequest"/> to handle</typeparam>
 /// <typeparam name="TResult">The type of expected <see cref="IOperationResult"/></typeparam>
-public class DomainExceptionHandlingMiddleware<TRequest, TResult>
+public class GuardExceptionHandlingMiddleware<TRequest, TResult>
     : IMiddleware<TRequest, TResult>
     where TRequest : IRequest<TResult>
     where TResult : IOperationResult
@@ -34,25 +34,10 @@ public class DomainExceptionHandlingMiddleware<TRequest, TResult>
         {
             return await next();
         }
-        catch (DomainArgumentException ex)
+        catch (GuardException ex)
         {
-            if (!this.TryCreateErrorResponse((int)HttpStatusCode.BadRequest, out var response, new Error(ErrorTypes.Invalid, ex.GetType().Name, (int)HttpStatusCode.BadRequest, ex.Message))) throw;
-            return response;
-        }
-        catch (DomainValidationException ex)
-        {
-            if (!this.TryCreateErrorResponse((int)HttpStatusCode.BadRequest, out var response, errors: ex.ValidationErrors.ToArray())) throw;
-            return response;
-        }
-        catch (DomainNullReferenceException ex)
-        {
-            if (!this.TryCreateErrorResponse((int)HttpStatusCode.NotFound, out var response, new Error(ErrorTypes.NotFound, ex.GetType().Name, (int)HttpStatusCode.NotFound, ex.Message))) throw;
-            return response;
-
-        }
-        catch (DomainException ex)
-        {
-            if (!this.TryCreateErrorResponse((int)HttpStatusCode.BadRequest, out var response, new Error(ErrorTypes.Invalid, ex.GetType().Name, (int)HttpStatusCode.BadRequest, ex.Message))) throw;
+            var errors = new Dictionary<string, string[]>() { { ex.ArgumentName ?? "value", new string[] { ex.Message } } };
+            if (!this.TryCreateErrorResponse((int)HttpStatusCode.BadRequest, out var response, new Error(ErrorTypes.Invalid, "Invalid", (int)HttpStatusCode.BadRequest, errors: errors))) throw;
             return response;
         }
     }
