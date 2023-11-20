@@ -7,6 +7,7 @@
 /// Initializes a new <see cref="GuardException"/>
 /// </remarks>
 /// <param name="message">The <see cref="GuardException"/>'s message</param>
+/// <param name="argumentName">The name of the argument to throw the <see cref="GuardException"/> for</param>
 public class GuardException(string? message, string? argumentName = null)
     : Exception(message)
 {

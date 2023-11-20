@@ -49,7 +49,7 @@ public static class EnumerableGuardClauses
     /// </summary>
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="minimum">The minimum amount of items the value should contain</param>
-    /// <param name="ex">The <see cref="Exception"/> to throw</param>
+    /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
     public static IGuardClause<TEnumerable> WhenCountLowerThan<TEnumerable>(this IGuardClause<TEnumerable> guard, int minimum, string message) where TEnumerable : IEnumerable => guard.WhenCountLowerThan(minimum, new GuardException(message));
 
@@ -80,7 +80,7 @@ public static class EnumerableGuardClauses
     /// </summary>
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="maximum">The maximum amount of items the value should contain</param>
-    /// <param name="ex">The <see cref="Exception"/> to throw</param>
+    /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
     public static IGuardClause<TEnumerable> WhenCountHigherThan<TEnumerable>(this IGuardClause<TEnumerable> guard, int maximum, string message) where TEnumerable : IEnumerable => guard.WhenCountHigherThan(maximum, new GuardException(message));
 

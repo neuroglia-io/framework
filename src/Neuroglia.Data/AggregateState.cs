@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text.Json.Serialization;
+
 namespace Neuroglia.Data;
 
 /// <summary>
@@ -34,17 +36,21 @@ public abstract record AggregateState<TKey>
     protected AggregateState(TKey id) => this.Id = id;
 
     /// <inheritdoc/>
+    [JsonInclude]
     public virtual TKey Id { get; protected set; } = default!;
 
     object IIdentifiable.Id => this.Id;
 
     /// <inheritdoc/>
+    [JsonInclude]
     public virtual ulong StateVersion { get; set; }
 
     /// <inheritdoc/>
+    [JsonInclude]
     public virtual DateTimeOffset CreatedAt { get; protected set; }
 
     /// <inheritdoc/>
+    [JsonInclude]
     public virtual DateTimeOffset? LastModified { get; protected set; }
 
     /// <inheritdoc/>
