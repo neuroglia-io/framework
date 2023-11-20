@@ -48,7 +48,7 @@ public class GuardClause<T>(T? value, string? argumentName = null)
     }
 
     /// <inheritdoc/>
-    public IGuardClause<T> WhenNullReference<TKey>(TKey key, string keyName) => this.WhenNullReference(key, new GuardException(StringFormatter.NamedFormat(GuardExceptionMessages.when_null_reference, new { type = typeof(T), key, keyName }), this.ArgumentName));
+    public IGuardClause<T> WhenNullReference<TKey>(TKey key, string keyName) => this.WhenNullReference(key, new GuardException(StringFormatter.NamedFormat(GuardExceptionMessages.when_null_reference, new { type = typeof(T).Name.ToCamelCase(), key, keyName }), this.ArgumentName));
 
     /// <inheritdoc/>
     public IGuardClause<T> WhenNullReference<TKey>(TKey key, GuardException ex)
