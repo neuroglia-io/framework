@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Data.Guards\Neuroglia.Data.Guards.csproj" />
     <ProjectReference Include="..\Neuroglia.Data\Neuroglia.Data.csproj" />
   </ItemGroup>
 

@@ -10,7 +10,7 @@ public interface IGuardClause<T>
     /// <summary>
     /// Gets the value to guard against
     /// </summary>
-    T Value { get; }
+    T? Value { get; }
 
     /// <summary>
     /// Gets the name of the argument to guard against, if any
@@ -56,5 +56,21 @@ public interface IGuardClause<T>
     /// <param name="ex">The <see cref="GuardException"/> to throw</param>
     /// <returns>The configured <see cref="IGuardClause{T}"/></returns>
     IGuardClause<T> WhenNotNull(GuardException ex);
+
+    /// <summary>
+    /// Throws when the value is null due to an invalid reference
+    /// </summary>
+    /// <param name="reference">The reference to the guarded value</param>
+    /// <param name="keyName">The name of the key used to reference the guarded value</param>
+    /// <returns>The configured <see cref="IGuardClause{T}"/></returns>
+    IGuardClause<T> WhenNullReference<TKey>(TKey reference, string keyName = "id");
+
+    /// <summary>
+    /// Throws when the value is null due to an invalid reference
+    /// </summary>
+    /// <param name="reference">The reference to the guarded value</param>
+    /// <param name="ex">The <see cref="GuardException"/> to throw</param>
+    /// <returns>The configured <see cref="IGuardClause{T}"/></returns>
+    IGuardClause<T> WhenNullReference<TKey>(TKey reference, GuardException ex);
 
 }

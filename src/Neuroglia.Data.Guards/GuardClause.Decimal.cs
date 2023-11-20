@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Neuroglia.Data.Guards.Properties;
+
 namespace Neuroglia.Data.Guards;
 
 /// <summary>
@@ -24,7 +26,7 @@ public static class DecimalGuardClause
     /// </summary>
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenNegative(this IGuardClause<decimal> guard) => guard.WhenNegative("The value must not be negative");
+    public static IGuardClause<decimal> WhenNegative(this IGuardClause<decimal> guard) => guard.WhenNegative(GuardExceptionMessages.when_negative);
 
     /// <summary>
     /// Throws when the value is negative
@@ -32,7 +34,7 @@ public static class DecimalGuardClause
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenNegative(this IGuardClause<decimal> guard, string message) => guard.WhenNegative(new GuardException(message));
+    public static IGuardClause<decimal> WhenNegative(this IGuardClause<decimal> guard, string message) => guard.WhenNegative(new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is negative
@@ -51,7 +53,7 @@ public static class DecimalGuardClause
     /// </summary>
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenPositive(this IGuardClause<decimal> guard) => guard.WhenPositive("The value must not be positive");
+    public static IGuardClause<decimal> WhenPositive(this IGuardClause<decimal> guard) => guard.WhenPositive(GuardExceptionMessages.when_positive);
 
     /// <summary>
     /// Throws when the value is positive
@@ -59,7 +61,7 @@ public static class DecimalGuardClause
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenPositive(this IGuardClause<decimal> guard, string message) => guard.WhenPositive(new GuardException(message));
+    public static IGuardClause<decimal> WhenPositive(this IGuardClause<decimal> guard, string message) => guard.WhenPositive(new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is positive
@@ -79,7 +81,7 @@ public static class DecimalGuardClause
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="minimum">The minimum value allowed</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenLowerThan(this IGuardClause<decimal> guard, decimal minimum) => guard.WhenLowerThan(minimum, $"The value must be higher or equal to '{minimum}'");
+    public static IGuardClause<decimal> WhenLowerThan(this IGuardClause<decimal> guard, decimal minimum) => guard.WhenLowerThan(minimum, StringFormatter.Format(GuardExceptionMessages.when_lower_than, minimum));
 
     /// <summary>
     /// Throws when the value is lower than a specified decimal
@@ -88,7 +90,7 @@ public static class DecimalGuardClause
     /// <param name="minimum">The minimum value allowed</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenLowerThan(this IGuardClause<decimal> guard, decimal minimum, string message) => guard.WhenLowerThan(minimum, new GuardException(message));
+    public static IGuardClause<decimal> WhenLowerThan(this IGuardClause<decimal> guard, decimal minimum, string message) => guard.WhenLowerThan(minimum, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is lower than a specified decimal
@@ -109,7 +111,7 @@ public static class DecimalGuardClause
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="maximum">The maximum value allowed</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenHigherThan(this IGuardClause<decimal> guard, decimal maximum) => guard.WhenHigherThan(maximum, $"The value must be lower or equal to '{maximum}'");
+    public static IGuardClause<decimal> WhenHigherThan(this IGuardClause<decimal> guard, decimal maximum) => guard.WhenHigherThan(maximum, StringFormatter.Format(GuardExceptionMessages.when_higher_than, maximum));
 
     /// <summary>
     /// Throws when the value is higher than a specified decimal
@@ -118,7 +120,7 @@ public static class DecimalGuardClause
     /// <param name="maximum">The maximum value allowed</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenHigherThan(this IGuardClause<decimal> guard, decimal maximum, string message) => guard.WhenHigherThan(maximum, new GuardException(message));
+    public static IGuardClause<decimal> WhenHigherThan(this IGuardClause<decimal> guard, decimal maximum, string message) => guard.WhenHigherThan(maximum, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is higher than a specified decimal
@@ -140,7 +142,7 @@ public static class DecimalGuardClause
     /// <param name="minimum">The exclusive lower bounds of the range</param>
     /// <param name="maximum">The exclusive upper bounds of the range</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenWithinRange(this IGuardClause<decimal> guard, decimal minimum, decimal maximum) => guard.WhenWithinRange(minimum, maximum, $"The value should not fall within a range beginning at '{minimum}' and extending up to '{maximum}'");
+    public static IGuardClause<decimal> WhenWithinRange(this IGuardClause<decimal> guard, decimal minimum, decimal maximum) => guard.WhenWithinRange(minimum, maximum, StringFormatter.Format(GuardExceptionMessages.when_within_range, minimum, maximum));
 
     /// <summary>
     /// Throws when the value falls within a specified range
@@ -150,7 +152,7 @@ public static class DecimalGuardClause
     /// <param name="maximum">The exclusive upper bounds of the range</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenWithinRange(this IGuardClause<decimal> guard, decimal minimum, decimal maximum, string message) => guard.WhenWithinRange(minimum, maximum, new GuardException(message));
+    public static IGuardClause<decimal> WhenWithinRange(this IGuardClause<decimal> guard, decimal minimum, decimal maximum, string message) => guard.WhenWithinRange(minimum, maximum, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value falls within a specified range
@@ -173,7 +175,7 @@ public static class DecimalGuardClause
     /// <param name="minimum">The exclusive lower bounds of the range</param>
     /// <param name="maximum">The exclusive upper bounds of the range</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenNotWithinRange(this IGuardClause<decimal> guard, decimal minimum, decimal maximum) => guard.WhenNotWithinRange(minimum, maximum, $"The value should fall within a range beginning at '{minimum}' and extending up to '{maximum}'");
+    public static IGuardClause<decimal> WhenNotWithinRange(this IGuardClause<decimal> guard, decimal minimum, decimal maximum) => guard.WhenNotWithinRange(minimum, maximum, StringFormatter.Format(GuardExceptionMessages.when_not_within_range, minimum, maximum));
 
     /// <summary>
     /// Throws when the value does not fall within a specified range
@@ -183,7 +185,7 @@ public static class DecimalGuardClause
     /// <param name="maximum">The exclusive upper bounds of the range</param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<decimal> WhenNotWithinRange(this IGuardClause<decimal> guard, decimal minimum, decimal maximum, string message) => guard.WhenNotWithinRange(minimum, maximum, new GuardException(message));
+    public static IGuardClause<decimal> WhenNotWithinRange(this IGuardClause<decimal> guard, decimal minimum, decimal maximum, string message) => guard.WhenNotWithinRange(minimum, maximum, new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value does not fall within a specified range

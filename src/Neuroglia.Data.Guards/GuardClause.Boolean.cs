@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Neuroglia.Data.Guards.Properties;
+
 namespace Neuroglia.Data.Guards;
 
 /// <summary>
@@ -24,7 +26,7 @@ public static class BooleanGuardClause
     /// </summary>
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<bool> WhenTrue(this IGuardClause<bool> guard) => guard.WhenTrue("The specified value must be 'false'");
+    public static IGuardClause<bool> WhenTrue(this IGuardClause<bool> guard) => guard.WhenTrue(GuardExceptionMessages.when_true);
 
     /// <summary>
     /// Throws when the value is true
@@ -32,7 +34,7 @@ public static class BooleanGuardClause
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<bool> WhenTrue(this IGuardClause<bool> guard, string message) => guard.WhenTrue(new GuardException(message));
+    public static IGuardClause<bool> WhenTrue(this IGuardClause<bool> guard, string message) => guard.WhenTrue(new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is true
@@ -51,7 +53,7 @@ public static class BooleanGuardClause
     /// </summary>
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<bool> WhenFalse(this IGuardClause<bool> guard) => guard.WhenFalse("The specified value must be 'true'");
+    public static IGuardClause<bool> WhenFalse(this IGuardClause<bool> guard) => guard.WhenFalse(GuardExceptionMessages.when_false);
 
     /// <summary>
     /// Throws when the value is false
@@ -59,7 +61,7 @@ public static class BooleanGuardClause
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
     /// <param name="message">The <see cref="Exception"/> message</param>
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
-    public static IGuardClause<bool> WhenFalse(this IGuardClause<bool> guard, string message) => guard.WhenFalse(new GuardException(message));
+    public static IGuardClause<bool> WhenFalse(this IGuardClause<bool> guard, string message) => guard.WhenFalse(new GuardException(message, guard.ArgumentName));
 
     /// <summary>
     /// Throws when the value is false
