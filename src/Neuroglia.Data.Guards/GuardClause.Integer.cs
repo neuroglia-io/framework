@@ -106,6 +106,36 @@ public static class IntegerGuardClause
     }
 
     /// <summary>
+    /// Throws when the value is lower or equal to a specified int
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="minimum">The minimum value allowed</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<int> WhenLowerOrEqualTo(this IGuardClause<int> guard, int minimum) => guard.WhenLowerOrEqualTo(minimum, StringFormatter.Format(GuardExceptionMessages.when_lower_than, minimum));
+
+    /// <summary>
+    /// Throws when the value is lower or equal to a specified int
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="minimum">The minimum value allowed</param>
+    /// <param name="message">The <see cref="Exception"/> message</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<int> WhenLowerOrEqualTo(this IGuardClause<int> guard, int minimum, string message) => guard.WhenLowerOrEqualTo(minimum, new GuardException(message, guard.ArgumentName));
+
+    /// <summary>
+    /// Throws when the value is lower or equal to a specified int
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="minimum">The minimum value allowed</param>
+    /// <param name="ex">The <see cref="Exception"/> to throw</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<int> WhenLowerOrEqualTo(this IGuardClause<int> guard, int minimum, GuardException ex)
+    {
+        if (guard.Value <= minimum) throw ex;
+        return guard;
+    }
+
+    /// <summary>
     /// Throws when the value is higher than a specified integer
     /// </summary>
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
@@ -132,6 +162,36 @@ public static class IntegerGuardClause
     public static IGuardClause<int> WhenHigherThan(this IGuardClause<int> guard, int maximum, GuardException ex)
     {
         if (guard.Value > maximum) throw ex;
+        return guard;
+    }
+
+    /// <summary>
+    /// Throws when the value is higher or equal to a specified int
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="maximum">The maximum value allowed</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<int> WhenHigherOrEqualTo(this IGuardClause<int> guard, int maximum) => guard.WhenHigherOrEqualTo(maximum, StringFormatter.Format(GuardExceptionMessages.when_higher_than, maximum));
+
+    /// <summary>
+    /// Throws when the value is higher or equal to a specified int
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="maximum">The maximum value allowed</param>
+    /// <param name="message">The <see cref="Exception"/> message</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<int> WhenHigherOrEqualTo(this IGuardClause<int> guard, int maximum, string message) => guard.WhenHigherOrEqualTo(maximum, new GuardException(message, guard.ArgumentName));
+
+    /// <summary>
+    /// Throws when the value is higher or equal to a specified int
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="maximum">The maximum value allowed</param>
+    /// <param name="ex">The <see cref="Exception"/> to throw</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<int> WhenHigherOrEqualTo(this IGuardClause<int> guard, int maximum, GuardException ex)
+    {
+        if (guard.Value >= maximum) throw ex;
         return guard;
     }
 
@@ -164,7 +224,7 @@ public static class IntegerGuardClause
     /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
     public static IGuardClause<int> WhenWithinRange(this IGuardClause<int> guard, int minimum, int maximum, GuardException ex)
     {
-        if (guard.Value < minimum || guard.Value > maximum) throw ex;
+        if (guard.Value > minimum && guard.Value < maximum) throw ex;
         return guard;
     }
 

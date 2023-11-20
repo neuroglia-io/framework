@@ -31,21 +31,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Expressions.JavaScript\Neuroglia.Data.Expressions.JavaScript.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Expressions.JQ\Neuroglia.Data.Expressions.JQ.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Guards\Neuroglia.Data.Guards.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.EventStore\Neuroglia.Data.Infrastructure.EventSourcing.EventStore.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Memory\Neuroglia.Data.Infrastructure.EventSourcing.Memory.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Redis\Neuroglia.Data.Infrastructure.EventSourcing.Redis.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.Memory\Neuroglia.Data.Infrastructure.Memory.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.Mongo\Neuroglia.Data.Infrastructure.Mongo.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.Infrastructure.ObjectStorage.Minio\Neuroglia.Data.Infrastructure.ObjectStorage.Minio.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Measurements\Neuroglia.Measurements.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
-    <ProjectReference Include="..\..\..\src\Neuroglia.Plugins\Neuroglia.Plugins.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Expressions.JavaScript\Neuroglia.Data.Expressions.JavaScript.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Expressions.JQ\Neuroglia.Data.Expressions.JQ.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.EventStore\Neuroglia.Data.Infrastructure.EventSourcing.EventStore.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Memory\Neuroglia.Data.Infrastructure.EventSourcing.Memory.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Redis\Neuroglia.Data.Infrastructure.EventSourcing.Redis.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.Memory\Neuroglia.Data.Infrastructure.Memory.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.Mongo\Neuroglia.Data.Infrastructure.Mongo.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.ObjectStorage.Minio\Neuroglia.Data.Infrastructure.ObjectStorage.Minio.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Guards\Neuroglia.Data.Guards.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Measurements\Neuroglia.Measurements.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Plugins\Neuroglia.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>

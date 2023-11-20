@@ -61,6 +61,24 @@ namespace Neuroglia.Data.Guards.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value must be a date and time before &apos;{before}&apos;.
+        /// </summary>
+        public static string when_after {
+            get {
+                return ResourceManager.GetString("when_after", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value must be a date and time after &apos;{after}&apos;.
+        /// </summary>
+        public static string when_before {
+            get {
+                return ResourceManager.GetString("when_before", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The value must not contain &apos;{item}&apos;.
         /// </summary>
         public static string when_contains {
@@ -142,7 +160,7 @@ namespace Neuroglia.Data.Guards.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value must be higher than &apos;{value}&apos;.
+        ///   Looks up a localized string similar to The value must be lower than &apos;{value}&apos;.
         /// </summary>
         public static string when_higher_than {
             get {
@@ -151,7 +169,7 @@ namespace Neuroglia.Data.Guards.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The value must be lower than &apos;{value}&apos;.
+        ///   Looks up a localized string similar to The value must be higher than &apos;{value}&apos;.
         /// </summary>
         public static string when_lower_than {
             get {

@@ -106,6 +106,36 @@ public static class ShortGuardClause
     }
 
     /// <summary>
+    /// Throws when the value is lower or equal to a specified short
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="minimum">The minimum value allowed</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<short> WhenLowerOrEqualTo(this IGuardClause<short> guard, short minimum) => guard.WhenLowerOrEqualTo(minimum, StringFormatter.Format(GuardExceptionMessages.when_lower_than, minimum));
+
+    /// <summary>
+    /// Throws when the value is lower or equal to a specified short
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="minimum">The minimum value allowed</param>
+    /// <param name="message">The <see cref="Exception"/> message</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<short> WhenLowerOrEqualTo(this IGuardClause<short> guard, short minimum, string message) => guard.WhenLowerOrEqualTo(minimum, new GuardException(message, guard.ArgumentName));
+
+    /// <summary>
+    /// Throws when the value is lower or equal to a specified short
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="minimum">The minimum value allowed</param>
+    /// <param name="ex">The <see cref="Exception"/> to throw</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<short> WhenLowerOrEqualTo(this IGuardClause<short> guard, short minimum, GuardException ex)
+    {
+        if (guard.Value <= minimum) throw ex;
+        return guard;
+    }
+
+    /// <summary>
     /// Throws when the value is higher than a specified short
     /// </summary>
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
@@ -132,6 +162,36 @@ public static class ShortGuardClause
     public static IGuardClause<short> WhenHigherThan(this IGuardClause<short> guard, short maximum, GuardException ex)
     {
         if (guard.Value > maximum) throw ex;
+        return guard;
+    }
+
+    /// <summary>
+    /// Throws when the value is higher or equal to a specified short
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="maximum">The maximum value allowed</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<short> WhenHigherOrEqualTo(this IGuardClause<short> guard, short maximum) => guard.WhenHigherOrEqualTo(maximum, StringFormatter.Format(GuardExceptionMessages.when_higher_than, maximum));
+
+    /// <summary>
+    /// Throws when the value is higher or equal to a specified short
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="maximum">The maximum value allowed</param>
+    /// <param name="message">The <see cref="Exception"/> message</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<short> WhenHigherOrEqualTo(this IGuardClause<short> guard, short maximum, string message) => guard.WhenHigherOrEqualTo(maximum, new GuardException(message, guard.ArgumentName));
+
+    /// <summary>
+    /// Throws when the value is higher or equal to a specified short
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="maximum">The maximum value allowed</param>
+    /// <param name="ex">The <see cref="Exception"/> to throw</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<short> WhenHigherOrEqualTo(this IGuardClause<short> guard, short maximum, GuardException ex)
+    {
+        if (guard.Value >= maximum) throw ex;
         return guard;
     }
 

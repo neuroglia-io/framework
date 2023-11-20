@@ -43,6 +43,104 @@ public class GuardTests
     }
 
     [Fact]
+    public void Guard_Against_Object_WhenNullReference_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((object?)null).WhenNullReference("fake-id");
+        var guardAgainstValidValue = () => Guard.Against(new { }).WhenNullReference("fake-id");
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Guid_WhenEmpty_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against(Guid.Empty).WhenEmpty();
+        var guardAgainstValidValue = () => Guard.Against(Guid.NewGuid()).WhenEmpty();
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_TimeSpan_WhenLowerThan_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against(TimeSpan.FromSeconds(30)).WhenLowerThan(TimeSpan.FromMinutes(1));
+        var guardAgainstValidValue = () => Guard.Against(TimeSpan.FromMinutes(1)).WhenLowerThan(TimeSpan.FromSeconds(30));
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_TimeSpan_WhenLowerOrEqualTo_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against(TimeSpan.FromMinutes(1)).WhenLowerOrEqualsTo(TimeSpan.FromSeconds(60));
+        var guardAgainstValidValue = () => Guard.Against(TimeSpan.FromMinutes(2)).WhenLowerOrEqualsTo(TimeSpan.FromSeconds(60));
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_TimeSpan_WhenHigherThan_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against(TimeSpan.FromMinutes(1)).WhenHigherThan(TimeSpan.FromSeconds(30));
+        var guardAgainstValidValue = () => Guard.Against(TimeSpan.FromSeconds(1)).WhenHigherThan(TimeSpan.FromSeconds(30));
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_TimeSpan_WhenHigherOrEqualTo_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against(TimeSpan.FromSeconds(30)).WhenHigherOrEqualsTo(TimeSpan.FromSeconds(30));
+        var guardAgainstValidValue = () => Guard.Against(TimeSpan.FromSeconds(10)).WhenHigherOrEqualsTo(TimeSpan.FromSeconds(30));
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_DateTime_WhenBefore_Should_Work()
+    {
+        //arrange
+        var before = DateTime.Now;
+        var guardAgainstInvalidValue = () => Guard.Against(before.Subtract(TimeSpan.FromMinutes(1))).WhenBefore(before);
+        var guardAgainstValidValue = () => Guard.Against(before).WhenBefore(before);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_DateTime_WhenAfter_Should_Work()
+    {
+        //arrange
+        var before = DateTime.Now;
+        var guardAgainstInvalidValue = () => Guard.Against(before.Add(TimeSpan.FromMinutes(1))).WhenAfter(before);
+        var guardAgainstValidValue = () => Guard.Against(before).WhenAfter(before);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
     public void Guard_Against_String_WhenNullOrWhitespace_Should_Work()
     {
         //arrange
@@ -325,6 +423,102 @@ public class GuardTests
     }
 
     [Fact]
+    public void Guard_Against_Integer_WhenNegative_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((int)-1).WhenNegative();
+        var guardAgainstValidValue = () => Guard.Against((int)0).WhenNegative();
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Integer_WhenPositive_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((int)1).WhenPositive();
+        var guardAgainstValidValue = () => Guard.Against((int)0).WhenPositive();
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Integer_WhenLowerThan_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((int)0).WhenLowerThan(1);
+        var guardAgainstValidValue = () => Guard.Against((int)1).WhenLowerThan(1);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Integer_WhenLowerOrEqualTo_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((int)0).WhenLowerOrEqualTo(0);
+        var guardAgainstValidValue = () => Guard.Against((int)1).WhenLowerOrEqualTo(0);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Integer_WhenHigherThan_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((int)2).WhenHigherThan(1);
+        var guardAgainstValidValue = () => Guard.Against((int)1).WhenHigherThan(1);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Integer_WhenHigherOrEqual_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((int)2).WhenHigherOrEqualTo(1);
+        var guardAgainstValidValue = () => Guard.Against((int)0).WhenHigherOrEqualTo(1);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Integer_WhenWithinRange_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((int)1).WhenWithinRange(0, 10);
+        var guardAgainstValidValue = () => Guard.Against((int)0).WhenWithinRange(0, 10);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Integer_WhenNotWithinRange_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((int)0).WhenNotWithinRange(1, 10);
+        var guardAgainstValidValue = () => Guard.Against((int)1).WhenNotWithinRange(1, 10);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
     public void Guard_Against_Decimal_WhenNegative_Should_Work()
     {
         //arrange
@@ -361,11 +555,35 @@ public class GuardTests
     }
 
     [Fact]
+    public void Guard_Against_Decimal_WhenLowerOrEqualTo_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((decimal)0).WhenLowerOrEqualTo(0);
+        var guardAgainstValidValue = () => Guard.Against((decimal)1).WhenLowerOrEqualTo(0);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
     public void Guard_Against_Decimal_WhenHigherThan_Should_Work()
     {
         //arrange
         var guardAgainstInvalidValue = () => Guard.Against((decimal)2).WhenHigherThan(1);
         var guardAgainstValidValue = () => Guard.Against((decimal)1).WhenHigherThan(1);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Decimal_WhenHigherOrEqual_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((decimal)2).WhenHigherOrEqualTo(1);
+        var guardAgainstValidValue = () => Guard.Against((decimal)0).WhenHigherOrEqualTo(1);
 
         //assert
         guardAgainstInvalidValue.Should().Throw<GuardException>();
@@ -433,11 +651,35 @@ public class GuardTests
     }
 
     [Fact]
+    public void Guard_Against_Double_WhenLowerOrEqualTo_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((double)0).WhenLowerOrEqualTo(0);
+        var guardAgainstValidValue = () => Guard.Against((double)1).WhenLowerOrEqualTo(0);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
     public void Guard_Against_Double_WhenHigherThan_Should_Work()
     {
         //arrange
         var guardAgainstInvalidValue = () => Guard.Against((double)2).WhenHigherThan(1);
         var guardAgainstValidValue = () => Guard.Against((double)1).WhenHigherThan(1);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Double_WhenHigherOrEqualTo_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((double)2).WhenHigherOrEqualTo(1);
+        var guardAgainstValidValue = () => Guard.Against((double)0).WhenHigherOrEqualTo(1);
 
         //assert
         guardAgainstInvalidValue.Should().Throw<GuardException>();
@@ -505,11 +747,35 @@ public class GuardTests
     }
 
     [Fact]
+    public void Guard_Against_Short_WhenLowerOrEqualTo_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((short)0).WhenLowerOrEqualTo(0);
+        var guardAgainstValidValue = () => Guard.Against((short)1).WhenLowerOrEqualTo(0);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
     public void Guard_Against_Short_WhenHigherThan_Should_Work()
     {
         //arrange
         var guardAgainstInvalidValue = () => Guard.Against((short)2).WhenHigherThan(1);
         var guardAgainstValidValue = () => Guard.Against((short)1).WhenHigherThan(1);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Short_WhenHigherOrEqualTo_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((short)2).WhenHigherOrEqualTo(1);
+        var guardAgainstValidValue = () => Guard.Against((short)0).WhenHigherOrEqualTo(1);
 
         //assert
         guardAgainstInvalidValue.Should().Throw<GuardException>();
@@ -577,11 +843,35 @@ public class GuardTests
     }
 
     [Fact]
+    public void Guard_Against_Long_WhenLowerOrEqualTo_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((long)0).WhenLowerOrEqualTo(0);
+        var guardAgainstValidValue = () => Guard.Against((long)1).WhenLowerOrEqualTo(0);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
     public void Guard_Against_Long_WhenHigherThan_Should_Work()
     {
         //arrange
         var guardAgainstInvalidValue = () => Guard.Against((long)2).WhenHigherThan(1);
         var guardAgainstValidValue = () => Guard.Against((long)1).WhenHigherThan(1);
+
+        //assert
+        guardAgainstInvalidValue.Should().Throw<GuardException>();
+        guardAgainstValidValue.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Guard_Against_Long_WhenHigherOrEqual_Should_Work()
+    {
+        //arrange
+        var guardAgainstInvalidValue = () => Guard.Against((long)2).WhenHigherOrEqualTo(1);
+        var guardAgainstValidValue = () => Guard.Against((long)0).WhenHigherOrEqualTo(1);
 
         //assert
         guardAgainstInvalidValue.Should().Throw<GuardException>();
@@ -606,18 +896,6 @@ public class GuardTests
         //arrange
         var guardAgainstInvalidValue = () => Guard.Against((long)0).WhenNotWithinRange(1, 10);
         var guardAgainstValidValue = () => Guard.Against((long)1).WhenNotWithinRange(1, 10);
-
-        //assert
-        guardAgainstInvalidValue.Should().Throw<GuardException>();
-        guardAgainstValidValue.Should().NotThrow();
-    }
-
-    [Fact]
-    public void Guard_Against_Object_WhenNullReference_Should_Work()
-    {
-        //arrange
-        var guardAgainstInvalidValue = () => Guard.Against((object?)null).WhenNullReference("fake-id");
-        var guardAgainstValidValue = () => Guard.Against(new { }).WhenNullReference("fake-id");
 
         //assert
         guardAgainstInvalidValue.Should().Throw<GuardException>();

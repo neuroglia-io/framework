@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="when_after" xml:space="preserve">
+    <value>The value must be a date and time before '{before}'</value>
+  </data>
+  <data name="when_before" xml:space="preserve">
+    <value>The value must be a date and time after '{after}'</value>
+  </data>
   <data name="when_contains" xml:space="preserve">
     <value>The value must not contain '{item}'</value>
   </data>
@@ -145,10 +151,10 @@
     <value>The specified value must be set to 'true'</value>
   </data>
   <data name="when_higher_than" xml:space="preserve">
-    <value>The value must be higher than '{value}'</value>
+    <value>The value must be lower than '{value}'</value>
   </data>
   <data name="when_lower_than" xml:space="preserve">
-    <value>The value must be lower than '{value}'</value>
+    <value>The value must be higher than '{value}'</value>
   </data>
   <data name="when_negative" xml:space="preserve">
     <value>The value must not be negative</value>
