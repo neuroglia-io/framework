@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -10,7 +10,7 @@
     <Authors>Neuroglia SRL</Authors>
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-	<PackageTags>neuroglia framework eventing infrastructure cloud-events</PackageTags>
+    <PackageTags>neuroglia framework data guard</PackageTags>
     <Version>4.2.1</Version>
     <NeutralLanguage>en</NeutralLanguage>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -22,14 +22,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
-      <PackagePath>\</PackagePath>
+    <None Include="..\..\assets\img\logo_white_on_blue_256.png">
       <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions\Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

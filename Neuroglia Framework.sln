@@ -86,11 +86,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Measurements", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Eventing.CloudEvents", "src\Neuroglia..Eventing.CloudEvents\Neuroglia.Eventing.CloudEvents.csproj", "{4EF7D29B-4A84-4776-A260-FC4D429F33E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Eventing.CloudEvents.AspNetCore", "src\Neuroglia.Eventing.CloudEvents.AspNetCore\Neuroglia.Eventing.CloudEvents.AspNetCore.csproj", "{45376332-0EBE-4A6B-B4B2-D62959FC170B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Eventing.CloudEvents.AspNetCore", "src\Neuroglia.Eventing.CloudEvents.AspNetCore\Neuroglia.Eventing.CloudEvents.AspNetCore.csproj", "{45376332-0EBE-4A6B-B4B2-D62959FC170B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions", "src\Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions\Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions.csproj", "{9797DAB8-5BBF-4DD0-B558-AF8C33EF45DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions", "src\Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions\Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions.csproj", "{9797DAB8-5BBF-4DD0-B558-AF8C33EF45DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Eventing.CloudEvents.Infrastructure", "src\Neuroglia.Eventing.CloudEvents.Infrastructure\Neuroglia.Eventing.CloudEvents.Infrastructure.csproj", "{E31B8F6D-BB0A-4345-A6F9-73CD41A3AAC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Eventing.CloudEvents.Infrastructure", "src\Neuroglia.Eventing.CloudEvents.Infrastructure\Neuroglia.Eventing.CloudEvents.Infrastructure.csproj", "{E31B8F6D-BB0A-4345-A6F9-73CD41A3AAC6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.Guards", "src\Neuroglia.Data.Guards\Neuroglia.Data.Guards.csproj", "{5CBBF0DE-D008-435C-A341-6FD1970E5D9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -254,6 +256,10 @@ Global
 		{E31B8F6D-BB0A-4345-A6F9-73CD41A3AAC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E31B8F6D-BB0A-4345-A6F9-73CD41A3AAC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E31B8F6D-BB0A-4345-A6F9-73CD41A3AAC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CBBF0DE-D008-435C-A341-6FD1970E5D9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CBBF0DE-D008-435C-A341-6FD1970E5D9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CBBF0DE-D008-435C-A341-6FD1970E5D9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CBBF0DE-D008-435C-A341-6FD1970E5D9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -298,6 +304,7 @@ Global
 		{45376332-0EBE-4A6B-B4B2-D62959FC170B} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{9797DAB8-5BBF-4DD0-B558-AF8C33EF45DC} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{E31B8F6D-BB0A-4345-A6F9-73CD41A3AAC6} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{5CBBF0DE-D008-435C-A341-6FD1970E5D9F} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}
