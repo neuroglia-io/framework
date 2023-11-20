@@ -106,6 +106,36 @@ public static class DecimalGuardClause
     }
 
     /// <summary>
+    /// Throws when the value is lower or equal to a specified decimal
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="minimum">The minimum value allowed</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<decimal> WhenLowerOrEqualTo(this IGuardClause<decimal> guard, decimal minimum) => guard.WhenLowerOrEqualTo(minimum, StringFormatter.Format(GuardExceptionMessages.when_lower_than, minimum));
+
+    /// <summary>
+    /// Throws when the value is lower or equal to a specified decimal
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="minimum">The minimum value allowed</param>
+    /// <param name="message">The <see cref="Exception"/> message</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<decimal> WhenLowerOrEqualTo(this IGuardClause<decimal> guard, decimal minimum, string message) => guard.WhenLowerOrEqualTo(minimum, new GuardException(message, guard.ArgumentName));
+
+    /// <summary>
+    /// Throws when the value is lower or equal to a specified decimal
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="minimum">The minimum value allowed</param>
+    /// <param name="ex">The <see cref="Exception"/> to throw</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<decimal> WhenLowerOrEqualTo(this IGuardClause<decimal> guard, decimal minimum, GuardException ex)
+    {
+        if (guard.Value <= minimum) throw ex;
+        return guard;
+    }
+
+    /// <summary>
     /// Throws when the value is higher than a specified decimal
     /// </summary>
     /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
@@ -132,6 +162,36 @@ public static class DecimalGuardClause
     public static IGuardClause<decimal> WhenHigherThan(this IGuardClause<decimal> guard, decimal maximum, GuardException ex)
     {
         if (guard.Value > maximum) throw ex;
+        return guard;
+    }
+
+    /// <summary>
+    /// Throws when the value is higher or equal to a specified decimal
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="maximum">The maximum value allowed</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<decimal> WhenHigherOrEqualTo(this IGuardClause<decimal> guard, decimal maximum) => guard.WhenHigherOrEqualTo(maximum, StringFormatter.Format(GuardExceptionMessages.when_higher_than, maximum));
+
+    /// <summary>
+    /// Throws when the value is higher or equal to a specified decimal
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="maximum">The maximum value allowed</param>
+    /// <param name="message">The <see cref="Exception"/> message</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<decimal> WhenHigherOrEqualTo(this IGuardClause<decimal> guard, decimal maximum, string message) => guard.WhenHigherOrEqualTo(maximum, new GuardException(message, guard.ArgumentName));
+
+    /// <summary>
+    /// Throws when the value is higher or equal to a specified decimal
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="maximum">The maximum value allowed</param>
+    /// <param name="ex">The <see cref="Exception"/> to throw</param>
+    /// <returns>The configure <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<decimal> WhenHigherOrEqualTo(this IGuardClause<decimal> guard, decimal maximum, GuardException ex)
+    {
+        if (guard.Value >= maximum) throw ex;
         return guard;
     }
 
