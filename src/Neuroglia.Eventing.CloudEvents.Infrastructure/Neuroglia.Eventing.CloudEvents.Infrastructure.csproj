@@ -30,6 +30,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions\Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions.csproj" />
+    <ProjectReference Include="..\Neuroglia.Reactive\Neuroglia.Reactive.csproj" />
+    <ProjectReference Include="..\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.csproj" />
   </ItemGroup>
 
 </Project>
