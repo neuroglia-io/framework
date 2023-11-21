@@ -55,7 +55,7 @@ public class CloudEventMiddleware
         try
         {
             var serializer = context.RequestServices.GetRequiredService<IJsonSerializer>();
-            var e = serializer.Deserialize<CloudEvent>(context.Request.Body)!;
+            var e = serializer is IAsyncSerializer asyncSerializer ? await asyncSerializer.DeserializeAsync<CloudEvent>(context.Request.Body) : serializer.Deserialize<CloudEvent>(context.Request.Body)!;
             cloudEventBus.InputStream.OnNext(e);
             context.Response.StatusCode = (int)HttpStatusCode.Accepted;
         }

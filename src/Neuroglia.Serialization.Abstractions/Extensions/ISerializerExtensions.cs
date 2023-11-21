@@ -73,6 +73,16 @@ public static class ISerializerExtensions
     }
 
     /// <summary>
+    /// Deserializes the value written on the specified <see cref="Stream"/>
+    /// </summary>
+    /// <typeparam name="T">The value's expected type</typeparam>
+    /// <param name="serializer">The extended <see cref="ISerializer"/></param>
+    /// <param name="stream">The <see cref="Stream"/> the value to deserialize has been written to</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The deserialized value, if any</returns>
+    public static async Task<T?> DeserializeAsync<T>(this IAsyncSerializer serializer, Stream stream, CancellationToken cancellationToken = default) => (T?)await serializer.DeserializeAsync(stream, typeof(T), cancellationToken);
+
+    /// <summary>
     /// Converts the specified value into a new instance of the target type
     /// </summary>
     /// <param name="serializer">The extended <see cref="ISerializer"/></param>
