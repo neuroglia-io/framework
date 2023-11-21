@@ -13,36 +13,39 @@
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Neuroglia.Eventing.CloudEvents.Infrastructure.Configuration;
 using Neuroglia.Reactive;
 using Neuroglia.Serialization;
+using Polly;
+using Polly.CircuitBreaker;
 using System.Net.Http.Headers;
 using System.Text;
 
 namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
 
 /// <summary>
-/// Represents an <see cref="ICloudEventDispatcher"/> implementation that uses <see cref="HttpClient"/>s to dispatch <see cref="CloudEvent"/>s 
+/// Represents an <see cref="ICloudEventPublisher"/> implementation that uses <see cref="System.Net.Http.HttpClient"/>s to publish <see cref="CloudEvent"/>s 
 /// </summary>
-public class CloudEventHttpDispatcher
-    : ICloudEventDispatcher
+public class CloudEventPublisher
+    : ICloudEventPublisher
 {
 
     bool _disposed;
 
     /// <summary>
-    /// Initializes a new <see cref="CloudEventHttpDispatcher"/>
+    /// Initializes a new <see cref="CloudEventPublisher"/>
     /// </summary>
     /// <param name="loggerFactory">The service used to create <see cref="ILogger"/>s</param>
     /// <param name="serializer">The service used to serialize <see cref="CloudEvent"/>s to JSON</param>
     /// <param name="cloudEventBus">The service used to manage outgoing and incoming <see cref="CloudEvent"/>s</param>
-    /// <param name="cloudEventOptions">The service used to access the current <see cref="CloudEventOptions"/></param>
+    /// <param name="cloudEventDispatchOptions">The service used to access the current <see cref="Configuration.CloudEventPublishOptions"/></param>
     /// <param name="httpClient">The service used to perform <see cref="HttpRequestMessage"/>s</param>
-    public CloudEventHttpDispatcher(ILoggerFactory loggerFactory, IJsonSerializer serializer, ICloudEventBus cloudEventBus, IOptions<CloudEventOptions> cloudEventOptions, HttpClient httpClient)
+    public CloudEventPublisher(ILoggerFactory loggerFactory, IJsonSerializer serializer, ICloudEventBus cloudEventBus, IOptions<CloudEventPublishOptions> cloudEventDispatchOptions, HttpClient httpClient)
     {
         this.Logger = loggerFactory.CreateLogger(this.GetType());
         this.Serializer = serializer;
         this.CloudEventBus = cloudEventBus;
-        this.CloudEventOptions = cloudEventOptions.Value;
+        this.CloudEventDispatchOptions = cloudEventDispatchOptions.Value;
         this.HttpClient = httpClient;
     }
 
@@ -64,7 +67,7 @@ public class CloudEventHttpDispatcher
     /// <summary>
     /// Gets the options used to configure the application's <see cref="CloudEvent"/>s
     /// </summary>
-    protected CloudEventOptions CloudEventOptions { get; }
+    protected CloudEventPublishOptions CloudEventDispatchOptions { get; }
 
     /// <summary>
     /// Gets the service used to perform <see cref="HttpRequestMessage"/>s
@@ -79,13 +82,9 @@ public class CloudEventHttpDispatcher
     /// <inheritdoc/>
     public virtual Task StartAsync(CancellationToken cancellationToken)
     {
-        return this.CloudEventOptions.Sink == null
-            ? Task.Run(() => this.CloudEventBus.OutputStream.SubscribeAsync(e => this.DispatchAsync(e, this.CancellationTokenSource.Token), this.CancellationTokenSource.Token), cancellationToken)
-            : Task.CompletedTask;
+        this.CloudEventBus.OutputStream.SubscribeAsync(e => this.PublishAsync(e, this.CancellationTokenSource.Token), this.CancellationTokenSource.Token);
+        return Task.CompletedTask;
     }
-
-    /// <inheritdoc/>
-    public virtual Task StopAsync(CancellationToken cancellationToken) => Task.Run(this.CancellationTokenSource.Cancel, cancellationToken);
 
     /// <summary>
     /// Publishes the specified <see cref="CloudEvent"/>
@@ -93,11 +92,38 @@ public class CloudEventHttpDispatcher
     /// <param name="e">The <see cref="CloudEvent"/> to publish</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    public virtual async Task DispatchAsync(CloudEvent e, CancellationToken cancellationToken = default)
+    public virtual async Task PublishAsync(CloudEvent e, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(e);
 
-        var uri = this.CloudEventOptions.Sink;
+        var exceptionPredicate = (HttpRequestException ex) => this.CloudEventDispatchOptions.Retry.StatusCodes == null || this.CloudEventDispatchOptions.Retry.StatusCodes.Count == 0 || (ex.StatusCode.HasValue && ex.StatusCode.HasValue && this.CloudEventDispatchOptions.Retry.StatusCodes.Contains((int)ex.StatusCode.Value));
+        AsyncCircuitBreakerPolicy? circuitBreakerPolicy = this.CloudEventDispatchOptions.Retry.CircuitBreaker == null ? null : Policy.Handle(exceptionPredicate)
+                .CircuitBreakerAsync(this.CloudEventDispatchOptions.Retry.CircuitBreaker.BreakAfter, this.CloudEventDispatchOptions.Retry.CircuitBreaker.BreakDuration);
+
+        AsyncPolicy retryPolicy = this.CloudEventDispatchOptions.Retry.MaxAttempts.HasValue ?
+            Policy.Handle(exceptionPredicate)
+                .WaitAndRetryAsync(this.CloudEventDispatchOptions.Retry.MaxAttempts.Value, this.CloudEventDispatchOptions.Retry.BackoffDuration.ForAttempt)
+            : Policy.Handle(exceptionPredicate)
+                .WaitAndRetryForeverAsync(this.CloudEventDispatchOptions.Retry.BackoffDuration.ForAttempt);
+
+        retryPolicy = circuitBreakerPolicy == null ? retryPolicy : retryPolicy.WrapAsync(circuitBreakerPolicy);
+        await retryPolicy.ExecuteAsync(token => this.SendCloudEventAsync(e, token), cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    public virtual Task StopAsync(CancellationToken cancellationToken) => Task.Run(this.CancellationTokenSource.Cancel, cancellationToken);
+
+    /// <summary>
+    /// Sends the specified <see cref="CloudEvent"/> to the configured sink <see cref="Uri"/>
+    /// </summary>
+    /// <param name="e">The <see cref="CloudEvent"/> to send</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    protected virtual async Task SendCloudEventAsync(CloudEvent e, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(e);
+
+        var uri = this.CloudEventDispatchOptions.Sink;
         var json = this.Serializer.SerializeToText(e);
         using var requestContent = new StringContent(json, Encoding.UTF8, new MediaTypeHeaderValue(CloudEventContentType.Json));
         using var request = new HttpRequestMessage(HttpMethod.Post, uri) { Content = requestContent };
@@ -108,7 +134,7 @@ public class CloudEventHttpDispatcher
     }
 
     /// <summary>
-    /// Disposes of the <see cref="CloudEventHttpDispatcher"/>
+    /// Disposes of the <see cref="CloudEventPublisher"/>
     /// </summary>
     /// <param name="disposing">A boolean indicating whether or not the object is being disposed of</param>
     protected virtual void Dispose(bool disposing)

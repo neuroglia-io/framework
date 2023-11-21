@@ -29,7 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Polly" Version="8.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions\Neuroglia.Eventing.CloudEvents.Infrastructure.Abstractions.csproj" />
+    <ProjectReference Include="..\Neuroglia.Mediation\Neuroglia.Mediation.csproj" />
     <ProjectReference Include="..\Neuroglia.Reactive\Neuroglia.Reactive.csproj" />
     <ProjectReference Include="..\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.csproj" />
   </ItemGroup>

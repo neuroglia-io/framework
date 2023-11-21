@@ -14,15 +14,15 @@
 namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Configuration;
 
 /// <summary>
-/// Represents the options used to configure the application's <see cref="CloudEvent"/>s
+/// Represents the options used to configure the publishing of <see cref="CloudEvent"/>s
 /// </summary>
-public class CloudEventOptions
+public class CloudEventPublishOptions
 {
 
     /// <summary>
-    /// Initializes a new <see cref="CloudEventOptions"/>
+    /// Initializes a new <see cref="CloudEventPublishOptions"/>
     /// </summary>
-    public CloudEventOptions()
+    public CloudEventPublishOptions()
     {
         var env = Environment.GetEnvironmentVariable(EnvironmentVariables.Sink);
         if (!string.IsNullOrWhiteSpace(env) && Uri.TryCreate(env, new UriCreationOptions(), out var sink) && sink != null) this.Sink = sink;
@@ -50,7 +50,12 @@ public class CloudEventOptions
     public virtual Uri? SchemaRegistry { get; set; }
 
     /// <summary>
-    /// Exposes the environments variables used to configure the <see cref="CloudEventOptions"/>
+    /// Gets/sets the options used to configure the publish retry policy
+    /// </summary>
+    public virtual HttpClientRetryPolicyOptions Retry { get; set; } = new();
+
+    /// <summary>
+    /// Exposes the environments variables used to configure the <see cref="CloudEventPublishOptions"/>
     /// </summary>
     public static class EnvironmentVariables
     {

@@ -94,6 +94,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Guards", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.UnitTests", "test\Neuroglia.UnitTests\Neuroglia.UnitTests.csproj", "{63922ABE-916D-4A4D-A3E1-8162BEED060E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Mediation.Abstractions", "src\Neuroglia.Mediation.Abstractions\Neuroglia.Mediation.Abstractions.csproj", "{23AEEAC4-03C7-4E6F-AB74-26588908AAB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -260,6 +262,10 @@ Global
 		{63922ABE-916D-4A4D-A3E1-8162BEED060E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63922ABE-916D-4A4D-A3E1-8162BEED060E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63922ABE-916D-4A4D-A3E1-8162BEED060E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23AEEAC4-03C7-4E6F-AB74-26588908AAB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23AEEAC4-03C7-4E6F-AB74-26588908AAB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23AEEAC4-03C7-4E6F-AB74-26588908AAB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23AEEAC4-03C7-4E6F-AB74-26588908AAB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -305,6 +311,7 @@ Global
 		{E31B8F6D-BB0A-4345-A6F9-73CD41A3AAC6} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{5CBBF0DE-D008-435C-A341-6FD1970E5D9F} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{63922ABE-916D-4A4D-A3E1-8162BEED060E} = {AFFADE1D-C17D-4ED8-8407-BFE108714262}
+		{23AEEAC4-03C7-4E6F-AB74-26588908AAB9} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}

@@ -11,25 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Neuroglia.Data;
+namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Configuration;
 
-namespace Neuroglia.UnitTests.Data;
-
-public class Contact
-    : Entity<Guid>
+/// <summary>
+/// Represents an object used to configure a retry policy
+/// </summary>
+public class RetryPolicyOptions
 {
 
-    protected Contact() { }
+    /// <summary>
+    /// Gets/sets an object used to configure the backoff duration between retry attempts
+    /// </summary>
+    public virtual RetryBackoffDuration BackoffDuration { get; set; } = new();
 
-    public Contact(string name, string phoneNumber)
-        : base(Guid.NewGuid()) 
-    { 
-        this.Name = name;
-        this.PhoneNumber = phoneNumber;
-    }
-
-    public virtual string Name { get; set; } = null!;
-
-    public virtual string PhoneNumber { get; set; } = null!;
+    /// <summary>
+    /// Gets/sets the maximum retry attempts to perform. If not set, it will retry forever
+    /// </summary>
+    public virtual int? MaxAttempts { get; set; } = 3;
 
 }

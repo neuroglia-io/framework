@@ -12,6 +12,8 @@
 // limitations under the License.
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Neuroglia.Eventing.CloudEvents.Infrastructure.Configuration;
 using Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
 
 namespace Neuroglia.Eventing.CloudEvents.Infrastructure;
@@ -28,5 +30,35 @@ public static class IServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddCloudEventBus(this IServiceCollection services) => services.AddCloudEventBus<CloudEventBus>();
+
+    /// <summary>
+    /// Adds and configures a <see cref="CloudEventPublisher"/>
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+    /// <param name="configuration">An <see cref="Action{T}"/> used to configure the <see cref="CloudEventPublishOptions"/></param>
+    /// <returns>The configured <see cref="IServiceCollection"/></returns>
+    public static IServiceCollection AddCloudEventPublisher(this IServiceCollection services, Action<CloudEventPublishOptions>? configuration = null)
+    {
+        configuration ??= _ => { };
+        services.Configure(configuration);
+        services.AddSingleton<ICloudEventPublisher, CloudEventPublisher>();
+        services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<ICloudEventPublisher>());
+        return services;
+    }
+
+    /// <summary>
+    /// Adds and configures a <see cref="CloudEventIngestor"/>
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+    /// <param name="configuration">An <see cref="Action{T}"/> used to configure the <see cref="CloudEventIngestionOptions"/></param>
+    /// <returns>The configured <see cref="IServiceCollection"/></returns>
+    public static IServiceCollection AddCloudEventIngestor(this IServiceCollection services, Action<CloudEventIngestionOptions>? configuration = null)
+    {
+        configuration ??= _ => { };
+        services.Configure(configuration);
+        services.AddSingleton<ICloudEventIngestor, CloudEventIngestor>();
+        services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<ICloudEventIngestor>());
+        return services;
+    }
 
 }

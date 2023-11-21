@@ -63,6 +63,7 @@ public static class IServiceCollectionExtensions
         setup ??= JsonSerializer.DefaultOptionsConfiguration!;
         services.Configure(setup);
         services.AddSerializer<JsonSerializer>(lifetime);
+        services.Add(new ServiceDescriptor(typeof(IJsonSerializer), typeof(JsonSerializer), lifetime));
         return services;
     }
 

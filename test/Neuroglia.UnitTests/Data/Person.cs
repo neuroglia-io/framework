@@ -77,11 +77,11 @@ public class Person
         this.State.Contacts.Add(contact);
     }
 
-    [JsonPatchOperation(JsonPatchOperationType.Replace, nameof(PersonStateV1.Contacts) + "/" + nameof(Contact.Tel))]
+    [JsonPatchOperation(JsonPatchOperationType.Replace, nameof(PersonStateV1.Contacts) + "/" + nameof(Contact.PhoneNumber))]
     public virtual void UpdateContactTelephoneNumber(Guid contactId, string tel)
     {
         var contact = this.State.Contacts.First(c => c.Id == contactId);
-        contact.Tel = tel;
+        contact.PhoneNumber = tel;
     }
 
     [JsonPatchOperation(JsonPatchOperationType.Replace, nameof(PersonStateV1.Traits) + "/" + nameof(PersonTrait.Name))]

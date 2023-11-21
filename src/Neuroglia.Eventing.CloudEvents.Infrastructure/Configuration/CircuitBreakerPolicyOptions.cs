@@ -11,23 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.Hosting;
-
-namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
+namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Configuration;
 
 /// <summary>
-/// Defines the fundamentals of a service used to publish <see cref="CloudEvent"/>s
+/// Represents an object used to configure a circuit breaker
 /// </summary>
-public interface ICloudEventDispatcher
-    : IHostedService, IDisposable
+public class CircuitBreakerPolicyOptions
 {
 
     /// <summary>
-    /// Dispatches the specified <see cref="CloudEvent"/>
+    /// Gets/sets the maximum attempts after which to break the circuit
     /// </summary>
-    /// <param name="e">The <see cref="CloudEvent"/> to publish</param>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task DispatchAsync(CloudEvent e, CancellationToken cancellationToken = default);
+    public virtual int BreakAfter { get; set; }
+
+    /// <summary>
+    /// Gets/sets the duration the circuit remains broken
+    /// </summary>
+    public virtual TimeSpan BreakDuration { get; set; }
 
 }
