@@ -11,25 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reactive.Subjects;
-
-namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
+namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Configuration;
 
 /// <summary>
-/// Defines the fundamentals of a service used to manage incoming and outgoing streams of <see cref="CloudEvent"/>s
+/// Represents an object used to configure a retry policy
 /// </summary>
-public interface ICloudEventBus
-    : IDisposable
+public class RetryPolicyOptions
 {
 
     /// <summary>
-    /// Gets the stream of events ingested by the application
+    /// Gets/sets an object used to configure the backoff duration between retry attempts
     /// </summary>
-    ISubject<CloudEvent> InputStream { get; }
+    public virtual RetryBackoffDuration BackoffDuration { get; set; } = new();
 
     /// <summary>
-    /// Gets the stream of events published by the application
+    /// Gets/sets the maximum retry attempts to perform. If not set, it will retry forever
     /// </summary>
-    ISubject<CloudEvent> OutputStream { get; }
+    public virtual int? MaxAttempts { get; set; } = 3;
 
 }

@@ -11,25 +11,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reactive.Subjects;
-
-namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
+namespace Neuroglia.Eventing.CloudEvents;
 
 /// <summary>
-/// Defines the fundamentals of a service used to manage incoming and outgoing streams of <see cref="CloudEvent"/>s
+/// Represents an <see cref="Attribute"/> used to configure the <see cref="CloudEvent"/> enveloppe of a specified type
 /// </summary>
-public interface ICloudEventBus
-    : IDisposable
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+public class CloudEventAttribute
+    : Attribute
 {
 
     /// <summary>
-    /// Gets the stream of events ingested by the application
+    /// Initializes a new <see cref="CloudEventAttribute"/>
     /// </summary>
-    ISubject<CloudEvent> InputStream { get; }
+    /// <param name="type">The <see cref="CloudEvent.Type"/> of <see cref="CloudEvent"/>s transporting the marked class as payload</param>
+    public CloudEventAttribute(string type)
+    {
+        this.Type = type;
+    }
 
     /// <summary>
-    /// Gets the stream of events published by the application
+    /// Gets the <see cref="CloudEvent.Type"/> of <see cref="CloudEvent"/>s transporting the marked class as payload
     /// </summary>
-    ISubject<CloudEvent> OutputStream { get; }
+    public string Type { get; }
 
 }

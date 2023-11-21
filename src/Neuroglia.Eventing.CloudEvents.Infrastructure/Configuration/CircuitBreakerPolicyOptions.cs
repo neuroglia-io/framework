@@ -11,25 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reactive.Subjects;
-
-namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
+namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Configuration;
 
 /// <summary>
-/// Defines the fundamentals of a service used to manage incoming and outgoing streams of <see cref="CloudEvent"/>s
+/// Represents an object used to configure a circuit breaker
 /// </summary>
-public interface ICloudEventBus
-    : IDisposable
+public class CircuitBreakerPolicyOptions
 {
 
     /// <summary>
-    /// Gets the stream of events ingested by the application
+    /// Gets/sets the maximum attempts after which to break the circuit
     /// </summary>
-    ISubject<CloudEvent> InputStream { get; }
+    public virtual int BreakAfter { get; set; }
 
     /// <summary>
-    /// Gets the stream of events published by the application
+    /// Gets/sets the duration the circuit remains broken
     /// </summary>
-    ISubject<CloudEvent> OutputStream { get; }
+    public virtual TimeSpan BreakDuration { get; set; }
 
 }

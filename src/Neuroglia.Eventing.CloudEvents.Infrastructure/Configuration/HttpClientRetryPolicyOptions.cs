@@ -11,25 +11,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reactive.Subjects;
-
-namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
+namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Configuration;
 
 /// <summary>
-/// Defines the fundamentals of a service used to manage incoming and outgoing streams of <see cref="CloudEvent"/>s
+/// Represents an object used to configure the retry policy for an http client
 /// </summary>
-public interface ICloudEventBus
-    : IDisposable
+public class HttpClientRetryPolicyOptions
+    : RetryPolicyOptions
 {
 
     /// <summary>
-    /// Gets the stream of events ingested by the application
+    /// Gets/sets a list containing the http status codes the retry policy applies to. If not set, the policy will apply to all non-success (200-300) status codes
     /// </summary>
-    ISubject<CloudEvent> InputStream { get; }
+    public virtual List<int>? StatusCodes { get; set; }
 
     /// <summary>
-    /// Gets the stream of events published by the application
+    /// Gets/sets an object that configures the client's circuit breaker, if any
     /// </summary>
-    ISubject<CloudEvent> OutputStream { get; }
+    public virtual CircuitBreakerPolicyOptions? CircuitBreaker { get; set; }
 
 }

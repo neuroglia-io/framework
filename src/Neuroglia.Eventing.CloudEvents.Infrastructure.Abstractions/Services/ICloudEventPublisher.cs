@@ -11,25 +11,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reactive.Subjects;
+using Microsoft.Extensions.Hosting;
 
 namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
 
 /// <summary>
-/// Defines the fundamentals of a service used to manage incoming and outgoing streams of <see cref="CloudEvent"/>s
+/// Defines the fundamentals of a service used to publish <see cref="CloudEvent"/>s
 /// </summary>
-public interface ICloudEventBus
-    : IDisposable
+public interface ICloudEventPublisher
+    : IHostedService, IDisposable
 {
 
     /// <summary>
-    /// Gets the stream of events ingested by the application
+    /// Publishes the specified <see cref="CloudEvent"/>
     /// </summary>
-    ISubject<CloudEvent> InputStream { get; }
-
-    /// <summary>
-    /// Gets the stream of events published by the application
-    /// </summary>
-    ISubject<CloudEvent> OutputStream { get; }
+    /// <param name="e">The <see cref="CloudEvent"/> to publish</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    Task PublishAsync(CloudEvent e, CancellationToken cancellationToken = default);
 
 }

@@ -19,6 +19,17 @@ public class Contact
     : Entity<Guid>
 {
 
-    public virtual string Tel { get; set; } = null!;
+    protected Contact() { }
+
+    public Contact(string name, string phoneNumber)
+        : base(Guid.NewGuid()) 
+    { 
+        this.Name = name;
+        this.PhoneNumber = phoneNumber;
+    }
+
+    public virtual string Name { get; set; } = null!;
+
+    public virtual string PhoneNumber { get; set; } = null!;
 
 }

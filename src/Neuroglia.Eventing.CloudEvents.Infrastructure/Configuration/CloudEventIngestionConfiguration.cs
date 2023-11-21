@@ -11,25 +11,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Reactive.Subjects;
+using System.ComponentModel.DataAnnotations;
 
-namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
+namespace Neuroglia.Eventing.CloudEvents.Infrastructure.Configuration;
 
 /// <summary>
-/// Defines the fundamentals of a service used to manage incoming and outgoing streams of <see cref="CloudEvent"/>s
+/// Represents the configuration of how to deserialize the data contained by ingested <see cref="CloudEvent"/>s of a specific type
 /// </summary>
-public interface ICloudEventBus
-    : IDisposable
+public class CloudEventIngestionConfiguration
 {
 
     /// <summary>
-    /// Gets the stream of events ingested by the application
+    /// Gets/sets the type of <see cref="CloudEvent"/>s to deserialize
     /// </summary>
-    ISubject<CloudEvent> InputStream { get; }
+    [Required]
+    public virtual string Type { get; set; } = null!;
 
     /// <summary>
-    /// Gets the stream of events published by the application
+    /// Gets/sets the type to deserialize the <see cref="CloudEvent.Data"/> to
     /// </summary>
-    ISubject<CloudEvent> OutputStream { get; }
+    [Required]
+    public virtual Type DataType { get; set; } = null!;
 
 }
