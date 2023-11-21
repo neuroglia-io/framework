@@ -104,10 +104,10 @@ public class CloudEventIngestor
                 this.Logger.LogWarning("The cloud event of type '{cloudEventType}' with id '{cloudEventId}' does not have data, and will therefore not be ingested, but will be acked.", e.Type, e.Id);
                 return;
             }
-            else if (ingestionConfiguration.DataType.IsAssignableFrom(notification.GetType())) notification = this.Serializer.Convert(notification, ingestionConfiguration.DataType);
+            else if (ingestionConfiguration.DataType != notification.GetType()) notification = this.Serializer.Convert(notification, ingestionConfiguration.DataType);
             await mediator.PublishAsync((dynamic)notification!, cancellationToken).ConfigureAwait(false);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             this.Logger.LogError("Failed to ingest the cloud event of type '{cloudEventType}' with id '{cloudEventId}': {ex}", e.Type, e.Id, ex);
         }

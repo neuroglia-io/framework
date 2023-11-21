@@ -28,7 +28,7 @@ public class InheritancePriorityJsonTypeInfoResolver
     public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
     {
         var typeInfo = base.GetTypeInfo(type, options);
-        var properties = type.GetProperties().ToDictionary(p => p.TryGetCustomAttribute<JsonPropertyNameAttribute>(out var propertyNameAttribute) && propertyNameAttribute != null ? propertyNameAttribute.Name : p.Name, p => p.DeclaringType!.GetAscendencyLevel(type));
+        var properties = type.GetProperties().Where(p => !p.TryGetCustomAttribute<JsonIgnoreAttribute>(out _)).ToDictionary(p => p.TryGetCustomAttribute<JsonPropertyNameAttribute>(out var propertyNameAttribute) && propertyNameAttribute != null ? propertyNameAttribute.Name : p.Name, p => p.DeclaringType!.GetAscendencyLevel(type));
         if (typeInfo.Kind == JsonTypeInfoKind.Object)
         {
             foreach (var property in typeInfo.Properties.OrderBy(a => a.Name))
