@@ -23,6 +23,11 @@ public class EventStoreOptions
 {
 
     /// <summary>
+    /// Gets/sets the name of the database to use, if any
+    /// </summary>
+    public string? DatabaseName { get; set; }
+
+    /// <summary>
     /// Gets/sets the type of <see cref="ISerializer"/> to use to serialize and deserialize events. If not set, will use the first registered <see cref="ISerializer"/>
     /// </summary>
     public Type? SerializerType { get; set; }

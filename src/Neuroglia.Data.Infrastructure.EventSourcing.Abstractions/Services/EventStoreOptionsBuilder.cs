@@ -37,6 +37,13 @@ public class EventStoreOptionsBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IEventStoreOptionsBuilder UseDatabase(string databaseName)
+    {
+        this.Options.DatabaseName = databaseName;
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual EventStoreOptions Build() => this.Options;
 
 }
