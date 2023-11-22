@@ -32,7 +32,7 @@
   <ItemGroup>
     <PackageReference Include="JsonCons.Utilities" Version="1.0.0" />
     <PackageReference Include="JsonPatch.Net" Version="2.1.0" />
-    <PackageReference Include="JsonSchema.Net" Version="5.3.1" />
+    <PackageReference Include="JsonSchema.Net" Version="5.4.0" />
   </ItemGroup>
 
   <ItemGroup>

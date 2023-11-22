@@ -37,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Data.Guards\Neuroglia.Data.Guards.csproj" />
     <ProjectReference Include="..\Neuroglia.Data.Infrastructure.Abstractions\Neuroglia.Data.Infrastructure.Abstractions.csproj" />
   </ItemGroup>
 

@@ -94,7 +94,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Guards", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.UnitTests", "test\Neuroglia.UnitTests\Neuroglia.UnitTests.csproj", "{63922ABE-916D-4A4D-A3E1-8162BEED060E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Mediation.Abstractions", "src\Neuroglia.Mediation.Abstractions\Neuroglia.Mediation.Abstractions.csproj", "{23AEEAC4-03C7-4E6F-AB74-26588908AAB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mediation.Abstractions", "src\Neuroglia.Mediation.Abstractions\Neuroglia.Mediation.Abstractions.csproj", "{23AEEAC4-03C7-4E6F-AB74-26588908AAB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

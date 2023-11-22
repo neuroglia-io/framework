@@ -31,6 +31,13 @@ public interface IEventStoreOptionsBuilder
         where TSerializer : class, ISerializer;
 
     /// <summary>
+    /// Uses the specified database
+    /// </summary>
+    /// <param name="databaseName">The name of the database to use</param>
+    /// <returns>The configured <see cref="IEventStoreOptionsBuilder"/></returns>
+    IEventStoreOptionsBuilder UseDatabase(string databaseName);
+
+    /// <summary>
     /// Builds the <see cref="EventStoreOptions"/>
     /// </summary>
     /// <returns>A new <see cref="EventStoreOptions"/></returns>

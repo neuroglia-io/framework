@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using Neuroglia.Data.Guards;
 using Neuroglia.Data.Infrastructure.Mongo.Configuration;
 using Neuroglia.Data.Infrastructure.Services;
 using Pluralize.NET.Core;
@@ -81,6 +82,8 @@ public class MongoRepository<TEntity, TKey>
     /// <inheritdoc/>
     public override async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         var options = new InsertOneOptions();
         await this.Collection.InsertOneAsync(entity, options, cancellationToken).ConfigureAwait(false);
         return (await this.GetAsync(entity.Id, cancellationToken).ConfigureAwait(false))!;
@@ -89,8 +92,13 @@ public class MongoRepository<TEntity, TKey>
     /// <inheritdoc/>
     public override async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(entity);
+
         var options = new ReplaceOptions();
-        await this.Collection.ReplaceOneAsync(d => d.Id.Equals(entity.Id), entity, options, cancellationToken).ConfigureAwait(false);
+        var result = await this.Collection.ReplaceOneAsync(d => d.Id.Equals(entity.Id), entity, options, cancellationToken).ConfigureAwait(false);
+
+        Guard.AgainstArgument(result.ModifiedCount == 1 ? entity : null, nameof(entity)).WhenNullReference(entity.Id);
+
         return (await this.GetAsync(entity.Id, cancellationToken).ConfigureAwait(false))!;
     }
 

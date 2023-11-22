@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using Microsoft.Extensions.Options;
+using Neuroglia.Data.Guards;
 using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
 using Neuroglia.Data.Infrastructure.Services;
 using Neuroglia.Mediation;
@@ -86,13 +87,17 @@ public class EventSourcingRepository<TAggregate, TKey>
     /// <inheritdoc/>
     public virtual async Task<TAggregate> AddAsync(TAggregate aggregate, CancellationToken cancellationToken = default)
     {
-        if (aggregate == null) throw new ArgumentNullException(nameof(aggregate));
+        ArgumentNullException.ThrowIfNull(aggregate);
+
         var events = aggregate.PendingEvents.ToList();
         await this.EventStore.AppendAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetDescriptor()), cancellationToken: cancellationToken).ConfigureAwait(false);
+
         aggregate.State.StateVersion = (ulong)events.Count;
         aggregate.ClearPendingEvents();
+
         await this.StateManager.TakeSnapshotAsync(aggregate, cancellationToken).ConfigureAwait(false);
         if(this.Options.PublishEvents) foreach (var e in events) await this.Mediator.PublishAsync((dynamic)e, cancellationToken).ConfigureAwait(false);
+
         return aggregate;
     }
 
@@ -113,20 +118,28 @@ public class EventSourcingRepository<TAggregate, TKey>
     /// <inheritdoc/>
     public virtual async Task<TAggregate?> GetAsync(TKey id, CancellationToken cancellationToken = default)
     {
-        var aggregate = await this.StateManager.RestoreStateAsync(id, cancellationToken).ConfigureAwait(false);
-        var recordedEvents = await this.EventStore.ReadAsync(this.GetStreamIdFor(id), StreamReadDirection.Forwards, (long)aggregate.State.StateVersion, null, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false);
-        if (recordedEvents == null) return null;
-        aggregate = this.Aggregator.Aggregate(recordedEvents.Select(e => this.MigrationManager.MigrateEventToLatest(e.Data!)).OfType<IDomainEvent>(), aggregate);
-        return aggregate;
+        try
+        {
+            var aggregate = await this.StateManager.RestoreStateAsync(id, cancellationToken).ConfigureAwait(false);
+            var recordedEvents = await this.EventStore.ReadAsync(this.GetStreamIdFor(id), StreamReadDirection.Forwards, (long)aggregate.State.StateVersion, null, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false);
+            if (recordedEvents == null) return null;
+            aggregate = this.Aggregator.Aggregate(recordedEvents.Select(e => this.MigrationManager.MigrateEventToLatest(e.Data!)).OfType<IDomainEvent>(), aggregate);
+            return aggregate;
+        }
+        catch (StreamNotFoundException) { return null; }
     }
 
     /// <inheritdoc/>
     public virtual async Task<TAggregate?> GetAsync(TKey id, ulong version, CancellationToken cancellationToken = default)
     {
-        var recordedEvents = await this.EventStore.ReadAsync(this.GetStreamIdFor(id), StreamReadDirection.Backwards, (long)version, cancellationToken: cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false);
-        if (recordedEvents == null) return null;
-        recordedEvents.Reverse();
-        return this.Aggregator.Aggregate(recordedEvents.Select(e => this.MigrationManager.MigrateEventToLatest(e.Data!)).OfType<IDomainEvent>());
+        try
+        {
+            var recordedEvents = await this.EventStore.ReadAsync(this.GetStreamIdFor(id), StreamReadDirection.Backwards, (long)version, cancellationToken: cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false);
+            if (recordedEvents == null) return null;
+            recordedEvents.Reverse();
+            return this.Aggregator.Aggregate(recordedEvents.Select(e => this.MigrationManager.MigrateEventToLatest(e.Data!)).OfType<IDomainEvent>());
+        }
+        catch (StreamNotFoundException) { return null; }
     }
 
     /// <inheritdoc/>
@@ -139,14 +152,19 @@ public class EventSourcingRepository<TAggregate, TKey>
     /// <inheritdoc/>
     public virtual async Task<TAggregate> UpdateAsync(TAggregate aggregate, ulong expectedVersion, CancellationToken cancellationToken = default)
     {
-        if (aggregate == null) throw new ArgumentNullException(nameof(aggregate));
+        ArgumentNullException.ThrowIfNull(aggregate);
+        Guard.AgainstArgument(await this.ContainsAsync(aggregate.Id, cancellationToken).ConfigureAwait(false) ? aggregate : null, nameof(aggregate)).WhenNullReference(aggregate.Id);
+
         if (!aggregate.PendingEvents.Any()) return aggregate;
         var events = aggregate.PendingEvents.ToList();
         await this.EventStore.AppendAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetDescriptor()), (long)expectedVersion, cancellationToken).ConfigureAwait(false);
+
         aggregate.State.StateVersion += (ulong)events.Count;
         aggregate.ClearPendingEvents();
+
         await this.StateManager.TakeSnapshotAsync(aggregate, cancellationToken).ConfigureAwait(false);
         if (this.Options.PublishEvents) foreach (var e in events) await this.Mediator.PublishAsync((dynamic)e, cancellationToken).ConfigureAwait(false);
+
         return aggregate;
     }
 
