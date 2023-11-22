@@ -13,6 +13,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Neuroglia.Data.Guards;
 using Neuroglia.Data.Infrastructure.Services;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure;
@@ -59,7 +60,7 @@ public abstract class RepositoryTestsBase
     }
 
     [Fact, Priority(2)]
-    public async Task Contains_Should_Work()
+    public async Task Contains_Existing_Should_Work()
     {
         //arrange
         var user = await Repository.AddAsync(User.Create());
@@ -73,7 +74,17 @@ public abstract class RepositoryTestsBase
     }
 
     [Fact, Priority(3)]
-    public async Task Get_Should_Work()
+    public async Task Contains_NonExisting_Should_Work()
+    {
+        //act
+        var result = await Repository.ContainsAsync(Guid.NewGuid().ToString());
+
+        //assert
+        result.Should().BeFalse();
+    }
+
+    [Fact, Priority(4)]
+    public async Task Get_Existing_Should_Work()
     {
         //arrange
         var user = await Repository.AddAsync(User.Create());
@@ -89,8 +100,18 @@ public abstract class RepositoryTestsBase
         result.State.Email?.Should().Be(user.State.Email);
     }
 
-    [Fact, Priority(4)]
-    public async Task Update_Should_Work()
+    [Fact, Priority(5)]
+    public async Task Get_NonExisting_Should_Work()
+    {
+        //act
+        var result = await Repository.GetAsync(Guid.NewGuid().ToString());
+
+        //assert
+        result.Should().BeNull();
+    }
+
+    [Fact, Priority(6)]
+    public async Task Update_Existing_Should_Work()
     {
         //arrange
         var user = User.Create();
@@ -106,8 +127,22 @@ public abstract class RepositoryTestsBase
         result.State.EmailVerified.Should().BeTrue();
     }
 
-    [Fact, Priority(5)]
-    public async Task Remove_Should_Work()
+    [Fact, Priority(7)]
+    public async Task Update_NonExisting_Should_Throw()
+    {
+        //arrange
+        var user = User.Create();
+
+        //act
+        user.VerifyEmail();
+        var action = () => Repository.UpdateAsync(user);
+
+        //assert
+        await action.Should().ThrowAsync<Exception>();
+    }
+
+    [Fact, Priority(8)]
+    public async Task Remove_Existing_Should_Work()
     {
         //arrange
         var user = await Repository.AddAsync(User.Create());
@@ -120,6 +155,16 @@ public abstract class RepositoryTestsBase
         //assert
         result.Should().BeTrue();
         contains.Should().BeFalse();
+    }
+
+    [Fact, Priority(9)]
+    public async Task Remove_NonExisting_Should_Throw()
+    {
+        //act
+        var result = await Repository.RemoveAsync(Guid.NewGuid().ToString());
+
+        //assert
+        result.Should().BeFalse();
     }
 
 }
