@@ -469,7 +469,7 @@ public class ESEventStore
     /// <returns>A new awaitable <see cref="Task"/></returns>
     protected virtual async Task OnAckEventAsync(ISubject<IEventRecord> subject, PersistentSubscription subscription, ResolvedEvent e)
     {
-        try { await subscription.Ack(e.Event.EventId).ConfigureAwait(false); }
+        try { await subscription.Ack(e.OriginalEvent.EventId).ConfigureAwait(false); }
         catch (ObjectDisposedException ex) { subject.OnError(ex); }
     }
 
@@ -483,7 +483,7 @@ public class ESEventStore
     /// <returns>A new awaitable <see cref="Task"/></returns>
     protected virtual async Task OnNackEventAsync(ISubject<IEventRecord> subject, PersistentSubscription subscription, ResolvedEvent e, string? reason)
     {
-        try { await subscription.Nack(PersistentSubscriptionNakEventAction.Retry, reason ?? "Unknown", e.Event.EventId).ConfigureAwait(false); }
+        try { await subscription.Nack(PersistentSubscriptionNakEventAction.Retry, reason ?? "Unknown", e.OriginalEvent.EventId).ConfigureAwait(false); }
         catch (ObjectDisposedException ex) { subject.OnError(ex); }
     }
 
