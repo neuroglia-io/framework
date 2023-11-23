@@ -14,7 +14,7 @@
 namespace Neuroglia.Data;
 
 /// <summary>
-/// Defines the fundamentals of a domain event, that is an event bounded to a specific domain context
+/// Defines the fundamentals of a domain event, which is an event bounded to a specific domain context
 /// </summary>
 public interface IDomainEvent
 {
@@ -37,7 +37,7 @@ public interface IDomainEvent
 }
 
 /// <summary>
-/// Defines the fundamentals of a domain event, that is an event bounded to a specific domain context
+/// Defines the fundamentals of a domain event, which is an event bounded to a specific domain context
 /// </summary>
 /// <typeparam name="TAggregate">The type of <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></typeparam>
 public interface IDomainEvent<TAggregate>
@@ -49,7 +49,7 @@ public interface IDomainEvent<TAggregate>
 }
 
 /// <summary>
-/// Defines the fundamentals of a domain event, that is an event bounded to a specific domain context
+/// Defines the fundamentals of a domain event, which is an event bounded to a specific domain context
 /// </summary>
 /// <typeparam name="TAggregate">The type of <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></typeparam>
 /// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></typeparam>
