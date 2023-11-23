@@ -17,7 +17,7 @@ namespace Neuroglia;
 /// Represents the base class for all integration events
 /// </summary>
 public abstract record IntegrationEvent
-    : DataTransferObject
+    : DataTransferObject, IIntegrationEvent
 {
 
     /// <summary>
