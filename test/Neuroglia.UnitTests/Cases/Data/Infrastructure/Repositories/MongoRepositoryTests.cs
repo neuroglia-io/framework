@@ -22,11 +22,11 @@ using Neuroglia.UnitTests.Containers;
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.Repositories;
 
 [TestCaseOrderer("Neuroglia.UnitTests.Services.PriorityTestCaseOrderer", "Neuroglia.UnitTests")]
-public class MongoCacheRepositoryTests
+public class MongoRepositoryTests
     : QueryableRepositoryTestsBase
 {
 
-    public MongoCacheRepositoryTests() : base(BuildServices()) { }
+    public MongoRepositoryTests() : base(BuildServices()) { }
 
     static IServiceCollection BuildServices()
     {

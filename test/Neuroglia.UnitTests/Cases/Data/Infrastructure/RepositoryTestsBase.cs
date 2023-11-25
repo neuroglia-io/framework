@@ -150,6 +150,7 @@ public abstract class RepositoryTestsBase
 
         //act
         var result = await Repository.RemoveAsync(user.Id);
+        await Repository.SaveChangesAsync();
         var contains = await Repository.ContainsAsync(user.Id);
 
         //assert

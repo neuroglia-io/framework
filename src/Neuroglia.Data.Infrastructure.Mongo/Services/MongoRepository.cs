@@ -13,7 +13,9 @@
 
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.WireProtocol.Messages;
 using MongoDB.Driver.Linq;
 using Neuroglia.Data.Guards;
 using Neuroglia.Data.Infrastructure.Mongo.Configuration;
@@ -28,10 +30,13 @@ namespace Neuroglia.Data.Infrastructure.Mongo.Services;
 /// <typeparam name="TEntity">The type of entities managed by the repository</typeparam>
 /// <typeparam name="TKey">The type of key used to uniquely identify entities managed by the repository</typeparam>
 public class MongoRepository<TEntity, TKey>
-    : QueryableRepositoryBase<TEntity, TKey>
+    : QueryableRepositoryBase<TEntity, TKey>, IDisposable
     where TEntity : class, IIdentifiable<TKey>
     where TKey : IEquatable<TKey>
 {
+
+    bool _disposed;
+    bool? _supportsTransactions;
 
     /// <summary>
     /// Initializes a new <see cref="MongoRepository{TDocument, TKey}"/>
@@ -72,6 +77,29 @@ public class MongoRepository<TEntity, TKey>
     /// Gets the underlying <see cref="IMongoCollection{TDocument}"/>
     /// </summary>
     protected IMongoCollection<TEntity> Collection { get; }
+    
+    /// <summary>
+    /// Gets a boolean indicating whether or not the <see cref="MongoRepository{TEntity, TKey}"/> supports transactions
+    /// </summary>
+    protected bool SupportsTransactions
+    {
+        get
+        {
+            if (!this._supportsTransactions.HasValue)
+            {
+                this._supportsTransactions = this.Database.Client
+                    .GetDatabase("admin")
+                    .RunCommand<BsonDocument>(BsonDocument.Parse("{ getCmdLineOpts: 1 }"))
+                    .Contains("replSet");
+            }
+            return this._supportsTransactions.Value;
+        }
+    }
+
+    /// <summary>
+    /// Gets the current <see cref="IClientSessionHandle"/>, if any
+    /// </summary>
+    protected IClientSessionHandle? CurrentSession { get; private set; }
 
     /// <inheritdoc/>
     public override Task<bool> ContainsAsync(TKey key, CancellationToken cancellationToken = default) => this.Collection.AsQueryable().AnyAsync(e => e.Id.Equals(key), cancellationToken);
@@ -84,8 +112,16 @@ public class MongoRepository<TEntity, TKey>
     {
         ArgumentNullException.ThrowIfNull(entity);
 
+        if (this.SupportsTransactions)
+        {
+            this.CurrentSession ??= await this.Database.Client.StartSessionAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+            if (!this.CurrentSession.IsInTransaction) this.CurrentSession.StartTransaction();
+        }
+
         var options = new InsertOneOptions();
-        await this.Collection.InsertOneAsync(entity, options, cancellationToken).ConfigureAwait(false);
+        if (this.SupportsTransactions) await this.Collection.InsertOneAsync(this.CurrentSession, entity, options, cancellationToken).ConfigureAwait(false);
+        else await this.Collection.InsertOneAsync(entity, options, cancellationToken).ConfigureAwait(false);
+
         return (await this.GetAsync(entity.Id, cancellationToken).ConfigureAwait(false))!;
     }
 
@@ -94,8 +130,16 @@ public class MongoRepository<TEntity, TKey>
     {
         ArgumentNullException.ThrowIfNull(entity);
 
+        if (this.SupportsTransactions)
+        {
+            this.CurrentSession ??= await this.Database.Client.StartSessionAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+            if (!this.CurrentSession.IsInTransaction) this.CurrentSession.StartTransaction();
+        }
+
         var options = new ReplaceOptions();
-        var result = await this.Collection.ReplaceOneAsync(d => d.Id.Equals(entity.Id), entity, options, cancellationToken).ConfigureAwait(false);
+        var result = this.SupportsTransactions
+            ? await this.Collection.ReplaceOneAsync(this.CurrentSession, d => d.Id.Equals(entity.Id), entity, options, cancellationToken).ConfigureAwait(false)
+            : await this.Collection.ReplaceOneAsync(d => d.Id.Equals(entity.Id), entity, options, cancellationToken).ConfigureAwait(false);
 
         Guard.AgainstArgument(result.ModifiedCount == 1 ? entity : null, nameof(entity)).WhenNullReference(entity.Id);
 
@@ -105,7 +149,15 @@ public class MongoRepository<TEntity, TKey>
     /// <inheritdoc/>
     public override async Task<bool> RemoveAsync(TKey key, CancellationToken cancellationToken = default)
     {
-        var result = await this.Collection.DeleteOneAsync(d => d.Id.Equals(key), cancellationToken).ConfigureAwait(false);
+        if (this.SupportsTransactions)
+        {
+            this.CurrentSession ??= await this.Database.Client.StartSessionAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+            if (!this.CurrentSession.IsInTransaction) this.CurrentSession.StartTransaction();
+        }
+
+        var result = this.SupportsTransactions
+            ? await this.Collection.DeleteOneAsync(this.CurrentSession, d => d.Id.Equals(key), cancellationToken: cancellationToken).ConfigureAwait(false)
+            : await this.Collection.DeleteOneAsync(d => d.Id.Equals(key), cancellationToken).ConfigureAwait(false);
         return result.DeletedCount > 0;
     }
 
@@ -113,9 +165,45 @@ public class MongoRepository<TEntity, TKey>
     public override Task<bool> RemoveAsync(TEntity entity, CancellationToken cancellationToken = default) => this.RemoveAsync(entity.Id, cancellationToken);
 
     /// <inheritdoc/>
-    public override Task SaveChangesAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+    public override async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        if (!this.SupportsTransactions || this.CurrentSession == null || !this.CurrentSession.IsInTransaction) return;
+        try
+        {
+            await this.CurrentSession.CommitTransactionAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch(Exception)
+        {
+            try { await this.CurrentSession.AbortTransactionAsync(cancellationToken).ConfigureAwait(false); } catch { }
+            throw;
+        }
+    }
 
     /// <inheritdoc/>
     public override IQueryable<TEntity> AsQueryable() => this.Collection.AsQueryable();
+
+    /// <summary>
+    /// Disposes of the <see cref="MongoRepository{TEntity, TKey}"/>
+    /// </summary>
+    /// <param name="disposing">A boolean indicating whether or not the <see cref="MongoRepository{TEntity, TKey}"/> is being disposed of</param>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this._disposed)
+        {
+            if (disposing)
+            {
+                this.CurrentSession?.AbortTransaction();
+                this.CurrentSession?.Dispose();
+            }
+            this._disposed = true;
+        }
+    }
+
+    /// <inheritdoc/>
+    public void Dispose()
+    {
+        this.Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
 
 }
