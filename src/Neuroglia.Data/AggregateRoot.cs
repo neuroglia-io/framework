@@ -40,7 +40,7 @@ public abstract class AggregateRoot<TKey, TState>
     /// <inheritdoc/>
     public virtual DateTimeOffset? LastModified => this.State.LastModified;
 
-    private readonly List<IDomainEvent> _pendingEvents = new();
+    private readonly List<IDomainEvent> _pendingEvents = [];
     /// <inheritdoc/>
     public virtual IReadOnlyList<IDomainEvent> PendingEvents => this._pendingEvents.AsReadOnly();
 

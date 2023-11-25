@@ -19,7 +19,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.Services;
 /// Defines the fundamentals of an event sourcing implementation of the <see cref="IRepository"/> interface
 /// </summary>
 public interface IEventSourcingRepository
-    : IRepository
+    : IConcurrentRepository
 {
 
     /// <summary>
@@ -47,7 +47,7 @@ public interface IEventSourcingRepository
 /// </summary>
 /// <typeparam name="TAggregate">The type of the managed <see cref="IAggregateRoot"/>s</typeparam>
 public interface IEventSourcingRepository<TAggregate>
-    : IEventSourcingRepository, IRepository<TAggregate>
+    : IEventSourcingRepository, IConcurrentRepository<TAggregate>
     where TAggregate : class, IAggregateRoot
 {
 
@@ -60,15 +60,6 @@ public interface IEventSourcingRepository<TAggregate>
     /// <returns>The aggregate with the specified key</returns>
     new Task<TAggregate?> GetAsync(object id, ulong version, CancellationToken cancellationToken = default);
 
-    /// <summary>
-    /// Updates the specified aggregate
-    /// </summary>
-    /// <param name="aggregate">The aggregate to update</param>
-    /// <param name="expectedVersion">The expected version of the aggregate</param>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>The updated aggregate</returns>
-    Task<TAggregate> UpdateAsync(TAggregate aggregate, ulong expectedVersion, CancellationToken cancellationToken = default);
-
 }
 
 /// <summary>
@@ -77,7 +68,7 @@ public interface IEventSourcingRepository<TAggregate>
 /// <typeparam name="TAggregate">The type of the managed <see cref="IAggregateRoot"/>s</typeparam>
 /// <typeparam name="TKey">The key used to identify managed <see cref="IAggregateRoot"/>s</typeparam>
 public interface IEventSourcingRepository<TAggregate, TKey>
-    : IEventSourcingRepository<TAggregate>, IRepository<TAggregate, TKey>
+    : IEventSourcingRepository<TAggregate>, IConcurrentRepository<TAggregate, TKey>
     where TAggregate : class, IAggregateRoot<TKey>
     where TKey : IEquatable<TKey>
 {
