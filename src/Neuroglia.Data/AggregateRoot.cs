@@ -61,6 +61,9 @@ public abstract class AggregateRoot<TKey, TState>
         where TEvent : IDomainEvent
     {
         if (e == null) throw new ArgumentNullException(nameof(e));
+
+        if (e is DomainEvent<TKey> domainEvent) domainEvent.AggregateVersion = this.State.StateVersion + (ulong)this.PendingEvents.Count + 1;
+
         this._pendingEvents.Add(e);
         return e;
     }

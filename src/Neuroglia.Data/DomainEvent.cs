@@ -19,11 +19,10 @@ namespace Neuroglia.Data;
 /// <summary>
 /// Represents the default implementation of the <see cref="IDomainEvent{TAggregate, TKey}"/> interface
 /// </summary>
-/// <typeparam name="TAggregate">The type of <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></typeparam>
 /// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></typeparam>
-public abstract class DomainEvent<TAggregate, TKey>
-    : IDomainEvent<TAggregate, TKey>
-    where TAggregate : IAggregateRoot<TKey>
+[DataContract]
+public abstract class DomainEvent<TKey>
+    : IDomainEvent
     where TKey : IEquatable<TKey>
 {
 
@@ -38,20 +37,54 @@ public abstract class DomainEvent<TAggregate, TKey>
     /// <param name="aggregateId">The id of the <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></param>
     protected DomainEvent(TKey aggregateId)
     {
-        this.AggregateId = aggregateId;
         this.CreatedAt = DateTimeOffset.Now;
+        this.AggregateId = aggregateId;
     }
+
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public abstract Type AggregateType { get; }
 
     /// <inheritdoc/>
     public virtual TKey AggregateId { get; protected set; } = default!;
 
-    object IDomainEvent.AggregateId => this.AggregateId;
+    /// <inheritdoc/>
+    [JsonInclude]
+    public virtual ulong AggregateVersion { get; internal protected set; }
+
+    /// <inheritdoc/>
+    [JsonInclude]
+    public virtual DateTimeOffset CreatedAt { get; protected set; }
+
+    object IDomainEvent.AggregateId => this.AggregateId!;
+
+}
+
+/// <summary>
+/// Represents the default implementation of the <see cref="IDomainEvent{TAggregate, TKey}"/> interface
+/// </summary>
+/// <typeparam name="TAggregate">The type of <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></typeparam>
+/// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></typeparam>
+[DataContract]
+public abstract class DomainEvent<TAggregate, TKey>
+    : DomainEvent<TKey>, IDomainEvent<TAggregate, TKey>
+    where TAggregate : IAggregateRoot<TKey>
+    where TKey : IEquatable<TKey>
+{
+
+    /// <summary>
+    /// Initializes a new <see cref="DomainEvent{TAggregate, TKey}"/>
+    /// </summary>
+    protected DomainEvent() { }
+
+    /// <summary>
+    /// Initializes a new <see cref="DomainEvent{TAggregate, TKey}"/>
+    /// </summary>
+    /// <param name="aggregateId">The id of the <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></param>
+    protected DomainEvent(TKey aggregateId) : base(aggregateId) { }
 
     /// <inheritdoc/>
     [IgnoreDataMember, JsonIgnore]
-    public virtual Type AggregateType => typeof(TAggregate);
-
-    /// <inheritdoc/>
-    public virtual DateTimeOffset CreatedAt { get; protected set; }
+    public override Type AggregateType => typeof(TAggregate);
 
 }

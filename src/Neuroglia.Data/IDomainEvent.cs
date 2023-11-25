@@ -30,6 +30,12 @@ public interface IDomainEvent
     object AggregateId { get; }
 
     /// <summary>
+    /// Gets the version of the source <see cref="IAggregateRoot"/>'s source after applying the <see cref="IDomainEvent"/>. 
+    /// In other words, indicates the position of the <see cref="IDomainEvent"/> in its source <see cref="IAggregateRoot"/>'s event stream
+    /// </summary>
+    ulong AggregateVersion { get; }
+
+    /// <summary>
     /// Gets the date and time the <see cref="IDomainEvent"/> has been created at
     /// </summary>
     DateTimeOffset CreatedAt { get; }
@@ -44,6 +50,7 @@ public interface IDomainEvent<TAggregate>
     : IDomainEvent
     where TAggregate : IAggregateRoot
 {
+
 
 
 }
