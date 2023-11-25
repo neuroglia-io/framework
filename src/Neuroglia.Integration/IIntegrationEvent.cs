@@ -19,6 +19,19 @@ namespace Neuroglia;
 public interface IIntegrationEvent
 {
 
+    /// <summary>
+    /// Gets/sets the date and time at which the integration event has been created
+    /// </summary>
+    DateTimeOffset CreatedAt { get; }
 
+    /// <summary>
+    /// Gets/sets the id of the aggregate, if any, that has produced the event
+    /// </summary>
+    object? AggregateId { get; }
+
+    /// <summary>
+    /// Gets/sets the version of the event's source aggregate, if any, at the time it produced the event
+    /// </summary>
+    ulong? AggregateVersion { get; }
 
 }

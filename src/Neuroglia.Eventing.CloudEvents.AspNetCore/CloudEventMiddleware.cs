@@ -14,7 +14,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Neuroglia.Eventing.CloudEvents;
 using Neuroglia.Eventing.CloudEvents.Infrastructure.Services;
 using Neuroglia.Serialization;
 using System.Net;
@@ -51,11 +50,11 @@ public class CloudEventMiddleware
     /// <inheritdoc/>
     public async Task InvokeAsync(HttpContext context, ICloudEventBus cloudEventBus)
     {
-        if (!context.Request.ContentType.StartsWith(CloudEventContentType.Prefix)) { await this.Next(context); return; }
+        if (context.Request.ContentType?.StartsWith(CloudEventContentType.Prefix) != true) { await this.Next(context); return; }
         try
         {
             var serializer = context.RequestServices.GetRequiredService<IJsonSerializer>();
-            var e = serializer is IAsyncSerializer asyncSerializer ? await asyncSerializer.DeserializeAsync<CloudEvent>(context.Request.Body) : serializer.Deserialize<CloudEvent>(context.Request.Body)!;
+            var e = serializer is IAsyncSerializer asyncSerializer ? (await asyncSerializer.DeserializeAsync<CloudEvent>(context.Request.Body).ConfigureAwait(false))! : serializer.Deserialize<CloudEvent>(context.Request.Body)!;
             cloudEventBus.InputStream.OnNext(e);
             context.Response.StatusCode = (int)HttpStatusCode.Accepted;
         }
