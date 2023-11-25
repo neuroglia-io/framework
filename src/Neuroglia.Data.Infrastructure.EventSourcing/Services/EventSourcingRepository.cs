@@ -145,7 +145,8 @@ public class EventSourcingRepository<TAggregate, TKey>
     /// <inheritdoc/>
     public virtual Task<TAggregate> UpdateAsync(TAggregate aggregate, CancellationToken cancellationToken = default)
     {
-        if (aggregate == null) throw new ArgumentNullException(nameof(aggregate));
+        ArgumentNullException.ThrowIfNull(aggregate);
+
         return this.UpdateAsync(aggregate, aggregate.State.StateVersion - 1, cancellationToken);
     }
 
@@ -208,6 +209,8 @@ public class EventSourcingRepository<TAggregate, TKey>
     async Task<IAggregateRoot?> IEventSourcingRepository.GetAsync(object key, ulong version, CancellationToken cancellationToken) => await this.GetAsync((TKey)key, version, cancellationToken).ConfigureAwait(false);
 
     async Task<IIdentifiable> IRepository.UpdateAsync(IIdentifiable entity, CancellationToken cancellationToken) => await this.UpdateAsync((TAggregate)entity, cancellationToken).ConfigureAwait(false);
+
+    async Task<IIdentifiable> IConcurrentRepository.UpdateAsync(IIdentifiable entity, ulong expectedVersion, CancellationToken cancellationToken) => await this.UpdateAsync((TAggregate)entity, expectedVersion, cancellationToken).ConfigureAwait(false);
 
     async Task<IAggregateRoot> IEventSourcingRepository.UpdateAsync(IAggregateRoot aggregate, ulong version, CancellationToken cancellationToken) => await this.UpdateAsync((TAggregate)aggregate, version, cancellationToken).ConfigureAwait(false);
 

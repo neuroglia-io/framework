@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using Neuroglia.Data.Infrastructure;
+using Neuroglia.Data.Infrastructure.Mongo.Services;
 using Neuroglia.Mediation;
 using Neuroglia.UnitTests.Containers;
 
@@ -27,6 +28,28 @@ public class MongoRepositoryTests
 {
 
     public MongoRepositoryTests() : base(BuildServices()) { }
+
+    protected new MongoRepository<User, string> Repository => (MongoRepository<User, string>)base.Repository;
+
+    [Fact]
+    public async Task Update_Existing_Twice_WithOptimisticConcurrency_Should_Fail()
+    {
+        //arrange
+        var user = User.Create();
+        user.State.StateVersion++;
+        await Repository.AddAsync(user);
+        user.State.StateVersion++;
+        user.VerifyEmail();
+        user = await Repository.UpdateAsync(user);
+        await Repository.SaveChangesAsync();
+
+        //act
+        user.LogIn();
+
+        //assert
+        var action = () => Repository.UpdateAsync(user, 1);
+        await action.Should().ThrowAsync<OptimisticConcurrencyException>();
+    }
 
     static IServiceCollection BuildServices()
     {

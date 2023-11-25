@@ -15,12 +15,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.WireProtocol.Messages;
 using MongoDB.Driver.Linq;
 using Neuroglia.Data.Guards;
 using Neuroglia.Data.Infrastructure.Mongo.Configuration;
 using Neuroglia.Data.Infrastructure.Services;
 using Pluralize.NET.Core;
+using System.Linq.Expressions;
 
 namespace Neuroglia.Data.Infrastructure.Mongo.Services;
 
@@ -30,7 +30,7 @@ namespace Neuroglia.Data.Infrastructure.Mongo.Services;
 /// <typeparam name="TEntity">The type of entities managed by the repository</typeparam>
 /// <typeparam name="TKey">The type of key used to uniquely identify entities managed by the repository</typeparam>
 public class MongoRepository<TEntity, TKey>
-    : QueryableRepositoryBase<TEntity, TKey>, IDisposable
+    : RepositoryBase<TEntity, TKey>, IQueryableRepository<TEntity, TKey>, IConcurrentRepository<TEntity, TKey>, IDisposable
     where TEntity : class, IIdentifiable<TKey>
     where TKey : IEquatable<TKey>
 {
@@ -126,9 +126,22 @@ public class MongoRepository<TEntity, TKey>
     }
 
     /// <inheritdoc/>
-    public override async Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public override Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default) => this.ReplaceOneAsync(entity, null, cancellationToken);
+
+    /// <inheritdoc/>
+    public virtual Task<TEntity> UpdateAsync(TEntity entity, ulong expectedVersion, CancellationToken cancellationToken = default) => this.ReplaceOneAsync(entity, expectedVersion, cancellationToken);
+
+    /// <summary>
+    /// Updates the specified entity
+    /// </summary>
+    /// <param name="entity">The updated state of the entity</param>
+    /// <param name="expectedVersion">The entity's expected version, if any</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The updated entity</returns>
+    protected virtual async Task<TEntity> ReplaceOneAsync(TEntity entity, ulong? expectedVersion, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity);
+        Guard.AgainstArgument(await this.ContainsAsync(entity.Id, cancellationToken).ConfigureAwait(false) ? entity : null, nameof(entity)).WhenNullReference(entity.Id);
 
         if (this.SupportsTransactions)
         {
@@ -136,12 +149,14 @@ public class MongoRepository<TEntity, TKey>
             if (!this.CurrentSession.IsInTransaction) this.CurrentSession.StartTransaction();
         }
 
-        var options = new ReplaceOptions();
+        var checkVersion = expectedVersion.HasValue && entity is IVersionedState;
+        Expression<Func<TEntity, bool>> selector = d => d.Id.Equals(entity.Id) && (!checkVersion || ((IVersionedState)entity).StateVersion == expectedVersion!.Value);
+        var replaceOptions = new ReplaceOptions();
         var result = this.SupportsTransactions
-            ? await this.Collection.ReplaceOneAsync(this.CurrentSession, d => d.Id.Equals(entity.Id), entity, options, cancellationToken).ConfigureAwait(false)
-            : await this.Collection.ReplaceOneAsync(d => d.Id.Equals(entity.Id), entity, options, cancellationToken).ConfigureAwait(false);
+            ? await this.Collection.ReplaceOneAsync(this.CurrentSession, selector, entity, replaceOptions, cancellationToken).ConfigureAwait(false)
+            : await this.Collection.ReplaceOneAsync(selector, entity, replaceOptions, cancellationToken).ConfigureAwait(false);
 
-        Guard.AgainstArgument(result.ModifiedCount == 1 ? entity : null, nameof(entity)).WhenNullReference(entity.Id);
+        if (result.ModifiedCount < 1) throw new OptimisticConcurrencyException(); //this should only occur in cases of optimistic concurrency exception
 
         return (await this.GetAsync(entity.Id, cancellationToken).ConfigureAwait(false))!;
     }
@@ -180,7 +195,11 @@ public class MongoRepository<TEntity, TKey>
     }
 
     /// <inheritdoc/>
-    public override IQueryable<TEntity> AsQueryable() => this.Collection.AsQueryable();
+    public virtual IQueryable<TEntity> AsQueryable() => this.Collection.AsQueryable();
+
+    IQueryable IQueryableRepository.AsQueryable() => this.AsQueryable();
+
+    async Task<IIdentifiable> IConcurrentRepository.UpdateAsync(IIdentifiable entity, ulong expectedVersion, CancellationToken cancellationToken) => await this.UpdateAsync((TEntity)entity, expectedVersion, cancellationToken).ConfigureAwait(false);
 
     /// <summary>
     /// Disposes of the <see cref="MongoRepository{TEntity, TKey}"/>
