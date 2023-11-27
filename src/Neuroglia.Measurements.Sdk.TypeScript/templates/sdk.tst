@@ -6,6 +6,7 @@ ${
     {
       settings.PartialRenderingMode = PartialRenderingMode.Combined;
       settings.IncludeProject("Neuroglia.Measurements");
+      settings.SkipAddingGeneratedFilesToProject = true;
       settings.OutputFilenameFactory = (File file) =>
       {
         string fullName = "";
@@ -273,19 +274,25 @@ ${
       return $"import {{ {RemoveArraySuffix(importedType.Name)} }} from '{GetRelativePath(importedType, originFullname)}{ToKebabCase(RemoveArraySuffix(importedType.Name))}';";
     }
 
-    string BuildModelImports(string fullName, string name, string baseName, IPropertyCollection properties, ITypeCollection typeArguments) {
+    string BuildModelImports(string fullName, string name, string baseName, IPropertyCollection properties, ITypeCollection typeArguments)
+    {
       string output = "";
+      if (baseName == "Measurement")
+      {
+        output += Indent(0, "import { UnitOfMeasurementType } from '../enums';");
+        output += Indent(0, "import { UnitOfMeasurement } from './unit-of-measurement';");
+      }
       if (!string.IsNullOrWhiteSpace(baseName) && !KNOWN_BASES.Contains(baseName))
       {
-        output += $"import {{ {baseName} }} from './{ToKebabCase(baseName)}';\r\n";
+        output += Indent(0, $"import {{ {baseName} }} from './{ToKebabCase(baseName)}';");
       }
       else if (!string.IsNullOrWhiteSpace(baseName) && baseName == "EntityDataTransferObject")
       {
-        output += $"import {{ EntityDto }} from '@neuroglia/angular-rest-core';\r\n";
+        output += Indent(0, $"import {{ EntityDto }} from '@neuroglia/angular-rest-core';");
       }
       else
       {
-        output += $"import {{ ModelConstructor }} from '@neuroglia/common';\r\n";
+        output += Indent(0, $"import {{ ModelConstructor }} from '@neuroglia/common';");
       }
       output += properties
         .Where(p => !p.Attributes.Any(a => a.Name == "JsonIgnore"))
@@ -298,7 +305,7 @@ ${
         .Where(t => ShouldBeImported(t, name, baseName, typeArguments))
         .Select(t => BuildImport(t, fullName))
         .Distinct()
-        .Aggregate("", (all, import) => $"{all}{import}\r\n")
+        .Aggregate("", (all, import) => Indent(0, $"{all}{import}"))
         .TrimStart();
       return output;
     }
@@ -514,8 +521,36 @@ ${
         )
       );
       string output = "";
-      output += Indent(1, $"constructor(model?: Partial<{GetClassName(name, typeArguments)}>) {{");
-      output += Indent(2, "super(model);");
+            if (
+        name == "Capacity" ||
+        name == "Energy" ||
+        name == "Length" ||
+        name == "Mass" ||
+        name == "Surface" ||
+        name == "Temperature" ||
+        name == "Unit" ||
+        name == "Volume"
+      )
+      {
+        output += Indent(1, "constructor(value?: number, unit?: UnitOfMeasurement);");
+        output += Indent(1, $"constructor(model?: Partial<{GetClassName(name, typeArguments)}>);");
+        output += Indent(1, $"constructor(...args: Array<number | UnitOfMeasurement | Partial<{GetClassName(name, typeArguments)}> | undefined>) {{");
+        output += Indent(2, $"let model: Partial<{GetClassName(name, typeArguments)}> = {{}};");
+        output += Indent(2, "if (args?.length === 1) {");
+        output += Indent(3, $"model = args[0] as Partial<{GetClassName(name, typeArguments)}>;");
+        output += Indent(2, "}");
+        output += Indent(2, "else if (args?.length == 2) {");
+        output += Indent(2, "const [value, unit] = args as [number, UnitOfMeasurement];");
+        output += Indent(2, "model = { value, unit };");
+        output += Indent(2, "}");
+        output += Indent(2, "super(model);");
+        output += Indent(2, $"if (!this.unit.type) this.unit.type = UnitOfMeasurementType.{name};");
+        output += Indent(2, $"if (this.unit.type !== UnitOfMeasurementType.{name}) throw new Error(`Invalid unit of measurement type '${{this.unit.type}}', expected '${{UnitOfMeasurementType.{name}}}'.`);");
+      }
+      else {
+        output += Indent(1, $"constructor(model?: Partial<{GetClassName(name, typeArguments)}>) {{");
+        output += Indent(2, "super(model);");
+      }
       if (complexProperties.Any())
       {
         complexProperties.ToList().ForEach(property =>
@@ -585,289 +620,6 @@ ${
       return BuildModelConstructor(clazz.Name, clazz.Properties, clazz.TypeArguments);
     }
 
-    string GetReturnType(Method method)
-    {
-      string actionResultPattern = @"^ActionResult<(.*)>$";
-      string output = "";
-      if (method.Type.Name != "IActionResult" && Regex.IsMatch(method.Type.Name, actionResultPattern))
-      {
-        output = method.Type.Unwrap().FullName;
-      }
-      else
-      {
-        Attribute responseTypeAttribute = method.Attributes.FirstOrDefault(a => a.Name == "ProducesResponseType" && Regex.IsMatch(a.Value, @", 2\d{2}"));
-        if (responseTypeAttribute == null) return "void";
-        output = Regex.Replace(responseTypeAttribute.Value, @"typeof\((.*)\), \d{3}", "$1");
-      }
-      bool isEnumerable = output.Contains("System.Collections.Generic");
-      output = Regex.Replace(output, @".*\.Integration\.Models\.", "Models.");
-      output = Regex.Replace(output, @".*\.Integration\.Events\.", "Events.");
-      output = Regex.Replace(output, @".*\.Integration\.Commands\.", "Commands.");
-      if (isEnumerable) {
-        output = output.Replace(">", "[]");
-      }
-      if(output.Contains("Microsoft.AspNetCore.OData.Results.PageResult")) {
-        output = Regex.Replace(output, @"Microsoft\.AspNetCore\.OData\.Results\.PageResult<(.*)>", "ODataQueryResultDto<$1>");
-      }
-      if(output.Contains("Models.PageResult")) {
-        output = Regex.Replace(output, @"Models\.PageResult<(.*)>", "ODataQueryResultDto<$1>");
-      }
-      if (output.ToLower() == "decimal" || output == "float" || output.ToLower().StartsWith("int"))
-      {
-        output = "number";
-      }
-      else if (output.ToLower() == "bool")
-      {
-        output = "boolean";
-      }
-      else if (output == "System.Guid" || output == "System.Guid?")
-      {
-        output = "string";
-      }
-      return output;
-    }
-
-    string GetRoute(Method method)
-    {
-      return Regex.Replace(Typewriter.Extensions.WebApi.UrlExtensions.Url(method), "/Name = .*", "", RegexOptions.Compiled)
-          .Replace("{language:length(2,2)}?language=${encodeURIComponent(language)}", "${encodeURIComponent(language)}");
-    }
-
-    string GetMethodName(Method method, string verb)
-    {
-      IMethodCollection classMethods = ((Class)method.Parent).Methods;
-      string methodName = method.name.Replace("Async", "");
-      IEnumerable<Method> overloads = classMethods.Where(cm => cm.Name == method.Name);
-      if (overloads.Count() == 1)
-      {
-        return methodName;
-      }
-      else if (overloads.Count(cm => Typewriter.Extensions.WebApi.HttpMethodExtensions.HttpMethod(cm) == verb) == 1)
-      {
-        return verb + methodName;
-      }
-      int index = overloads.ToList().IndexOf(method);
-      if (index == 0)
-      {
-        return methodName;
-      }
-      return methodName + (index + 1);
-    }
-
-    string GetParamName(Parameter p)
-    {
-      if (!p.Type.IsDate) return p.name;
-      return p.name + "Source";
-    }
-
-    //bool SupportsODataList(Method method) => method.Attributes.Any(a => a.Name == "EnableQuery");
-
-    string GetParamType(Parameter p)
-    {
-      if(p.Type.Name.StartsWith("ODataQueryOptions")) {
-        return "ODataQueryOptions";
-      }
-      else if (p.Type.FullName.Contains(".Integration.Models."))
-      {
-        return "Models." + p.Type;
-      }
-      else if (p.Type.FullName.Contains(".Integration.Events."))
-      {
-        return "Events." + p.Type;
-      }
-      else if (p.Type.FullName.Contains(".Integration.Commands."))
-      {
-        return "Commands." + p.Type;
-      }
-      else if (p.Type.IsEnum)
-      {
-        return "Enums." + p.Type;
-      }
-      else if (p.Type == "IFormFile")
-      {
-        return "File";
-      }
-      else if (p.Type == "KeyValuePair<string, string>")
-      {
-        return "Record<string, string>";
-      }
-      else if(p.Type.OriginalName == "JsonPatchDocument") {
-        return "any[]";
-      }
-      return p.Type;
-    }
-
-    string GetDefaultValue(Parameter parameter)
-    {
-      if (String.IsNullOrWhiteSpace(parameter.DefaultValue) || parameter.DefaultValue == "null") return "";
-      if (parameter.Type == "string") return $" = '{parameter.DefaultValue}'";
-      return $" = {parameter.DefaultValue}";
-    }
-
-    string GetParameters(Method method)
-    {
-      IEnumerable<Parameter> parameters = method.Parameters.Where(p => p.Type.Name != "CancellationToken");
-      IEnumerable<Parameter> mandatoryParams = parameters.Where(p => !p.Type.IsNullable);
-      IEnumerable<Parameter> withDefaultParams = parameters.Where(p => p.Type.IsNullable && !String.IsNullOrWhiteSpace(p.DefaultValue) && p.DefaultValue != "null");
-      IEnumerable<Parameter> optionnalParams = parameters.Where(p => p.Type.IsNullable && (String.IsNullOrWhiteSpace(p.DefaultValue) || p.DefaultValue == "null"));
-      //IEnumerable<string> odataQueryParms = SupportsODataList(method) ? new string[] { "odataQuery?: any" } : new string[]{};
-      IEnumerable<string> strParams = mandatoryParams.Select(p => $"{GetParamName(p)}: {GetParamType(p)}{GetDefaultValue(p)}")
-          .Concat(withDefaultParams.Select(p => $"{GetParamName(p)}: {GetParamType(p)}{GetDefaultValue(p)}"))
-          .Concat(optionnalParams.Select(p => $"{GetParamName(p)}?: {GetParamType(p)}{GetDefaultValue(p)}"))
-          //.Concat(odataQueryParms)
-          ;
-      return String.Join(", ", strParams);
-    }
-
-    string GetJsonPostData(IEnumerable<Parameter> extraData)
-    {
-      if (extraData.Count() > 1 || !extraData.First().Type.IsPrimitive)
-      {
-        return $"{{ {String.Join(",", extraData.Select(p => "..." + p.name))} }}";
-      }
-      return extraData.First().name;
-    }
-
-    string BuildMethod(Method method)
-    {
-      if (!IsController(((Class)method.Parent).FullName))
-      {
-        return "";
-      }
-      string returnType = GetReturnType(method);
-      string route = GetRoute(method);
-      string verb = Typewriter.Extensions.WebApi.HttpMethodExtensions.HttpMethod(method);
-      string methodName = GetMethodName(method, verb);
-      IEnumerable<Parameter> parameters = method.Parameters.Where(p => p.Type.Name != "CancellationToken");
-      IEnumerable<Parameter> dateParams = parameters.Where(p => p.Type.IsDate);
-      IEnumerable<Parameter> extraData = parameters.Where(p =>
-        !Typewriter.Extensions.WebApi.UrlExtensions.Url(method).Contains($"encodeURIComponent({p.name})") &&
-        !Typewriter.Extensions.WebApi.UrlExtensions.Url(method).Contains($"${{{p.name}}}") &&
-        p.Type != "IFormFile"
-      );
-      IEnumerable<Parameter> fileParams = parameters.Where(p => p.Type == "IFormFile");
-      string output = BuildComments(method.DocComment, true, 1);
-      output = output.Replace(NEW_LINE + new String(Options.IndentationChar, Options.IndentationCount) + " */", ""); //Removes last comment line
-      parameters.ToList().ForEach(p =>
-      {
-        output += Indent(1, $" * @param {GetParamName(p)} {FormatComment(method.DocComment.Parameters.FirstOrDefault(cp => cp.Name == p.Name)?.Description)}");
-      });
-      output += Indent(1, $" * returns {{Observable<{returnType}>}}");
-      output += Indent(1, $" */");
-      output += Indent(1, $"public {methodName}({GetParameters(method)}): Observable<{returnType}> {{");
-      dateParams.ToList().ForEach(p =>
-      {
-        output += Indent(2, $"const {p.name}: string = format({GetParamName(p)}, 'MM/dd/YYYY HH:mm xxx').replace(/\\+/g, '%2B');");
-      });
-      output += Indent(2, $"const url: string = `${{this.apiUrl}}{route}`;");
-      output += Indent(2, $"const httpRequestInfo: HttpRequestInfo = new HttpRequestInfo({{ clientServiceName: '{GetServiceClassName(((Class)method.Parent).Name)}', methodName: '{methodName}', verb: '{verb}', url }});");
-      if (verb != "post" && verb != "put" && verb != "patch" && verb != "delete")
-      {
-        if (!extraData.Any()/* && !SupportsODataList(method)*/)
-        {
-          if (returnType != "string")
-          {
-            output += Indent(2, $"return logHttpRequest(this.logger, this.errorObserver, this.http.{verb}<{returnType}>(url), httpRequestInfo);");
-          }
-          else
-          {
-            output += Indent(2, $"return logHttpRequest(this.logger, this.errorObserver, this.http.{verb}(url, {{ responseType: 'text' }}), httpRequestInfo);");
-          }
-        }
-        else
-        {
-          string fromObject = String.Join(",",
-            extraData
-              .Select(p => p.Type.IsPrimitive ? p.name : $"...{p.name}")
-              //.Concat(SupportsODataList(method) ?  new string[]{ "...odataQuery" } : new string[]{})
-          );
-          output += Indent(2, "const params: HttpParams = new HttpParams({");
-          output += Indent(3, $"fromObject: {{ {fromObject} }},");
-          output += Indent(3, "encoder: new URIComponentQueryEncoder()");
-          output += Indent(2, "});");
-          output += Indent(2, "httpRequestInfo.params = params;");
-          if (returnType != "string")
-          {
-            output += Indent(2, $"return logHttpRequest(this.logger, this.errorObserver, this.http.{verb}<{returnType}>(url, {{ params }}), httpRequestInfo);");
-          }
-          else
-          {
-            output += Indent(2, $"return logHttpRequest(this.logger, this.errorObserver, this.http.{verb}(url, {{ params, responseType: 'text' }}), httpRequestInfo);");
-          }
-        }
-      }
-      else
-      {
-        if (!fileParams.Any())
-        {
-          if (!extraData.Any())
-          {
-            if (verb != "delete") output += Indent(2, "const data: string = '';");
-          }
-          else
-          {
-            output += Indent(2, $"const data: string = JSON.stringify({GetJsonPostData(extraData)});");
-            output += Indent(2, "httpRequestInfo.postData = data;");
-          }
-          if (verb != "delete") {
-            if (returnType != "string")
-            {
-              output += Indent(2, $"return logHttpRequest(this.logger, this.errorObserver, this.http.{verb}<{returnType}>(url, data, defaultHttpOptions), httpRequestInfo);");
-            }
-            else
-            {
-              output += Indent(2, $"return logHttpRequest(this.logger, this.errorObserver, this.http.{verb}(url, data, {{ ...defaultHttpOptions, responseType: 'text' }}), httpRequestInfo);");
-            }
-          }
-          else
-          {
-            output += Indent(2, "const httpOptions = {");
-            output += Indent(3, "...defaultHttpOptions,");
-            if (extraData.Any())
-            {
-              output += Indent(3, $"body: {GetJsonPostData(extraData)}");
-            }
-            output += Indent(2, "};");
-            if (returnType != "string")
-            {
-              output += Indent(2, $"return logHttpRequest(this.logger, this.errorObserver, this.http.{verb}<{returnType}>(url, httpOptions), httpRequestInfo);");
-            }
-            else
-            {
-              output += Indent(2, $"return logHttpRequest(this.logger, this.errorObserver, this.http.{verb}(url, {{ ...httpOptions, responseType: 'text' }}), httpRequestInfo);");
-            }
-          }
-        }
-        else
-        {
-          output += Indent(2, "const formData: FormData = new FormData();");
-          fileParams.ToList().ForEach(p =>
-          {
-            output += Indent(2, $"formData.append('{GetParamName(p)}', {GetParamName(p)}, {GetParamName(p)}.name)");
-          });
-          if (extraData.Any())
-          {
-            extraData.ToList().ForEach(p =>
-            {
-              output += Indent(2, $"formData.append('{GetParamName(p)}', {GetParamName(p)});");
-            });
-          }
-          output += Indent(2, "httpRequestInfo.formData = formData;");
-          if (returnType != "string")
-          {
-            output += Indent(2, $"return logHttpRequest(this.logger, this.errorObserver, this.http.{verb}<{returnType}>(url, formData), httpRequestInfo);");
-          }
-          else
-          {
-            output += Indent(2, $"return logHttpRequest(this.logger, this.errorObserver, this.http.{verb}(url, formData, {{ responseType: 'text' }}), httpRequestInfo);");
-          }
-        }
-      }
-      output += Indent(1, "}");
-      output += NEW_LINE;
-      return output;
-    }
-
     string TypeScriptEnumValue(EnumValue enumeration)
     {
         dynamic attribute = enumeration.Attributes.Where(a => a.Name == "EnumMember").FirstOrDefault();
@@ -885,7 +637,6 @@ $BuildConstructor
 $BuildDeclaration {
 $BuildProperties
 $BuildConstructor
-$Methods[$BuildMethod]
 }]$Enums(*)[$BuildExportsIndex export enum $Name {
   $Values[$Name = '$TypeScriptEnumValue'][,
   ]

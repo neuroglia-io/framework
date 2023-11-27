@@ -59,6 +59,40 @@
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\capacity.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\energy-extension.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\extensions.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\index.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\volume-extension.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\unit-extension.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\temperature-extension.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\surface-extension.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\mass-extension.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\length-extension.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\measurement-extension.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\capacity-extension.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\enums\index.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\enums\unit-of-measurement-type.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\known-unit-of-measurements.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\capacity.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\energy.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\index.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\length.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\mass.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\measurement.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\surface.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\temperature.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\unit-of-measurement.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\unit.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\models\volume.ts" />
     <TypeScriptCompile Include="packages\neuroglia\measurements\src\public-api.ts" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />

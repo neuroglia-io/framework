@@ -5,21 +5,21 @@
   "projects": {
     "@neuroglia/measurements": {
       "projectType": "library",
-      "root": "packages/neuroglia/posm-project-manager-client",
-      "sourceRoot": "packages/neuroglia/posm-project-manager-client/src",
+      "root": "packages/neuroglia/measurements",
+      "sourceRoot": "packages/neuroglia/measurements/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "packages/neuroglia/posm-project-manager-client/ng-package.json"
+            "project": "packages/neuroglia/measurements/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "packages/neuroglia/posm-project-manager-client/tsconfig.lib.prod.json"
+              "tsConfig": "packages/neuroglia/measurements/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "packages/neuroglia/posm-project-manager-client/tsconfig.lib.json"
+              "tsConfig": "packages/neuroglia/measurements/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -27,10 +27,19 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "packages/neuroglia/posm-project-manager-client/tsconfig.spec.json",
+            "tsConfig": "packages/neuroglia/measurements/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "./packages/neuroglia/measurements/src/lib/measurement-extension",
+              "./packages/neuroglia/measurements/src/lib/capacity-extension",
+              "./packages/neuroglia/measurements/src/lib/energy-extension",
+              "./packages/neuroglia/measurements/src/lib/length-extension",
+              "./packages/neuroglia/measurements/src/lib/mass-extension",
+              "./packages/neuroglia/measurements/src/lib/surface-extension",
+              "./packages/neuroglia/measurements/src/lib/temperature-extension",
+              "./packages/neuroglia/measurements/src/lib/unit-extension",
+              "./packages/neuroglia/measurements/src/lib/volume-extension"
             ]
           }
         },
@@ -38,8 +47,8 @@
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": [
-              "packages/neuroglia/posm-project-manager-client/**/*.ts",
-              "packages/neuroglia/posm-project-manager-client/**/*.html"
+              "packages/neuroglia/measurements/**/*.ts",
+              "packages/neuroglia/measurements/**/*.html"
             ]
           }
         }

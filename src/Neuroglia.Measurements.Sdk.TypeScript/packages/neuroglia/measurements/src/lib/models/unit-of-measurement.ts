@@ -19,5 +19,4 @@ export class UnitOfMeasurement extends ModelConstructor {
     super(model);
   }
 
-
 }

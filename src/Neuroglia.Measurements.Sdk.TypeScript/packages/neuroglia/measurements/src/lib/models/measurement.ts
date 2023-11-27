@@ -16,5 +16,4 @@ export class Measurement extends ModelConstructor {
     this.unit = new UnitOfMeasurement(model?.unit||{});
   }
 
-
 }
