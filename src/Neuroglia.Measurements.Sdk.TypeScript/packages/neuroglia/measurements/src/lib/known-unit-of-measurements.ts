@@ -99,8 +99,8 @@ export const units = {
   unit: {
     unit: new UnitOfMeasurement({ type: UnitOfMeasurementType.Unit, name: 'Unit', symbol: 'u', ratio: 1 }),
     pair: new UnitOfMeasurement({ type: UnitOfMeasurementType.Unit, name: 'Pair', symbol: 'pr', ratio: 0.5 }),
-    halfDozen: new UnitOfMeasurement({ type: UnitOfMeasurementType.Unit, name: 'Half dozen', symbol: 'doz', ratio: 1 }),
-    dozen: new UnitOfMeasurement({ type: UnitOfMeasurementType.Unit, name: 'Half dozen', symbol: 'hdoz', ratio: 1 }),
+    halfDozen: new UnitOfMeasurement({ type: UnitOfMeasurementType.Unit, name: 'Half dozen', symbol: 'doz', ratio: 1/6 }),
+    dozen: new UnitOfMeasurement({ type: UnitOfMeasurementType.Unit, name: 'Half dozen', symbol: 'hdoz', ratio: 1/12 }),
   },
 
   volume: {

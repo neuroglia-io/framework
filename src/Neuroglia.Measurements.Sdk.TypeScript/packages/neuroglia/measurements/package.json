@@ -9,7 +9,8 @@
   },
   "peerDependencies": {
     "@neuroglia/common": "*",
-    "date-fns": "^2.18.0"
+    "date-fns": "^2.18.0",
+    "mathjs": "^12.1.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

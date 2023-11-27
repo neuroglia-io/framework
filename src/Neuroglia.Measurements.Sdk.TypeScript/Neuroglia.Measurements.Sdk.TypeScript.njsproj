@@ -44,6 +44,7 @@
     <Content Include=".eslintrc.json" />
     <Content Include=".gitignore" />
     <Content Include="angular.json" />
+    <Content Include="package-lock.json" />
     <Content Include="package.json" />
     <Content Include="packages\neuroglia\measurements\.eslintrc.json" />
     <Content Include="packages\neuroglia\measurements\ng-package.json" />
@@ -59,6 +60,14 @@
     <Content Include="tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\measurement.spec.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\volume.spec.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\unit.spec.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\temperature.spec.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\surface.spec.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\mass.spec.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\length.spec.ts" />
+    <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\energy.spec.ts" />
     <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\volume.ts" />
     <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\unit.ts" />
     <TypeScriptCompile Include="packages\neuroglia\measurements\src\lib\temperature.ts" />

@@ -37,8 +37,6 @@ ${
           }
           if (IsEvent(fullName)) return $"{PACKAGE_ROOT}\\events\\{fileName}.ts";
           if (IsCommand(fullName)) return $"{PACKAGE_ROOT}\\commands\\{fileName}.ts";
-          if (IsController(fullName)) return $"{PACKAGE_ROOT}\\{GetServiceFileName(fileName)}.ts";
-          if (IsHub(fullName)) return $"{PACKAGE_ROOT}\\{GetSignlaRFileName(fileName)}.ts";
         }
         return "UNSUPPORTED_" + file.Name;
       };
@@ -55,11 +53,6 @@ ${
       .Trim()
       .ToLower();
 
-    string GetServiceClassName(string name) => name.Replace("Controller", "Service");
-
-    string GetServiceFileName(string name) => name.Replace("-controller", ".service");
-
-    string GetSignlaRFileName(string name) => name.Replace("-hub", ".signalr.service");
 
     bool IsModel(string fullName) => !fullName.Contains("Extensions");
 
@@ -110,17 +103,7 @@ ${
       bool hasIndex = false;
       string typeDestination = "";
       string exportedFileName = ToKebabCase(name);
-      if (IsController(fullName))
-      {
-        hasIndex = ExistingExportsIndex["ROOT"];
-        exportedFileName = GetServiceFileName(exportedFileName);
-      }
-      else if (IsHub(fullName))
-      {
-        hasIndex = ExistingExportsIndex["ROOT"];
-        exportedFileName = GetSignlaRFileName(exportedFileName);
-      }
-      else if (isEnum) {
+      if (isEnum) {
         typeDestination = "enums";
         hasIndex = ExistingExportsIndex[typeDestination];
       }
@@ -190,34 +173,6 @@ ${
     string Indent(int depth, string message, Boolean newLine = true)
     {
       return new String(Options.IndentationChar, Options.IndentationCount * depth) + message + (newLine ? NEW_LINE : "");
-    }
-
-    string BuildServiceImports()
-    {
-      string output = "";
-      output += Indent(0, "import { Injectable, inject } from '@angular/core';");
-      output += Indent(0, "import { HttpClient, HttpParams } from '@angular/common/http';");
-      output += Indent(0, "import { Observable } from 'rxjs';");
-      output += Indent(0, "import { catchError, map, tap } from 'rxjs/operators';");
-      output += Indent(0, "import { format } from 'date-fns';");
-      output += Indent(0, "import { URIComponentQueryEncoder } from '@neuroglia/angular-common';");
-      output += Indent(0, "import { ILogger } from '@neuroglia/logging';");
-      output += Indent(0, "import { NamedLoggingServiceFactory } from '@neuroglia/angular-logging';");
-      output += Indent(0, "import {");
-      output += Indent(1, "defaultHttpOptions,");
-      output += Indent(1, "HttpErrorObserverService,");
-      output += Indent(1, "HttpRequestInfo,");
-      output += Indent(1, "logHttpRequest,");
-      output += Indent(1, "ODataQueryOptions,");
-      output += Indent(1, "ODataQueryResultDto,");
-      output += Indent(1, "UrlHelperService,");
-      output += Indent(0, "} from '@neuroglia/angular-rest-core';");
-      output += Indent(0, "import { REST_API_URL_TOKEN } from './rest-api-url-token';");
-      output += Indent(0, "import * as Models from './models';");
-      //output += Indent(0, "import * as Enums from './enums';");
-      output += Indent(0, "import * as Commands from './commands';");
-      output += Indent(0, "import * as Events from './events';");
-      return output;
     }
 
     static string[] KnownBases = new string[]
@@ -343,17 +298,11 @@ ${
 
     string BuildImports(Record record)
     {
-      if (IsController(record.FullName)) {
-        return BuildServiceImports();
-      }
       return BuildModelImports(record.FullName, record.Name, record.BaseRecord?.Name ?? "", record.Properties, record.TypeArguments);
     }
 
     string BuildImports(Class clazz)
     {
-      if (IsController(clazz.FullName)) {
-        return BuildServiceImports();
-      }
       return BuildModelImports(clazz.FullName, clazz.Name, clazz.BaseClass?.Name ?? "", clazz.Properties, clazz.TypeArguments);
     }
 
@@ -387,16 +336,6 @@ ${
       return output;
     }
 
-    string BuildServiceDeclaration(string serviceName)
-    {
-      string output = "";
-      output += Indent(0, $"@Injectable({{");
-      output += Indent(1, $"providedIn: 'root'");
-      output += Indent(0, $"}})");
-      output += Indent(0, $"export class {serviceName}", false);
-      return output;
-    }
-
     string GetClassName(string name, ITypeCollection typeArguments)
     {
       if (string.IsNullOrWhiteSpace(name))
@@ -427,33 +366,13 @@ ${
     string BuildDeclaration(Record record)
     {
       string output = BuildComments(record.DocComment, true, 0);
-      if (IsController(record.FullName))
-      {
-        return output + BuildServiceDeclaration(GetServiceClassName(record.Name));
-      }
       return output + BuildModelDeclaration(record.Name, record.BaseRecord?.Name ?? "", record.TypeArguments, record.BaseRecord?.TypeArguments);
     }
 
     string BuildDeclaration(Class clazz)
     {
       string output = BuildComments(clazz.DocComment, true, 0);
-      if (IsController(clazz.FullName))
-      {
-        return output + BuildServiceDeclaration(GetServiceClassName(clazz.Name));
-      }
       return output + BuildModelDeclaration(clazz.Name, clazz.BaseClass?.Name ?? "", clazz.TypeArguments, clazz.BaseClass?.TypeArguments);
-    }
-
-    string BuildServiceProperties()
-    {
-      string output = NEW_LINE;
-      output += Indent(1, "protected apiUrl: string = inject(REST_API_URL_TOKEN);");
-      output += Indent(1, "protected errorObserver = inject(HttpErrorObserverService);");
-      output += Indent(1, "protected namedLoggingServiceFactory = inject(NamedLoggingServiceFactory);");
-      output += Indent(1, "protected http = inject(HttpClient);");
-      output += Indent(1, "protected urlHelperService = inject(UrlHelperService);");
-      output += Indent(1, "protected logger: ILogger;");
-      return output;
     }
 
     string GetPropertyName(Property property)
@@ -517,29 +436,12 @@ ${
 
     string BuildProperties(Record record)
     {
-      if (IsController(record.FullName))
-      {
-        return BuildServiceProperties();
-      }
       return BuildModelProperties(record.Properties);
     }
 
     string BuildProperties(Class clazz)
     {
-      if (IsController(clazz.FullName))
-      {
-        return BuildServiceProperties();
-      }
       return BuildModelProperties(clazz.Properties);
-    }
-
-    string BuildServiceConstructor(string serviceName)
-    {
-      string output = NEW_LINE;
-      output += Indent(1, "constructor() {");
-      output += Indent(2, $"this.logger = this.namedLoggingServiceFactory.create('{serviceName}');");
-      output += Indent(1, "}");
-      return output;
     }
 
     string BuildModelConstructor(string name, IPropertyCollection properties, ITypeCollection typeArguments)
@@ -557,14 +459,8 @@ ${
       );
       string output = "";
       if (
-        name == "Capacity" ||
-        name == "Energy" ||
-        name == "Length" ||
-        name == "Mass" ||
-        name == "Surface" ||
-        name == "Temperature" ||
-        name == "Unit" ||
-        name == "Volume"
+        name == "Measurement" ||
+        ExtendedModels.Contains(name)
       )
       {
         output += Indent(1, "constructor(value?: number, unit?: UnitOfMeasurement);");
@@ -579,8 +475,11 @@ ${
         output += Indent(3, "model = { value, unit };");
         output += Indent(2, "}");
         output += Indent(2, "super(model);");
-        output += Indent(2, $"if (!this.unit.type) this.unit.type = UnitOfMeasurementType.{name};");
-        output += Indent(2, $"if (this.unit.type !== UnitOfMeasurementType.{name}) throw new Error(`Invalid unit of measurement type '${{this.unit.type}}', expected '${{UnitOfMeasurementType.{name}}}'.`);");
+        if (name != "Measurement")
+        {
+          output += Indent(2, $"if (!this.unit.type) this.unit.type = UnitOfMeasurementType.{name};");
+          output += Indent(2, $"if (this.unit.type !== UnitOfMeasurementType.{name}) throw new Error(`Invalid unit of measurement type '${{this.unit.type}}', expected '${{UnitOfMeasurementType.{name}}}'.`);");
+        }
       }
       else {
         output += Indent(1, $"constructor(model?: Partial<{GetClassName(name, typeArguments)}>) {{");
@@ -639,19 +538,11 @@ ${
 
     string BuildConstructor(Record record)
     {
-      if (IsController(record.FullName))
-      {
-        return BuildServiceConstructor(GetServiceClassName(record.Name));
-      }
       return BuildModelConstructor(record.Name, record.Properties, record.TypeArguments);
     }
 
     string BuildConstructor(Class clazz)
     {
-      if (IsController(clazz.FullName))
-      {
-        return BuildServiceConstructor(GetServiceClassName(clazz.Name));
-      }
       return BuildModelConstructor(clazz.Name, clazz.Properties, clazz.TypeArguments);
     }
 
