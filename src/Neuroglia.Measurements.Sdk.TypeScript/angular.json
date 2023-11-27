@@ -30,16 +30,7 @@
             "tsConfig": "packages/neuroglia/measurements/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
-              "zone.js/testing",
-              "./packages/neuroglia/measurements/src/lib/measurement-extension",
-              "./packages/neuroglia/measurements/src/lib/capacity-extension",
-              "./packages/neuroglia/measurements/src/lib/energy-extension",
-              "./packages/neuroglia/measurements/src/lib/length-extension",
-              "./packages/neuroglia/measurements/src/lib/mass-extension",
-              "./packages/neuroglia/measurements/src/lib/surface-extension",
-              "./packages/neuroglia/measurements/src/lib/temperature-extension",
-              "./packages/neuroglia/measurements/src/lib/unit-extension",
-              "./packages/neuroglia/measurements/src/lib/volume-extension"
+              "zone.js/testing"
             ]
           }
         },

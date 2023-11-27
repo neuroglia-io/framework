@@ -29,7 +29,12 @@ ${
         if (!string.IsNullOrWhiteSpace(fullName))
         {
           if (file.Enums.Any()) return $"{PACKAGE_ROOT}\\enums\\{fileName}.ts";
-          if (IsModel(fullName)) return $"{PACKAGE_ROOT}\\models\\{fileName}.ts";
+          if (IsModel(fullName))
+          {
+            var name = fullName.Split('.').Last();
+            if (ExtendedModels.Contains(name) || name == "Measurement") return $"{PACKAGE_ROOT}\\models\\{fileName}-base.ts";
+            return $"{PACKAGE_ROOT}\\models\\{fileName}.ts";
+          }
           if (IsEvent(fullName)) return $"{PACKAGE_ROOT}\\events\\{fileName}.ts";
           if (IsCommand(fullName)) return $"{PACKAGE_ROOT}\\commands\\{fileName}.ts";
           if (IsController(fullName)) return $"{PACKAGE_ROOT}\\{GetServiceFileName(fileName)}.ts";
@@ -87,20 +92,18 @@ ${
         { "ROOT", false }
     };
 
-    void BuildExportsIndex(Record record)
+    static string[] ExtendedModels = new string[]
     {
-      BuildExportsIndex((File)record.Parent, record.FullName, record.Name);
-    }
-
-    void BuildExportsIndex(Class clazz)
-    {
-      BuildExportsIndex((File)clazz.Parent, clazz.FullName, clazz.Name);
-    }
-
-    void BuildExportsIndex(Enum enumeration)
-    {
-      BuildExportsIndex((File)enumeration.Parent, enumeration.FullName, enumeration.Name, true);
-    }
+      "Capacity",
+      "Energy",
+      "Length",
+      "Mass",
+      //"Measurement",
+      "Surface",
+      "Temperature",
+      "Unit",
+      "Volume",
+    };
 
     void BuildExportsIndex(File sourceFile, string fullName, string name, bool isEnum = false)
     {
@@ -122,6 +125,10 @@ ${
         hasIndex = ExistingExportsIndex[typeDestination];
       }
       else if (IsModel(fullName)) {
+        if (name == "Measurement" || ExtendedModels.Contains(name))
+        {
+          return; // will be exported by the extension
+        }
         typeDestination = "models";
         hasIndex = ExistingExportsIndex[typeDestination];
       }
@@ -155,6 +162,21 @@ ${
       else {
         ExistingExportsIndex[typeDestination] = true;
       }
+    }
+
+    void BuildExportsIndex(Record record)
+    {
+      BuildExportsIndex((File)record.Parent, record.FullName, record.Name);
+    }
+
+    void BuildExportsIndex(Class clazz)
+    {
+      BuildExportsIndex((File)clazz.Parent, clazz.FullName, clazz.Name);
+    }
+
+    void BuildExportsIndex(Enum enumeration)
+    {
+      BuildExportsIndex((File)enumeration.Parent, enumeration.FullName, enumeration.Name, true);
     }
 
     static class Options
@@ -198,7 +220,7 @@ ${
       return output;
     }
 
-    static string[] KNOWN_BASES = new string[]
+    static string[] KnownBases = new string[]
     {
       "DataTransferObject",
       //"AggregateStateDataTransferObject",
@@ -209,7 +231,7 @@ ${
 
     string RemoveArraySuffix(string input) => input.Replace("[]", "");
 
-    static string[] ANYLIKE_TYPES = new string[]
+    static string[] AnylikeTypes = new string[]
     {
       "any",
       "Any",
@@ -221,7 +243,7 @@ ${
       "ExpandoObject"
     };
 
-    static string[] STRINGLIKE_TYPES = new string[]
+    static string[] StringlikeTypes = new string[]
     {
       "Version",
       "Uri",
@@ -234,8 +256,8 @@ ${
       RemoveArraySuffix(importedType.Name) != originBaseName &&
       RemoveArraySuffix(importedType.Name) != "any" &&
       importedType.OriginalName != "JsonPatchDocument" &&
-      !STRINGLIKE_TYPES.Contains(importedType.OriginalName) && 
-      !ANYLIKE_TYPES.Contains(importedType.OriginalName) && 
+      !StringlikeTypes.Contains(importedType.OriginalName) && 
+      !AnylikeTypes.Contains(importedType.OriginalName) && 
       !originTypeArguments.Select(t => t.Name).Contains(importedType.Name) &&
       !importedType.Attributes.Any(a => a.Name == "JsonIgnore");
 
@@ -271,18 +293,27 @@ ${
       {
         return $"import {{ {name} }} from '{KnownExternalTypes[name]}';";
       }
-      return $"import {{ {RemoveArraySuffix(importedType.Name)} }} from '{GetRelativePath(importedType, originFullname)}{ToKebabCase(RemoveArraySuffix(importedType.Name))}';";
+      if (ExtendedModels.Contains(name))
+      {
+        name += "Base";
+      }
+      return $"import {{ {RemoveArraySuffix(name)} }} from '{GetRelativePath(importedType, originFullname)}{ToKebabCase(RemoveArraySuffix(name))}';";
     }
 
     string BuildModelImports(string fullName, string name, string baseName, IPropertyCollection properties, ITypeCollection typeArguments)
     {
       string output = "";
+      if (ExtendedModels.Contains(baseName))
+      {        
+        baseName += "Base";
+      }
       if (baseName == "Measurement")
       {
         output += Indent(0, "import { UnitOfMeasurementType } from '../enums';");
         output += Indent(0, "import { UnitOfMeasurement } from './unit-of-measurement';");
+        output += Indent(0, "import { Measurement } from '../measurement';");
       }
-      if (!string.IsNullOrWhiteSpace(baseName) && !KNOWN_BASES.Contains(baseName))
+      else if (!string.IsNullOrWhiteSpace(baseName) && !KnownBases.Contains(baseName))
       {
         output += Indent(0, $"import {{ {baseName} }} from './{ToKebabCase(baseName)}';");
       }
@@ -372,6 +403,10 @@ ${
       {
         return name;
       }
+      if (ExtendedModels.Contains(name))
+      {
+        name += "Base";
+      }
       if (typeArguments != null && typeArguments.Any()) {
         name += $"<{String.Join(",",typeArguments.Select(t => t.Name))}>";
       }
@@ -382,7 +417,7 @@ ${
     {
       name = GetClassName(name, typeArguments);
       baseName = GetClassName(baseName, baseTypeArguments);
-      if (!string.IsNullOrWhiteSpace(baseName) && !KNOWN_BASES.Contains(baseName))
+      if (!string.IsNullOrWhiteSpace(baseName) && !KnownBases.Contains(baseName))
       {
         return Indent(0, $"export class {name} extends {baseName}", false);
       }
@@ -434,11 +469,11 @@ ${
     string GetType(Type type)
     {
       string typeName = type.Name;
-      if (ANYLIKE_TYPES.Contains(type.OriginalName))
+      if (AnylikeTypes.Contains(type.OriginalName))
       {
         typeName = "any";
       }
-      else if (STRINGLIKE_TYPES.Contains(type.OriginalName))
+      else if (StringlikeTypes.Contains(type.OriginalName))
       {
         typeName = "string";
       }
@@ -515,13 +550,13 @@ ${
           !p.Type.IsPrimitive &&
           !p.Type.IsEnum &&
           !typeArguments.Select(t => t.Name).Contains(p.Type.Name) &&
-          !STRINGLIKE_TYPES.Contains(p.Type.OriginalName) && 
-          !ANYLIKE_TYPES.Contains(p.Type.OriginalName) &&
+          !StringlikeTypes.Contains(p.Type.OriginalName) && 
+          !AnylikeTypes.Contains(p.Type.OriginalName) &&
           !p.Attributes.Any(a => a.Name == "JsonIgnore")
         )
       );
       string output = "";
-            if (
+      if (
         name == "Capacity" ||
         name == "Energy" ||
         name == "Length" ||
@@ -540,8 +575,8 @@ ${
         output += Indent(3, $"model = args[0] as Partial<{GetClassName(name, typeArguments)}>;");
         output += Indent(2, "}");
         output += Indent(2, "else if (args?.length == 2) {");
-        output += Indent(2, "const [value, unit] = args as [number, UnitOfMeasurement];");
-        output += Indent(2, "model = { value, unit };");
+        output += Indent(3, "const [value, unit] = args as [number, UnitOfMeasurement];");
+        output += Indent(3, "model = { value, unit };");
         output += Indent(2, "}");
         output += Indent(2, "super(model);");
         output += Indent(2, $"if (!this.unit.type) this.unit.type = UnitOfMeasurementType.{name};");
