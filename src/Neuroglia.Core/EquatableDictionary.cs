@@ -24,7 +24,7 @@ namespace Neuroglia;
 /// <typeparam name="TValue">The type of values contained by the dictionary</typeparam>
 [CollectionDataContract]
 public record EquatableDictionary<TKey, TValue>
-    : IDictionary<TKey, TValue>
+    : IDictionary<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>
     where TKey : notnull
 {
 

@@ -11,16 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia;
-
-/// <summary>
-/// Represents the attribute used to mark an object as queryable
-/// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public class QueryableAttribute
-    : Attribute
-{
-
-
-
-}
+global using Json.Schema;
+global using Json.Schema.Generation;
+global using Json.Schema.Generation.Generators;
+global using Json.Schema.Generation.Intents;

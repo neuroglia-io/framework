@@ -11,16 +11,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia;
+namespace Neuroglia.JsonSchema.Generation;
 
 /// <summary>
-/// Represents the attribute used to mark an object as queryable
+/// Represents the <see cref="ISchemaGenerator"/> used to handle <see cref="DateTimeOffset"/>s
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public class QueryableAttribute
-    : Attribute
+public class DateTimeOffsetSchemaGenerator
+    : ISchemaGenerator
 {
 
+    /// <inheritdoc/>
+    public virtual void AddConstraints(SchemaGenerationContextBase context)
+    {
+        context.Intents.Add(new TypeIntent(SchemaValueType.String));
+        context.Intents.Add(new FormatIntent(new("date-time")));
+    }
 
+    /// <inheritdoc/>
+    public virtual bool Handles(Type type) => type == typeof(DateTimeOffset);
 
 }
