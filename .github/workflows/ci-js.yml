@@ -5,14 +5,12 @@ on:
     branches: [ main ]
     paths:
       - '**/*.Sdk.TypeScript/**'
-    paths-ignore:
-      - '.github/**'
+      - '!.github/**'
   pull_request:
     branches: [ main ]
     paths:
       - '**/*.Sdk.TypeScript/**'
-    paths-ignore:
-      - '.github/**'
+      - '!.github/**'
 
 jobs:
   changes:
