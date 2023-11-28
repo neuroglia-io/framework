@@ -4,13 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<Company>Neuroglia SRL</Company>
     <Copyright>Copyright © 2021-Present Neuroglia SRL. All rights reserved.</Copyright>
     <Authors>Neuroglia SRL</Authors>
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-	<PackageTags>neuroglia framework data infrastructure event-sourcing es memory</PackageTags>
+    <PackageTags>neuroglia framework json json-schema schema generation</PackageTags>
     <Version>4.7.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -22,21 +22,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
-      <PackagePath>\</PackagePath>
+    <None Include="..\..\assets\img\logo_white_on_blue_256.png">
       <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
-    <PackageReference Include="System.Reactive" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj" />
-    <ProjectReference Include="..\Neuroglia.Plugins.Abstractions\Neuroglia.Plugins.Abstractions.csproj" />
-    <ProjectReference Include="..\Neuroglia.Reactive\Neuroglia.Reactive.csproj" />
+    <PackageReference Include="JsonSchema.Net.Generation" Version="3.5.0" />
   </ItemGroup>
 
 </Project>

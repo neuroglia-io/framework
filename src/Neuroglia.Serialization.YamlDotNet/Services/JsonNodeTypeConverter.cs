@@ -27,6 +27,20 @@ public class JsonNodeTypeConverter
     : IYamlTypeConverter
 {
 
+    /// <summary>
+    /// Initializes a new <see cref="JsonNodeTypeConverter"/>
+    /// </summary>
+    /// <param name="preservePropertyNameCase">A boolean indicating whether or not to preserve the case of the name of converted properties</param>
+    public JsonNodeTypeConverter(bool preservePropertyNameCase = false)
+    {
+        this.PreservePropertyNameCase = preservePropertyNameCase;
+    }
+
+    /// <summary>
+    /// Gets a boolean indicating whether or not to preserve the case of the name of converted properties
+    /// </summary>
+    protected bool PreservePropertyNameCase { get; }
+
     /// <inheritdoc/>
     public virtual bool Accepts(Type type) => typeof(JsonElement).IsAssignableFrom(type) || typeof(JsonNode).IsAssignableFrom(type);
 
@@ -104,7 +118,7 @@ public class JsonNodeTypeConverter
     protected virtual void WriteJsonObjectProperty(IEmitter emitter, KeyValuePair<string, JsonNode?> jsonProperty)
     {
         if (jsonProperty.Value == null) return;
-        emitter.Emit(new Scalar(CamelCaseNamingConvention.Instance.Apply(jsonProperty.Key)));
+        emitter.Emit(new Scalar(this.PreservePropertyNameCase ? jsonProperty.Key : CamelCaseNamingConvention.Instance.Apply(jsonProperty.Key)));
         this.WriteJsonNode(emitter, jsonProperty.Value);
     }
 
