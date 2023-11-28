@@ -45,12 +45,15 @@ public class YamlSerializer
     {
         DefaultSerializer = new SerializerBuilder()
             .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitEmptyCollections)
+            .WithQuotingNecessaryStrings(true)
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .WithTypeConverter(new JsonNodeTypeConverter())
             .WithTypeConverter(new JsonSchemaTypeConverter())
             .WithTypeConverter(new StringEnumSerializer())
             .WithTypeConverter(new UriTypeSerializer())
             .WithTypeConverter(new DateTimeOffsetSerializer())
+            .WithTypeConverter(new EquatableListSerializer())
+            .WithTypeConverter(new EquatableDictionarySerializer())
             .Build();
         DefaultDeserializer = new DeserializerBuilder()
             .IgnoreUnmatchedProperties()
@@ -164,6 +167,5 @@ public class YamlSerializer
     /// <param name="buffer">The UTF8 encoded YAML input</param>
     /// <returns>The deserialized value</returns>
     public virtual T? Deserialize<T>(ReadOnlySpan<byte> buffer) => this.Deserializer.Deserialize<T>(Encoding.UTF8.GetString(buffer));
-
 
 }
