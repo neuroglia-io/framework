@@ -21,14 +21,19 @@ public abstract record IntegrationEvent
 {
 
     /// <summary>
+    /// Gets/sets the date and time at which the integration event has been produced
+    /// </summary>
+    public virtual DateTimeOffset CreatedAt { get; set; }
+
+    /// <summary>
     /// Gets/sets the id of the aggregate, if any, that has produced the event
     /// </summary>
     public virtual object? AggregateId { get; set; }
 
     /// <summary>
-    /// Gets/sets the date and time at which the integration event has been produced
+    /// Gets/sets the version of the aggregate, if any, that has produced the event
     /// </summary>
-    public virtual DateTimeOffset CreatedAt { get; set; }
+    public ulong? AggregateVersion { get; set; }
 
 }
 

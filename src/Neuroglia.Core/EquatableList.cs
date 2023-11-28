@@ -17,7 +17,7 @@ using System.Runtime.Serialization;
 namespace Neuroglia;
 
 /// <summary>
-/// Represents an <see cref="IList{T}"/> 
+/// Represents a record implementation of the <see cref="IList{T}"/> interface, equatable based on its record items
 /// </summary>
 /// <typeparam name="T">The type of the items the list is made out of</typeparam>
 [CollectionDataContract]

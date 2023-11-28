@@ -20,8 +20,10 @@ namespace Neuroglia.UnitTests.Data;
 public class User
     : RestorableAggregateRoot<string, UserStateV1>,
     ISnapshotable<Snapshot<UserStateV1>>,
-    IRestorable<Snapshot<UserStateV1>>
+    IRestorable<Snapshot<UserStateV1>>,
+    IVersionedState
 {
+    public ulong StateVersion { get => this.State.StateVersion; set => this.State.StateVersion = value; }
 
     public User() { }
 

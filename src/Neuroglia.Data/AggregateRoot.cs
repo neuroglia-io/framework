@@ -40,7 +40,7 @@ public abstract class AggregateRoot<TKey, TState>
     /// <inheritdoc/>
     public virtual DateTimeOffset? LastModified => this.State.LastModified;
 
-    private readonly List<IDomainEvent> _pendingEvents = new();
+    private readonly List<IDomainEvent> _pendingEvents = [];
     /// <inheritdoc/>
     public virtual IReadOnlyList<IDomainEvent> PendingEvents => this._pendingEvents.AsReadOnly();
 
@@ -61,6 +61,9 @@ public abstract class AggregateRoot<TKey, TState>
         where TEvent : IDomainEvent
     {
         if (e == null) throw new ArgumentNullException(nameof(e));
+
+        if (e is DomainEvent<TKey> domainEvent) domainEvent.AggregateVersion = this.State.StateVersion + (ulong)this.PendingEvents.Count + 1;
+
         this._pendingEvents.Add(e);
         return e;
     }

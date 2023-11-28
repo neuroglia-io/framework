@@ -22,7 +22,7 @@ namespace Neuroglia.Data.Infrastructure.Services;
 /// <typeparam name="TKey">The type of key used to identify and distinct managed entities</typeparam>
 [Factory(typeof(MemoryCacheRepositoryFactory<,>))]
 public class MemoryCacheRepository<TEntity, TKey>
-    : QueryableRepositoryBase<TEntity, TKey>
+    : RepositoryBase<TEntity, TKey>, IQueryableRepository<TEntity, TKey>
     where TEntity : class, IIdentifiable<TKey>
     where TKey : IEquatable<TKey>
 {
@@ -44,11 +44,11 @@ public class MemoryCacheRepository<TEntity, TKey>
     /// <inheritdoc/>
     public override Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        if(entity == null) throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
         var collectionKey = this.BuildCacheKey();
         var entityKey = this.BuildCacheKey(entity.Id);
         if (this.Cache.TryGetValue(collectionKey, out List<string>? keys) && keys != null && keys.Contains(entityKey)) throw new Exception($"An entity with the specified id '{entity.Id}' already exists in the repository");
-        else keys = new();
+        else keys = [];
         keys.Add(entityKey);
         this.Cache.Set(collectionKey, keys);
         this.Cache.Set(entityKey, entity);
@@ -64,7 +64,7 @@ public class MemoryCacheRepository<TEntity, TKey>
     /// <inheritdoc/>
     public override Task<TEntity> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        if (entity == null) throw new ArgumentNullException(nameof(entity));
+        ArgumentNullException.ThrowIfNull(entity);
         var entityKey = this.BuildCacheKey(entity.Id);
         if (!this.Cache.TryGetValue(entityKey, out _)) throw new NullReferenceException($"Failed to find an entity with the specified id '{entity.Id}'");
         this.Cache.Set(entityKey, entity);
@@ -74,7 +74,7 @@ public class MemoryCacheRepository<TEntity, TKey>
     /// <inheritdoc/>
     public override Task<bool> RemoveAsync(TKey key, CancellationToken cancellationToken = default)
     {
-        if (key == null) throw new ArgumentNullException(nameof(key));
+        ArgumentNullException.ThrowIfNull(key);
         var entityKey = this.BuildCacheKey(key);
         var exists = this.Cache.TryGetValue(entityKey, out _);
         if (exists) this.Cache.Remove(entityKey);
@@ -85,7 +85,7 @@ public class MemoryCacheRepository<TEntity, TKey>
     public override Task SaveChangesAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
 
     /// <inheritdoc/>
-    public override IQueryable<TEntity> AsQueryable() => this.AsEnumerable().AsQueryable();
+    public virtual IQueryable<TEntity> AsQueryable() => this.AsEnumerable().AsQueryable();
 
     /// <summary>
     /// Gets a new <see cref="IEnumerable{T}"/> containing all managed entities
@@ -104,5 +104,7 @@ public class MemoryCacheRepository<TEntity, TKey>
     /// <param name="id">The id, if any, to build the cache key for</param>
     /// <returns>A new cache key</returns>
     protected virtual string BuildCacheKey(TKey? id = default) => id == null || id.Equals(default) ? nameof(TEntity).ToKebabCase() : $"{nameof(TEntity).ToKebabCase()}-{id}";
+
+    IQueryable IQueryableRepository.AsQueryable() => this.AsQueryable();
 
 }
