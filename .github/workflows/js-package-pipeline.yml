@@ -1,0 +1,38 @@
+name: CI Pipeline for JS packages
+
+on:
+  workflow_call:
+    inputs:
+      package:
+        required: true
+        type: string
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      package-config: ${{ step.package-config.outputs }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@latest
+      
+      - name: Read packages configuration
+        uses: pietrobolcato/action-read-yaml@1.0.0
+        id: packages-config
+        with:
+          config: ${{ github.workspace }}/github/js-packages.yaml
+
+      - name: Select package configuration
+        id: package-config
+        run: |
+          echo "name=${{ steps.packages-config.outputs['${{ inputs.package }}.name'] }}" >> "$GITHUB_OUTPUT"
+          echo "path=${{ steps.packages-config.outputs['${{ inputs.package }}.path'] }}" >> "$GITHUB_OUTPUT"
+    
+    test:
+      needs: config
+      runs-on: ubuntu-latest
+      steps:
+        run: |
+          echo "${{ inputs.package }} - ${{ needs.config.outputs.package-config.name }} - ${{ needs.config.outputs.package-config.path }}"
+  # restore:
+  #   uses: ./.github/workflows/restore-js-dependencies.yml

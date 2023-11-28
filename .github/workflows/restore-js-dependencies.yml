@@ -1,0 +1,35 @@
+name: Restore NPM JS dependencies
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        required: true
+        type: string
+      name:
+        required: true
+        type: string
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@latest
+
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+  
+      - name: Restore dependencies
+        working-directory: ${{ inputs.path }}
+        run: npm ci
+
+      - name: Cache dependecies
+        uses: actions/cache@v3
+        working-directory: ${{ inputs.path }}
+        with:
+          path: './node_modules/'
+          key: node_modules-${{ inputs.name }}

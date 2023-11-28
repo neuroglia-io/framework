@@ -1,0 +1,42 @@
+name: Continous integration JS
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**/*.Sdk.TypeScript/**'
+    paths-ignore:
+      - '.github/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**/*.Sdk.TypeScript/**'
+    paths-ignore:
+      - '.github/**'
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      packages: ${{ step.change-detection.output.changes }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@latest
+
+      - name: Detect changes
+        id: change-detection
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            measurements: '**/Neuroglia.Measurements.Sdk.TypeScript/**'
+
+  pipeline:
+    needs: changes
+    strategy:
+      matrix:
+        package: ${{ fromJSON(needs.changes.outputs.packages) }}
+    uses: ./.github/workflows/js-package-pipeline.yml
+    with:
+      package: ${{ matrix.package }}
