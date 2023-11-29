@@ -1,6 +1,11 @@
 name: Pipeline for JS packages
 
 on:
+  workflow_dispatch:
+    inputs:
+      package:
+        required: true
+        type: string
   workflow_call:
     inputs:
       package:

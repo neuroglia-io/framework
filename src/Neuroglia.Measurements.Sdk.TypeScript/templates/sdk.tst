@@ -274,7 +274,7 @@ ${
       }
       else if (!string.IsNullOrWhiteSpace(baseName) && baseName == "EntityDataTransferObject")
       {
-        output += Indent(0, $"import {{ EntityDto }} from '@neuroglia/angular-rest-core';");
+        output += Indent(0, $"import {{ EntityDataTransferObject }} from '@neuroglia/integration';");
       }
       else
       {
