@@ -1,0 +1,45 @@
+name: Continous integration entry point for JS
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - '**/*.Sdk.TypeScript/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**/*.Sdk.TypeScript/**'
+
+jobs:
+  changes:
+    # Skip if it's not running in the `neuroglia-io/framework` repo
+    if: github.repository == 'neuroglia-io/framework'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      packages: ${{ steps.detection.outputs.changes }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Detect changes
+        id: detection
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            measurements: '**/Neuroglia.Measurements.Sdk.TypeScript/**'
+      
+      - name: Defined output 'packages' as
+        run: echo "${{ steps.detection.outputs.changes }}"
+
+  pipeline:
+    needs: changes
+    strategy:
+      matrix:
+        package: ${{ fromJSON(needs.changes.outputs.packages) }}
+    uses: ./.github/workflows/js-package-pipeline.yml
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    with:
+      package: ${{ matrix.package }}
