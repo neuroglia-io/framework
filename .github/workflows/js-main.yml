@@ -58,6 +58,7 @@ jobs:
     needs: changes
     strategy:
       max-parallel: 1
+      fail-fast: false
       matrix:
         package: ${{ fromJSON(needs.changes.outputs.packages) }}
     uses: ./.github/workflows/js-package-pipeline.yml

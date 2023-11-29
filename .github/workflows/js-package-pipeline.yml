@@ -91,3 +91,16 @@ jobs:
     with:
       name: ${{ fromJSON(needs.config.outputs.package-config).name }}
       path: ${{ fromJSON(needs.config.outputs.package-config).path }}
+
+  cleanup:
+    if: ${{ always() }}
+    needs:
+       - config
+       - build
+       - test
+       - lint
+       - publish
+    uses: ./.github/workflows/js-cleanup-cache.yml
+    with:
+      name: ${{ fromJSON(needs.config.outputs.package-config).name }}
+      path: ${{ fromJSON(needs.config.outputs.package-config).path }}
