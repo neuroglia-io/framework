@@ -1,11 +1,5 @@
 import { units } from "./known-unit-of-measurements";
 import { Measurement } from "./measurement";
-import { create, all } from 'mathjs';
-
-const math = create(all, {
-  precision: 6,
-  predictable: true
-});
 
 describe('Measurement Tests', () => {
 
