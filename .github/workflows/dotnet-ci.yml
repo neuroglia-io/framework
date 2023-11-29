@@ -1,30 +1,31 @@
-name: Continuous integration
+name: Continuous integration .NET
 
 on:
   push:
     branches: [ main ]
     paths-ignore:
       - '.github/**'
+      - '**/*.Sdk.TypeScript/**'
   workflow_dispatch:
 
 jobs:
   test:
     # Skip if it's not running in the `neuroglia-io/framework` repo
     if: github.repository == 'neuroglia-io/framework' && github.ref_name == 'main'
-    uses: ./.github/workflows/test-dotnet.yml
+    uses: ./.github/workflows/dotnet-test.yml
     secrets: inherit
 
   versioning:
     needs: [test]
-    uses: ./.github/workflows/versioning.yml
+    uses: ./.github/workflows/dotnet-versioning.yml
     secrets: inherit
 
   build:
     needs: [versioning]
-    uses: ./.github/workflows/build-dotnet.yml
+    uses: ./.github/workflows/dotnet-build.yml
     secrets: inherit
 
   release:
     needs: [build]
-    uses: ./.github/workflows/release.yml
+    uses: ./.github/workflows/dotnet-release.yml
     secrets: inherit

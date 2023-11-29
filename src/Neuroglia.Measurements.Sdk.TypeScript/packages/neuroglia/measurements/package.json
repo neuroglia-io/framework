@@ -1,0 +1,19 @@
+{
+  "name": "@neuroglia/measurements",
+  "description": "Provides the TS models for Neuroglia.Measurements",
+  "version": "0.0.1",
+  "author": {
+    "name": "JB Bianchi - Neuroglia SPRL",
+    "email": "jb.bianchi@neuroglia.io",
+    "url": "https://neuroglia.io"
+  },
+  "peerDependencies": {
+    "@neuroglia/common": "*",
+    "date-fns": "^2.18.0",
+    "mathjs": "^12.1.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}
