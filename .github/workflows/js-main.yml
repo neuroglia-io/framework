@@ -1,3 +1,24 @@
+### Usage notes ##
+#
+# Two things are needed:
+#
+# 1. configure the package matching path in the "Detect changes" step below.
+# This allows to match a "package" idenfifier to changes in a subdirectory.
+# e.g.:
+# my-package: '**/my-package/**'
+#
+# 2. configure the package in .github/js-packages.json .
+# This allows to define variables that will be used in the pipeline.
+# e.g:
+# {
+#   "my-package": {<-- the "package" identifier
+#     "name": "@neuroglia/my-package", <-- the actual name of the package on the registry
+#     "path": "./", <-- the path from where to run npm scripts
+#     "dependencies": [] <-- the internal packages dependencies
+#   } 
+# }
+###
+
 name: Continous integration entry point for JS
 
 on:
@@ -36,6 +57,7 @@ jobs:
   pipeline:
     needs: changes
     strategy:
+      max-parallel: 1
       matrix:
         package: ${{ fromJSON(needs.changes.outputs.packages) }}
     uses: ./.github/workflows/js-package-pipeline.yml

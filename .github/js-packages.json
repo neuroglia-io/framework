@@ -1,6 +1,7 @@
 {
   "measurements": {
     "name": "@neuroglia/measurements",
-    "path": "./src/Neuroglia.Measurements.Sdk.TypeScript/"
+    "path": "./src/Neuroglia.Measurements.Sdk.TypeScript/",
+    "dependencies": []
   }
 }

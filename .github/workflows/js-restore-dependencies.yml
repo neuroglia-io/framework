@@ -9,6 +9,10 @@ on:
       name:
         required: true
         type: string
+      dependencies:
+        required: false
+        type: string
+        default: ''
 
 jobs:
   restore:
@@ -21,14 +25,26 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ format('{0}{1}/', inputs.path, 'node_modules') }}
+          key: ${{ inputs.name }}-node_modules
   
       - name: Restore dependencies
         run: |
           cd ${{ inputs.path }}
           npm ci
+  
+      - name: Install internal dependencies
+        if: inputs.dependencies != ''
+        run: |
+          cd ${{ inputs.path }}
+          npm i ${{ inputs.dependencies }}
 
-      - name: Cache dependencies
-        uses: actions/cache@v3
+      - name: Save cached dependencies
+        uses: actions/cache/save@v3
         with:
-          path: ${{ format('{0}/{1}/', inputs.path, 'node_modules') }}
+          path: ${{ format('{0}{1}/', inputs.path, 'node_modules') }}
           key: ${{ inputs.name }}-node_modules

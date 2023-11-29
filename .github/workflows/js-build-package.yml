@@ -22,19 +22,25 @@ jobs:
         with:
           node-version: 18
 
-      - name: Cache dependencies
-        uses: actions/cache@v3
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v3
         with:
-          path: ${{ format('{0}/{1}/', inputs.path, 'node_modules') }}
+          path: ${{ format('{0}{1}/', inputs.path, 'node_modules') }}
           key: ${{ inputs.name }}-node_modules
+
+      - name: Restore build artifacts
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ format('{0}{1}/', inputs.path, 'dist') }}
+          key: ${{ inputs.name }}-dist
       
       - name: Build
         run: |
           cd ${{ inputs.path }}
           npx ng b ${{ inputs.name }} --configuration=production
 
-      - name: Cache build
-        uses: actions/cache@v3
+      - name: Save build artifacts
+        uses: actions/cache/save@v3
         with:
-          path: ${{ format('{0}/{1}/', inputs.path, 'dist') }}
+          path: ${{ format('{0}{1}/', inputs.path, 'dist') }}
           key: ${{ inputs.name }}-dist

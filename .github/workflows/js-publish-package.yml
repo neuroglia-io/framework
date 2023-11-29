@@ -15,7 +15,7 @@ on:
 
 jobs:
   publish:
-    if: github.event_name == 'push' && github.ref_name == 'main'
+    if: (github.event_name == 'push' && github.ref_name == 'main') || github.event_name =='workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -26,10 +26,10 @@ jobs:
         with:
           node-version: 18
 
-      - name: Cache build
-        uses: actions/cache@v3
+      - name: Restore build artifacts
+        uses: actions/cache/restore@v3
         with:
-          path: ${{ format('{0}/{1}/', inputs.path, 'dist') }}
+          path: ${{ format('{0}{1}/', inputs.path, 'dist') }}
           key: ${{ inputs.name }}-dist
       
       - name: Publish package
@@ -41,5 +41,3 @@ jobs:
           version=$(npm view ${{ inputs.name }} version 2>/dev/null) && npm version $version || true
           npm version patch # patch current version
           npm publish --access=public
-          version=$(npm view ${{ inputs.name }} version)
-          echo "Published ${{ inputs.name }}@$version"
