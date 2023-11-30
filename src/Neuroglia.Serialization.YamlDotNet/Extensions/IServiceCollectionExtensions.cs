@@ -34,10 +34,16 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddYamlDotNetSerializer(this IServiceCollection services, Action<IYamlSerializerBuilder>? setup = null, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
         var builder = new YamlSerializerBuilder();
+        setup ??= builder =>
+        {
+            YamlSerializer.DefaultSerializerConfiguration(builder.Serializer);
+            YamlSerializer.DefaultDeserializerConfiguration(builder.Deserializer);
+        };
         setup?.Invoke(builder);
         services.TryAdd(new ServiceDescriptor(typeof(YamlDotNet.Serialization.ISerializer), builder.Serializer.Build()));
         services.TryAdd(new ServiceDescriptor(typeof(IDeserializer), builder.Deserializer.Build()));
         services.AddSerializer<YamlSerializer>(lifetime);
+        services.Add(new ServiceDescriptor(typeof(IYamlSerializer), typeof(YamlSerializer), lifetime));
         return services;
     }
 

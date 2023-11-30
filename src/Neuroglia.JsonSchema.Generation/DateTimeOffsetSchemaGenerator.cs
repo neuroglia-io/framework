@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.JsonSchema.Generation;
+namespace Neuroglia.Json.Schema.Generation;
 
 /// <summary>
 /// Represents the <see cref="ISchemaGenerator"/> used to handle <see cref="DateTimeOffset"/>s

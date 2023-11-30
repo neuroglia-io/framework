@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
@@ -28,6 +29,7 @@ public class InheritancePriorityJsonTypeInfoResolver
     public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
     {
         var typeInfo = base.GetTypeInfo(type, options);
+        if (typeof(JsonElement).IsAssignableFrom(type) || typeof(JsonNode).IsAssignableFrom(type)) return typeInfo;
         var properties = type.GetProperties().Where(p => !p.TryGetCustomAttribute<JsonIgnoreAttribute>(out _)).ToDictionary(p => p.TryGetCustomAttribute<JsonPropertyNameAttribute>(out var propertyNameAttribute) && propertyNameAttribute != null ? propertyNameAttribute.Name : p.Name, p => p.DeclaringType!.GetAscendencyLevel(type));
         if (typeInfo.Kind == JsonTypeInfoKind.Object)
         {

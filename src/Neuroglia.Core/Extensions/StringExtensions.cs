@@ -54,7 +54,7 @@ public static partial class StringExtensions
         result = MatchNonAlphanumericCharactersExpression().Replace(result, SubstitutionBlock).Trim();
         result = ReduceSpacesExpression().Replace(result, " ").Replace(" ", delimiter);
         result = ReplaceSubstitutionBlockExpression().Replace(result, delimiter);
-        result = string.Concat(result.Select((c, i) => char.IsUpper(c) && i != 0 ? $"{delimiter}{c}" : c.ToString())).ToLower();
+        result = string.Concat(result.Select((c, i) => char.IsUpper(c) && i != 0 ? !char.IsUpper(result[i - 1]) ? $"{delimiter}{c}" : c.ToString() : c.ToString())).ToLower();
         result = ReduceHyphenExpressions().Replace(result, delimiter);
         if (result.Last().ToString() == delimiter) result = result[..^1];
         return result;

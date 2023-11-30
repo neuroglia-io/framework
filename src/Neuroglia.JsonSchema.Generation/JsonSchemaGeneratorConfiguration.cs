@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.JsonSchema.Generation;
+namespace Neuroglia.Json.Schema.Generation;
 
 /// <summary>
 /// Exposes methods to handle <see cref="SchemaGeneratorConfiguration"/>s

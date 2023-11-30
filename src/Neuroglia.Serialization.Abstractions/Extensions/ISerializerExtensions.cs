@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Text;
-
 namespace Neuroglia.Serialization;
 
 /// <summary>
@@ -70,6 +68,19 @@ public static class ISerializerExtensions
         if (byteArray == null || !byteArray.Any()) return default;
         using var stream = new MemoryStream(byteArray);
         return serializer.Deserialize<T>(stream);
+    }
+
+    /// <summary>
+    /// Deserializes the specified text
+    /// </summary>
+    /// <typeparam name="T">The type to deserialize the text to</typeparam>
+    /// <param name="serializer">The extended <see cref="ISerializer"/></param>
+    /// <param name="text">The text to deserialize</param>
+    /// <returns>The deserialized value, if any</returns>
+    public static T? Deserialize<T>(this ITextSerializer serializer, string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return default;
+        return (T?)serializer.Deserialize(text, typeof(T));
     }
 
     /// <summary>

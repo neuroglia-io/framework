@@ -55,7 +55,7 @@ public static partial class StringFormatter
         var output = template;
         foreach(var parameter in parameters)
         {
-            output = output.Replace($"{{{parameter.Key}}}", parameter.Value.ToString(), StringComparison.OrdinalIgnoreCase);
+            output = output.Replace($"{{{parameter.Key}}}", parameter.Value?.ToString(), StringComparison.OrdinalIgnoreCase);
         }
         return output;
     }

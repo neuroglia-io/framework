@@ -28,6 +28,44 @@ public class YamlSerializer
     static readonly YamlDotNet.Serialization.ISerializer DefaultSerializer;
     static readonly IDeserializer DefaultDeserializer;
 
+    /// <summary>
+    /// Gets the action used to configure a <see cref="SerializerBuilder"/> by default
+    /// </summary>
+    public static readonly Action<SerializerBuilder> DefaultSerializerConfiguration = serializer =>
+    {
+        serializer
+            .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitEmptyCollections)
+            .WithQuotingNecessaryStrings(true)
+            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .WithTypeConverter(new JsonNodeTypeConverter())
+            .WithTypeConverter(new JsonSchemaTypeConverter())
+            .WithTypeConverter(new StringEnumSerializer())
+            .WithTypeConverter(new UriTypeSerializer())
+            .WithTypeConverter(new DateTimeOffsetSerializer())
+            .WithTypeConverter(new EquatableListSerializer())
+            .WithTypeConverter(new EquatableDictionarySerializer());
+    };
+
+    /// <summary>
+    /// Gets the action used to configure a <see cref="DeserializerBuilder"/> by default
+    /// </summary>
+    public static readonly Action<DeserializerBuilder> DefaultDeserializerConfiguration = deserializer =>
+    {
+        deserializer
+            .IgnoreUnmatchedProperties()
+            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .WithNodeDeserializer(
+                inner => new StringEnumDeserializer(inner),
+                syntax => syntax.InsteadOf<ScalarNodeDeserializer>())
+            .WithNodeTypeResolver(new InferTypeResolver())
+            .WithNodeDeserializer(
+                inner => new JsonObjectDeserializer(inner),
+                syntax => syntax.InsteadOf<DictionaryNodeDeserializer>())
+            .WithNodeDeserializer(
+                inner => new JsonSchemaDeserializer(inner),
+                syntax => syntax.InsteadOf<JsonObjectDeserializer>());
+    };
+
     static YamlSerializer? _default;
     /// <summary>
     /// Gets the default, globally accessible <see cref="YamlSerializer"/>
@@ -43,32 +81,13 @@ public class YamlSerializer
 
     static YamlSerializer()
     {
-        DefaultSerializer = new SerializerBuilder()
-            .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitEmptyCollections)
-            .WithQuotingNecessaryStrings(true)
-            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-            .WithTypeConverter(new JsonNodeTypeConverter())
-            .WithTypeConverter(new JsonSchemaTypeConverter())
-            .WithTypeConverter(new StringEnumSerializer())
-            .WithTypeConverter(new UriTypeSerializer())
-            .WithTypeConverter(new DateTimeOffsetSerializer())
-            .WithTypeConverter(new EquatableListSerializer())
-            .WithTypeConverter(new EquatableDictionarySerializer())
-            .Build();
-        DefaultDeserializer = new DeserializerBuilder()
-            .IgnoreUnmatchedProperties()
-            .WithNamingConvention(CamelCaseNamingConvention.Instance)
-            .WithNodeDeserializer(
-                inner => new StringEnumDeserializer(inner),
-                syntax => syntax.InsteadOf<ScalarNodeDeserializer>())
-            .WithNodeTypeResolver(new InferTypeResolver())
-            .WithNodeDeserializer(
-                inner => new JsonObjectDeserializer(inner),
-                syntax => syntax.InsteadOf<DictionaryNodeDeserializer>())
-            .WithNodeDeserializer(
-                inner => new JsonSchemaDeserializer(inner),
-                syntax => syntax.InsteadOf<JsonObjectDeserializer>())
-            .Build();
+        var serializerBuilder = new SerializerBuilder();
+        DefaultSerializerConfiguration(serializerBuilder);
+        DefaultSerializer = serializerBuilder.Build();
+
+        var deserializerBuilder = new DeserializerBuilder();
+        DefaultDeserializerConfiguration(deserializerBuilder);
+        DefaultDeserializer = deserializerBuilder.Build();
     }
 
     /// <summary>

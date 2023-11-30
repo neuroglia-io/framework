@@ -23,8 +23,12 @@ namespace Neuroglia.Serialization.Json;
 /// <summary>
 /// Represents the System.Text.Json implementation of the <see cref="IJsonSerializer"/> interface
 /// </summary>
-public class JsonSerializer
-    : IJsonSerializer, IAsyncSerializer
+/// <remarks>
+/// Initializes a new <see cref="JsonSerializer"/>
+/// </remarks>
+/// <param name="options">The current <see cref="JsonSerializerOptions"/></param>
+public class JsonSerializer(IOptions<JsonSerializerOptions> options)
+        : IJsonSerializer, IAsyncSerializer
 {
 
     /// <summary>
@@ -68,16 +72,9 @@ public class JsonSerializer
     }
 
     /// <summary>
-    /// Initializes a new <see cref="JsonSerializer"/>
-    /// </summary>
-    /// <param name="options">The current <see cref="JsonSerializerOptions"/></param>
-    public JsonSerializer(IOptions<JsonSerializerOptions> options) { this.Options = options.Value; }
-
-    /// <summary>
     /// Gets the current <see cref="JsonSerializerOptions"/>
     /// </summary>
-    protected JsonSerializerOptions Options { get; }
-
+    protected JsonSerializerOptions Options { get; } = options.Value;
     /// <inheritdoc/>
     public virtual bool Supports(string mediaTypeName) => mediaTypeName == MediaTypeNames.Application.Json || mediaTypeName.EndsWith("+json");
 

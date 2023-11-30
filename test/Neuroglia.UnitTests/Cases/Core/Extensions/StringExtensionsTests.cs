@@ -45,6 +45,20 @@ public class StringExtensionsTests
     }
 
     [Fact]
+    public void ToKebabCase_WithAcronym_Should_Work()
+    {
+        //arrange
+        var input = "Hello, World!!!  Bye  API!";
+        var expectation = "hello-world-bye-api";
+
+        //act
+        var output = input.ToKebabCase();
+
+        //assert
+        output.Should().Be(expectation);
+    }
+
+    [Fact]
     public void ToSnakeCase_Should_Work()
     {
         //arrange

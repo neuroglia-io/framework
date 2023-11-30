@@ -31,6 +31,7 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddNewtonsoftJsonSerializer(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
         services.AddSerializer<NewtonsoftJsonSerializer>(lifetime);
+        services.Add(new ServiceDescriptor(typeof(IJsonSerializer), typeof(NewtonsoftJsonSerializer), lifetime));
         return services;
     }
 
