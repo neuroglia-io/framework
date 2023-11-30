@@ -1,0 +1,43 @@
+name: Publish JS package
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        required: true
+        type: string
+      name:
+        required: true
+        type: string
+    secrets:
+      NPM_TOKEN:
+        required: true
+
+jobs:
+  publish:
+    if: (github.event_name == 'push' && github.ref_name == 'main') || github.event_name =='workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Restore build artifacts
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ format('{0}{1}/', inputs.path, 'dist') }}
+          key: ${{ inputs.name }}-dist
+      
+      - name: Publish package
+        run: |
+          package=$(basename "${{ inputs.name }}")
+          scope=$(dirname "${{ inputs.name }}" | sed -r 's/@//g')
+          cd "${{ inputs.path }}dist/${scope}/${package}"
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}">>.npmrc
+          version=$(npm view ${{ inputs.name }} version 2>/dev/null) && npm version $version || true
+          npm version patch # patch current version
+          npm publish --access=public

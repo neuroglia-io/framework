@@ -1,0 +1,39 @@
+name: Test JS package
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        required: true
+        type: string
+      name:
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Restore cached dependencies
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ format('{0}{1}/', inputs.path, 'node_modules') }}
+          key: ${{ inputs.name }}-node_modules
+      
+      - name: Test
+        run: |
+          cd ${{ inputs.path }}
+          npx ng test ${{ inputs.name }} --browsers=ChromeHeadless --watch=false
+      
+      - name: Coverage
+        run: |
+          cd ${{ inputs.path }}
+          npx ng test ${{ inputs.name }} --browsers=ChromeHeadless --watch=false --code-coverage

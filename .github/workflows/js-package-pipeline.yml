@@ -1,0 +1,106 @@
+# See js-main.yml first
+
+name: Pipeline for JS packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: The name of the package, without @neuroglia prefix, as described in .github/js-packages.json
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      package:
+        required: true
+        type: string
+    secrets:
+      NPM_TOKEN:
+        required: true
+
+jobs:
+  config:
+    runs-on: ubuntu-latest
+    outputs:
+      package-config: ${{ steps.package-config.outputs.package }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      
+      - name: Read packages configuration file
+        id: package-config
+        run: |
+          package=`cat ./.github/js-packages.json | jq '."${{ inputs.package }}"' --compact-output`
+          echo "package=$package" >> "$GITHUB_OUTPUT"
+      
+      - name: Defined output 'package-config' as
+        run: echo "${{ steps.package-config.outputs.package }}"
+
+  debug:
+    needs: config
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Got config for ${{ inputs.package }} - name: ${{ fromJSON(needs.config.outputs.package-config).name }} - path: ${{ fromJSON(needs.config.outputs.package-config).path }} - dependencies: ${{ join(fromJSON(needs.config.outputs.package-config).dependencies, ' ') }}"
+          echo "Context event name: ${{ github.event_name }} - ref_name: ${{ github.ref_name }}"
+
+  restore:
+    needs: config
+    uses: ./.github/workflows/js-restore-dependencies.yml
+    with:
+      name: ${{ fromJSON(needs.config.outputs.package-config).name }}
+      path: ${{ fromJSON(needs.config.outputs.package-config).path }}
+      dependencies: ${{ join(fromJSON(needs.config.outputs.package-config).dependencies, ' ') }}
+
+  build:
+    needs: 
+       - config
+       - restore
+    uses: ./.github/workflows/js-build-package.yml
+    with:
+      name: ${{ fromJSON(needs.config.outputs.package-config).name }}
+      path: ${{ fromJSON(needs.config.outputs.package-config).path }}
+
+  lint:
+    needs: 
+       - config
+       - build
+    uses: ./.github/workflows/js-lint-package.yml
+    with:
+      name: ${{ fromJSON(needs.config.outputs.package-config).name }}
+      path: ${{ fromJSON(needs.config.outputs.package-config).path }}
+
+  test:
+    needs: 
+       - config
+       - build
+    uses: ./.github/workflows/js-test-package.yml
+    with:
+      name: ${{ fromJSON(needs.config.outputs.package-config).name }}
+      path: ${{ fromJSON(needs.config.outputs.package-config).path }}
+
+  publish:
+    needs: 
+       - config
+       - build
+       - test
+       - lint
+    uses: ./.github/workflows/js-publish-package.yml
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    with:
+      name: ${{ fromJSON(needs.config.outputs.package-config).name }}
+      path: ${{ fromJSON(needs.config.outputs.package-config).path }}
+
+  cleanup:
+    if: ${{ always() }}
+    needs:
+       - config
+       - build
+       - test
+       - lint
+       - publish
+    uses: ./.github/workflows/js-cleanup-cache.yml
+    with:
+      name: ${{ fromJSON(needs.config.outputs.package-config).name }}
+      path: ${{ fromJSON(needs.config.outputs.package-config).path }}
