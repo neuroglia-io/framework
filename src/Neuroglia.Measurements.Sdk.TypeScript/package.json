@@ -10,11 +10,13 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "exit 0",
+    "serve": "ng serve",
+    "build": "exit 0",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "clean": "exit 0"
   },
   "dependencies": {
     "@angular/animations": "^17.0.0",
