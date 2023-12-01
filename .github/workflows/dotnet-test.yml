@@ -27,12 +27,6 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
 
-
-      - name: Install node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
       - name: Restore dependencies
         run: dotnet restore "${{ env.SOLUTION }}"
 
