@@ -20,8 +20,20 @@ public static class CloudEventSpecVersion
 {
 
     /// <summary>
-    /// Specifies version 1.0
+    /// Exposes information about the <see href="https://cloudevents.io/">Cloud Event spec</see> version 1.0
     /// </summary>
-    public const string v1 = "1.0";
+    public static class V1
+    {
+
+        /// <summary>
+        /// Gets the '1.0' version of the <see href="https://cloudevents.io/">Cloud Event spec</see>
+        /// </summary>
+        public const string Version = "1.0";
+        /// <summary>
+        /// Gets the <see cref="Uri"/> that references the JSON Schema of the <see href="https://cloudevents.io/">Cloud Event spec</see> version 1.0
+        /// </summary>
+        public static readonly Uri SchemaUri = new("https://raw.githubusercontent.com/cloudevents/spec/v1.0.1/spec.json");
+
+    }
 
 }

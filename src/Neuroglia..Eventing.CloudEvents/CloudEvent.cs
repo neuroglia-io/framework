@@ -35,11 +35,11 @@ public record CloudEvent
     public virtual string Id { get; set; } = null!;
 
     /// <summary>
-    /// Gets/sets the version of the CloudEvents specification which the event uses. Defaults to <see cref="CloudEventSpecVersion.v1"/>
+    /// Gets/sets the version of the CloudEvents specification which the event uses. Defaults to <see cref="CloudEventSpecVersion.V1.Version"/>
     /// </summary>
-    [DefaultValue(CloudEventSpecVersion.v1)]
+    [DefaultValue(CloudEventSpecVersion.V1.Version)]
     [DataMember(Order = 2, Name = "specversion", IsRequired = true), JsonPropertyOrder(2), JsonPropertyName("specversion")]
-    public virtual string SpecVersion { get; set; } = CloudEventSpecVersion.v1;
+    public virtual string SpecVersion { get; set; } = CloudEventSpecVersion.V1.Version;
 
     /// <summary>
     /// Gets/sets the date and time at which the event has been produced
