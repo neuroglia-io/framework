@@ -28,7 +28,7 @@ namespace Neuroglia.Serialization.Json;
 /// </remarks>
 /// <param name="options">The current <see cref="JsonSerializerOptions"/></param>
 public class JsonSerializer(IOptions<JsonSerializerOptions> options)
-        : IJsonSerializer, IAsyncSerializer
+    : IJsonSerializer, IAsyncSerializer
 {
 
     /// <summary>
@@ -84,41 +84,15 @@ public class JsonSerializer(IOptions<JsonSerializerOptions> options)
     /// <inheritdoc/>
     public virtual string SerializeToText(object? value, Type? type = null) => System.Text.Json.JsonSerializer.Serialize(value, type ?? value?.GetType()!, this.Options);
 
-    /// <summary>
-    /// Serializes the specified object into a new <see cref="JsonNode"/>
-    /// </summary>
-    /// <typeparam name="T">The type of object to serialize</typeparam>
-    /// <param name="graph">The object to serialize</param>
-    /// <returns>A new <see cref="JsonNode"/></returns>
     /// <inheritdoc/>
     public virtual JsonNode? SerializeToNode<T>(T graph) => System.Text.Json.JsonSerializer.SerializeToNode(graph, this.Options);
 
-    /// <summary>
-    /// Serializes the specified object into a new <see cref="JsonElement"/>
-    /// </summary>
-    /// <typeparam name="T">The type of object to serialize</typeparam>
-    /// <param name="graph">The object to serialize</param>
-    /// <returns>A new <see cref="JsonElement"/></returns>
     /// <inheritdoc/>
     public virtual JsonElement? SerializeToElement<T>(T graph) => System.Text.Json.JsonSerializer.SerializeToElement(graph, this.Options);
 
-    /// <summary>
-    /// Serializes the specified object into a new <see cref="JsonDocument"/>
-    /// </summary>
-    /// <typeparam name="T">The type of object to serialize</typeparam>
-    /// <param name="graph">The object to serialize</param>
-    /// <returns>A new <see cref="JsonDocument"/></returns>
     /// <inheritdoc/>
     public virtual JsonDocument? SerializeToDocument<T>(T graph) => System.Text.Json.JsonSerializer.SerializeToDocument(graph, this.Options);
 
-    /// <summary>
-    /// Serializes an object to the specified <see cref="Stream"/>
-    /// </summary>
-    /// <typeparam name="T">The type of the object to serialize</typeparam>
-    /// <param name="stream">The <see cref="Stream"/> to serialize the object to</param>
-    /// <param name="graph">The object to serialize</param>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new awaitable <see cref="Task"/></returns>
     /// <inheritdoc/>
     public virtual Task SerializeAsync<T>(Stream stream, T graph, CancellationToken cancellationToken = default) => System.Text.Json.JsonSerializer.SerializeAsync(stream, graph, this.Options, cancellationToken);
 
@@ -131,44 +105,19 @@ public class JsonSerializer(IOptions<JsonSerializerOptions> options)
     /// <inheritdoc/>
     public virtual object? Deserialize(Stream stream, Type type) => System.Text.Json.JsonSerializer.Deserialize(stream, type, this.Options);
 
-    /// <summary>
-    /// Deserializes the specified <see cref="JsonElement"/>
-    /// </summary>
-    /// <param name="element">The <see cref="JsonElement"/> to deserialize</param>
-    /// <param name="type">The type to deserialize the specified <see cref="JsonElement"/> into</param>
-    /// <returns>The deserialized value</returns>
+    /// <inheritdoc/>
     public virtual object? Deserialize(JsonElement element, Type type) => System.Text.Json.JsonSerializer.Deserialize(element, type, this.Options);
 
-    /// <summary>
-    /// Deserializes the specified <see cref="JsonElement"/>
-    /// </summary>
-    /// <typeparam name="T">The type to deserialize the specified <see cref="JsonElement"/> into</typeparam>
-    /// <param name="element">The <see cref="JsonElement"/> to deserialize</param>
-    /// <returns>The deserialized value</returns>
+    /// <inheritdoc/>
     public virtual T? Deserialize<T>(JsonElement element) => System.Text.Json.JsonSerializer.Deserialize<T>(element, this.Options);
 
-    /// <summary>
-    /// Deserializes the specified JSON input
-    /// </summary>
-    /// <typeparam name="T">The type to deserialize the specified JSON into</typeparam>
-    /// <param name="json">The JSON input to deserialize</param>
-    /// <returns>The deserialized value</returns>
+    /// <inheritdoc/>
     public virtual T? Deserialize<T>(string json) => System.Text.Json.JsonSerializer.Deserialize<T>(json, this.Options);
 
-    /// <summary>
-    /// Deserializes the specified <see cref="JsonNode"/>
-    /// </summary>
-    /// <param name="node">The <see cref="JsonNode"/> to deserialize</param>
-    /// <param name="type">The type to deserialize the specified <see cref="JsonNode"/> into</param>
-    /// <returns>The deserialized value</returns>
+    /// <inheritdoc/>
     public virtual object? Deserialize(JsonNode node, Type type) => System.Text.Json.JsonSerializer.Deserialize(node, type, this.Options);
 
-    /// <summary>
-    /// Deserializes the specified <see cref="JsonNode"/>
-    /// </summary>
-    /// <typeparam name="T">The type to deserialize the specified <see cref="JsonNode"/> into</typeparam>
-    /// <param name="node">The <see cref="JsonNode"/> to deserialize</param>
-    /// <returns>The deserialized value</returns>
+    /// <inheritdoc/>
     public virtual T? Deserialize<T>(JsonNode node) => System.Text.Json.JsonSerializer.Deserialize<T>(node, this.Options);
 
     /// <summary>
@@ -190,13 +139,7 @@ public class JsonSerializer(IOptions<JsonSerializerOptions> options)
     /// <inheritdoc/>
     public virtual async Task<object?> DeserializeAsync(Stream stream, Type type, CancellationToken cancellationToken = default) => await System.Text.Json.JsonSerializer.DeserializeAsync(stream, type, this.Options, cancellationToken).ConfigureAwait(false);
 
-    /// <summary>
-    /// Deserializes the specified <see cref="Stream"/> as a new <see cref="IAsyncEnumerable{T}"/>
-    /// </summary>
-    /// <typeparam name="T">The expected type of elements to enumerate</typeparam>
-    /// <param name="stream">The <see cref="Stream"/> to deserialize</param>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new <see cref="IAsyncEnumerable{T}"/></returns>
+    /// <inheritdoc/>
     public virtual IAsyncEnumerable<T?> DeserializeAsyncEnumerable<T>(Stream stream, CancellationToken cancellationToken = default) => System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable<T>(stream, this.Options, cancellationToken);
 
 }

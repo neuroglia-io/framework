@@ -11,6 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text.Json.Nodes;
+using System.Text.Json;
+
 namespace Neuroglia.Serialization;
 
 /// <summary>
@@ -20,6 +23,37 @@ public interface IJsonSerializer
     : ITextSerializer
 {
 
+    /// <summary>
+    /// Serializes the specified object into a new <see cref="JsonNode"/>
+    /// </summary>
+    /// <typeparam name="T">The type of object to serialize</typeparam>
+    /// <param name="graph">The object to serialize</param>
+    /// <returns>A new <see cref="JsonNode"/></returns>
+    JsonNode? SerializeToNode<T>(T graph);
 
+    /// <summary>
+    /// Serializes the specified object into a new <see cref="JsonElement"/>
+    /// </summary>
+    /// <typeparam name="T">The type of object to serialize</typeparam>
+    /// <param name="graph">The object to serialize</param>
+    /// <returns>A new <see cref="JsonElement"/></returns>
+    JsonElement? SerializeToElement<T>(T graph);
+
+    /// <summary>
+    /// Serializes the specified object into a new <see cref="JsonDocument"/>
+    /// </summary>
+    /// <typeparam name="T">The type of object to serialize</typeparam>
+    /// <param name="graph">The object to serialize</param>
+    /// <returns>A new <see cref="JsonDocument"/></returns>
+    JsonDocument? SerializeToDocument<T>(T graph);
+
+    /// <summary>
+    /// Deserializes the specified <see cref="Stream"/> as a new <see cref="IAsyncEnumerable{T}"/>
+    /// </summary>
+    /// <typeparam name="T">The expected type of elements to enumerate</typeparam>
+    /// <param name="stream">The <see cref="Stream"/> to deserialize</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new <see cref="IAsyncEnumerable{T}"/></returns>
+    IAsyncEnumerable<T?> DeserializeAsyncEnumerable<T>(Stream stream, CancellationToken cancellationToken = default);
 
 }

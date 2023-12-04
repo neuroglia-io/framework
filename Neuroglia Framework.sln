@@ -98,9 +98,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Mediation.Abstrac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Integration", "src\Neuroglia.Integration\Neuroglia.Integration.csproj", "{B9DF1C37-F41F-4AC8-8BB0-19AD9EB978D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.JsonSchema.Generation", "src\Neuroglia.JsonSchema.Generation\Neuroglia.JsonSchema.Generation.csproj", "{30EF0A31-DD4D-4A4C-A383-8AF88DE8FD93}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Measurements.Sdk.TypeScript", "src\Neuroglia.Measurements.Sdk.TypeScript\Neuroglia.Measurements.Sdk.TypeScript.csproj", "{4BA3F773-5C01-4064-9441-EED11C3264EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.Schemas.Json", "src\Neuroglia.Data.Schemas.Json\Neuroglia.Data.Schemas.Json.csproj", "{A555095D-AA84-4D67-BF84-A0038EC783BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -276,14 +276,14 @@ Global
 		{B9DF1C37-F41F-4AC8-8BB0-19AD9EB978D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9DF1C37-F41F-4AC8-8BB0-19AD9EB978D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9DF1C37-F41F-4AC8-8BB0-19AD9EB978D7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30EF0A31-DD4D-4A4C-A383-8AF88DE8FD93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30EF0A31-DD4D-4A4C-A383-8AF88DE8FD93}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30EF0A31-DD4D-4A4C-A383-8AF88DE8FD93}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30EF0A31-DD4D-4A4C-A383-8AF88DE8FD93}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4BA3F773-5C01-4064-9441-EED11C3264EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4BA3F773-5C01-4064-9441-EED11C3264EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BA3F773-5C01-4064-9441-EED11C3264EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BA3F773-5C01-4064-9441-EED11C3264EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A555095D-AA84-4D67-BF84-A0038EC783BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A555095D-AA84-4D67-BF84-A0038EC783BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A555095D-AA84-4D67-BF84-A0038EC783BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A555095D-AA84-4D67-BF84-A0038EC783BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -331,8 +331,8 @@ Global
 		{63922ABE-916D-4A4D-A3E1-8162BEED060E} = {AFFADE1D-C17D-4ED8-8407-BFE108714262}
 		{23AEEAC4-03C7-4E6F-AB74-26588908AAB9} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{B9DF1C37-F41F-4AC8-8BB0-19AD9EB978D7} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
-		{30EF0A31-DD4D-4A4C-A383-8AF88DE8FD93} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{4BA3F773-5C01-4064-9441-EED11C3264EC} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{A555095D-AA84-4D67-BF84-A0038EC783BD} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}

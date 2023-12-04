@@ -13,6 +13,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Serialization.DataContract;
+using System.IO;
 
 namespace Neuroglia.Serialization;
 

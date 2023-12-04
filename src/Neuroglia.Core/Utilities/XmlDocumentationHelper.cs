@@ -26,14 +26,14 @@ namespace Neuroglia;
 public static partial class XmlDocumentationHelper
 {
 
-    private static ConcurrentDictionary<string, AssemblyXmlDocumentationContainer> LoadedAssemblyXmlDocumentation = new();
+    private static ConcurrentDictionary<string, AssemblyXmlDocumentationContainer> LoadedAssemblyXmlDocumentation = [];
 
     /// <summary>
     /// Gets the specified type's XML code documentation
     /// </summary>
     /// <param name="type">The type to get the XML code documentation for</param>
     /// <returns>The XML code documentation of the specified type</returns>
-    public static string DocumentationOf(Type type)
+    public static string? DocumentationOf(Type type)
     {
         ArgumentNullException.ThrowIfNull(type);
 
@@ -182,7 +182,7 @@ public static partial class XmlDocumentationHelper
 
         AssemblyXmlDocumentationContainer() { }
 
-        public Dictionary<string, string> XmlDocumentation { get; } = new();
+        public Dictionary<string, string> XmlDocumentation { get; } = [];
 
         public string? GetDocumentationFor(Type type)
         {

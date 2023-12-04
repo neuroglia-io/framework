@@ -11,32 +11,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Json.More;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Net.Mime;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Neuroglia.Serialization.DataContract;
 
 /// <summary>
 /// Represents the DataContract implementation of the <see cref="IXmlSerializer"/>
 /// </summary>
-public class NewtonsoftJsonSerializer
+/// <remarks>
+/// Initializes a new <see cref="NewtonsoftJsonSerializer"/>
+/// </remarks>
+/// <param name="settings">The service used to monitor the current <see cref="JsonSerializerSettings"/></param>
+public class NewtonsoftJsonSerializer(IOptionsMonitor<JsonSerializerSettings> settings)
     : IJsonSerializer
 {
 
     /// <summary>
-    /// Initializes a new <see cref="NewtonsoftJsonSerializer"/>
-    /// </summary>
-    /// <param name="settings">The service used to monitor the current <see cref="JsonSerializerSettings"/></param>
-    public NewtonsoftJsonSerializer(IOptionsMonitor<JsonSerializerSettings> settings)
-    {
-        this.Settings = settings;
-    }
-
-    /// <summary>
     /// Gets the service used to monitor the current <see cref="JsonSerializerSettings"/>
     /// </summary>
-    protected IOptionsMonitor<JsonSerializerSettings> Settings { get; }
+    protected IOptionsMonitor<JsonSerializerSettings> Settings { get; } = settings;
 
     /// <inheritdoc/>
     public virtual bool Supports(string mediaTypeName) => mediaTypeName == MediaTypeNames.Application.Json || mediaTypeName.EndsWith("+json");
@@ -44,7 +42,7 @@ public class NewtonsoftJsonSerializer
     /// <inheritdoc/>
     public virtual void Serialize(object? value, Stream stream, Type? type = null)
     {
-        var serializer = JsonSerializer.Create(this.Settings.CurrentValue);
+        var serializer = Newtonsoft.Json.JsonSerializer.Create(this.Settings.CurrentValue);
         using var streamWriter = new StreamWriter(stream, leaveOpen: true);
         using var jsonTextWriter = new JsonTextWriter(streamWriter);
         serializer.Serialize(jsonTextWriter, value, type);
@@ -59,10 +57,27 @@ public class NewtonsoftJsonSerializer
     /// <inheritdoc/>
     public virtual object? Deserialize(Stream stream, Type type)
     {
-        var serializer = JsonSerializer.Create(this.Settings.CurrentValue);
+        var serializer = Newtonsoft.Json.JsonSerializer.Create(this.Settings.CurrentValue);
         using var streamReader = new StreamReader(stream, leaveOpen: true);
         using var jsonTextReader = new JsonTextReader(streamReader);
         return serializer.Deserialize(jsonTextReader, type);
     }
+
+    /// <inheritdoc/>
+    public virtual JsonNode? SerializeToNode<T>(T graph) => graph == null ? null : JsonNode.Parse(this.SerializeToText(graph));
+
+    /// <inheritdoc/>
+    public virtual JsonElement? SerializeToElement<T>(T graph) 
+    {
+        if (graph == null) return null;
+        var reader = new Utf8JsonReader(this.SerializeToByteArray(graph));
+        return JsonElement.ParseValue(ref reader);
+    }
+
+    /// <inheritdoc/>
+    public virtual JsonDocument? SerializeToDocument<T>(T graph) => graph == null ? null : JsonDocument.Parse(this.SerializeToText(graph));
+
+    /// <inheritdoc/>
+    public virtual IAsyncEnumerable<T?> DeserializeAsyncEnumerable<T>(Stream stream, CancellationToken cancellationToken = default) => Newtonsoft.Json.JsonSerializer.Create(this.Settings.CurrentValue).DeserializeAsyncEnumerable<T>(stream, cancellationToken);
 
 }
