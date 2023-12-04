@@ -11,42 +11,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.Serialization;
+
 namespace Neuroglia;
 
 /// <summary>
 /// Represents the base class for all integration events
 /// </summary>
-public abstract record IntegrationEvent
+[DataContract]
+public abstract record IntegrationEvent<TKey>
     : DataTransferObject, IIntegrationEvent
 {
 
     /// <summary>
     /// Gets/sets the date and time at which the integration event has been produced
     /// </summary>
+    [DataMember]
     public virtual DateTimeOffset CreatedAt { get; set; }
 
     /// <summary>
     /// Gets/sets the id of the aggregate, if any, that has produced the event
     /// </summary>
-    public virtual object? AggregateId { get; set; }
+    [DataMember]
+    public virtual TKey? AggregateId { get; set; }
 
     /// <summary>
     /// Gets/sets the version of the aggregate, if any, that has produced the event
     /// </summary>
+    [DataMember]
     public ulong? AggregateVersion { get; set; }
 
-}
-
-/// <summary>
-/// Represents the base class for all integration events
-/// </summary>
-public abstract record IntegrationEvent<TKey>
-    : IntegrationEvent
-{
-
-    /// <summary>
-    /// Gets/sets the id of the aggregate, if any, that has produced the event
-    /// </summary>
-    public virtual new TKey? AggregateId { get; set; }
+    object? IIntegrationEvent.AggregateId => this.AggregateId;
 
 }

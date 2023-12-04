@@ -11,18 +11,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Runtime.Serialization;
-
-namespace Neuroglia;
+namespace Neuroglia.Data.Schemas.Json;
 
 /// <summary>
-/// Represents the base class of all Data Transfer Objects (DTOs)
+/// Defines the fundamentals of a service used to resolve <see cref="JsonSchema"/>s
 /// </summary>
-[DataContract]
-public abstract record DataTransferObject
-    : IDataTransferObject
+public interface IJsonSchemaResolver
 {
 
-
+    /// <summary>
+    /// Resolves the $refs of the specified <see cref="JsonSchema"/>
+    /// </summary>
+    /// <param name="schema">The <see cref="JsonSchema"/> to resolve</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The resolved <see cref="JsonSchema"/></returns>
+    Task<JsonSchema> ResolveSchemaAsync(JsonSchema schema, CancellationToken cancellationToken = default);
 
 }
