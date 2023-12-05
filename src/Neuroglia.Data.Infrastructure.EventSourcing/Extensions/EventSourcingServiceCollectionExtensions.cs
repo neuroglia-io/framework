@@ -42,7 +42,7 @@ public static class EventSourcingServiceCollectionExtensions
         var options = builder.Build();
         services.AddSingleton(Options.Create(options));
         services.TryAdd(new ServiceDescriptor(typeof(IEventAggregatorFactory), options.AggregatorFactoryType, lifetime));
-        services.TryAdd(new ServiceDescriptor(typeof(IEventMigrationManager), options.MigrationManagerType, lifetime));
+        services.TryAdd(new ServiceDescriptor(typeof(IEventMigrationManager), options.MigrationManagerType, ServiceLifetime.Singleton));
         services.TryAdd(new ServiceDescriptor(typeof(IAggregateStateManager<TAggregate, TKey>), options.StateManagerType, lifetime));
         services.AddEventSourcingRepository<TAggregate, TKey, EventSourcingRepository<TAggregate, TKey>>(lifetime: lifetime);
         return services;
