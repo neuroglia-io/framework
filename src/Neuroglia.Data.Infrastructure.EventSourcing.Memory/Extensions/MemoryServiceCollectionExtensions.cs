@@ -20,7 +20,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.Memory;
 /// <summary>
 /// Defines extensions for <see cref="IServiceCollection"/>s
 /// </summary>
-public static class IServiceCollectionExtensions
+public static class MemoryServiceCollectionExtensions
 {
 
     /// <summary>
