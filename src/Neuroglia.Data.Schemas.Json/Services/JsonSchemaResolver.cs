@@ -75,7 +75,7 @@ public class JsonSchemaResolver(IJsonSerializer serializer, HttpClient httpClien
                 var mergedSchema = this.RemoveReferenceProperties(schema);
                 foreach (var refSchema in refSchemas)
                 {
-                    mergedSchema = JsonMergePatch.ApplyMergePatch(mergedSchema, refSchema).RootElement;
+                    mergedSchema = JsonMergePatch.ApplyMergePatch(refSchema, mergedSchema).RootElement;
                 }
                 var mergedSchemaNode = this.Serializer.SerializeToNode(mergedSchema)!.AsObject()!;
                 foreach (var property in mergedSchema.EnumerateObject())
@@ -141,7 +141,7 @@ public class JsonSchemaResolver(IJsonSerializer serializer, HttpClient httpClien
         if (uri.IsAbsoluteUri)
         {
             var schemaJson = await this.HttpClient.GetStringAsync(uri, cancellationToken).ConfigureAwait(false);
-            schema = this.Serializer.SerializeToElement(schemaJson);
+            schema = this.Serializer.Deserialize<JsonElement>(schemaJson);
             useRootSchema = false;
         }
         else
