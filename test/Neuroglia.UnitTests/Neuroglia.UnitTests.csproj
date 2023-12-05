@@ -25,6 +25,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="7.0.0" />
     <PackageReference Include="Testcontainers" Version="3.6.0" />
@@ -51,6 +52,7 @@
     <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.ObjectStorage.Minio\Neuroglia.Data.Infrastructure.ObjectStorage.Minio.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Guards\Neuroglia.Data.Guards.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Schemas.Json\Neuroglia.Data.Schemas.Json.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Eventing.CloudEvents.Infrastructure\Neuroglia.Eventing.CloudEvents.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Mapping\Neuroglia.Mapping.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Measurements\Neuroglia.Measurements.csproj" />
