@@ -145,7 +145,7 @@ public class ESEventStore
         if (string.IsNullOrWhiteSpace(streamId))
         {
             if(string.IsNullOrWhiteSpace(this.Options.DatabaseName)) return this.ReadFromAllAsync(readDirection, offset, length, cancellationToken);
-            else return this.ReadFromStreamAsync($"$ce-{this.Options.DatabaseName}", readDirection, offset, length, cancellationToken);
+            else return this.ReadFromStreamAsync(this.GetDatabaseStreamId()!, readDirection, offset, length, cancellationToken);
         }
         else return this.ReadFromStreamAsync(this.GetQualifiedStreamId(streamId), readDirection, offset, length, cancellationToken);
     }
@@ -227,7 +227,7 @@ public class ESEventStore
         if (string.IsNullOrWhiteSpace(streamId))
         {
             if (string.IsNullOrWhiteSpace(this.Options.DatabaseName)) return this.ObserveAllAsync(offset, consumerGroup, cancellationToken);
-            else return this.ObserveStreamAsync($"$ce-{this.Options.DatabaseName}", offset, consumerGroup, cancellationToken);
+            else return this.ObserveStreamAsync(this.GetDatabaseStreamId()!, offset, consumerGroup, cancellationToken);
         }
         else return this.ObserveStreamAsync(streamId, offset, consumerGroup, cancellationToken);
     }
@@ -314,9 +314,10 @@ public class ESEventStore
         if (string.IsNullOrWhiteSpace(consumerGroup)) throw new ArgumentNullException(nameof(consumerGroup));
         ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
 
-        IPosition position = string.IsNullOrWhiteSpace(streamId) ? offset == StreamPosition.EndOfStream ? Position.End : Position.Start : offset == StreamPosition.EndOfStream ? ESStreamPosition.End : ESStreamPosition.FromInt64(offset);
+        IPosition position = string.IsNullOrWhiteSpace(streamId) ? offset == StreamPosition.EndOfStream ? ESStreamPosition.End : ESStreamPosition.Start : offset == StreamPosition.EndOfStream ? ESStreamPosition.End : ESStreamPosition.FromInt64(offset);
         var settings = new PersistentSubscriptionSettings(true, position, checkPointLowerBound: 1, checkPointUpperBound: 1);
         PersistentSubscriptionInfo subscription;
+        streamId = string.IsNullOrWhiteSpace(streamId) ? string.IsNullOrWhiteSpace(this.Options.DatabaseName) ? null : this.GetDatabaseStreamId()! : this.GetQualifiedStreamId(streamId);
         if (string.IsNullOrWhiteSpace(streamId))
         {
             try { subscription = await this.EventStorePersistentSubscriptionsClient.GetInfoToAllAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false); }
@@ -329,8 +330,7 @@ public class ESEventStore
         }
         else
         {
-            streamId = this.GetQualifiedStreamId(streamId);
-            try { subscription = await this.EventStorePersistentSubscriptionsClient.GetInfoToStreamAsync(consumerGroup, streamId, cancellationToken: cancellationToken).ConfigureAwait(false); }
+            try { subscription = await this.EventStorePersistentSubscriptionsClient.GetInfoToStreamAsync(streamId, consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false); }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound) { throw new StreamNotFoundException(); }
             if (subscription.Stats.LastCheckpointedEventPosition != null) await this.SetConsumerCheckpointPositionAsync(consumerGroup, streamId, subscription.Stats.LastCheckpointedEventPosition, cancellationToken).ConfigureAwait(false);
 
@@ -365,6 +365,12 @@ public class ESEventStore
     /// <param name="streamId">The stream id to convert</param>
     /// <returns>The qualified id of the specified stream id</returns>
     protected virtual string GetQualifiedStreamId(string streamId) => string.IsNullOrWhiteSpace(this.Options.DatabaseName) || streamId.StartsWith($"$ce-") ? streamId : $"{this.Options.DatabaseName}-{streamId}";
+
+    /// <summary>
+    /// Gets the id, if any, of the stream that contains references to all events in the database
+    /// </summary>
+    /// <returns>The id, if any, of the stream that contains references to all events in the database</returns>
+    protected virtual string? GetDatabaseStreamId() => string.IsNullOrWhiteSpace(this.Options.DatabaseName) ? null : $"$ce-{this.Options.DatabaseName}";
 
     /// <summary>
     /// Deserializes the specified <see cref="ResolvedEvent"/> into a new <see cref="IEventRecord"/>
@@ -415,7 +421,16 @@ public class ESEventStore
     /// <param name="position">The last checkpointed position</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    protected virtual Task SetConsumerCheckpointPositionAsync(string consumerGroup, string? streamId, IPosition position, CancellationToken cancellationToken = default) => this.AppendAsync(this.GetConsumerCheckpointStreamId(consumerGroup, streamId), new EventDescriptor[] { new("$checkpoint", ((Position)position).CommitPosition) }, cancellationToken: cancellationToken);
+    protected virtual async Task SetConsumerCheckpointPositionAsync(string consumerGroup, string? streamId, IPosition position, CancellationToken cancellationToken = default)
+    {
+        var data = position switch
+        {
+            Position pos => pos.CommitPosition,
+            ESStreamPosition spos => (ulong)spos.ToInt64(),
+            _ => throw new NotSupportedException($"The position type '{position.GetType()}' is not supported in this context")
+        };
+        await this.AppendAsync(this.GetConsumerCheckpointStreamId(consumerGroup, streamId), new EventDescriptor[] { new("$checkpoint", data) }, cancellationToken: cancellationToken).ConfigureAwait(false);
+    }
 
     /// <summary>
     /// Gets the id of the stream used to store the checkpoints of the specified consumer group, and optionally stream
@@ -450,7 +465,7 @@ public class ESEventStore
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(this.Options.DatabaseName) || !e.OriginalStreamId.StartsWith($"$ce-{this.Options.DatabaseName}")) if (e.OriginalStreamId.StartsWith("$") || e.Event.Metadata.Length < 1) return subscription.Ack(e);
+            if (string.IsNullOrWhiteSpace(this.Options.DatabaseName) || !e.OriginalStreamId.StartsWith(this.GetDatabaseStreamId()!)) if (e.OriginalStreamId.StartsWith("$") || e.Event.Metadata.Length < 1) return subscription.Ack(e);
             return Task.Run(() => subject.OnNext(this.DeserializeEventRecord(e, subscription, subject, checkpointedPosition > (string.IsNullOrWhiteSpace(streamId) ? e.Event.Position.CommitPosition : e.Event.EventNumber.ToUInt64()))), cancellationToken);
         }
         catch (Exception ex)
