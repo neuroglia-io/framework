@@ -31,6 +31,9 @@ jobs:
         id: package-config
         run: |
           package=`cat ./.github/js-packages.json | jq '."${{ inputs.package }}"' --compact-output`
+          workspaceRoot=`echo $package | jq -r '.path'`
+          packageRoot=`cat ${workspaceRoot}angular.json | jq -r '.projects."@neuroglia/${{ inputs.package }}".root'`
+          package=`cat ${workspaceRoot}$packageRoot/package.json | jq --argjson package "$package" '$package + { dependencies: (.peerDependencies//{})|[keys[]|select(startswith("@neuroglia"))] }' --compact-output`
           echo "package=$package" >> "$GITHUB_OUTPUT"
       
       - name: Defined output 'package-config' as
