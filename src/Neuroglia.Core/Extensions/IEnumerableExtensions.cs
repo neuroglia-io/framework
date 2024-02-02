@@ -50,6 +50,14 @@ public static class IEnumerableExtensions
     }
 
     /// <summary>
+    /// Joins the values of the <see cref="IEnumerable{T}"/> with the specified character
+    /// </summary>
+    /// <param name="values">The values to join</param>
+    /// <param name="separator">The separator char</param>
+    /// <returns>A new string that consists of the joined values, separated by the specified char</returns>
+    public static string Join(this IEnumerable<string> values, char separator) => string.Join(separator, values);
+
+    /// <summary>
     /// Filters the elements of a sequence based on a specified type
     /// </summary>
     /// <param name="enumerable">The enumerable to filter</param>

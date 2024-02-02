@@ -21,12 +21,10 @@ namespace Neuroglia;
 /// <summary>
 /// Represents an <see cref="EnumConverter"/> used to convert enum using the values specified by <see cref="EnumMemberAttribute"/>s
 /// </summary>
-public class EnumMemberTypeConverter
-    : EnumConverter
+/// <inheritdoc/>
+public class EnumMemberTypeConverter([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type type)
+        : EnumConverter(type)
 {
-
-    /// <inheritdoc/>
-    public EnumMemberTypeConverter([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] Type type) : base(type) { }
 
     /// <inheritdoc/>
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)

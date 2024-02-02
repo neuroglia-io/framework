@@ -63,7 +63,7 @@ public class JavaScriptExpressionEvaluator
     public virtual Task<object?> EvaluateAsync(string expression, object data, IDictionary<string, object>? args = null, Type? expectedType = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(expression)) throw new ArgumentNullException(nameof(expression));
-        if (data == null) throw new ArgumentNullException(nameof(data));
+        ArgumentNullException.ThrowIfNull(data);
         if (expectedType == null) expectedType = typeof(object);
         return Task.Run(() =>
         {

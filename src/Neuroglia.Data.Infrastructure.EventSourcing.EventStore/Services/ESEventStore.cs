@@ -243,7 +243,7 @@ public class ESEventStore
     protected virtual async Task<IObservable<IEventRecord>> ObserveStreamAsync(string streamId, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
-        if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
         if (!await this.StreamExistsAsync(streamId, cancellationToken).ConfigureAwait(false)) throw new StreamNotFoundException(streamId);
         var qualifiedStreamId = this.GetQualifiedStreamId(streamId);
 
@@ -277,7 +277,7 @@ public class ESEventStore
     /// <returns>A new <see cref="IObservable{T}"/> used to observe events</returns>
     protected virtual async Task<IObservable<IEventRecord>> ObserveAllAsync(long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
-        if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
 
         var subject = new ReplaySubject<IEventRecord>();
         if (string.IsNullOrWhiteSpace(consumerGroup))
@@ -465,7 +465,7 @@ public class ESEventStore
     {
         try
         {
-            if (string.IsNullOrWhiteSpace(this.Options.DatabaseName) || !e.OriginalStreamId.StartsWith(this.GetDatabaseStreamId()!)) if (e.OriginalStreamId.StartsWith("$") || e.Event.Metadata.Length < 1) return subscription.Ack(e);
+            if (string.IsNullOrWhiteSpace(this.Options.DatabaseName) || !e.OriginalStreamId.StartsWith(this.GetDatabaseStreamId()!)) if (e.OriginalStreamId.StartsWith('$') || e.Event.Metadata.Length < 1) return subscription.Ack(e);
             return Task.Run(() => subject.OnNext(this.DeserializeEventRecord(e, subscription, subject, checkpointedPosition > (string.IsNullOrWhiteSpace(streamId) ? e.Event.Position.CommitPosition : e.Event.EventNumber.ToUInt64()))), cancellationToken);
         }
         catch (Exception ex)

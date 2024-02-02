@@ -1,0 +1,78 @@
+﻿apiVersion: hylo.io/v1
+kind: ResourceDefinition
+metadata:
+  name: resource-definitions.hylo.io
+spec:
+  scope: Cluster
+  group: hylo.io
+  names:
+    singular: resource-definition
+    plural: resource-definitions
+    kind: ResourceDefinition
+    shortNames:
+      - rd
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                scope:
+                  type: string
+                  enum:
+                    - Cluster
+                    - Namespaced
+                group:
+                  type: string
+                names:
+                  type: object
+                  properties:
+                    singular:
+                      type: string
+                    plural:
+                      type: string
+                    kind:
+                      type: string
+                    shortNames:
+                      type: array
+                      items:
+                        type: string
+                  required:
+                    - singular
+                    - plural
+                    - kind
+                versions:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      served:
+                        type: boolean
+                      storage:
+                        type: boolean
+                      schema:
+                        type: object
+                        properties:
+                          openAPIV3Schema:
+                            type: object
+                        required:
+                          - openAPIV3Schema
+                    required:
+                      - name
+                      - served
+                      - storage
+              required:
+                - scope
+                - group
+                - names
+                - versions
+
+        

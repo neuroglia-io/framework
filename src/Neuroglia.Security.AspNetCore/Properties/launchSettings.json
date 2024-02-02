@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Neuroglia.Security.AspNetCore": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:51997;http://localhost:51998"
+    }
+  }
+}
