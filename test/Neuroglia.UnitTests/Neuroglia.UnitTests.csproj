@@ -18,6 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoBogus" Version="2.13.1" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
@@ -26,15 +27,15 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="7.0.0" />
     <PackageReference Include="Testcontainers" Version="3.7.0" />
-    <PackageReference Include="xunit" Version="2.6.6" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+    <PackageReference Include="xunit" Version="2.7.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.0">
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -51,6 +52,7 @@
     <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.Mongo\Neuroglia.Data.Infrastructure.Mongo.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.ObjectStorage.Minio\Neuroglia.Data.Infrastructure.ObjectStorage.Minio.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Guards\Neuroglia.Data.Guards.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.ResourceOriented.Redis\Neuroglia.Data.Infrastructure.ResourceOriented.Redis.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Schemas.Json\Neuroglia.Data.Schemas.Json.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Eventing.CloudEvents.Infrastructure\Neuroglia.Eventing.CloudEvents.Infrastructure.csproj" />
@@ -58,6 +60,7 @@
     <ProjectReference Include="..\..\src\Neuroglia.Measurements\Neuroglia.Measurements.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Plugins\Neuroglia.Plugins.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Security.AspNetCore\Neuroglia.Security.AspNetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

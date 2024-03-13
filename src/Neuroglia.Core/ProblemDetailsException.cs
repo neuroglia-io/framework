@@ -19,13 +19,13 @@ namespace Neuroglia;
 /// <remarks>
 /// Initializes a new <see cref="ProblemDetailsException"/>
 /// </remarks>
-/// <param name="problem">An object that describes the problem that has occured</param>
+/// <param name="problem">An object that describes the problem that has occurred</param>
 public class ProblemDetailsException(ProblemDetails problem)
     : Exception($"[{problem.Status} - {problem.Title}] {problem.Detail}{(problem.Errors?.Count > 0 ? Environment.NewLine + string.Join(Environment.NewLine, problem.Errors.Select(e => $"{e.Key}: {string.Join(", ", e.Value)}")) : "")}")
 {
 
     /// <summary>
-    /// An object that describes the problem that has occured
+    /// An object that describes the problem that has occurred
     /// </summary>
     public ProblemDetails Problem { get; } = problem;
 

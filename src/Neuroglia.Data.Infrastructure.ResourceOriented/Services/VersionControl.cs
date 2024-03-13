@@ -87,7 +87,7 @@ public class VersionControl
             this.Logger.LogWarning("Versioning webhook {webhook} failed to convert the resource to version '{version}'", webhook, toVersion.Name);
             throw new ProblemDetailsException(ResourceProblemDetails.ResourceConversionFailed(context.ResourceReference, toVersion.Name, conversionReview.Response?.Errors?.ToArray()!));
         }
-        this.Logger.LogDebug("Resource '{resource}' succesfully converted to version '{version}'", context.ResourceReference, toVersion.Name);
+        this.Logger.LogDebug("Resource '{resource}' successfully converted to version '{version}'", context.ResourceReference, toVersion.Name);
         return conversionReview.Response.ConvertedResource;
     }
 

@@ -13,7 +13,7 @@
 
 using System.Security.Claims;
 
-namespace Neuroglia.Security;
+namespace Neuroglia.Security.Services;
 
 /// <summary>
 /// Defines the fundamentals of a service used to access the current user

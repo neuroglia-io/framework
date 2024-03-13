@@ -64,7 +64,7 @@ public class MinioObjectStorage
         }
         catch (MinioException ex)
         {
-            this.Logger.LogError("An error occured while creating the bucket with name '{bucket}': {ex}", name, ex);
+            this.Logger.LogError("An error occurred while creating the bucket with name '{bucket}': {ex}", name, ex);
             throw;
         }
     }
@@ -83,7 +83,7 @@ public class MinioObjectStorage
         }
         catch (MinioException ex)
         {
-            this.Logger.LogError("An error occured while lising buckets: {ex}", ex);
+            this.Logger.LogError("An error occurred while lising buckets: {ex}", ex);
             throw;
         }
         foreach(var bucket in buckets)
@@ -140,7 +140,7 @@ public class MinioObjectStorage
         }
         catch (MinioException ex)
         {
-            this.Logger.LogError("An error occured while putting the object with name '{object}' in bucket with name '{bucket}': {ex}", name, bucketName, ex);
+            this.Logger.LogError("An error occurred while putting the object with name '{object}' in bucket with name '{bucket}': {ex}", name, bucketName, ex);
             throw;
         }
     }
@@ -174,7 +174,7 @@ public class MinioObjectStorage
         }
         catch (MinioException ex)
         {
-            this.Logger.LogError("An error occured while lising buckets: {ex}", ex);
+            this.Logger.LogError("An error occurred while lising buckets: {ex}", ex);
             throw;
         }
         await foreach (var item in items.Where(i => !i.IsDir))
@@ -199,7 +199,7 @@ public class MinioObjectStorage
         }
         catch (MinioException ex)
         {
-            this.Logger.LogError("An error occured while creating the bucket with name '{bucket}': {ex}", name, ex);
+            this.Logger.LogError("An error occurred while creating the bucket with name '{bucket}': {ex}", name, ex);
             throw;
         }
     }

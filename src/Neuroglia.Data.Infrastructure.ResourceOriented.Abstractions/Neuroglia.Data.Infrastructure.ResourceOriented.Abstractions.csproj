@@ -23,6 +23,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\mutating-webhook.yaml" />
+    <None Remove="Assets\resource-definition.yaml" />
+    <None Remove="Assets\validating-webhook.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\mutating-webhook.yaml" />
+    <EmbeddedResource Include="Assets\resource-definition.yaml" />
+    <EmbeddedResource Include="Assets\validating-webhook.yaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
       <PackagePath>\</PackagePath>
       <Pack>True</Pack>
@@ -30,10 +42,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JsonSchema.Net" Version="5.5.1" />
+    <PackageReference Include="JsonSchema.Net" Version="6.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
 	<PackageReference Include="System.Linq.Async" Version="6.0.1" />
 	<PackageReference Include="System.Reactive.Linq" Version="6.0.0" />
-    <PackageReference Include="YamlDotNet" Version="15.1.0" />
+    <PackageReference Include="YamlDotNet" Version="15.1.2" />
   </ItemGroup>
 
   <ItemGroup>

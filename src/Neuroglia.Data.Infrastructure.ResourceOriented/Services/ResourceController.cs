@@ -99,7 +99,7 @@ public class ResourceController<TResource>
     }
 
     /// <summary>
-    /// Reconciles the state of controlled resources with their actual state, as advertized by the server
+    /// Reconciles the state of controlled resources with their actual state, as advertised by the server
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
@@ -139,7 +139,7 @@ public class ResourceController<TResource>
     /// <summary>
     /// Handles the specified <see cref="IResource"/>'s change
     /// </summary>
-    /// <param name="e">An <see cref="IResourceWatchEvent{TResource}"/> that describes the change that has occured</param>
+    /// <param name="e">An <see cref="IResourceWatchEvent{TResource}"/> that describes the change that has occurred</param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     private Task OnResourceWatchEventAsync(IResourceWatchEvent<TResource> e)
     {

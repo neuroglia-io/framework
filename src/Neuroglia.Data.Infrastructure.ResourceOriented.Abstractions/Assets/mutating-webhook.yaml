@@ -1,0 +1,62 @@
+﻿apiVersion: neuroglia.io/v1
+kind: ResourceDefinition
+metadata:
+  name: mutating-webhooks.neuroglia.io
+spec:
+  names:
+    kind: MutatingWebhook
+    singular: mutating-webhook
+    plural: mutating-webhooks
+    shortNames:
+      - mwh
+  group: hylo.io
+  version: v1
+  scope: Cluster
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                client:
+                  type: object
+                  properties:
+                    uri:
+                      type: string
+                      format: url
+                  required:
+                    - uri
+                resources:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      scope:
+                        type: string
+                      apiGroups:
+                        type: array
+                        items:
+                          type: string
+                      apiVersions:
+                        type: array
+                        items:
+                          type: string
+                      kinds:
+                        type: array
+                        items:
+                          type: string
+                      operations:
+                        type: array
+                        items:
+                          type: string
+                priority:
+                  type: number
+              required:
+                - client
+          required:
+            - spec

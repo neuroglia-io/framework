@@ -1,7 +1,7 @@
-﻿apiVersion: hylo.io/v1
+﻿apiVersion: neuroglia.io/v1
 kind: ResourceDefinition
 metadata:
-  name: resource-definitions.hylo.io
+  name: resource-definitions.neuroglia.io
 spec:
   scope: Cluster
   group: hylo.io

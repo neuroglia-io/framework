@@ -95,7 +95,7 @@ public static class ResourceProblemDetails
     /// </summary>
     /// <param name="operation">The operation that was rejected</param>
     /// <param name="resource">The resource that could not be admitted</param>
-    /// <param name="errors">An array containing the errors that have occured during admission</param>
+    /// <param name="errors">An array containing the errors that have occurred during admission</param>
     /// <returns>A new <see cref="ProblemDetails"/></returns>
     public static ProblemDetails ResourceAdmissionFailed(Operation operation, IResourceReference resource, params KeyValuePair<string, string[]>[] errors)
     {
@@ -113,7 +113,7 @@ public static class ResourceProblemDetails
     /// </summary>
     /// <param name="resource">The resource that could not be converted</param>
     /// <param name="toVersion">The version the resource was converted to</param>
-    /// <param name="errors">An array containing the errors that have occured during conversion</param>
+    /// <param name="errors">An array containing the errors that have occurred during conversion</param>
     /// <returns>A new <see cref="ProblemDetails"/></returns>
     public static ProblemDetails ResourceConversionFailed(IResourceReference resource, string toVersion, params KeyValuePair<string, string[]>[] errors)
     {

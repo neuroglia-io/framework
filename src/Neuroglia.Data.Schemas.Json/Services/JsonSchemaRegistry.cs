@@ -95,7 +95,7 @@ public class JsonSchemaRegistry
             }
             catch (Exception ex)
             {
-                this.Logger.LogError("An error occured while retrieving the JSON Schema at '{uri}': {ex}", reference, ex);
+                this.Logger.LogError("An error occurred while retrieving the JSON Schema at '{uri}': {ex}", reference, ex);
             }
         }
         this.HttpClient.Dispose();

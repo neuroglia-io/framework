@@ -102,7 +102,7 @@ public class PluginProvider
             }
             catch (Exception ex)
             {
-                this.Logger.LogWarning("An exception occured while instanciating plugin of type '{pluginType}': {ex}", plugin.Type, ex);
+                this.Logger.LogWarning("An exception occurred while instanciating plugin of type '{pluginType}': {ex}", plugin.Type, ex);
                 continue;
             }
             yield return pluginInstance;

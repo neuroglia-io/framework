@@ -39,9 +39,9 @@ public record UserInfo
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
         if (string.IsNullOrWhiteSpace(authenticationType)) throw new ArgumentNullException(nameof(authenticationType));
-        Name = name;
-        AuthenticationType = authenticationType;
-        Claims = claims;
+        this.Name = name;
+        this.AuthenticationType = authenticationType;
+        this.Claims = claims;
     }
 
     /// <summary>
@@ -63,5 +63,8 @@ public record UserInfo
     /// </summary>
     [DataMember(Order = 3, Name = "claims", IsRequired = true), JsonPropertyOrder(3), JsonPropertyName("claims")]
     public virtual IDictionary<string, string>? Claims { get; set; }
+
+    /// <inheritdoc/>
+    public override string ToString() => this.Name;
 
 }

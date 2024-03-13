@@ -325,7 +325,7 @@ public class ESEventStore
             if (subscription.Stats.LastCheckpointedEventPosition != null) await this.SetConsumerCheckpointPositionAsync(consumerGroup, streamId, subscription.Stats.LastCheckpointedEventPosition, cancellationToken).ConfigureAwait(false);
            
             await this.EventStorePersistentSubscriptionsClient.DeleteToAllAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false);
-            try { await this.EventStorePersistentSubscriptionsClient.CreateToAllAsync(consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); } //it occured in tests that EventStore would only eventually delete the subscription, resulting in caught exception, thus the need for the try/catch block
+            try { await this.EventStorePersistentSubscriptionsClient.CreateToAllAsync(consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); } //it occurred in tests that EventStore would only eventually delete the subscription, resulting in caught exception, thus the need for the try/catch block
             catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { await this.EventStorePersistentSubscriptionsClient.UpdateToAllAsync(consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
         }
         else
@@ -335,7 +335,7 @@ public class ESEventStore
             if (subscription.Stats.LastCheckpointedEventPosition != null) await this.SetConsumerCheckpointPositionAsync(consumerGroup, streamId, subscription.Stats.LastCheckpointedEventPosition, cancellationToken).ConfigureAwait(false);
 
             await this.EventStorePersistentSubscriptionsClient.DeleteToStreamAsync(streamId, consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false);
-            try { await this.EventStorePersistentSubscriptionsClient.CreateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); } //it occured in tests that EventStore would only eventually delete the subscription, resulting in caught exception, thus the need for the try/catch block
+            try { await this.EventStorePersistentSubscriptionsClient.CreateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); } //it occurred in tests that EventStore would only eventually delete the subscription, resulting in caught exception, thus the need for the try/catch block
             catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists) { await this.EventStorePersistentSubscriptionsClient.UpdateToStreamAsync(streamId, consumerGroup, settings, cancellationToken: cancellationToken).ConfigureAwait(false); }
         }
     }
@@ -508,7 +508,7 @@ public class ESEventStore
     /// <param name="subject">The <see cref="ISubject{T}"/> to stream <see cref="IEventRecord"/>s to</param>
     /// <param name="subscription">The <see cref="StreamSubscription"/> the <see cref="ResolvedEvent"/> has been received by</param>
     /// <param name="reason">The reason why to drop the <see cref="StreamSubscription"/></param>
-    /// <param name="ex">The <see cref="Exception"/> that occured, if any</param>
+    /// <param name="ex">The <see cref="Exception"/> that occurred, if any</param>
     protected virtual void OnSubscriptionDropped(ISubject<IEventRecord> subject, StreamSubscription subscription, SubscriptionDroppedReason reason, Exception? ex)
     {
         switch (reason)
@@ -529,7 +529,7 @@ public class ESEventStore
     /// <param name="subject">The <see cref="ISubject{T}"/> to stream <see cref="IEventRecord"/>s to</param>
     /// <param name="subscription">The <see cref="PersistentSubscription"/> the <see cref="ResolvedEvent"/> has been received by</param>
     /// <param name="reason">The reason why to drop the <see cref="PersistentSubscription"/></param>
-    /// <param name="ex">The <see cref="Exception"/> that occured, if any</param>
+    /// <param name="ex">The <see cref="Exception"/> that occurred, if any</param>
     protected virtual void OnSubscriptionDropped(ISubject<IEventRecord> subject, PersistentSubscription subscription, SubscriptionDroppedReason reason, Exception? ex)
     {
         switch (reason)

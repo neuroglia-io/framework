@@ -58,7 +58,7 @@ public interface IDatabase
     /// <param name="group">The API group the <see cref="IResource"/>s to list belongs to</param>
     /// <param name="version">The version of the type of <see cref="IResource"/>s to list</param>
     /// <param name="plural">The plural name of the type of <see cref="IResource"/>s to list</param>
-    /// <param name="namespace">The namespace the <see cref="IResource"/>s to list belongs to, if any. If not set, lists resources accross all namespaces</param>
+    /// <param name="namespace">The namespace the <see cref="IResource"/>s to list belongs to, if any. If not set, lists resources across all namespaces</param>
     /// <param name="labelSelectors">A collection of objects used to configure the labels to filter the <see cref="IResource"/>s to list by</param>
     /// <param name="maxResults">The maximum amount of results that should be returned</param>
     /// <param name="continuationToken">A value used to continue paging resources, in the context of a paging request</param>

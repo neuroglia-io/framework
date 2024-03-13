@@ -73,8 +73,8 @@ public partial record LabelSelector
     {
         return Operator switch
         {
-            LabelSelectionOperator.Contains => string.IsNullOrWhiteSpace(Value) && Values?.Any() == false ? Key : $"{Key} in ({Values!.Join(',')})",
-            LabelSelectionOperator.NotContains => string.IsNullOrWhiteSpace(Value) && Values?.Any() == false ? $"!{Key}" : $"{Key} notin ({Values!.Join(',')})",
+            LabelSelectionOperator.Contains => string.IsNullOrWhiteSpace(Value) && this.Values?.Any() == false ? Key : $"{Key} in ({Values!.Join(',')})",
+            LabelSelectionOperator.NotContains => string.IsNullOrWhiteSpace(Value) && this.Values?.Any() == false ? $"!{Key}" : $"{Key} notin ({Values!.Join(',')})",
             LabelSelectionOperator.Equals => $"{Key}={Value}",
             LabelSelectionOperator.NotEquals => $"{Key}!={Value}",
             _ => throw new NotSupportedException($"The specified {nameof(LabelSelectionOperator)} '{Operator}' is not supported"),

@@ -99,4 +99,11 @@ public static class IResourceExtensions
     /// <returns>A boolean indicating whether or not the <see cref="IResource"/> is an <see cref="IResourceDefinition"/></returns>
     public static bool IsResourceDefinition(this IResource resource) => resource.GetGroup() == ResourceDefinition.ResourceGroup && resource.Kind == ResourceDefinition.ResourceKind;
 
+    /// <summary>
+    /// Determines whether or not the <see cref="IResource"/> is a <see cref="Namespace"/>
+    /// </summary>
+    /// <param name="resource">The <see cref="IResource"/> to check</param>
+    /// <returns>A boolean indicating whether or not the <see cref="IResource"/> is a <see cref="Namespace"/></returns>
+    public static bool IsNamespace(this IResource resource) => resource.GetGroup() == NamespaceDefinition.ResourceGroup && resource.Kind == NamespaceDefinition.ResourceKind;
+
 }

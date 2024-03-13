@@ -25,7 +25,7 @@ public record MutatingWebhookDefinition
 
     static MutatingWebhookDefinition()
     {
-        using var stream = typeof(ResourceDefinition).Assembly.GetManifestResourceStream($"{typeof(ResourceDefinition).Namespace}.mutating-webhook.yaml")!;
+        using var stream = typeof(ResourceDefinition).Assembly.GetManifestResourceStream($"{typeof(ResourceDefinition).Namespace}.Assets.mutating-webhook.yaml")!;
         using var streamReader = new StreamReader(stream);
         Instance = YamlSerializer.Default.Deserialize<ResourceDefinition>(streamReader.ReadToEnd())!;
     }

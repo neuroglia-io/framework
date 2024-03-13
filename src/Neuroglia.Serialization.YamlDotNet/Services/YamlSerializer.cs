@@ -21,8 +21,13 @@ namespace Neuroglia.Serialization.Yaml;
 /// <summary>
 /// Represents the <see href="YamlDotNet">https://github.com/aaubry/YamlDotNet</see> implementation of the <see cref="IYamlSerializer"/>
 /// </summary>
-public class YamlSerializer
-    : IYamlSerializer
+/// <remarks>
+/// Initializes a new <see cref="YamlSerializer"/>
+/// </remarks>
+/// <param name="serializer">The underlying <see cref="YamlDotNet.Serialization.ISerializer"/></param>
+/// <param name="deserializer">The underlying <see cref="IDeserializer"/></param>
+public class YamlSerializer(YamlDotNet.Serialization.ISerializer serializer, IDeserializer deserializer)
+        : IYamlSerializer
 {
 
     static readonly YamlDotNet.Serialization.ISerializer DefaultSerializer;
@@ -91,25 +96,14 @@ public class YamlSerializer
     }
 
     /// <summary>
-    /// Initializes a new <see cref="YamlSerializer"/>
-    /// </summary>
-    /// <param name="serializer">The underlying <see cref="YamlDotNet.Serialization.ISerializer"/></param>
-    /// <param name="deserializer">The underlying <see cref="IDeserializer"/></param>
-    public YamlSerializer(YamlDotNet.Serialization.ISerializer serializer, IDeserializer deserializer)
-    {
-        this.Serializer = serializer;
-        this.Deserializer = deserializer;
-    }
-
-    /// <summary>
     /// Gets the underlying <see cref="YamlDotNet.Serialization.ISerializer"/>
     /// </summary>
-    protected YamlDotNet.Serialization.ISerializer Serializer { get; }
+    protected YamlDotNet.Serialization.ISerializer Serializer { get; } = serializer;
 
     /// <summary>
     /// Gets the underlying <see cref="IDeserializer"/>
     /// </summary>
-    protected IDeserializer Deserializer { get; }
+    protected IDeserializer Deserializer { get; } = deserializer;
 
     /// <inheritdoc/>
     public virtual bool Supports(string mediaTypeName) => mediaTypeName switch

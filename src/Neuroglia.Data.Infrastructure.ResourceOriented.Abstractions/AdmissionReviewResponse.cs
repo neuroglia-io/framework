@@ -32,7 +32,7 @@ public record AdmissionReviewResponse
     /// <param name="uid">A string that uniquely and globally identifies the resource admission review request to respond to</param>
     /// <param name="allowed">A boolean indicating whether or not the requested operation is allowed on the specified resource</param>
     /// <param name="patch">The patch to apply, in case the resource is being mutated</param>
-    /// <param name="problem">An object used to describe the problem, if any, that has occured during the resource admission</param>
+    /// <param name="problem">An object used to describe the problem, if any, that has occurred during the resource admission</param>
     public AdmissionReviewResponse(string uid, bool allowed, Patch? patch = null, ProblemDetails? problem = null)
     {
         if (string.IsNullOrWhiteSpace(uid)) throw new ArgumentNullException(nameof(uid));
@@ -63,7 +63,7 @@ public record AdmissionReviewResponse
     public virtual Patch? Patch { get; set; }
 
     /// <summary>
-    /// Gets/sets an object used to describe the problem, if any, that has occured during the resource admission
+    /// Gets/sets an object used to describe the problem, if any, that has occurred during the resource admission
     /// </summary>
     [DataMember(Order = 4, Name = "problem"), JsonPropertyOrder(4), JsonPropertyName("problem"), YamlMember(Order = 4, Alias = "problem")]
     public virtual ProblemDetails? Problem { get; set; }

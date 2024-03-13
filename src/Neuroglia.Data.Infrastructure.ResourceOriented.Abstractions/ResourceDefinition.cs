@@ -25,7 +25,7 @@ public record ResourceDefinition
 
     static ResourceDefinition()
     {
-        using var stream = typeof(ResourceDefinition).Assembly.GetManifestResourceStream($"{typeof(ResourceDefinition).Namespace}.resource-definition.yaml")!;
+        using var stream = typeof(ResourceDefinition).Assembly.GetManifestResourceStream($"{typeof(ResourceDefinition).Namespace}.Assets.resource-definition.yaml")!;
         using var streamReader = new StreamReader(stream);
         Instance = YamlSerializer.Default.Deserialize<ResourceDefinition>(streamReader.ReadToEnd())!;
     }

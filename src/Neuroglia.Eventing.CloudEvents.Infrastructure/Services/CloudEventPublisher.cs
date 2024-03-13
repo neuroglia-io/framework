@@ -129,7 +129,7 @@ public class CloudEventPublisher
         using var request = new HttpRequestMessage(HttpMethod.Post, uri) { Content = requestContent };
         using var response = await this.HttpClient.SendAsync(request, this.CancellationTokenSource.Token).ConfigureAwait(false);
         var responseContent = await response.Content.ReadAsStringAsync(this.CancellationTokenSource.Token).ConfigureAwait(false);
-        if (!response.IsSuccessStatusCode) this.Logger.LogError("An error occured while publishing cloud event with id '{cloudEventId}': the remote server responded with a non-success status code '{statusCode}'./r/nDetails: {details}", e.Id, response.StatusCode, responseContent);
+        if (!response.IsSuccessStatusCode) this.Logger.LogError("An error occurred while publishing cloud event with id '{cloudEventId}': the remote server responded with a non-success status code '{statusCode}'./r/nDetails: {details}", e.Id, response.StatusCode, responseContent);
         response.EnsureSuccessStatusCode();
     }
 
