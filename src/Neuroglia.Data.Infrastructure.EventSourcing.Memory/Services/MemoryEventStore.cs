@@ -17,8 +17,6 @@ using Neuroglia.Plugins;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.IO;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
@@ -29,7 +27,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.DistributedCache.Services;
 /// Represents an <see cref="IEventStore"/> implementation relying on an <see cref="IMemoryCache"/>
 /// </summary>
 /// <remarks>Should not be used in production</remarks>
-[Plugin(Tags = new string[] { "event-store" }), Factory(typeof(MemoryCacheEventStoreFactory))]
+[Plugin(Tags = ["event-store"]), Factory(typeof(MemoryCacheEventStoreFactory))]
 public class MemoryEventStore
     : IEventStore, IDisposable
 {
@@ -53,7 +51,7 @@ public class MemoryEventStore
     /// <summary>
     /// Gets the <see cref="ConcurrentDictionary{TKey, TValue}"/> containing all published <see cref="IEventRecord"/>s
     /// </summary>
-    protected ConcurrentDictionary<ulong, IEventRecord> Stream { get; } = new();
+    protected ConcurrentDictionary<ulong, IEventRecord> Stream { get; } = [];
 
     /// <summary>
     /// Gets the <see cref="ISubject{T}"/> used to stream <see cref="IEventRecord"/>s
@@ -79,7 +77,7 @@ public class MemoryEventStore
             else if(actualversion == null || actualversion != expectedVersion) throw new OptimisticConcurrencyException(expectedVersion, actualversion);
         }
 
-        stream ??= new();
+        stream ??= [];
         ulong offset = actualversion.HasValue ? (ulong)actualversion.Value + 1 : StreamPosition.StartOfStream;
         foreach(var e in events)
         {

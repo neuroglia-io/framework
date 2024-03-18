@@ -140,7 +140,7 @@ public class JQExpressionEvaluator
             try { File.Delete(file); } catch { }
         }
 
-        if (process.ExitCode != 0) throw new Exception($"An error occured while evaluting the specified expression: {error}");
+        if (process.ExitCode != 0) throw new Exception($"An error occurred while evaluting the specified expression: {error}");
         if (string.IsNullOrWhiteSpace(output)) return null;
         return this.Serializer.Deserialize(output, expectedType);
     }

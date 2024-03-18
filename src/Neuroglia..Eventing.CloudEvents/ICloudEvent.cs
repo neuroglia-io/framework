@@ -23,7 +23,7 @@ public interface ICloudEvent
 {
 
     /// <summary>
-    /// Gets/sets the version of the CloudEvents specification which the event uses. Defaults to <see cref="CloudEventSpecVersion.v1"/>
+    /// Gets/sets the version of the CloudEvents specification which the event uses. Defaults to <see cref="CloudEventSpecVersion.V1"/>
     /// </summary>
     string SpecVersion { get; }
 

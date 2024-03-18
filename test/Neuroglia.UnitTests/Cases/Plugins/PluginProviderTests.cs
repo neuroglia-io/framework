@@ -13,7 +13,6 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Neuroglia.Data.Infrastructure.EventSourcing.Memory;
 using Neuroglia.Data.Infrastructure.Services;
 using Neuroglia.Plugins;
 using Neuroglia.Plugins.Services;

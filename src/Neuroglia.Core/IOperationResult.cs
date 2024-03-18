@@ -30,7 +30,7 @@ public interface IOperationResult
     object? Data { get; }
 
     /// <summary>
-    /// Gets a list containing the errors that have occured, if any, during the execution of the operation
+    /// Gets a list containing the errors that have occurred, if any, during the execution of the operation
     /// </summary>
     IReadOnlyCollection<Error>? Errors { get; }
 

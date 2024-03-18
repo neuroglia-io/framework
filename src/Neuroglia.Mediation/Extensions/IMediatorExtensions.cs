@@ -32,7 +32,7 @@ public static class IMediatorExtensions
     public static async Task<T?> ExecuteAndUnwrapAsync<T>(this IMediator mediator, IRequest<IOperationResult<T>> request, CancellationToken cancellationToken = default)
     {
         var result = await mediator.ExecuteAsync(request, cancellationToken);
-        if (result.Status < 200 || result.Status > 299) throw new GuardException($"An error has occured during the request's execution:{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors == null ? Array.Empty<string>() : result.Errors.Select(e => $"{e.Status}: {e.Detail}"))}", null);
+        if (result.Status < 200 || result.Status > 299) throw new GuardException($"An error has occurred during the request's execution:{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors == null ? Array.Empty<string>() : result.Errors.Select(e => $"{e.Status}: {e.Detail}"))}", null);
         return result.Data;
     }
 
@@ -46,7 +46,7 @@ public static class IMediatorExtensions
     public static async Task ExecuteAndUnwrapAsync(this IMediator mediator, IRequest<IOperationResult> request, CancellationToken cancellationToken = default)
     {
         var result = await mediator.ExecuteAsync(request, cancellationToken);
-        if (result.Status < 200 || result.Status > 299) throw new GuardException($"An error has occured during the request's execution:{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors == null ? Array.Empty<string>() : result.Errors.Select(e => $"{e.Status}: {e.Detail}"))}", null);
+        if (result.Status < 200 || result.Status > 299) throw new GuardException($"An error has occurred during the request's execution:{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors == null ? Array.Empty<string>() : result.Errors.Select(e => $"{e.Status}: {e.Detail}"))}", null);
     }
 
 }

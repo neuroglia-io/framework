@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StackExchange.Redis" Version="2.7.33" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Data.Infrastructure.ResourceOriented\Neuroglia.Data.Infrastructure.ResourceOriented.csproj" />
+    <ProjectReference Include="..\Neuroglia.Plugins.Abstractions\Neuroglia.Plugins.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

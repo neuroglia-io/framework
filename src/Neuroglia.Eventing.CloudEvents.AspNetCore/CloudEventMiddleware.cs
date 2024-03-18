@@ -60,7 +60,7 @@ public class CloudEventMiddleware
         }
         catch(Exception ex)
         {
-            this.Logger.LogError("An error occured while consuming an incoming cloud event: {ex}", ex.ToString());
+            this.Logger.LogError("An error occurred while consuming an incoming cloud event: {ex}", ex.ToString());
             throw;
         }
     }

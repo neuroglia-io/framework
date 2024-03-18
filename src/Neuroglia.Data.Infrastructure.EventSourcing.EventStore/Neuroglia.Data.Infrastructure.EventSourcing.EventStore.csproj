@@ -11,7 +11,7 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 	<PackageTags>neuroglia framework data infrastructure event-sourcing es event-store</PackageTags>
-    <Version>4.7.7</Version>
+    <Version>4.8.0</Version>
     <NeutralLanguage>en</NeutralLanguage>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="23.1.0" />
-	<PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.1.0" />
+	<PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="23.2.1" />
+	<PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.2.1" />
 	<PackageReference Include="System.Reactive" Version="6.0.0" />
   </ItemGroup>
 
