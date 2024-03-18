@@ -18,6 +18,7 @@ using Microsoft.Extensions.Options;
 using Neuroglia.Data.Expressions.JavaScript.Configuration;
 using Neuroglia.Data.Expressions.Services;
 using Neuroglia.Serialization;
+using System.Collections;
 
 namespace Neuroglia.Data.Expressions.JavaScript;
 
@@ -59,6 +60,38 @@ public class JavaScriptExpressionEvaluator
     /// <inheritdoc/>
     public virtual bool Supports(string language) => string.IsNullOrWhiteSpace(language) ? throw new ArgumentNullException(nameof(language)) : language.Equals("javascript", StringComparison.OrdinalIgnoreCase);
 
+    /// <summary>
+    /// Determines if the specified object is an array-like CLR collection.
+    /// </summary>
+    /// Notes: see https://github.com/sebastienros/jint/issues/1030#issuecomment-1919747531
+    /// Code from https://github.com/elsa-workflows/elsa-core/blob/a1c30facbae44590ebd8d5662e052109950d535c/src/modules/Elsa.JavaScript/Helpers/ObjectArrayHelper.cs
+    public static bool DetermineIfObjectIsArrayLikeClrCollection(Type type)
+    {
+        var isDictionary = typeof(IDictionary).IsAssignableFrom(type);
+
+        if (isDictionary)
+            return false;
+
+        if (typeof(ICollection).IsAssignableFrom(type))
+            return true;
+
+        foreach (var interfaceType in type.GetInterfaces())
+        {
+            if (!interfaceType.IsGenericType)
+            {
+                continue;
+            }
+
+            if (interfaceType.GetGenericTypeDefinition() == typeof(IReadOnlyCollection<>)
+                || interfaceType.GetGenericTypeDefinition() == typeof(ICollection<>))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /// <inheritdoc/>
     public virtual Task<object?> EvaluateAsync(string expression, object data, IDictionary<string, object>? args = null, Type? expectedType = null, CancellationToken cancellationToken = default)
     {
@@ -84,10 +117,13 @@ public class JavaScriptExpressionEvaluator
                         // Use a cancellation token.
                         //.CancellationToken(cancellationToken)
                         // customizing object wrapping to set array prototype to objects
-                        .SetWrapObjectHandler((engine, target) =>
+                        .SetWrapObjectHandler((engine, target, type) =>
                         {
                             var instance = new ObjectWrapper(engine, target);
-                            if (instance.IsArrayLike) instance.SetPrototypeOf(engine.Realm.Intrinsics.Array.PrototypeObject);
+                            if (DetermineIfObjectIsArrayLikeClrCollection(target.GetType()))
+                            {
+                                instance.Prototype = engine.Intrinsics.Array.PrototypeObject;
+                            }
                             return instance;
                         })
                     ;
