@@ -12,7 +12,6 @@
 // limitations under the License.
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Neuroglia.Data.PatchModel.Services;
 using Neuroglia.Security.Services;
 

@@ -87,10 +87,14 @@ public class DirectoryPluginSource
         
         foreach (var assemblyFilePath in Directory.GetFiles(this.Path, this.SearchPattern, this.SearchOption).ToList())
         {
-            if (!await this.IsPluginAssemblyAsync(assemblyFilePath, cancellationToken).ConfigureAwait(false)) continue;
-            var assemblySource = new AssemblyPluginSource(this.Name, this.Options, assemblyFilePath);
-            await assemblySource.LoadAsync(cancellationToken).ConfigureAwait(false);
-            this._assemblies.Add(assemblySource);
+            try
+            {
+                if (!await this.IsPluginAssemblyAsync(assemblyFilePath, cancellationToken).ConfigureAwait(false)) continue;
+                var assemblySource = new AssemblyPluginSource(this.Name, this.Options, assemblyFilePath);
+                await assemblySource.LoadAsync(cancellationToken).ConfigureAwait(false);
+                this._assemblies.Add(assemblySource);
+            }
+            catch { continue; }
         }
 
         this.IsLoaded = true;
