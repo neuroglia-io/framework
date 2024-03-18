@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Json.More;
 using Json.Schema;
 using Neuroglia.Serialization.Json;
 using System.Runtime.Serialization;
@@ -41,7 +40,7 @@ public static class JsonStrategicMergePatch
         {
             JsonArray arrayPatch => ApplyPatch(target?.AsArray(), arrayPatch, schema, patchConfiguration),
             JsonObject objectPatch => ApplyPatch(target?.AsObject(), objectPatch, schema, patchConfiguration),
-            JsonValue valuePatch => valuePatch.Copy(),
+            JsonValue valuePatch => valuePatch.DeepClone(),
             _ => null,
         };
     }
@@ -58,8 +57,8 @@ public static class JsonStrategicMergePatch
     {
         if (patch == null) return target;
         patchConfiguration ??= JsonSerializer.Default.Deserialize<Configuration>(patch);
-        var patched = target.Copy()?.AsObject();
-        patched ??= new();
+        var patched = target?.DeepClone()?.AsObject();
+        patched ??= [];
         switch (patchConfiguration?.Strategy)
         {
             case Strategies.Delete: return null;
@@ -98,8 +97,8 @@ public static class JsonStrategicMergePatch
     {
         if (patch == null) return target;
         if (patchConfiguration == null) try { patchConfiguration = JsonSerializer.Default.Deserialize<Configuration>(patch); } catch { }
-        var patched = target.Copy()?.AsArray();
-        patched ??= new();
+        var patched = target?.DeepClone()?.AsArray();
+        patched ??= [];
         switch (patchConfiguration?.Strategy)
         {
             case Strategies.Delete: return null;
@@ -131,7 +130,7 @@ public static class JsonStrategicMergePatch
                                     itemsToPatch = patched.OfType<JsonObject>().Where(p => p.TryGetPropertyValue(mergeKey, out var originalValue) && originalValue?.ToString() == patchValue?.ToString()).ToList();
                                 if (itemsToPatch?.Any() == false)
                                 {
-                                    var itemToPatch = objectPatch.Copy()?.AsObject();
+                                    var itemToPatch = objectPatch?.DeepClone()?.AsObject();
                                     if (itemToPatch != null) itemsToPatch = new JsonObject[] { itemToPatch };
                                 }
                                 if (itemsToPatch != null)
@@ -165,7 +164,7 @@ public static class JsonStrategicMergePatch
                     }
                     else
                     {
-                        patched.Add(itemPatch.Copy());
+                        patched.Add(itemPatch?.DeepClone());
                     }
                 }
                 break;

@@ -28,7 +28,7 @@ public static class JsonPatchUtility
     /// <param name="source">The source object</param>
     /// <param name="target">The target object</param>
     /// <returns>A new <see cref="JsonPatch"/> based on the differences between the specified values</returns>
-    public static JsonPatch CreateJsonPatchFromDiff<T>(object? source, object? target)
+    public static JsonPatch CreateJsonPatchFromDiff(object? source, object? target)
     {
         source ??= new();
         target ??= new();

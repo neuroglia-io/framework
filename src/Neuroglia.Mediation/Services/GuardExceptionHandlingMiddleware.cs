@@ -47,7 +47,7 @@ public class GuardExceptionHandlingMiddleware<TRequest, TResult>
     /// </summary>
     /// <param name="resultCode">The result code of the <see cref="IOperationResult"/> to create</param>
     /// <param name="result">The newly created <see cref="IOperationResult"/></param>
-    /// <param name="errors">An array containing the <see cref="Error"/>s that have occured during the processing of the <see cref="ICommand"/></param>
+    /// <param name="errors">An array containing the <see cref="Error"/>s that have occurred during the processing of the <see cref="ICommand"/></param>
     /// <returns>A new error <see cref="IOperationResult"/></returns>
     protected virtual bool TryCreateErrorResponse(int resultCode, out TResult result, params Error[] errors)
     {

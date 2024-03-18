@@ -26,6 +26,42 @@ public static partial class StringExtensions
     const string SubstitutionBlock = "§§";
 
     /// <summary>
+    /// Determines whether or not the specified input only contains letters
+    /// </summary>
+    /// <param name="input">The input to check</param>
+    /// <returns>A boolean indicating whether or not the specified input only contains letters</returns>
+    public static bool IsAlphabetic(this string input) => input.All(char.IsLetter);
+
+    /// <summary>
+    /// Determines whether or not the specified input only contains digits
+    /// </summary>
+    /// <param name="input">The input to check</param>
+    /// <returns>A boolean indicating whether or not the specified input only contains digits</returns>
+    public static bool IsNumeric(this string input) => input.All(char.IsDigit);
+
+    /// <summary>
+    /// Determines whether or not the specified input only contains letters or digits
+    /// </summary>
+    /// <param name="input">The input to check</param>
+    /// <param name="exceptions">An array containing all exceptions allowed</param>
+    /// <returns>A boolean indicating whether or not the specified input only contains letters or digits</returns>
+    public static bool IsAlphanumeric(this string input, params char[] exceptions) => input.All(c => char.IsLetterOrDigit(c) || (exceptions != null && exceptions.Contains(c)));
+
+    /// <summary>
+    /// Determines whether or not the specified input is lowercased
+    /// </summary>
+    /// <param name="input">The input to check</param>
+    /// <returns>A boolean indicating whether or not the specified input is lowercased</returns>
+    public static bool IsLowercased(this string input) => input.Where(char.IsLetter).All(char.IsLower);
+
+    /// <summary>
+    /// Determines whether or not the specified input is uppercased
+    /// </summary>
+    /// <param name="input">The input to check</param>
+    /// <returns>A boolean indicating whether or not the specified input is uppercased</returns>
+    public static bool IsUppercased(this string input) => input.All(char.IsLower);
+
+    /// <summary>
     /// Converts the string to its camel case representation
     /// </summary>
     /// <param name="input">The input to format</param>

@@ -38,7 +38,7 @@ public static class IQueryHandlerExtensions
     /// Creates a new <see cref="OperationResult{T}"/> indicating that the <see cref="Command{T}"/> is invalid
     /// </summary>
     /// <param name="handler">The extended <see cref="IQueryHandler"/></param>
-    /// <param name="errors">An array containing the <see cref="Error"/>s that have occured</param>
+    /// <param name="errors">An array containing the <see cref="Error"/>s that have occurred</param>
     /// <returns>A new <see cref="OperationResult{T}"/> indicating that the <see cref="Command{T}"/> is invalid</returns>
     public static IOperationResult<T> Invalid<TQuery, T>(this IQueryHandler<TQuery, T> handler, params Error[] errors)
         where TQuery : class, IQuery<IOperationResult<T>, T>
@@ -50,7 +50,7 @@ public static class IQueryHandlerExtensions
     /// Creates a new <see cref="OperationResult{T}"/> indicating that an object related to the <see cref="Command{T}"/> could not be found
     /// </summary>
     /// <param name="handler">The extended <see cref="IQueryHandler"/></param>
-    /// <param name="errors">An array containing the <see cref="Error"/>s that have occured</param>
+    /// <param name="errors">An array containing the <see cref="Error"/>s that have occurred</param>
     /// <returns>A new <see cref="OperationResult{T}"/> indicating that an object related to the <see cref="Command{T}"/> could not be found</returns>
     public static IOperationResult<T> NotFound<TQuery, T>(this IQueryHandler<TQuery, T> handler, params Error[] errors)
         where TQuery : class, IQuery<IOperationResult<T>, T>
@@ -73,7 +73,7 @@ public static class IQueryHandlerExtensions
     /// Creates a new <see cref="OperationResult{T}"/> indicating that the current user is unauthorized
     /// </summary>
     /// <param name="handler">The extended <see cref="IQueryHandler"/></param>
-    /// <param name="errors">An array containing the <see cref="Error"/>s that have occured</param>
+    /// <param name="errors">An array containing the <see cref="Error"/>s that have occurred</param>
     /// <returns>A new <see cref="OperationResult{T}"/> indicating that the operation is forbidden to the current user</returns>
     public static IOperationResult<T> Unauthorized<TQuery, T>(this IQueryHandler<TQuery, T> handler, params Error[] errors)
         where TQuery : class, IQuery<IOperationResult<T>, T>
@@ -85,7 +85,7 @@ public static class IQueryHandlerExtensions
     /// Creates a new <see cref="OperationResult{T}"/> indicating that the operation is forbidden to the current user
     /// </summary>
     /// <param name="handler">The extended <see cref="IQueryHandler"/></param>
-    /// <param name="errors">An array containing the <see cref="Error"/>s that have occured</param>
+    /// <param name="errors">An array containing the <see cref="Error"/>s that have occurred</param>
     /// <returns>A new <see cref="OperationResult{T}"/> indicating that the operation is forbidden to the current user</returns>
     public static IOperationResult<T> Forbidden<TQuery, T>(this IQueryHandler<TQuery, T> handler, params Error[] errors)
         where TQuery : class, IQuery<IOperationResult<T>, T>
@@ -94,11 +94,11 @@ public static class IQueryHandlerExtensions
     }
 
     /// <summary>
-    /// Creates a new <see cref="OperationResult{T}"/> indicating that an internal error occured while handling the <see cref="Command{T}"/>
+    /// Creates a new <see cref="OperationResult{T}"/> indicating that an internal error occurred while handling the <see cref="Command{T}"/>
     /// </summary>
     /// <param name="handler">The extended <see cref="IQueryHandler"/></param>
-    /// <param name="errors">An array containing the <see cref="Error"/>s that have occured</param>
-    /// <returns>A new <see cref="OperationResult{T}"/> indicating that an internal error occured while handling the <see cref="Command{T}"/></returns>
+    /// <param name="errors">An array containing the <see cref="Error"/>s that have occurred</param>
+    /// <returns>A new <see cref="OperationResult{T}"/> indicating that an internal error occurred while handling the <see cref="Command{T}"/></returns>
     public static IOperationResult<T> InternalError<TQuery, T>(this IQueryHandler<TQuery, T> handler, params Error[] errors)
         where TQuery : class, IQuery<IOperationResult<T>, T>
     {

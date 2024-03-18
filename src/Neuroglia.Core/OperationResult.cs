@@ -38,7 +38,7 @@ public record OperationResult
     /// </summary>
     /// <param name="status">A value that describes the status of the operation result</param>
     /// <param name="data">The data, if any, returned by the operation in case of success</param>
-    /// <param name="errors">A list of the errors that have occured, if any, during the execution of the operation</param>
+    /// <param name="errors">A list of the errors that have occurred, if any, during the execution of the operation</param>
     public OperationResult(int status, object? data = null, params Error[] errors)
     {
         this.Status = status;
@@ -80,7 +80,7 @@ public record OperationResult<T>
     /// </summary>
     /// <param name="status">A value that describes the status of the operation result</param>
     /// <param name="data">The data, if any, returned by the operation in case of success</param>
-    /// <param name="errors">A list of the errors that have occured, if any, during the execution of the operation</param>
+    /// <param name="errors">A list of the errors that have occurred, if any, during the execution of the operation</param>
     public OperationResult(int status, object? data = null, params Error[] errors) : base(status, data, errors) { }
 
     /// <inheritdoc/>

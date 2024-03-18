@@ -107,7 +107,7 @@ public class RequestPipeline<TRequest, TResult>
     }
 
     /// <summary>
-    /// Handles exceptions that might have occured during the execution of the pipeline
+    /// Handles exceptions that might have occurred during the execution of the pipeline
     /// </summary>
     /// <param name="pipelineExecutionTask">The <see cref="Task{T}"/> to handle the exceptions for</param>
     /// <returns>The result of the pipeline's execution</returns>
