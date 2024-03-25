@@ -39,7 +39,7 @@ public class NugetPackagePluginSource
 {
 
     const string DefaultPackageSource = "https://api.nuget.org/v3/index.json";
-    readonly List<AssemblyPluginSource> _assemblies = new();
+    readonly List<AssemblyPluginSource> _assemblies = [];
 
     /// <summary>
     /// Initializes a new <see cref="NugetPackagePluginSource"/>
@@ -158,20 +158,20 @@ public class NugetPackagePluginSource
         var settings = Settings.LoadDefaultSettings(string.Empty, null, new MachineWideSettings());
         var packageSourceProvider = new PackageSourceProvider(settings);
         var sourceRepositoryProvider = new SourceRepositoryProvider(packageSourceProvider, Providers);
-        var framework = NuGetFramework.Parse(typeof(PluginManager).Assembly.GetCustomAttribute<TargetFrameworkAttribute>()!.FrameworkName!);
+        var framework = NuGetFramework.Parse(Assembly.GetEntryAssembly()!.GetCustomAttribute<TargetFrameworkAttribute>()!.FrameworkName!);
 
         var package = await this.GetPackageAsync(this.PackageId, this.PackageVersion, this.IncludePreRelease, false, cancellationToken).ConfigureAwait(false) ?? throw new ArgumentNullException($"Failed to find the specified package with id '{this.PackageId}' and version '{this.PackageVersion}'");
         var project = new PluginNugetProject(this.PackagesDirectory.FullName, this.PluginDirectory.FullName, package.Identity, framework);
         var packageManager = new NuGetPackageManager(sourceRepositoryProvider, settings, this.PackagesDirectory.FullName) { PackagesFolderNuGetProject = project };
         var clientPolicyContext = ClientPolicyContext.GetClientPolicy(settings, this.NugetLogger);
-        var projectContext = new PluginNugetProjectContext(this.LoggerFactory) { PackageExtractionContext = new PackageExtractionContext(PackageSaveMode.Defaultv2, PackageExtractionBehavior.XmlDocFileSaveMode, clientPolicyContext, this.NugetLogger) };
+        var projectContext = new PluginNugetProjectContext(this.LoggerFactory) { PackageExtractionContext = new PackageExtractionContext(PackageSaveMode.Defaultv3, PackageExtractionBehavior.XmlDocFileSaveMode, clientPolicyContext, this.NugetLogger) };
         var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, true, false, VersionConstraints.None);
         var downloadContext = new PackageDownloadContext(resolutionContext.SourceCacheContext, this.PackagesDirectory.FullName, resolutionContext.SourceCacheContext.DirectDownload);
         
-        await packageManager.InstallPackageAsync(project, package.Identity, resolutionContext, projectContext, downloadContext, package.SourceRepository, new List<SourceRepository>(), cancellationToken).ConfigureAwait(false);
+        await packageManager.InstallPackageAsync(project, package.Identity, resolutionContext, projectContext, downloadContext, package.SourceRepository, [], cancellationToken).ConfigureAwait(false);
         await project.PostProcessAsync(projectContext, cancellationToken).ConfigureAwait(false);
         await project.PreProcessAsync(projectContext, cancellationToken).ConfigureAwait(false);
-        await packageManager.RestorePackageAsync(package.Identity, projectContext, downloadContext, new[] { package.SourceRepository }, cancellationToken).ConfigureAwait(false);
+        await packageManager.RestorePackageAsync(package.Identity, projectContext, downloadContext, [package.SourceRepository], cancellationToken).ConfigureAwait(false);
 
         foreach (var pluginAssemblyFilePath in project.PluginAssemblies)
         {
@@ -211,7 +211,7 @@ public class NugetPackagePluginSource
     }
 
     /// <summary>
-    /// Searchs a <see cref="NuGet.Protocol.Core.Types.SourceRepository"/> for the specified Nuget package
+    /// Searches a <see cref="NuGet.Protocol.Core.Types.SourceRepository"/> for the specified Nuget package
     /// </summary>
     /// <param name="packageId">The id of the package to search for</param>
     /// <param name="packageVersion">The version, if any, of the package to search for</param>
@@ -256,51 +256,45 @@ public class NugetPackagePluginSource
     /// <param name="sourceUri">The package source uri, if any</param>
     /// <returns>A new <see cref="NuGet.Configuration.PackageSource"/></returns>
     protected virtual PackageSource BuildPackageSource(Uri sourceUri)
+    {
+        ArgumentNullException.ThrowIfNull(sourceUri);
+
+        var source = sourceUri.OriginalString;
+        var userInfo = sourceUri.UserInfo;
+        if (string.IsNullOrWhiteSpace(source)) source = DefaultPackageSource;
+        var packageSource = new PackageSource(source);
+
+        if (!string.IsNullOrWhiteSpace(userInfo))
         {
-            if (sourceUri == null) throw new ArgumentNullException(nameof(sourceUri));
-
-            var source = sourceUri.OriginalString;
-            var userInfo = sourceUri.UserInfo;
-            if (string.IsNullOrWhiteSpace(source)) source = DefaultPackageSource;
-            var packageSource = new PackageSource(source);
-
-            if (!string.IsNullOrWhiteSpace(userInfo))
-            {
-                var components = userInfo.Split(':', StringSplitOptions.RemoveEmptyEntries);
-                var username = components.Length > 0 ? components[0] : null;
-                var password = components.Length > 1 ? components[1] : null;
-                packageSource.Credentials = new PackageSourceCredential(source, username, password, true, null);
-            }
-
-            return packageSource;
+            var components = userInfo.Split(':', StringSplitOptions.RemoveEmptyEntries);
+            var username = components.Length > 0 ? components[0] : null;
+            var password = components.Length > 1 ? components[1] : null;
+            packageSource.Credentials = new PackageSourceCredential(source, username, password, true, null);
         }
+
+        return packageSource;
+    }
 
     /// <summary>
     /// Describes a Nuget package
     /// </summary>
-    protected class NugetPackageInfo
+    /// <remarks>
+    /// Initializes a new <see cref="NugetPackageInfo"/>
+    /// </remarks>
+    /// <param name="sourceRepository">The <see cref="NuGet.Protocol.Core.Types.SourceRepository"/> the package is sourced by</param>
+    /// <param name="identity">The package's identity</param>
+    protected class NugetPackageInfo(SourceRepository sourceRepository, PackageIdentity identity)
     {
-
-        /// <summary>
-        /// Initializes a new <see cref="NugetPackageInfo"/>
-        /// </summary>
-        /// <param name="sourceRepository">The <see cref="NuGet.Protocol.Core.Types.SourceRepository"/> the package is sourced by</param>
-        /// <param name="identity">The package's identitye</param>
-        public NugetPackageInfo(SourceRepository sourceRepository, PackageIdentity identity)
-        {
-            this.SourceRepository = sourceRepository;
-            this.Identity = identity;
-        }
 
         /// <summary>
         /// Gets the <see cref="NuGet.Protocol.Core.Types.SourceRepository"/> the package is sourced by
         /// </summary>
-        public SourceRepository SourceRepository { get; }
+        public SourceRepository SourceRepository { get; } = sourceRepository;
 
         /// <summary>
         /// Gets the package's identity
         /// </summary>
-        public PackageIdentity Identity { get; }
+        public PackageIdentity Identity { get; } = identity;
 
     }
 

@@ -18,25 +18,20 @@ namespace Neuroglia.Data.Infrastructure.ResourceOriented.Services;
 /// <summary>
 /// Represents the service used to create <see cref="RedisDatabase"/>s
 /// </summary>
-public class RedisDatabaseFactory
+/// <remarks>
+/// Initializes a new <see cref="RedisDatabaseFactory"/>
+/// </remarks>
+/// <param name="applicationServices">The current application's services</param>
+public class RedisDatabaseFactory(IServiceProvider applicationServices)
     : IFactory<RedisDatabase>, IDisposable, IAsyncDisposable
 {
 
     private bool _disposed;
 
     /// <summary>
-    /// Initializes a new <see cref="RedisDatabaseFactory"/>
-    /// </summary>
-    /// <param name="applicationServices">The current application's services</param>
-    public RedisDatabaseFactory(IServiceProvider applicationServices)
-    {
-        this.ApplicationServices = applicationServices;
-    }
-
-    /// <summary>
     /// Gets the current application's services
     /// </summary>
-    protected IServiceProvider ApplicationServices { get; }
+    protected IServiceProvider ApplicationServices { get; } = applicationServices;
 
     /// <summary>
     /// Gets the plugin's services

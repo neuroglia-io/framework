@@ -13,9 +13,9 @@
 
 using Microsoft.Extensions.Options;
 using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
+using Neuroglia.Plugins;
 using Neuroglia.Serialization;
 using StackExchange.Redis;
-using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -26,6 +26,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.Services;
 /// <summary>
 /// Represents a <see href="https://stackexchange.github.io/StackExchange.Redis/">StackExchange Redis</see> implementation of the <see cref="IEventStore"/> interface
 /// </summary>
+[Plugin(Tags = ["event-store"]), Factory(typeof(RedisEventStoreFactory))]
 public class RedisEventStore
     : IEventStore
 {
@@ -82,25 +83,25 @@ public class RedisEventStore
         if (events == null || !events.Any()) throw new ArgumentNullException(nameof(events));
 
         var keys = (await this.Database.HashKeysAsync(streamId).ConfigureAwait(false))?.Order().ToList();
-        var actualversion = keys == null || !keys.Any() ? (long?)null : (long)keys.Order().LastOrDefault();
+        var actualVersion = keys == null || keys.Count == 0 ? (long?)null : (long)keys.Order().LastOrDefault();
 
         if (expectedVersion.HasValue)
         {
             if (expectedVersion.Value == Infrastructure.EventSourcing.StreamPosition.EndOfStream)
             {
-                if (actualversion != null) throw new OptimisticConcurrencyException(expectedVersion, actualversion);
+                if (actualVersion != null) throw new OptimisticConcurrencyException(expectedVersion, actualVersion);
             }
-            else if (actualversion == null || actualversion != expectedVersion) throw new OptimisticConcurrencyException(expectedVersion, actualversion);
+            else if (actualVersion == null || actualVersion != expectedVersion) throw new OptimisticConcurrencyException(expectedVersion, actualVersion);
         }
 
-        var offset = actualversion.HasValue ? (ulong)actualversion.Value + 1 : StreamPosition.StartOfStream;
+        var offset = actualVersion.HasValue ? (ulong)actualVersion.Value + 1 : StreamPosition.StartOfStream;
         foreach (var e in events)
         {
             var record = new EventRecord(streamId, Guid.NewGuid().ToShortString(), offset, (ulong)(await this.Database.HashKeysAsync(GlobalStreamKey).ConfigureAwait(false)).Length, DateTimeOffset.Now, e.Type, e.Data, e.Metadata);
             record.Metadata ??= new Dictionary<string, object>();
             record.Metadata[EventRecordMetadata.ClrTypeName] = e.Data?.GetType().AssemblyQualifiedName!;
             var entryValue = this.Serializer.SerializeToByteArray(record);
-            await this.Database.HashSetAsync(streamId, new HashEntry[] { new(offset, entryValue) }).ConfigureAwait(false);
+            await this.Database.HashSetAsync(streamId, [new(offset, entryValue)]).ConfigureAwait(false);
             await this.AppendToGlobalStreamAsync(record, cancellationToken).ConfigureAwait(false);
             await this.Database.PublishAsync(this.GetRedisChannel(streamId), entryValue).ConfigureAwait(false);
             await this.Database.PublishAsync(this.GetRedisChannel(), entryValue).ConfigureAwait(false);
@@ -118,9 +119,9 @@ public class RedisEventStore
     protected virtual async Task AppendToGlobalStreamAsync(IEventRecord e, CancellationToken cancellationToken = default)
     {
         var keys = (await this.Database.HashKeysAsync(GlobalStreamKey).ConfigureAwait(false))?.Order().ToList();
-        var offset = keys == null || !keys.Any() ? StreamPosition.StartOfStream : (long)keys.Last() + 1;
+        var offset = keys == null || keys.Count == 0 ? StreamPosition.StartOfStream : (long)keys.Last() + 1;
         var entryValue = this.Serializer.SerializeToByteArray(new EventReference(e.StreamId, e.Offset));
-        await this.Database.HashSetAsync(GlobalStreamKey, new HashEntry[] { new(offset, entryValue) }).ConfigureAwait(false);
+        await this.Database.HashSetAsync(GlobalStreamKey, [new(offset, entryValue)]).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
@@ -132,7 +133,7 @@ public class RedisEventStore
         var keys = (await this.Database.HashKeysAsync(streamId).ConfigureAwait(false)).Order().ToList();
         DateTimeOffset? firstEventAt = null;
         DateTimeOffset? lastEventAt = null;
-        if(keys.Any())
+        if(keys.Count != 0)
         {
             firstEventAt = this.Serializer.Deserialize<EventRecord>((byte[])(await this.Database.HashGetAsync(streamId, keys.First()).ConfigureAwait(false))!)!.Timestamp;
             lastEventAt = this.Serializer.Deserialize<EventRecord>((byte[])(await this.Database.HashGetAsync(streamId, keys.Last()).ConfigureAwait(false))!)!.Timestamp;
@@ -161,7 +162,7 @@ public class RedisEventStore
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
         if (!await this.Database.KeyExistsAsync(streamId).ConfigureAwait(false)) throw new StreamNotFoundException(streamId);
-        if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
 
         var hashKeys = (await this.Database.HashKeysAsync(streamId).ConfigureAwait(false)).Order().ToList();
 
@@ -193,7 +194,7 @@ public class RedisEventStore
     }
 
     /// <summary>
-    /// Reads recorded events accross all streams
+    /// Reads recorded events across all streams
     /// </summary>
     /// <param name="readDirection">The direction in which to read events</param>
     /// <param name="offset">The offset starting from which to read events</param>
@@ -254,13 +255,13 @@ public class RedisEventStore
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
         if (!await this.Database.KeyExistsAsync(streamId).ConfigureAwait(false)) throw new StreamNotFoundException(streamId);
-        if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
 
         var checkpointedPosition = (ulong?)null;
         if (!string.IsNullOrWhiteSpace(consumerGroup)) checkpointedPosition = await this.GetConsumerCheckpointedPositionAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false);
 
         var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false) ?? offset;
-        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(streamId, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken).Select(e => this.WrapEvent(e, streamId, consumerGroup, checkpointedPosition.HasValue ? checkpointedPosition.Value > e.Offset : string.IsNullOrWhiteSpace(consumerGroup) ? null : false))).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var events = storedOffset == StreamPosition.EndOfStream ? [] : await (this.ReadAsync(streamId, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken).Select(e => this.WrapEvent(e, streamId, consumerGroup, checkpointedPosition.HasValue ? checkpointedPosition.Value > e.Offset : string.IsNullOrWhiteSpace(consumerGroup) ? null : false))).ToListAsync(cancellationToken).ConfigureAwait(false);
         var messageQueue = await this.Subscriber.SubscribeAsync(this.GetRedisChannel(streamId));
         var subject = new Subject<IEventRecord>();
 
@@ -280,13 +281,13 @@ public class RedisEventStore
     /// <returns>A new <see cref="IObservable{T}"/> used to observe events</returns>
     public virtual async Task<IObservable<IEventRecord>> ObserveAllAsync(long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
-        if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
 
         var checkpointedPosition = (ulong?)null;
         if (!string.IsNullOrWhiteSpace(consumerGroup)) checkpointedPosition = await this.GetConsumerCheckpointedPositionAsync(consumerGroup, null, cancellationToken).ConfigureAwait(false);
 
         var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false) ?? offset;
-        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(null, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken).Select(e => this.WrapEvent(e, null, consumerGroup, checkpointedPosition.HasValue ? checkpointedPosition.Value > e.Offset : string.IsNullOrWhiteSpace(consumerGroup) ? null : false))).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var events = storedOffset == StreamPosition.EndOfStream ? [] : await (this.ReadAsync(null, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken).Select(e => this.WrapEvent(e, null, consumerGroup, checkpointedPosition.HasValue ? checkpointedPosition.Value > e.Offset : string.IsNullOrWhiteSpace(consumerGroup) ? null : false))).ToListAsync(cancellationToken).ConfigureAwait(false);
         var messageQueue = await this.Subscriber.SubscribeAsync(this.GetRedisChannel());
         var subject = new ReplaySubject<IEventRecord>();
 
@@ -305,7 +306,7 @@ public class RedisEventStore
         if (beforeVersion.HasValue && beforeVersion < StreamPosition.StartOfStream) throw new ArgumentOutOfRangeException(nameof(beforeVersion));
 
         var hashKeys = (await this.Database.HashKeysAsync(streamId).ConfigureAwait(false)).Order().ToList();
-        if (!hashKeys.Any()) return;
+        if (hashKeys.Count == 0) return;
 
         var beforeElement = hashKeys.Select(k => (ulong?)k).FirstOrDefault(o => o >= beforeVersion);
         if (beforeElement != null)
@@ -313,7 +314,7 @@ public class RedisEventStore
             var index = hashKeys.Select(k => (ulong?)k).ToList().IndexOf(beforeElement);
             hashKeys = hashKeys.Take(index).ToList();
         }
-        await this.Database.HashDeleteAsync(streamId, hashKeys.ToArray()).ConfigureAwait(false);
+        await this.Database.HashDeleteAsync(streamId, [.. hashKeys]).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
@@ -345,7 +346,7 @@ public class RedisEventStore
     public virtual async Task SetOffsetAsync(string consumerGroup, long offset, string? streamId = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(consumerGroup)) throw new ArgumentNullException(nameof(consumerGroup));
-        if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
 
         var checkpointedPosition = (ulong?)await this.GetOffsetAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false);
         if (checkpointedPosition.HasValue) await this.SetConsumerCheckpointPositionAsync(consumerGroup, streamId, checkpointedPosition.Value, cancellationToken).ConfigureAwait(false);
@@ -455,16 +456,11 @@ public class RedisEventStore
 
     }
 
-    class RedisSubscription
-        : IDisposable
+    class RedisSubscription(ChannelMessageQueue queue)
+                : IDisposable
     {
 
-        private readonly ChannelMessageQueue _queue;
-
-        public RedisSubscription(ChannelMessageQueue queue)
-        {
-            this._queue = queue;
-        }
+        readonly ChannelMessageQueue _queue = queue;
 
         /// <inheritdoc/>
         public void Dispose()

@@ -16,9 +16,10 @@ using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
+using Neuroglia.Data.Infrastructure.EventSourcing.EventStore.Services;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
+using Neuroglia.Plugins;
 using Neuroglia.Serialization;
-using System.IO;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
@@ -29,6 +30,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing;
 /// <summary>
 /// Represents the default <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="IEventStore"/> interface
 /// </summary>
+[Plugin(Tags = ["event-store"]), Factory(typeof(ESEventStoreFactory))]
 public class ESEventStore
     : IEventStore
 {
@@ -36,26 +38,19 @@ public class ESEventStore
     /// <summary>
     /// Initializes a new <see cref="ESEventStore"/>
     /// </summary>
-    /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
     /// <param name="logger">The service used to perform logging</param>
     /// <param name="options">The options used to configure the <see cref="ESEventStore"/></param>
     /// <param name="serializerProvider">The service used to provide <see cref="ISerializer"/>s</param>
     /// <param name="eventStoreClient">The service used to interact with the remove <see href="https://www.eventstore.com/">Event Store</see> service</param>
     /// <param name="eventStorePersistentSubscriptionsClient">The service used to interact with the remove <see href="https://www.eventstore.com/">Event Store</see> service, exclusively for persistent subscriptions</param>
-    public ESEventStore(IServiceProvider serviceProvider, ILogger<ESEventStore> logger, IOptions<EventStoreOptions> options, ISerializerProvider serializerProvider, EventStoreClient eventStoreClient, EventStorePersistentSubscriptionsClient eventStorePersistentSubscriptionsClient)
+    public ESEventStore(ILogger<ESEventStore> logger, IOptions<EventStoreOptions> options, ISerializerProvider serializerProvider, EventStoreClient eventStoreClient, EventStorePersistentSubscriptionsClient eventStorePersistentSubscriptionsClient)
     {
-        this.ServiceProvider = serviceProvider;
         this.Logger = logger;
         this.Options = options.Value;
         this.Serializer = serializerProvider.GetSerializers().First(s => this.Options.SerializerType == null || s.GetType() == this.Options.SerializerType);
         this.EventStoreClient = eventStoreClient;
         this.EventStorePersistentSubscriptionsClient = eventStorePersistentSubscriptionsClient;
     }
-
-    /// <summary>
-    /// Gets the current <see cref="IServiceProvider"/>
-    /// </summary>
-    protected virtual IServiceProvider ServiceProvider { get; }
 
     /// <summary>
     /// Gets the service used to perform logging

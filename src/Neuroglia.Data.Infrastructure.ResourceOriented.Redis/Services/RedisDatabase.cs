@@ -25,7 +25,7 @@ using System.Runtime.CompilerServices;
 namespace Neuroglia.Data.Infrastructure.ResourceOriented.Services;
 
 /// <summary>
-/// Represents a <see href="https://redis.io/">Redis</see> implementation of the <see cref="Infrastructure.Services.IDatabase"/> interface
+/// Represents a <see href="https://redis.io/">Redis</see> implementation of the <see cref="IDatabase"/> interface
 /// </summary>
 [Plugin(Tags = ["roa", "redis"]), Factory(typeof(RedisDatabaseFactory))]
 public class RedisDatabase
@@ -69,7 +69,7 @@ public class RedisDatabase
     protected IConnectionMultiplexer Redis { get; }
 
     /// <summary>
-    /// Gets the current <see cref="Infrastructure.Services.IDatabase"/>
+    /// Gets the current <see cref="IDatabase"/>
     /// </summary>
     protected StackExchange.Redis.IDatabase Database { get; }
 
@@ -108,7 +108,7 @@ public class RedisDatabase
             initialized = true;
             await this.CreateResourceAsync(new NamespaceDefinition(), false, this.CancellationTokenSource.Token).ConfigureAwait(false);
         }
-        if ((await this.ListResourcesAsync<Namespace>(cancellationToken: this.CancellationTokenSource.Token).ConfigureAwait(false)).Items?.Any() == false)
+        if ((await this.ListResourcesAsync<Namespace>(cancellationToken: this.CancellationTokenSource.Token).ConfigureAwait(false)).Items?.Count == 0)
         {
             initialized = true;
             await this.CreateNamespaceAsync(Namespace.DefaultNamespaceName, false, this.CancellationTokenSource.Token).ConfigureAwait(false);

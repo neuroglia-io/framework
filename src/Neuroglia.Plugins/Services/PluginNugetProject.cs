@@ -27,7 +27,7 @@ public class PluginNugetProject
     : FolderNuGetProject
 {
 
-    readonly List<string> _pluginAssemblies = new();
+    readonly List<string> _pluginAssemblies = [];
 
     /// <summary>
     /// Initializes a new <see cref="PluginNugetProject"/>
@@ -113,7 +113,7 @@ public class PluginNugetProject
         if (mostCompatibleFramework == null) return;
 
         var matchingEntries = entriesWithTargetFramework.Where(e => e.TargetFramework == mostCompatibleFramework).ToList();
-        if (!matchingEntries.Any()) return;
+        if (matchingEntries.Count == 0) return;
 
         foreach (var entry in matchingEntries)
         {

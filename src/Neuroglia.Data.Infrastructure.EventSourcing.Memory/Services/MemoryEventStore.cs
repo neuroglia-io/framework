@@ -27,26 +27,21 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.DistributedCache.Services;
 /// Represents an <see cref="IEventStore"/> implementation relying on an <see cref="IMemoryCache"/>
 /// </summary>
 /// <remarks>Should not be used in production</remarks>
+/// <remarks>
+/// Initializes a new <see cref="MemoryEventStore"/>
+/// </remarks>
+/// <param name="cache">The cache to stream events to</param>
 [Plugin(Tags = ["event-store"]), Factory(typeof(MemoryCacheEventStoreFactory))]
-public class MemoryEventStore
+public class MemoryEventStore(IMemoryCache cache)
     : IEventStore, IDisposable
 {
 
-    private bool _disposed;
-
-    /// <summary>
-    /// Initializes a new <see cref="MemoryEventStore"/>
-    /// </summary>
-    /// <param name="cache">The cache to stream events to</param>
-    public MemoryEventStore(IMemoryCache cache)
-    {
-        this.Cache = cache;
-    }
+    bool _disposed;
 
     /// <summary>
     /// Gets the cache to stream events to
     /// </summary>
-    protected IMemoryCache Cache { get; }
+    protected IMemoryCache Cache { get; } = cache;
 
     /// <summary>
     /// Gets the <see cref="ConcurrentDictionary{TKey, TValue}"/> containing all published <see cref="IEventRecord"/>s
@@ -66,19 +61,19 @@ public class MemoryEventStore
         if (expectedVersion < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(expectedVersion));
 
         this.Cache.TryGetValue<ObservableCollection<IEventRecord>>(streamId, out var stream);
-        var actualversion = stream == null ? (long?)null : (long)stream.Last().Offset;
+        var actualVersion = stream == null ? (long?)null : (long)stream.Last().Offset;
 
         if (expectedVersion.HasValue)
         {
             if(expectedVersion.Value == StreamPosition.EndOfStream)
             {
-                if (actualversion != null) throw new OptimisticConcurrencyException(expectedVersion, actualversion);
+                if (actualVersion != null) throw new OptimisticConcurrencyException(expectedVersion, actualVersion);
             }
-            else if(actualversion == null || actualversion != expectedVersion) throw new OptimisticConcurrencyException(expectedVersion, actualversion);
+            else if(actualVersion == null || actualVersion != expectedVersion) throw new OptimisticConcurrencyException(expectedVersion, actualVersion);
         }
 
         stream ??= [];
-        ulong offset = actualversion.HasValue ? (ulong)actualversion.Value + 1 : StreamPosition.StartOfStream;
+        ulong offset = actualVersion.HasValue ? (ulong)actualVersion.Value + 1 : StreamPosition.StartOfStream;
         foreach(var e in events)
         {
             var record = new EventRecord(streamId, Guid.NewGuid().ToString(), offset, (ulong)this.Stream.Count, DateTimeOffset.Now, e.Type, e.Data, e.Metadata);
@@ -122,7 +117,7 @@ public class MemoryEventStore
     protected virtual async IAsyncEnumerable<IEventRecord> ReadFromStreamAsync(string streamId, StreamReadDirection readDirection, long offset, ulong? length = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
-        if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
 
         if (!this.Cache.TryGetValue<ObservableCollection<IEventRecord>>(streamId, out var stream) || stream == null) throw new StreamNotFoundException(streamId);
 
@@ -157,7 +152,7 @@ public class MemoryEventStore
     }
 
     /// <summary>
-    /// Reads recorded events accross all streams
+    /// Reads recorded events across all streams
     /// </summary>
     /// <param name="readDirection">The direction in which to read events</param>
     /// <param name="offset">The offset starting from which to read events</param>
@@ -190,12 +185,12 @@ public class MemoryEventStore
     protected virtual async Task<IObservable<IEventRecord>> ObserveStreamAsync(string streamId, long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
-        if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
 
         if (!this.Cache.TryGetValue<ObservableCollection<IEventRecord>>(streamId, out var stream) || stream == null) throw new StreamNotFoundException(streamId);
 
         var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false) ?? offset;
-        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(streamId, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken)).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var events = storedOffset == StreamPosition.EndOfStream ? [] : await (this.ReadAsync(streamId, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken)).ToListAsync(cancellationToken).ConfigureAwait(false);
         var subject = new Subject<IEventRecord>();
         
         var checkpointedPosition = (ulong?)null;
@@ -218,10 +213,10 @@ public class MemoryEventStore
     /// <returns>A new <see cref="IObservable{T}"/> used to observe events</returns>
     protected virtual async Task<IObservable<IEventRecord>> ObserveAllAsync(long offset = StreamPosition.EndOfStream, string? consumerGroup = null, CancellationToken cancellationToken = default)
     {
-        if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
 
         var storedOffset = string.IsNullOrWhiteSpace(consumerGroup) ? offset : await this.GetOffsetAsync(consumerGroup, cancellationToken: cancellationToken).ConfigureAwait(false) ?? offset;
-        var events = storedOffset == StreamPosition.EndOfStream ? Array.Empty<IEventRecord>().ToList() : await (this.ReadAsync(null, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken)).ToListAsync(cancellationToken).ConfigureAwait(false);
+        var events = storedOffset == StreamPosition.EndOfStream ? [] : await (this.ReadAsync(null, StreamReadDirection.Forwards, storedOffset, cancellationToken: cancellationToken)).ToListAsync(cancellationToken).ConfigureAwait(false);
         var subject = new ReplaySubject<IEventRecord>();
 
         var checkpointedPosition = (ulong?)null;
@@ -250,7 +245,7 @@ public class MemoryEventStore
     public virtual async Task SetOffsetAsync(string consumerGroup, long offset, string? streamId = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(consumerGroup)) throw new ArgumentNullException(nameof(consumerGroup));
-        if (offset < StreamPosition.EndOfStream) throw new ArgumentOutOfRangeException(nameof(offset));
+        ArgumentOutOfRangeException.ThrowIfLessThan(offset, StreamPosition.EndOfStream);
 
         var checkpointedPosition = (ulong?)await this.GetOffsetAsync(consumerGroup, streamId, cancellationToken).ConfigureAwait(false);
         if (checkpointedPosition.HasValue) await this.SetConsumerCheckpointPositionAsync(consumerGroup, streamId, checkpointedPosition.Value, cancellationToken).ConfigureAwait(false);

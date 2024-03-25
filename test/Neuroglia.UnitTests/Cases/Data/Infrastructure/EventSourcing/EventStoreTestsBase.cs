@@ -21,16 +21,10 @@ using Org.BouncyCastle.Bcpg;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing;
 
-public abstract class EventStoreTestsBase
+public abstract class EventStoreTestsBase(IServiceCollection services)
     : IAsyncLifetime
 {
-
-    public EventStoreTestsBase(IServiceCollection services)
-    {
-        ServiceProvider = services.BuildServiceProvider();
-    }
-
-    protected ServiceProvider ServiceProvider { get; }
+    protected ServiceProvider ServiceProvider { get; } = services.BuildServiceProvider();
 
     protected CancellationTokenSource CancellationTokenSource { get; } = new();
 
@@ -97,7 +91,7 @@ public abstract class EventStoreTestsBase
     }
 
     [Fact, Priority(4)]
-    public async Task Append_WithInvalidExpectedVersion_Should_Throw_OptmisticConcurrencyException()
+    public async Task Append_WithInvalidExpectedVersion_Should_Throw_OptimisticConcurrencyException()
     {
         //arrange
         var streamId = "fake-stream";
