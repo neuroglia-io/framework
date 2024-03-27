@@ -179,7 +179,7 @@ public class NugetPackagePluginSource
             this._assemblies.Add(assemblyCatalog);
         }
 
-        this.PackagesDirectory.Delete(true);
+        try { this.PackagesDirectory.Delete(true); } catch { }
         this.IsLoaded = true;
     }
 
