@@ -49,12 +49,12 @@ public class PluginSourceBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IPluginSourceFinalStageBuilder FromNugetPackage(string? name, Action<IPluginTypeFilterBuilder> filterSetup, string packageId, string packageVersion, Uri? packageSourceUri, bool includePreRelease = false, string? packagesDirectory = null)
+    public virtual IPluginSourceFinalStageBuilder FromNugetPackage(string? name, Action<IPluginTypeFilterBuilder> filterSetup, string packageId, string packageVersion, Uri? packageSourceUri, bool includePreRelease = false)
     {
         var filterBuilder = new PluginTypeFilterBuilder();
         filterSetup.Invoke(filterBuilder);
         var options = new PluginSourceOptions() { Filter = filterBuilder.Build() };
-        this.Source = new NugetPackagePluginSource(new NullLoggerFactory(), name, options, packageId, packageVersion, packageSourceUri, includePreRelease, packagesDirectory);
+        this.Source = new NugetPackagePluginSource(new NullLoggerFactory(), name, options, packageId, packageVersion, packageSourceUri, includePreRelease);
         return this;
     }
 

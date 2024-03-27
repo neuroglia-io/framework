@@ -50,8 +50,7 @@ public interface IPluginSourceBuilder
     /// <param name="packageVersion">The version of the Nuget package used to source plugins</param>
     /// <param name="packageSourceUri">The uri of the package source to get the specified Nuget package from</param>
     /// <param name="includePreRelease">A boolean indicating whether or not to include pre-release packages</param>
-    /// <param name="packagesDirectory">The directory to output the nuget packages to, if any</param>
     /// <returns>A new <see cref="IPluginSource"/></returns>
-    IPluginSourceFinalStageBuilder FromNugetPackage(string? name, Action<IPluginTypeFilterBuilder> filterSetup, string packageId, string packageVersion, Uri? packageSourceUri, bool includePreRelease = false, string? packagesDirectory = null);
+    IPluginSourceFinalStageBuilder FromNugetPackage(string? name, Action<IPluginTypeFilterBuilder> filterSetup, string packageId, string packageVersion, Uri? packageSourceUri, bool includePreRelease = false);
 
 }

@@ -51,8 +51,7 @@ public class NugetPackagePluginSource
     /// <param name="packageVersion">The version, if any, of the Nuget package to use</param>
     /// <param name="packageSourceUri">The package source to use</param>
     /// <param name="includePreRelease">A boolean indicating whether or not to include pre-release packages</param>
-    /// <param name="packagesDirectory">The directory to output packages to</param>
-    public NugetPackagePluginSource(ILoggerFactory loggerFactory, string? name, PluginSourceOptions options, string packageId, string? packageVersion = null, Uri? packageSourceUri = null, bool includePreRelease = false, string? packagesDirectory = null)
+    public NugetPackagePluginSource(ILoggerFactory loggerFactory, string? name, PluginSourceOptions options, string packageId, string? packageVersion = null, Uri? packageSourceUri = null, bool includePreRelease = false)
     {
         if (string.IsNullOrWhiteSpace(packageId)) throw new ArgumentNullException(nameof(packageId));
 
@@ -66,7 +65,7 @@ public class NugetPackagePluginSource
         this.PackageSourceUri = packageSourceUri;
         this.IncludePreRelease = includePreRelease;
 
-        this.PackagesDirectory = string.IsNullOrWhiteSpace(packagesDirectory) ? new DirectoryInfo(SettingsUtility.GetGlobalPackagesFolder(Settings.LoadDefaultSettings(null))) : new DirectoryInfo(packagesDirectory);        
+        this.PackagesDirectory =  new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins", packageId, packageVersion ?? "latest", ".nuget"));        
         if (!this.PackagesDirectory.Exists) this.PackagesDirectory.Create();
 
         this.PluginDirectory = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins", packageId, packageVersion ?? "latest"));
@@ -165,8 +164,8 @@ public class NugetPackagePluginSource
         var packageManager = new NuGetPackageManager(sourceRepositoryProvider, settings, this.PackagesDirectory.FullName) { PackagesFolderNuGetProject = project };
         var clientPolicyContext = ClientPolicyContext.GetClientPolicy(settings, this.NugetLogger);
         var projectContext = new PluginNugetProjectContext(this.LoggerFactory) { PackageExtractionContext = new PackageExtractionContext(PackageSaveMode.Defaultv3, PackageExtractionBehavior.XmlDocFileSaveMode, clientPolicyContext, this.NugetLogger) };
-        var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, true, false, VersionConstraints.None);
-        var downloadContext = new PackageDownloadContext(resolutionContext.SourceCacheContext, this.PackagesDirectory.FullName, resolutionContext.SourceCacheContext.DirectDownload);
+        var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, true, false, VersionConstraints.None, new(), new());
+        var downloadContext = new PackageDownloadContext(resolutionContext.SourceCacheContext, this.PackagesDirectory.FullName, false);
         
         await packageManager.InstallPackageAsync(project, package.Identity, resolutionContext, projectContext, downloadContext, package.SourceRepository, [], cancellationToken).ConfigureAwait(false);
         await project.PostProcessAsync(projectContext, cancellationToken).ConfigureAwait(false);
@@ -180,6 +179,7 @@ public class NugetPackagePluginSource
             this._assemblies.Add(assemblyCatalog);
         }
 
+        this.PackagesDirectory.Delete(true);
         this.IsLoaded = true;
     }
 

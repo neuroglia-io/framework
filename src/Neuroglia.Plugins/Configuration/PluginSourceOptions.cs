@@ -53,7 +53,7 @@ public class PluginSourceOptions
     /// <returns>A new <see cref="IPluginSource"/></returns>
     public virtual IPluginSource BuildSource(IServiceProvider serviceProvider)
     {
-        var properties = this.Properties ==null ? new Dictionary<string, object>() : new Dictionary<string, object>(this.Properties, StringComparer.OrdinalIgnoreCase);
+        var properties = this.Properties == null ? [] : new Dictionary<string, object>(this.Properties, StringComparer.OrdinalIgnoreCase);
         switch (this.Type)
         {
             case PluginSourceType.Assembly:
@@ -69,8 +69,7 @@ public class PluginSourceOptions
                 properties.TryGetValue("packageVersion", out var packageVersion);
                 properties.TryGetValue("packageSourceUri", out var packageSourceUri);
                 properties.TryGetValue("includePreRelease", out var includePreRelease);
-                properties.TryGetValue("packagesDirectory", out var packagesDirectory);
-                return new NugetPackagePluginSource(serviceProvider.GetRequiredService<ILoggerFactory>(), this.Name, this, (string)packageId, packageVersion?.ToString()!, packageSourceUri == null ? null! : new Uri(packageSourceUri.ToString()!), includePreRelease != null && bool.Parse(includePreRelease.ToString()!), packagesDirectory?.ToString()!);
+                return new NugetPackagePluginSource(serviceProvider.GetRequiredService<ILoggerFactory>(), this.Name, this, (string)packageId, packageVersion?.ToString()!, packageSourceUri == null ? null! : new Uri(packageSourceUri.ToString()!), includePreRelease != null && bool.Parse(includePreRelease.ToString()!));
             default: throw new NotSupportedException($"The specified {nameof(PluginSourceType)} '{EnumHelper.Stringify(this.Type)}' is not supported");
         }
     }
