@@ -30,5 +30,85 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore "${{ env.SOLUTION }}"
 
-      - name: Test
-        run: dotnet test "${{ env.SOLUTION }}" --no-restore --verbosity normal
+      - name: Build solution
+        run: dotnet build "${{ env.SOLUTION }}" --configuration Release --no-restore
+
+      # # Run every tests
+      # - name: Test
+      #   run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --verbosity normal
+
+      # Run test 'per domain'
+      - name: Test Core
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Core"
+  
+      - name: Test Data.NsmTreeTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.NsmTreeTests"
+  
+      - name: Test Data.Expressions
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Expressions"
+  
+      - name: Test Data.Guards
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Guards"
+
+      - name: Test Data.Infrastructure.EventSourcing.EventAggregatorTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Infrastructure.EventSourcing.EventAggregatorTests"
+      
+      - name: Test Data.Infrastructure.EventSourcing.EventSourcingRepositoryTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Infrastructure.EventSourcing.EventSourcingRepositoryTests"
+      
+      - name: Test Data.Infrastructure.EventSourcing.AggregateStateManagerTestsBase
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Infrastructure.EventSourcing.AggregateStateManagerTestsBase"
+
+      - name: Test Data.Infrastructure.EventSourcing.EventStores.ESEventStoreTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Infrastructure.EventSourcing.EventStores.ESEventStoreTests"
+
+      - name: Test Data.Infrastructure.EventSourcing.EventStores.MemoryEventStoreTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Infrastructure.EventSourcing.EventStores.MemoryEventStoreTests"
+
+      - name: Test Data.Infrastructure.EventSourcing.EventStores.RedisEventStoreTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Infrastructure.EventSourcing.EventStores.RedisEventStoreTests"
+
+      - name: Test Data.Infrastructure.ObjectStorage
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter FullyQualifiedName~"Data.Infrastructure.ObjectStorage"      
+
+      - name: Test Data.Infrastructure.Repositories.EventSourcingRepositoryTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Infrastructure.Repositories.EventSourcingRepositoryTests"      
+
+      - name: Test Data.Infrastructure.Repositories.MemoryCacheRepositoryTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Infrastructure.Repositories.MemoryCacheRepositoryTests"      
+
+      - name: Test Data.Infrastructure.Repositories.MongoRepositoryTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Infrastructure.Repositories.MongoRepositoryTests"      
+
+      - name: Test Data.Infrastructure.ResourceOriented.Databases.RedisDatabaseTests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Infrastructure.ResourceOriented.Databases.RedisDatabaseTests"
+      
+      - name: Test Data.PatchModel
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.PatchModel"
+      
+      - name: Test Data.Schemas.Json
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Data.Schemas.Json"
+      
+      - name: Test Eventing.CloudEvents
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Eventing.CloudEvents"
+      
+      - name: Test Measurements
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Measurements"
+      
+      - name: Test Mediation
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Mediation"
+      
+      - name: Test Measurementss
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Measurements"
+      
+      - name: Test Plugins
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Measurements"
+      
+      - name: Test Measurementss
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Measurements"
+      
+      - name: Test Serialization
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName~Serialization"
+
+      - name: Other tests
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --no-restore --filter "FullyQualifiedName\!~Core&FullyQualifiedName\!~Data.NsmTreeTests&FullyQualifiedName\!~Data.Expressions&FullyQualifiedName\!~Data.Guards&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventAggregatorTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventSourcingRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.AggregateStateManagerTestsBase&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventStores.ESEventStoreTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventStores.MemoryEventStoreTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventStores.RedisEventStoreTests&FullyQualifiedName\!~Data.Infrastructure.ObjectStorage&FullyQualifiedName\!~Data.Infrastructure.Repositories.EventSourcingRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.Repositories.MemoryCacheRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.Repositories.MongoRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.ResourceOriented.Databases.RedisDatabaseTests&FullyQualifiedName\!~Data.PatchModel&FullyQualifiedName\!~Data.Schemas.Json&FullyQualifiedName\!~Eventing.CloudEvents&FullyQualifiedName\!~Measurements&FullyQualifiedName\!~Mediation&FullyQualifiedName\!~Plugins&FullyQualifiedName\!~Serialization"
