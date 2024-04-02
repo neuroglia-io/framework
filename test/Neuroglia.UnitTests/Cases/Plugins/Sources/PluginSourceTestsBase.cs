@@ -35,7 +35,7 @@ public abstract class PluginSourceTestsBase
     public async Task DisposeAsync() => await this.ServiceProvider.DisposeAsync().ConfigureAwait(false);
 
     [Fact]
-    public async Task Load_Should_Work()
+    public virtual async Task Load_Should_Work()
     {
         //act
         await this.PluginSource.LoadAsync();
