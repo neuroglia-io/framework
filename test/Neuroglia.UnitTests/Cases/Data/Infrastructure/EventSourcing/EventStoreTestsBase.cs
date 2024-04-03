@@ -17,7 +17,6 @@ using Microsoft.Extensions.Hosting;
 using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 using Neuroglia.Reactive;
-using Org.BouncyCastle.Bcpg;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing;
 

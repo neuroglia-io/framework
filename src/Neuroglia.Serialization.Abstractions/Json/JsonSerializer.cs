@@ -31,6 +31,8 @@ public class JsonSerializer(IOptions<JsonSerializerOptions> options)
     : IJsonSerializer, IAsyncSerializer
 {
 
+    static readonly object _lock = new object();
+
     /// <summary>
     /// Gets/sets an <see cref="Action{T}"/> used to configure the <see cref="JsonSerializerOptions"/> used by default
     /// </summary>
@@ -51,10 +53,13 @@ public class JsonSerializer(IOptions<JsonSerializerOptions> options)
     {
         get
         {
-            if (_defaultOptions != null) return _defaultOptions;
-            _defaultOptions = new JsonSerializerOptions();
-            DefaultOptionsConfiguration?.Invoke(_defaultOptions);
-            return _defaultOptions;
+            lock (_lock)
+            {
+                if (_defaultOptions != null) return _defaultOptions;
+                _defaultOptions = new JsonSerializerOptions();
+                DefaultOptionsConfiguration?.Invoke(_defaultOptions);
+                return _defaultOptions;
+            }
         }
     }
 

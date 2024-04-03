@@ -131,7 +131,7 @@ public static class IDatabaseExtensions
     /// </summary>
     /// <typeparam name="TResource">The type of <see cref="IResource"/>s to list</typeparam>
     /// <param name="database">The extended <see cref="IRepository"/></param>
-    /// <param name="namespace">The namespace the <see cref="IResource"/>s to list belongs to, if any. If not set, lists resources accross all namespaces</param>
+    /// <param name="namespace">The namespace the <see cref="IResource"/>s to list belongs to, if any. If not set, lists resources across all namespaces</param>
     /// <param name="labelSelectors">A collection of objects used to configure the labels to filter the <see cref="IResource"/>s to list by</param>
     /// <param name="maxResults">The maximum amount of results that should be returned</param>
     /// <param name="continuationToken">A value used to continue paging resources, in the context of a paging request</param>
@@ -150,7 +150,7 @@ public static class IDatabaseExtensions
     /// </summary>
     /// <typeparam name="TResource">The type of <see cref="IResource"/>s to stream</typeparam>
     /// <param name="database">The extended <see cref="IRepository"/></param>
-    /// <param name="namespace">The namespace the <see cref="IResource"/>s to stream belongs to, if any. If not set, streams resources accross all namespaces</param>
+    /// <param name="namespace">The namespace the <see cref="IResource"/>s to stream belongs to, if any. If not set, streams resources across all namespaces</param>
     /// <param name="labelSelectors">A collection of objects used to configure the labels to filter the <see cref="IResource"/>s to stream by</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new <see cref="IAsyncEnumerable{T}"/> used to stream all matching <see cref="IResource"/>s of type specified type</returns>
