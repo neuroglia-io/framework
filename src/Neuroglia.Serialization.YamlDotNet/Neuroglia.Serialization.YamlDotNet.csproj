@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="JsonSchema.Net" Version="6.0.4" />
+    <PackageReference Include="JsonSchema.Net" Version="6.0.7" />
     <PackageReference Include="YamlDotNet" Version="15.1.2" />
   </ItemGroup>
 

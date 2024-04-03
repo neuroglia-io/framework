@@ -182,7 +182,7 @@ public class ESEventStore
     }
 
     /// <summary>
-    /// Reads recorded events accross all streams
+    /// Reads recorded events across all streams
     /// </summary>
     /// <param name="readDirection">The direction in which to read events</param>
     /// <param name="offset">The offset starting from which to read events</param>
