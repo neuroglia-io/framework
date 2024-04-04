@@ -26,8 +26,8 @@ public interface IEventStore
     /// <param name="events">The events to append to the specified stream</param>
     /// <param name="expectedVersion">The expected version of the stream to append the events to. Used for optimistic concurrency</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task AppendAsync(string streamId, IEnumerable<IEventDescriptor> events, long? expectedVersion = null, CancellationToken cancellationToken = default);
+    /// <returns>The version of the stream that is next expected</returns>
+    Task<ulong> AppendAsync(string streamId, IEnumerable<IEventDescriptor> events, long? expectedVersion = null, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets information about the specified stream

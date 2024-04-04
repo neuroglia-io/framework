@@ -77,7 +77,7 @@ public class RedisEventStore
     protected ISubscriber Subscriber { get; }
 
     /// <inheritdoc/>
-    public virtual async Task AppendAsync(string streamId, IEnumerable<IEventDescriptor> events, long? expectedVersion = null, CancellationToken cancellationToken = default)
+    public virtual async Task<ulong> AppendAsync(string streamId, IEnumerable<IEventDescriptor> events, long? expectedVersion = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
         if (events == null || !events.Any()) throw new ArgumentNullException(nameof(events));
@@ -87,7 +87,7 @@ public class RedisEventStore
 
         if (expectedVersion.HasValue)
         {
-            if (expectedVersion.Value == Infrastructure.EventSourcing.StreamPosition.EndOfStream)
+            if (expectedVersion.Value == StreamPosition.EndOfStream)
             {
                 if (actualVersion != null) throw new OptimisticConcurrencyException(expectedVersion, actualVersion);
             }
@@ -107,7 +107,8 @@ public class RedisEventStore
             await this.Database.PublishAsync(this.GetRedisChannel(), entryValue).ConfigureAwait(false);
             offset++;
         }
-
+        offset--;
+        return offset;
     }
 
     /// <summary>

@@ -48,10 +48,11 @@ public abstract class EventStoreTestsBase(IServiceCollection services)
         var events = EventStreamFactory.Create().ToList();
 
         //act
-        await EventStore.AppendAsync(streamId, events);
+        var offset = await EventStore.AppendAsync(streamId, events);
         var storedEvents = await EventStore.ReadAsync(streamId, StreamReadDirection.Forwards, 0).ToListAsync();
 
         //assert
+        offset.Should().Be((ulong)storedEvents.Count - 1);
         storedEvents.Should().HaveSameCount(events);
         for (var i = 0; i < storedEvents.Count; i++)
         {
