@@ -54,7 +54,7 @@ public class MemoryEventStore(IMemoryCache cache)
     protected Subject<IEventRecord> Subject { get; } = new();
 
     /// <inheritdoc/>
-    public virtual Task AppendAsync(string streamId, IEnumerable<IEventDescriptor> events, long? expectedVersion = null, CancellationToken cancellationToken = default)
+    public virtual Task<ulong> AppendAsync(string streamId, IEnumerable<IEventDescriptor> events, long? expectedVersion = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(streamId)) throw new ArgumentNullException(nameof(streamId));
         if (events == null || !events.Any()) throw new ArgumentNullException(nameof(events));
@@ -78,14 +78,13 @@ public class MemoryEventStore(IMemoryCache cache)
         {
             var record = new EventRecord(streamId, Guid.NewGuid().ToString(), offset, (ulong)this.Stream.Count, DateTimeOffset.Now, e.Type, e.Data, e.Metadata);
             stream.Add(record);
-            offset++;
             this.Stream.AddOrUpdate((ulong)this.Stream.Count + 1, record, (key, value) => record);
             this.Subject.OnNext(record);
+            offset++;
         }
-
+        offset--;
         this.Cache.Set(streamId, stream);
-
-        return Task.CompletedTask;
+        return Task.FromResult(offset);
     }
 
     /// <inheritdoc/>
