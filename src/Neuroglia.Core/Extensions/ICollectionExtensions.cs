@@ -13,7 +13,7 @@
 
 using System.Collections;
 
-namespace Neuroglia;
+namespace Neuroglia.Collections;
 
 /// <summary>
 /// Defines extensions for <see cref="ICollection"/>s

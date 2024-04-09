@@ -110,7 +110,7 @@ public class JsonSchemaResolver(IJsonSerializer serializer, HttpClient httpClien
         {
             var reference = refKeyword.Value.Deserialize<string>()!;
             var refSchema = await this.ResolveReferencedSchemaAsync(new Uri(reference, UriKind.RelativeOrAbsolute), rootSchema, cancellationToken).ConfigureAwait(false);
-            if (refSchema.HasValue) refSchemas.Add(refSchema);
+            if (refSchema.HasValue) refSchemas.Add(refSchema.Value);
         }
 
         if (allOfKeyword.Value.ValueKind == JsonValueKind.Array)

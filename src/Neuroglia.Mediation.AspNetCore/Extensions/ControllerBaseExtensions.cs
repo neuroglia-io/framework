@@ -42,7 +42,7 @@ public static class ControllerBaseExtensions
     public static ActionResult Process<TResult>(this ControllerBase controller, TResult result, int successStatusCode = 200)
         where TResult : IOperationResult
     {
-        if (result.Status != (int)HttpStatusCode.OK)
+        if (!(result.Status >= 200 && result.Status < 300))
         {
             if (result.Status == (int)HttpStatusCode.Forbidden) return controller.StatusCode((int)HttpStatusCode.Forbidden);
             if (result.Status == (int)HttpStatusCode.BadRequest)
@@ -53,10 +53,10 @@ public static class ControllerBaseExtensions
             if (result.Status == (int)HttpStatusCode.NotFound)
             {
                 result.Errors?.ToList().ForEach(e => controller.ModelState.AddModelError(e.Title!, e.Detail!));
-                return NotFound(controller, controller.ModelState); ;
+                return NotFound(controller, controller.ModelState);
             }
             if (result.Status == (int)HttpStatusCode.NotModified) return controller.StatusCode((int)HttpStatusCode.NotModified);
-            return controller.StatusCode((int)HttpStatusCode.InternalServerError);
+            return controller.StatusCode((int)HttpStatusCode.InternalServerError, result.Data);
         }
         if (result.Data != null) return new ObjectResult(result.Data) { StatusCode = successStatusCode };
         else return controller.StatusCode(successStatusCode);

@@ -47,4 +47,29 @@ public static class ObjectExtensions
         return expando;
     }
 
+    /// <summary>
+    /// Gets the value returned by the specified property
+    /// </summary>
+    /// <param name="source">The extended object</param>
+    /// <param name="name">The name of the property to get</param>
+    /// <returns>The value of the specified property</returns>
+    /// <remarks>This method is used to dynamically get the property of an object, specifically when building an expression, which does not allow dynamic operations</remarks>
+    public static object GetProperty(this object source, string name)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        var property = source.GetType().GetProperty(name) ?? throw new MissingMemberException($"Failed to find a property with the specified name '{name}'", name);
+        return property.GetValue(source)!;
+    }
+
+    /// <summary>
+    /// Gets the value returned by the specified property
+    /// </summary>
+    /// <typeparam name="T">The type of the property to get</typeparam>
+    /// <param name="source">The extended object</param>
+    /// <param name="name">The name of the property to get</param>
+    /// <returns>The value of the specified property</returns>
+    /// <remarks>This method is used to dynamically get the property of an object, specifically when building an expression, which does not allow dynamic operations</remarks>
+    public static T GetProperty<T>(this object source, string name) => (T)source.GetProperty(name);
+
 }

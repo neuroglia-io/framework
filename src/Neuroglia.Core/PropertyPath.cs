@@ -72,7 +72,7 @@ public class PropertyPath
     /// </summary>
     /// <param name="input">The input to parse</param>
     /// <returns>A new <see cref="PropertyPath"/> based on the specified input</returns>
-    public static PropertyPath Parse(string input) => new PropertyPath(input);
+    public static PropertyPath Parse(string input) => new(input);
 
     /// <summary>
     /// Attempts to parse the specified input into a new <see cref="PropertyPath"/>
