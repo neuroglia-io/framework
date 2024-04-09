@@ -30,20 +30,20 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing;
 /// <summary>
 /// Represents the default <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="IEventStore"/> interface
 /// </summary>
-[Plugin(Tags = ["event-store"]), Factory(typeof(ESEventStoreFactory))]
-public class ESEventStore
+[Plugin(Tags = ["event-store"]), Factory(typeof(EsdbEventStoreFactory))]
+public class EsdbEventStore
     : IEventStore
 {
 
     /// <summary>
-    /// Initializes a new <see cref="ESEventStore"/>
+    /// Initializes a new <see cref="EsdbEventStore"/>
     /// </summary>
     /// <param name="logger">The service used to perform logging</param>
-    /// <param name="options">The options used to configure the <see cref="ESEventStore"/></param>
+    /// <param name="options">The options used to configure the <see cref="EsdbEventStore"/></param>
     /// <param name="serializerProvider">The service used to provide <see cref="ISerializer"/>s</param>
     /// <param name="eventStoreClient">The service used to interact with the remove <see href="https://www.eventstore.com/">Event Store</see> service</param>
     /// <param name="eventStorePersistentSubscriptionsClient">The service used to interact with the remove <see href="https://www.eventstore.com/">Event Store</see> service, exclusively for persistent subscriptions</param>
-    public ESEventStore(ILogger<ESEventStore> logger, IOptions<EventStoreOptions> options, ISerializerProvider serializerProvider, EventStoreClient eventStoreClient, EventStorePersistentSubscriptionsClient eventStorePersistentSubscriptionsClient)
+    public EsdbEventStore(ILogger<EsdbEventStore> logger, IOptions<EventStoreOptions> options, ISerializerProvider serializerProvider, EventStoreClient eventStoreClient, EventStorePersistentSubscriptionsClient eventStorePersistentSubscriptionsClient)
     {
         this.Logger = logger;
         this.Options = options.Value;
@@ -58,7 +58,7 @@ public class ESEventStore
     protected virtual ILogger Logger { get; }
 
     /// <summary>
-    /// Gets the options used to configure the <see cref="ESEventStore"/>
+    /// Gets the options used to configure the <see cref="EsdbEventStore"/>
     /// </summary>
     protected virtual EventStoreOptions Options { get; }
 
@@ -184,7 +184,7 @@ public class ESEventStore
     }
 
     /// <summary>
-    /// Reads recorded events across all streams
+    /// Reads recorded events accross all streams
     /// </summary>
     /// <param name="readDirection">The direction in which to read events</param>
     /// <param name="offset">The offset starting from which to read events</param>
@@ -542,7 +542,7 @@ public class ESEventStore
     }
 
     /// <summary>
-    /// Exposes constants about event related metadata used by the <see cref="ESEventStore"/>
+    /// Exposes constants about event related metadata used by the <see cref="EsdbEventStore"/>
     /// </summary>
     protected static class EventRecordMetadata
     {

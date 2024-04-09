@@ -14,9 +14,9 @@
 using Json.Patch;
 using Json.Pointer;
 using Microsoft.Extensions.DependencyInjection;
+using Neuroglia.Collections;
 using Neuroglia.Data.Guards;
 using Neuroglia.Data.Infrastructure.Services;
-using Neuroglia.Data.PatchModel.Services;
 using Neuroglia.Serialization.Json;
 using System.Collections;
 using System.Collections.Concurrent;

@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 
 namespace Neuroglia.Data.Infrastructure.EventSourcing;
@@ -19,18 +20,30 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing;
 /// <summary>
 /// Defines extensions for <see cref="IServiceCollection"/>s
 /// </summary>
-public static class EventStoreServiceCollectionExtensions
+public static class EsdbServiceCollectionExtensions
 {
 
     /// <summary>
-    /// Adds and configures a <see cref="ESEventStore"/>
+    /// Adds and configures a <see cref="EsdbEventStore"/>
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-    /// <param name="setup">An <see cref="Action{T}"/> used to configure the <see cref="ESEventStore"/></param>
+    /// <param name="setup">An <see cref="Action{T}"/> used to configure the <see cref="EsdbEventStore"/></param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddESEventStore(this IServiceCollection services, Action<IEventStoreOptionsBuilder>? setup = null)
+    public static IServiceCollection AddEsdbEventStore(this IServiceCollection services, Action<IEventStoreOptionsBuilder>? setup = null)
     {
-        services.AddEventStore<ESEventStore>(setup);
+        services.AddEventStore<EsdbEventStore>(setup);
+        return services;
+    }
+
+    /// <summary>
+    /// Adds and configures a <see cref="EsdbProjectionManager"/>
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+    /// <returns>The configured <see cref="IServiceCollection"/></returns>
+    public static IServiceCollection AddEsdbProjectionManager(this IServiceCollection services)
+    {
+        services.TryAddSingleton<EsdbProjectionManager>();
+        services.TryAddSingleton<IProjectionManager>(provider => provider.GetRequiredService<EsdbProjectionManager>());
         return services;
     }
 

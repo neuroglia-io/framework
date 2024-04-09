@@ -21,11 +21,11 @@ using Neuroglia.UnitTests.Containers;
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing.EventStores;
 
 [TestCaseOrderer("Neuroglia.UnitTests.Services.PriorityTestCaseOrderer", "Neuroglia.UnitTests")]
-public class ESEventStoreTests
+public class EsdbEventStoreTests
     : EventStoreTestsBase
 {
 
-    public ESEventStoreTests() : base(BuildServices()) { }
+    public EsdbEventStoreTests() : base(BuildServices()) { }
 
     public static IServiceCollection BuildServices()
     {
@@ -37,7 +37,7 @@ public class ESEventStoreTests
         services.AddSingleton(provider => EventStoreClientSettings.Create($"esdb://{provider.GetRequiredService<IContainer>().Hostname}:{provider.GetRequiredService<IContainer>().GetMappedPublicPort(EventStoreContainerBuilder.PublicPort2)}?tls=false"));
         services.AddSingleton(provider => new EventStoreClient(provider.GetRequiredService<EventStoreClientSettings>()));
         services.AddSingleton(provider => new EventStorePersistentSubscriptionsClient(provider.GetRequiredService<EventStoreClientSettings>()));
-        services.AddESEventStore();
+        services.AddEsdbEventStore();
         return services;
     }
 

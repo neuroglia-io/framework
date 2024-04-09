@@ -18,14 +18,14 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Neuroglia.Data.Infrastructure.EventSourcing.EventStore.Services;
 
 /// <summary>
-/// Represents the service used to create <see cref="ESEventStore"/> instances
+/// Represents the service used to create <see cref="EsdbEventStore"/> instances
 /// </summary>
 /// <remarks>
-/// Initializes a new <see cref="ESEventStoreFactory"/>
+/// Initializes a new <see cref="EsdbEventStoreFactory"/>
 /// </remarks>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
-public class ESEventStoreFactory(IServiceProvider serviceProvider)
-    : IFactory<ESEventStore>
+public class EsdbEventStoreFactory(IServiceProvider serviceProvider)
+    : IFactory<EsdbEventStore>
 {
 
     /// <summary>
@@ -39,13 +39,13 @@ public class ESEventStoreFactory(IServiceProvider serviceProvider)
     protected IServiceProvider ServiceProvider { get; } = serviceProvider;
 
     /// <inheritdoc/>
-    public virtual ESEventStore Create()
+    public virtual EsdbEventStore Create()
     {
         var configuration = this.ServiceProvider.GetRequiredService<IConfiguration>();
         var connectionString = configuration.GetConnectionString(ConnectionStringName);
         if (string.IsNullOrWhiteSpace(connectionString)) throw new Exception($"An error occurred while attempting to create an ESEventStore instance. The '{ConnectionStringName}' connection string is not provided or is invalid. Please ensure that the connection string is properly configured in the application settings.");
         var settings = EventStoreClientSettings.Create(connectionString);
-        return ActivatorUtilities.CreateInstance<ESEventStore>(this.ServiceProvider, new EventStoreClient(settings), new EventStorePersistentSubscriptionsClient(settings));
+        return ActivatorUtilities.CreateInstance<EsdbEventStore>(this.ServiceProvider, new EventStoreClient(settings), new EventStorePersistentSubscriptionsClient(settings));
     }
 
     object IFactory.Create() => this.Create();
