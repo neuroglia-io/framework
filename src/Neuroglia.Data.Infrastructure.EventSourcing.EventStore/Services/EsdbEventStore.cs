@@ -16,7 +16,6 @@ using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neuroglia.Data.Infrastructure.EventSourcing.Configuration;
-using Neuroglia.Data.Infrastructure.EventSourcing.EventStore.Services;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 using Neuroglia.Plugins;
 using Neuroglia.Serialization;
@@ -184,7 +183,7 @@ public class EsdbEventStore
     }
 
     /// <summary>
-    /// Reads recorded events accross all streams
+    /// Reads recorded events across all streams
     /// </summary>
     /// <param name="readDirection">The direction in which to read events</param>
     /// <param name="offset">The offset starting from which to read events</param>
@@ -423,7 +422,7 @@ public class EsdbEventStore
         var data = position switch
         {
             Position pos => pos.CommitPosition,
-            ESStreamPosition spos => (ulong)spos.ToInt64(),
+            ESStreamPosition esdbPos => (ulong)esdbPos.ToInt64(),
             _ => throw new NotSupportedException($"The position type '{position.GetType()}' is not supported in this context")
         };
         await this.AppendAsync(this.GetConsumerCheckpointStreamId(consumerGroup, streamId), new EventDescriptor[] { new("$checkpoint", data) }, cancellationToken: cancellationToken).ConfigureAwait(false);

@@ -30,6 +30,14 @@ public interface IProjectionManager
     Task CreateAsync<TState>(string name, Action<IProjectionSourceBuilder<TState>> setup, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Gets the status of the specified projection, if any
+    /// </summary>
+    /// <param name="name">The name of the projection to get the status of</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new <see cref="IProjectionStatus"/>, used to describe the status of an event-driven projection</returns>
+    Task<IProjectionStatus?> GetStatusAsync(string name, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Retrieves the current state of the event-driven projection with the specified name
     /// </summary>
     /// <typeparam name="TState">The type of the projection's state</typeparam>

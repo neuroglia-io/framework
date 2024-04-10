@@ -29,7 +29,7 @@ public static class ICollectionExtensions
     public static void Add(this ICollection collection, object item)
     {
         var itemType = collection.GetType().GetEnumerableElementType();
-        typeof(ICollection<>).MakeGenericType(itemType).GetMethod(nameof(Add))!.Invoke(collection, new object[] { item });
+        typeof(ICollection<>).MakeGenericType(itemType).GetMethod(nameof(Add))!.Invoke(collection, [item]);
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public static class ICollectionExtensions
     public static bool Contains(this ICollection collection, object item)
     {
         var itemType = collection.GetType().GetEnumerableElementType();
-        return (bool)typeof(ICollection<>).MakeGenericType(itemType).GetMethod(nameof(Contains))!.Invoke(collection, new object[] { item })!;
+        return (bool)typeof(ICollection<>).MakeGenericType(itemType).GetMethod(nameof(Contains))!.Invoke(collection, [item])!;
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public static class ICollectionExtensions
     public static bool Remove(this ICollection collection, object item)
     {
         var itemType = collection.GetType().GetEnumerableElementType();
-        return (bool)typeof(ICollection<>).MakeGenericType(itemType).GetMethod(nameof(Remove))!.Invoke(collection, new object[] { item })!;
+        return (bool)typeof(ICollection<>).MakeGenericType(itemType).GetMethod(nameof(Remove))!.Invoke(collection, [item])!;
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public static class ICollectionExtensions
     public static void Clear(this ICollection collection)
     {
         var itemType = collection.GetType().GetEnumerableElementType();
-        typeof(ICollection<>).MakeGenericType(itemType).GetMethod(nameof(Clear))!.Invoke(collection, Array.Empty<object>());
+        typeof(ICollection<>).MakeGenericType(itemType).GetMethod(nameof(Clear))!.Invoke(collection, []);
     }
 
 }

@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using EventStore.Client;
+using Neuroglia.Plugins;
 using Neuroglia.Serialization.Json;
 
 namespace Neuroglia.Data.Infrastructure.EventSourcing.Services;
@@ -20,6 +21,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.Services;
 /// Represents the EventStore implementation of the <see cref="IProjectionManager"/> interface
 /// </summary>
 /// <param name="projections">The underlying EventStore projection management API client</param>
+[Plugin(Tags = ["projection-manager"]), Factory(typeof(EsdbProjectionManagerFactory))]
 public class EsdbProjectionManager(EventStoreProjectionManagementClient projections)
     : IProjectionManager
 {
@@ -37,6 +39,15 @@ public class EsdbProjectionManager(EventStoreProjectionManagementClient projecti
         var builder = new EsdbProjectionBuilder<TState>(name, this.Projections);
         setup(builder);
         await builder.BuildAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    public virtual async Task<IProjectionStatus?> GetStatusAsync(string name, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        var details = await this.Projections.GetStatusAsync(name, cancellationToken: cancellationToken).ConfigureAwait(false);
+        if (details == null) return null;
+        else return new ProjectionStatus(details.Status, details.StateReason, ulong.TryParse(details.Position, out var offset) ? offset : null);
     }
 
     /// <inheritdoc/>
