@@ -20,6 +20,7 @@ using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Data.Infrastructure.EventSourcing.Services;
 using Neuroglia.Serialization;
 using Neuroglia.UnitTests.Containers;
+using Pipelines.Sockets.Unofficial.Arenas;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.EventSourcing.EventStores;
 
