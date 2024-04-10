@@ -28,7 +28,7 @@ public static class EsdbJavaScriptConversion
     /// <summary>
     /// Gets an array of the <see cref="JavascriptConversionExtension"/>s used to translate projections to EventStore 
     /// </summary>
-    public static readonly JavascriptConversionExtension[] Extensions = [new NullCheckConversionExtension(), new BinaryExpressionConversionExtension(), new ObjectConversionExtension(), new ArrayInitializerConversionExtension(), new ListConversionExtension(), new CollectionConversionExtension(), new DictionaryConversionExtension(), new EventRecordConversionExtension(), new ProjectionConversionExtension()];
+    public static readonly JavascriptConversionExtension[] Extensions = [new NullCheckConversionExtension(), new ObjectConversionExtension(), new ArrayInitializerConversionExtension(), new ListConversionExtension(), new CollectionConversionExtension(), new DictionaryConversionExtension(), new EventRecordConversionExtension(), new ProjectionConversionExtension()];
 
     class NullCheckConversionExtension
         : JavascriptConversionExtension
@@ -53,69 +53,6 @@ public static class EsdbJavaScriptConversion
             context.Write($" {op} undefined && ");
             context.Write(compareTo);
             context.Write($" {op} null");
-        }
-
-    }
-
-    class BinaryExpressionConversionExtension
-        : JavascriptConversionExtension
-    {
-
-        /// <inheritdoc/>
-        public override void ConvertToJavascript(JavascriptConversionContext context)
-        {
-            if (context.Node is not BinaryExpression binary) return;
-            switch (binary.NodeType)
-            {
-                case ExpressionType.Add:
-                    context.PreventDefault();
-                    context.Write(binary.Left);
-                    context.Write(" + ");
-                    context.Write(binary.Right);
-                    break;
-                case ExpressionType.Subtract:
-                    context.PreventDefault();
-                    context.Write(binary.Left);
-                    context.Write(" - ");
-                    context.Write(binary.Right);
-                    break;
-                case ExpressionType.Multiply:
-                    context.PreventDefault();
-                    context.Write(binary.Left);
-                    context.Write(" * ");
-                    context.Write(binary.Right);
-                    break;
-                case ExpressionType.Divide:
-                    context.PreventDefault();
-                    context.Write(binary.Left);
-                    context.Write(" / ");
-                    context.Write(binary.Right);
-                    break;
-                case ExpressionType.And:
-                    context.PreventDefault();
-                    context.Write(binary.Left);
-                    context.Write(" & ");
-                    context.Write(binary.Right);
-                    break;
-                case ExpressionType.AndAlso:
-                    context.PreventDefault();
-                    context.Write(binary.Left);
-                    context.Write(" && ");
-                    context.Write(binary.Right);
-                    break;
-                case ExpressionType.Or:
-                    context.PreventDefault();
-                    context.Write(binary.Left);
-                    context.Write(" | ");
-                    context.Write(binary.Right);
-                    break;
-                case ExpressionType.OrElse:
-                    context.PreventDefault();
-                    context.Write(binary.Left);
-                    context.Write(" || ");
-                    context.Write(binary.Right);
-                    break;
-            }
         }
 
     }
@@ -251,9 +188,11 @@ public static class EsdbJavaScriptConversion
                     {
                         using (context.Operation(JavascriptOperationTypes.Call))
                         {
-                            using (context.Operation(JavascriptOperationTypes.IndexerProperty))
-                                context.WriteNode(call.Arguments.First());
-                            context.Write($".{call.Arguments.Last().ToString()[1..^1]}");
+                            using (context.Operation(JavascriptOperationTypes.IndexerProperty)) context.WriteNode(call.Arguments.First());
+                            context.Write(".");
+                            var js = call.Arguments.Last().CompileToJavascript(context.Options);
+                            if (js.StartsWith("\"") && js.EndsWith("\"")) js = js[1..^1];
+                            context.Write(js);
                         }
                         return;
                     }
