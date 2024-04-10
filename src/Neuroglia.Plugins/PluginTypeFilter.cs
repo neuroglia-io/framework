@@ -24,9 +24,14 @@ public class PluginTypeFilter
 {
 
     /// <summary>
+    /// Gets/sets the type of match the filter should perform on its criteria
+    /// </summary>
+    public PluginTypeFilterMatch Match { get; set; } = PluginTypeFilterMatch.Any;
+
+    /// <summary>
     /// Gets/sets a list containing the filter's filtering criteria
     /// </summary>
-    public List<PluginTypeFilterCriterion> Criteria { get; set; } = new();
+    public List<PluginTypeFilterCriterion> Criteria { get; set; } = [];
 
     /// <summary>
     /// Determines whether or not to filter the specified type
@@ -34,7 +39,7 @@ public class PluginTypeFilter
     /// <param name="type">The type to check</param>
     /// <param name="metadataLoadContext">The <see cref="MetadataLoadContext"/> to use, if any</param>
     /// <returns>A boolean indicating whether or not to filter the specified type</returns>
-    public virtual bool Filters(Type type, MetadataLoadContext? metadataLoadContext = null) => Criteria.All(c => c.IsMetBy(type, metadataLoadContext));
+    public virtual bool Filters(Type type, MetadataLoadContext? metadataLoadContext = null) => this.Match == PluginTypeFilterMatch.Any ? this.Criteria.Any(c => c.IsMetBy(type, metadataLoadContext)) : this.Criteria.All(c => c.IsMetBy(type, metadataLoadContext));
 
 }
 
