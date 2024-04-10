@@ -78,7 +78,7 @@ public class PluginAssemblyLoadContext
     /// <returns>A new instance of the specified type, activated within the boundaries of the <see cref="PluginAssemblyLoadContext"/></returns>
     public object CreateInstance(IServiceProvider serviceProvider, Type type)
     {
-        var loadedAssembly = this.Assemblies.FirstOrDefault(a => a.GetName() == type.Assembly.GetName());
+        var loadedAssembly = this.Assemblies.FirstOrDefault(a => a.GetName().Name == type.Assembly.GetName().Name);
         if (loadedAssembly == null)
         {
             try
