@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
@@ -102,7 +101,7 @@ public class PluginProvider
             }
             catch (Exception ex)
             {
-                this.Logger.LogWarning("An exception occurred while instanciating plugin of type '{pluginType}': {ex}", plugin.Type, ex);
+                this.Logger.LogWarning("An exception occurred while instantiating plugin of type '{pluginType}': {ex}", plugin.Type, ex);
                 continue;
             }
             yield return pluginInstance;
