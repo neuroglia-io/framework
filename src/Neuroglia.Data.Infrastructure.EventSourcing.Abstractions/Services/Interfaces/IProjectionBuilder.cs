@@ -27,7 +27,7 @@ public interface IProjectionBuilder<TState>
     /// </summary>
     /// <param name="factory">The <see cref="Func{TResult}"/> used to create the projection's initial state</param>
     /// <returns>The configured <see cref="IProjectionBuilder{TState}"/></returns>
-    IProjectionBuilder<TState> Given(Expression<Func<object>> factory);
+    IProjectionBuilder<TState> Given(Expression<Func<TState>> factory);
 
     /// <summary>
     /// Configures the predicate used to to filter incoming event records based on the current projection state

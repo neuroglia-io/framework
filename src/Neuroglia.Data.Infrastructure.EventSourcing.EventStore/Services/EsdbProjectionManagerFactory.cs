@@ -18,14 +18,14 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Neuroglia.Data.Infrastructure.EventSourcing.Services;
 
 /// <summary>
-/// Represents the service used to create <see cref="EsdbEventStore"/> instances
+/// Represents the service used to create <see cref="EsdbProjectionManager"/> instances
 /// </summary>
 /// <remarks>
-/// Initializes a new <see cref="EsdbEventStoreFactory"/>
+/// Initializes a new <see cref="EsdbProjectionManagerFactory"/>
 /// </remarks>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
-public class EsdbEventStoreFactory(IServiceProvider serviceProvider)
-    : IFactory<EsdbEventStore>
+public class EsdbProjectionManagerFactory(IServiceProvider serviceProvider)
+    : IFactory<EsdbProjectionManager>
 {
 
     /// <summary>
@@ -39,13 +39,13 @@ public class EsdbEventStoreFactory(IServiceProvider serviceProvider)
     protected IServiceProvider ServiceProvider { get; } = serviceProvider;
 
     /// <inheritdoc/>
-    public virtual EsdbEventStore Create()
+    public virtual EsdbProjectionManager Create()
     {
         var configuration = this.ServiceProvider.GetRequiredService<IConfiguration>();
         var connectionString = configuration.GetConnectionString(ConnectionStringName);
         if (string.IsNullOrWhiteSpace(connectionString)) throw new Exception($"An error occurred while attempting to create an ESEventStore instance. The '{ConnectionStringName}' connection string is not provided or is invalid. Please ensure that the connection string is properly configured in the application settings.");
         var settings = EventStoreClientSettings.Create(connectionString);
-        return ActivatorUtilities.CreateInstance<EsdbEventStore>(this.ServiceProvider, new EventStoreClient(settings), new EventStorePersistentSubscriptionsClient(settings));
+        return ActivatorUtilities.CreateInstance<EsdbProjectionManager>(this.ServiceProvider, new EventStoreProjectionManagementClient(settings));
     }
 
     object IFactory.Create() => this.Create();

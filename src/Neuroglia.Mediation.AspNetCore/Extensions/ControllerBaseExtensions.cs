@@ -26,10 +26,10 @@ public static class ControllerBaseExtensions
     /// <summary>
     /// Creates a new <see cref="NotFoundObjectResult"/> based on the specified <see cref="ModelStateDictionary"/>
     /// </summary>
-    /// <param name="controller">The extended <see cref="ControllerBase"/></param>
+    /// <param name="_">The extended <see cref="ControllerBase"/></param>
     /// <param name="commandState">The <see cref="ModelStateDictionary"/> from which to create the <see cref="NotFoundObjectResult"/></param>
     /// <returns>A new <see cref="NotFoundObjectResult"/> based on the specified <see cref="ModelStateDictionary"/></returns>
-    public static NotFoundObjectResult NotFound(this ControllerBase controller, ModelStateDictionary commandState) => new(new SerializableError(commandState));
+    public static NotFoundObjectResult NotFound(this ControllerBase _, ModelStateDictionary commandState) => new(new SerializableError(commandState));
 
     /// <summary>
     /// Processes the specified <see cref="IOperationResult"/>
@@ -47,7 +47,7 @@ public static class ControllerBaseExtensions
             if (result.Status == (int)HttpStatusCode.Forbidden) return controller.StatusCode((int)HttpStatusCode.Forbidden);
             if (result.Status == (int)HttpStatusCode.BadRequest)
             {
-                result.Errors?.ToList().SelectMany(e => e.Errors == null ? new Dictionary<string, string[]>() { { e.Title!, new string[] { e.Detail! } } }.ToList() : e.Errors.ToList()).ToList().ForEach(e => controller.ModelState.AddModelError(e.Key, string.Join(Environment.NewLine, e.Value)));
+                result.Errors?.ToList().SelectMany(e => e.Errors == null ? new Dictionary<string, string[]>() { { e.Title!, new string[] { e.Detail! } } }.ToList() : [.. e.Errors]).ToList().ForEach(e => controller.ModelState.AddModelError(e.Key, string.Join(Environment.NewLine, e.Value)));
                 return controller.ValidationProblem(controller.ModelState);
             }
             if (result.Status == (int)HttpStatusCode.NotFound)

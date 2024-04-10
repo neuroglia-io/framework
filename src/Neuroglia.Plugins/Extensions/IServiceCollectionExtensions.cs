@@ -64,7 +64,7 @@ public static class IServiceCollectionExtensions
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddPluginSource(this IServiceCollection services, Action<IPluginSourceBuilder> setup)
     {
-        if (setup == null) throw new ArgumentNullException(nameof(setup));
+        ArgumentNullException.ThrowIfNull(setup);
         var builder = new PluginSourceBuilder();
         setup(builder);
         services.AddPluginSource(builder.Build());
@@ -111,7 +111,7 @@ public static class IServiceCollectionExtensions
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
     public static IServiceCollection ConfigurePlugins(this IServiceCollection services, IConfiguration configuration)
     {
-        if (configuration == null) throw new ArgumentNullException(nameof(configuration));
+        ArgumentNullException.ThrowIfNull(configuration);
 
         var optionsAccessor = services.FirstOrDefault(d => d.ServiceType == typeof(IOptions<PluginOptions>));
         if (optionsAccessor != null) return services;

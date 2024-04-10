@@ -21,6 +21,12 @@ public interface IProjectionSourceBuilder<TState>
 {
 
     /// <summary>
+    /// Builds a new event-driven projection that processes all events
+    /// </summary>
+    /// <returns>A new <see cref="IProjectionBuilder{TState}"/> implementation used to configure the projection to build</returns>
+    IProjectionBuilder<TState> FromAll();
+
+    /// <summary>
     /// Builds a new event-driven projection that processes events from the specified stream
     /// </summary>
     /// <param name="name">The name of the stream from which events will be processed by the projection</param>

@@ -99,7 +99,7 @@ public class JsonSchemaResolver(IJsonSerializer serializer, HttpClient httpClien
         ArgumentNullException.ThrowIfNull(schema);
         ArgumentNullException.ThrowIfNull(rootSchema);
 
-        if (schema.ValueKind != JsonValueKind.Object) return Array.Empty<JsonElement>();
+        if (schema.ValueKind != JsonValueKind.Object) return [];
 
         var refSchemas = new List<JsonElement>();
         var keywords = schema.EnumerateObject();

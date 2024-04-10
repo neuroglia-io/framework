@@ -31,9 +31,9 @@ namespace Neuroglia.Data.PatchModel;
 public class JsonPatchTypeInfo
 {
 
-    static readonly ConcurrentDictionary<Type, JsonPatchTypeInfo> Registry = new();
+    static readonly ConcurrentDictionary<Type, JsonPatchTypeInfo> Registry = [];
 
-    readonly List<JsonPatchPropertyInfo> _properties = new();
+    readonly List<JsonPatchPropertyInfo> _properties = [];
     /// <summary>
     /// Gets a list containing the type's properties
     /// </summary>
@@ -88,7 +88,7 @@ public class JsonPatchTypeInfo
     /// <returns>The <see cref="JsonPatchTypeInfo"/> for the specified type</returns>
     public static JsonPatchTypeInfo GetOrCreate(Type type)
     {
-        if (type == null) throw new ArgumentNullException(nameof(type));
+        ArgumentNullException.ThrowIfNull(type);
         if (Registry.TryGetValue(type, out var typeInfo) && typeInfo != null) return typeInfo;
 
         typeInfo = new JsonPatchTypeInfo();
@@ -175,7 +175,7 @@ public class JsonPatchTypeInfo
     /// </summary>
     /// <param name="getValueDelegate">The <see cref="Delegate"/> to build the delegate for</param>
     /// <returns>A new delegate for getting the value of the specified <see cref="PropertyInfo"/></returns>
-    public static Func<IServiceProvider, object, CancellationToken, Task<object?>> BuildGetValueDelegateFor(Delegate getValueDelegate) => (provider, source, cancellationToken) => Task.FromResult(getValueDelegate.GetMethodInfo().Invoke(source is IAggregateRoot aggregate ? aggregate.State : source, Array.Empty<object>()));
+    public static Func<IServiceProvider, object, CancellationToken, Task<object?>> BuildGetValueDelegateFor(Delegate getValueDelegate) => (provider, source, cancellationToken) => Task.FromResult(getValueDelegate.GetMethodInfo().Invoke(source is IAggregateRoot aggregate ? aggregate.State : source, []));
 
     /// <summary>
     /// Builds a new delegate for handling a JSON Patch operation of type <see cref="OperationType.Add"/>
@@ -221,7 +221,7 @@ public class JsonPatchTypeInfo
         return async (provider, source, operation, cancellationToken) =>
         {
             object[] args;
-            if (parameters.Length == 1 && parameters.First().ParameterType == typeof(PatchOperation)) args = new object[] { operation };
+            if (parameters.Length == 1 && parameters.First().ParameterType == typeof(PatchOperation)) args = [operation];
             else
             {
                 var valueParameter = parameters.FirstOrDefault() ?? throw new TargetParameterCountException($"A method used to reduce a JSON Patch operation of type '{OperationType.Add}' must declare a 'value' parameter and optionally an 'index' parameter of type 'int'");
@@ -251,7 +251,7 @@ public class JsonPatchTypeInfo
                     value = Guard.Against(await repository.GetAsync(key, cancellationToken).ConfigureAwait(false)).WhenNullReference(key).Value;
                 }
 
-                args = indexParameter == null ? new object[] { value! } : new object[] { value!, index! };
+                args = indexParameter == null ? [value!] : [value!, index!];
             }
             method.Invoke(source, args);
         };
@@ -307,7 +307,7 @@ public class JsonPatchTypeInfo
             var sourceValue = await typeInfo.GetValueAsync(provider, source, operation.From, cancellationToken).ConfigureAwait(false);
             if (sourceValue is IEnumerable enumerable && sourceValue.GetType() != typeof(string)) sourceValue = enumerable.ToNonGenericList();
             object[] args;
-            if (parameters.Length == 1 && parameters.First().ParameterType == typeof(PatchOperation)) args = new object[] { operation };
+            if (parameters.Length == 1 && parameters.First().ParameterType == typeof(PatchOperation)) args = [operation];
             else
             {
                 var valueParameter = parameters.FirstOrDefault() ?? throw new TargetParameterCountException($"A method used to reduce a JSON Patch operation of type '{OperationType.Add}' must declare a 'value' parameter and optionally an 'index' parameter of type 'int'");
@@ -321,7 +321,7 @@ public class JsonPatchTypeInfo
                         if (int.TryParse(lastPathSegment, out var indexValue)) index = indexValue;
                     }
                 }
-                args = indexParameter == null ? new object[] { sourceValue! } : new object[] { sourceValue!, index! };
+                args = indexParameter == null ? [sourceValue!] : [sourceValue!, index!];
             }
             method.Invoke(source, args);
         };
@@ -402,7 +402,7 @@ public class JsonPatchTypeInfo
             var sourceProperty = typeInfo.GetProperty(operation.From) ?? throw new NullReferenceException($"Failed to find a property at '{operation.Path}'");
             var sourceValue = (await typeInfo.GetValueAsync(provider, source, operation.From, cancellationToken).ConfigureAwait(false))!;
             object[] args;
-            if (parameters.Length == 1 && parameters.First().ParameterType == typeof(PatchOperation)) args = new object[] { operation };
+            if (parameters.Length == 1 && parameters.First().ParameterType == typeof(PatchOperation)) args = [operation];
             else
             {
                 var valueParameter = parameters.FirstOrDefault() ?? throw new TargetParameterCountException($"A method used to reduce a JSON Patch operation of type '{OperationType.Add}' must declare a 'value' parameter and optionally an 'index' parameter of type 'int'");
@@ -416,7 +416,7 @@ public class JsonPatchTypeInfo
                         if (int.TryParse(lastPathSegment, out var indexValue)) index = indexValue;
                     }
                 }
-                args = indexParameter == null ? new object[] { sourceValue! } : new object[] { sourceValue!, index! };
+                args = indexParameter == null ? [sourceValue!] : [sourceValue!, index!];
                 if (sourceProperty.Type.IsEnumerable() && sourceProperty.Type != typeof(string) && operation.From.IsArrayIndexer())
                 {
                     var sourceValues = await typeInfo.GetValueAsync(provider, source, operation.From.WithoutArrayIndexer(), cancellationToken).ConfigureAwait(false);
@@ -468,7 +468,7 @@ public class JsonPatchTypeInfo
         {
             var indexParameter = parameters.FirstOrDefault(p => typeof(int).IsAssignableFrom(p.ParameterType)) ?? throw new TargetParameterCountException($"A method used to reduce a JSON Patch operation of type '{OperationType.Remove}' must declare exactly one 'index' parameter of type 'int'");
             if (!int.TryParse(operation.Path.Segments.Last().Value, out var index)) throw new NullReferenceException($"The path of a JSON Patch operation of type '{OperationType.Remove}' must end with the index of the item to remove");
-            return Task.Run(() => method.Invoke(source, new object[] { index }), cancellationToken);
+            return Task.Run(() => method.Invoke(source, [index]), cancellationToken);
         };
     }
 
@@ -525,7 +525,7 @@ public class JsonPatchTypeInfo
             return Task.Run(() =>
             {
                 var propertySource = source is IAggregateRoot aggregate ? aggregate.State : source;
-                var value = getValueDelegate.GetMethodInfo().Invoke(propertySource, Array.Empty<object>());
+                var value = getValueDelegate.GetMethodInfo().Invoke(propertySource, []);
                 var valueType = getValueDelegate.GetMethodInfo().ReturnType;
                 if (operation.Path.IsArrayIndexer())
                 {

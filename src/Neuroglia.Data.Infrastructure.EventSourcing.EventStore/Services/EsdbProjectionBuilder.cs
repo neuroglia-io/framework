@@ -13,6 +13,7 @@
 
 using EventStore.Client;
 using Lambda2Js;
+using Neuroglia.Data.Infrastructure.EventSourcing.EventStore;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -33,9 +34,19 @@ public class EsdbProjectionBuilder<TState>(string name, EventStoreProjectionMana
     protected string Name { get; } = name;
 
     /// <summary>
+    /// Gets the source of the projection to build
+    /// </summary>
+    protected EsdbProjectionSource Source { get; set; }
+
+    /// <summary>
     /// Gets the name of the stream, if any, from which to process events
     /// </summary>
     protected string? StreamName { get; set; }
+    
+    /// <summary>
+    /// Gets the name of the stream category, if any, from which to process events
+    /// </summary>
+    protected string? StreamCategory { get; set; }
 
     /// <summary>
     /// Gets the underlying EventStore projection management API client
@@ -45,7 +56,7 @@ public class EsdbProjectionBuilder<TState>(string name, EventStoreProjectionMana
     /// <summary>
     /// Gets the <see cref="Expression"/> of the <see cref="Func{TResult}"/>, if any, used to create the projection's initial state
     /// </summary>
-    protected Expression<Func<object>>? GivenFactory { get; set; }
+    protected Expression<Func<TState>>? GivenFactory { get; set; }
 
     /// <summary>
     /// Gets the <see cref="Expression"/> of the predicate <see cref="Func{T1, T2, TResult}"/>, if any, used to filter incoming events
@@ -58,15 +69,23 @@ public class EsdbProjectionBuilder<TState>(string name, EventStoreProjectionMana
     protected List<Expression<Action<TState, IEventRecord>>>? ThenActions { get; set; }
 
     /// <inheritdoc/>
+    public virtual IProjectionBuilder<TState> FromAll()
+    {
+        this.Source = EsdbProjectionSource.All;
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual IProjectionBuilder<TState> FromStream(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        this.Source = EsdbProjectionSource.Stream;
         this.StreamName = name;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IProjectionBuilder<TState> Given(Expression<Func<object>> factory)
+    public virtual IProjectionBuilder<TState> Given(Expression<Func<TState>> factory)
     {
         ArgumentNullException.ThrowIfNull(factory);
         this.GivenFactory = factory;
@@ -115,7 +134,20 @@ public class EsdbProjectionBuilder<TState>(string name, EventStoreProjectionMana
     {
         var compilationOptions = new JavascriptCompilationOptions(JsCompilationFlags.BodyOnly, EsdbJavaScriptConversion.Extensions);
         var builder = new StringBuilder();
-        builder.AppendLine($"fromStream('{this.StreamName}')");
+        switch (this.Source)
+        {
+            case EsdbProjectionSource.All:
+                builder.AppendLine($"fromAll()");
+                break;
+            case EsdbProjectionSource.Category:
+                builder.AppendLine($"fromCategory('{this.StreamCategory}')");
+                break;
+            case EsdbProjectionSource.Stream:
+                builder.AppendLine($"fromStream('{this.StreamName}')");
+                break;
+            default:
+                throw new NotSupportedException($"The specified event source type '{EnumHelper.Stringify(this.Source)}' is not supported");
+        }
         builder.AppendLine(@"    .when({");
         if (this.GivenFactory != null) builder.AppendLine(@$"       $init: () => {this.GivenFactory.CompileToJavascript(compilationOptions)},");
         builder.AppendLine(@"       $any: (state, e) => {");
