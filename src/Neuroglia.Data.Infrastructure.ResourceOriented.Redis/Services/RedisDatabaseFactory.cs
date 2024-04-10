@@ -11,82 +11,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 
 namespace Neuroglia.Data.Infrastructure.ResourceOriented.Services;
 
 /// <summary>
-/// Represents the service used to create <see cref="RedisDatabase"/>s
+/// Represents the service used to create <see cref="RedisDatabase"/> instances
 /// </summary>
 /// <remarks>
 /// Initializes a new <see cref="RedisDatabaseFactory"/>
 /// </remarks>
-/// <param name="applicationServices">The current application's services</param>
-public class RedisDatabaseFactory(IServiceProvider applicationServices)
-    : IFactory<RedisDatabase>, IDisposable, IAsyncDisposable
+/// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
+public class RedisDatabaseFactory(IServiceProvider serviceProvider)
+    : IFactory<RedisDatabase>
 {
 
-    private bool _disposed;
+    /// <summary>
+    /// Gets the name of the Redis connection string
+    /// </summary>
+    public const string ConnectionStringName = "redis";
 
     /// <summary>
-    /// Gets the current application's services
+    /// Gets the current <see cref="IServiceProvider"/>
     /// </summary>
-    protected IServiceProvider ApplicationServices { get; } = applicationServices;
-
-    /// <summary>
-    /// Gets the plugin's services
-    /// </summary>
-    protected IServiceProvider? PluginServices { get; set; }
+    protected IServiceProvider ServiceProvider { get; } = serviceProvider;
 
     /// <inheritdoc/>
     public virtual RedisDatabase Create()
     {
-        if (this.PluginServices == null) return this.ApplicationServices.GetRequiredService<RedisDatabase>();
-        else return this.PluginServices.GetRequiredService<RedisDatabase>();
+        var configuration = this.ServiceProvider.GetRequiredService<IConfiguration>();
+        var connectionString = configuration.GetConnectionString(ConnectionStringName);
+        if (string.IsNullOrWhiteSpace(connectionString)) throw new Exception($"An error occurred while attempting to create an RedisEventStore instance. The '{ConnectionStringName}' connection string is not provided or is invalid. Please ensure that the connection string is properly configured in the application settings.");
+        var connectionMultiplexer = ConnectionMultiplexer.Connect(connectionString);
+        return ActivatorUtilities.CreateInstance<RedisDatabase>(this.ServiceProvider, connectionMultiplexer);
     }
 
     object IFactory.Create() => this.Create();
-
-    /// <summary>
-    /// Disposes of the <see cref="RedisDatabaseFactory"/>
-    /// </summary>
-    /// <param name="disposing">A boolean indicating whether or not the <see cref="RedisDatabaseFactory"/> is being disposed of</param>
-    /// <returns>A new awaitable <see cref="ValueTask"/></returns>
-    protected virtual async ValueTask DisposeAsync(bool disposing)
-    {
-        if (!disposing || this._disposed) return;
-        switch (this.PluginServices)
-        {
-            case IAsyncDisposable asyncDisposable: await asyncDisposable.DisposeAsync().ConfigureAwait(false); break;
-            case IDisposable disposable: disposable.Dispose(); break;
-        }
-        this._disposed = true;
-    }
-
-    /// <inheritdoc/>
-    public async ValueTask DisposeAsync()
-    {
-        await this.DisposeAsync(true).ConfigureAwait(false);
-        GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// Disposes of the <see cref="RedisDatabaseFactory"/>
-    /// </summary>
-    /// <param name="disposing">A boolean indicating whether or not the <see cref="RedisDatabaseFactory"/> is being disposed of</param>
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!disposing || this._disposed) return;
-        if (this.PluginServices is IDisposable disposable) disposable.Dispose();
-        this._disposed = true;
-    }
-
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        this.Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
 
 }

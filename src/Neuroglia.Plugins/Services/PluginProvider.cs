@@ -45,7 +45,7 @@ public class PluginProvider
     protected IServiceProvider ServiceProvider { get; }
 
     /// <summary>
-    /// Gets the service used to perfrom logging
+    /// Gets the service used to perform logging
     /// </summary>
     protected ILogger Logger { get; }
 
@@ -84,7 +84,7 @@ public class PluginProvider
     /// <inheritdoc/>
     public virtual IEnumerable<object> GetPlugins(Type serviceType, string? sourceName = null, IEnumerable<string>? tags = null)
     {
-        if (serviceType == null) throw new ArgumentNullException(nameof(serviceType));
+        ArgumentNullException.ThrowIfNull(serviceType);
         if (!serviceType.IsInterface) throw new ArgumentException("The plugin contract type must be an interface", nameof(serviceType));
         var genericArguments = serviceType.GetGenericArguments();
 
