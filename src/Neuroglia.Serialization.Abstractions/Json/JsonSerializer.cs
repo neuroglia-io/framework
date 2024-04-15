@@ -31,7 +31,7 @@ public class JsonSerializer(IOptions<JsonSerializerOptions> options)
     : IJsonSerializer, IAsyncSerializer
 {
 
-    static readonly object _lock = new object();
+    static readonly object _lock = new();
 
     /// <summary>
     /// Gets/sets an <see cref="Action{T}"/> used to configure the <see cref="JsonSerializerOptions"/> used by default

@@ -22,7 +22,7 @@ internal record FakeNamespacedResourceDefinition
     : ResourceDefinition
 {
 
-    internal new const string ResourceGroup = "unit.tests.hylo.io";
+    internal new const string ResourceGroup = "unit.tests.neuroglia.io";
     internal new const string ResourceVersion = "v1";
     internal const string ResourceSingular = "fake";
     internal new const string ResourcePlural = "fakes";

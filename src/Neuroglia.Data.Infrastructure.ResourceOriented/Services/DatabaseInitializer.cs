@@ -45,6 +45,11 @@ public class DatabaseInitializer
     /// </summary>
     protected IServiceProvider ServiceProvider { get; }
 
+    /// <summary>
+    /// Gets the <see cref="IDatabase"/> to initialize
+    /// </summary>
+    protected IDatabase Database => this.ServiceProvider.GetRequiredService<IDatabase>();
+
     /// <inheritdoc/>
     public virtual Task StartAsync(CancellationToken stoppingToken) => this.InitializeAsync(stoppingToken);
 
@@ -55,8 +60,7 @@ public class DatabaseInitializer
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         this.Logger.LogDebug("Initializing resource database...");
-        var database = this.ServiceProvider.GetRequiredService<IDatabase>();
-        if (await database.InitializeAsync(cancellationToken).ConfigureAwait(false))
+        if (await this.Database.InitializeAsync(cancellationToken).ConfigureAwait(false))
         {
             this.Logger.LogDebug("Seeding resource database...");
             try

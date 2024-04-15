@@ -52,18 +52,6 @@ public class NewtonsoftJsonSerializer(IOptionsMonitor<JsonSerializerSettings> se
     public virtual string SerializeToText(object? value, Type? type = null) => JsonConvert.SerializeObject(value, type, this.Settings.CurrentValue);
 
     /// <inheritdoc/>
-    public virtual object? Deserialize(string input, Type type) => JsonConvert.DeserializeObject(input, type, this.Settings.CurrentValue);
-
-    /// <inheritdoc/>
-    public virtual object? Deserialize(Stream stream, Type type)
-    {
-        var serializer = Newtonsoft.Json.JsonSerializer.Create(this.Settings.CurrentValue);
-        using var streamReader = new StreamReader(stream, leaveOpen: true);
-        using var jsonTextReader = new JsonTextReader(streamReader);
-        return serializer.Deserialize(jsonTextReader, type);
-    }
-
-    /// <inheritdoc/>
     public virtual JsonNode? SerializeToNode<T>(T graph) => graph == null ? null : JsonNode.Parse(this.SerializeToText(graph));
 
     /// <inheritdoc/>
@@ -76,6 +64,41 @@ public class NewtonsoftJsonSerializer(IOptionsMonitor<JsonSerializerSettings> se
 
     /// <inheritdoc/>
     public virtual JsonDocument? SerializeToDocument<T>(T graph) => graph == null ? null : JsonDocument.Parse(this.SerializeToText(graph));
+
+    /// <inheritdoc/>
+    public virtual object? Deserialize(string input, Type type) => JsonConvert.DeserializeObject(input, type, this.Settings.CurrentValue);
+
+    /// <inheritdoc/>
+    public virtual T? Deserialize<T>(string input) => JsonConvert.DeserializeObject<T>(input, this.Settings.CurrentValue);
+
+    /// <inheritdoc/>
+    public virtual object? Deserialize(Stream stream, Type type)
+    {
+        var serializer = Newtonsoft.Json.JsonSerializer.Create(this.Settings.CurrentValue);
+        using var streamReader = new StreamReader(stream, leaveOpen: true);
+        using var jsonTextReader = new JsonTextReader(streamReader);
+        return serializer.Deserialize(jsonTextReader, type);
+    }
+
+    /// <inheritdoc/>
+    public virtual object? Deserialize(JsonElement element, Type type)
+    {
+        var json = element.ToJsonString();
+        return this.Deserialize(json, type); 
+    }
+
+    /// <inheritdoc/>
+    public virtual T? Deserialize<T>(JsonElement element) => (T?)this.Deserialize(element, typeof(T));
+
+    /// <inheritdoc/>
+    public virtual object? Deserialize(JsonNode node, Type type)
+    {
+        var json = node.ToJsonString(Json.JsonSerializer.DefaultOptions);
+        return this.Deserialize(json, type);
+    }
+
+    /// <inheritdoc/>
+    public virtual T? Deserialize<T>(JsonNode node) => (T?)this.Deserialize(node, typeof(T));
 
     /// <inheritdoc/>
     public virtual IAsyncEnumerable<T?> DeserializeAsyncEnumerable<T>(Stream stream, CancellationToken cancellationToken = default) => Newtonsoft.Json.JsonSerializer.Create(this.Settings.CurrentValue).DeserializeAsyncEnumerable<T>(stream, cancellationToken);

@@ -4,7 +4,7 @@ metadata:
   name: resource-definitions.neuroglia.io
 spec:
   scope: Cluster
-  group: hylo.io
+  group: neuroglia.io
   names:
     singular: resource-definition
     plural: resource-definitions
