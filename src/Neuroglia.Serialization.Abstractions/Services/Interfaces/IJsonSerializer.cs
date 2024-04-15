@@ -48,6 +48,14 @@ public interface IJsonSerializer
     JsonDocument? SerializeToDocument<T>(T graph);
 
     /// <summary>
+    /// Deserializes a <see cref="JsonElement"/> into a new instance of the specified type
+    /// </summary>
+    /// <param name="json">The <see cref="JsonElement"/> to deserialize</param>
+    /// <param name="type">The type to deserialize the <see cref="JsonElement"/> to</param>
+    /// <returns>The deserialized <see cref="JsonElement"/></returns>
+    new object? Deserialize(string json, Type type);
+
+    /// <summary>
     /// Deserializes a value from its JSON representation
     /// </summary>
     /// <typeparam name="T">The value's expected type</typeparam>
