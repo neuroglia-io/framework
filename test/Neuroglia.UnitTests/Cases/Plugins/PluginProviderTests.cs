@@ -60,8 +60,9 @@ public class PluginProviderTests
     public void Get_PluginService_Should_Work()
     {
         //assert
-        this.ServiceProvider.GetService<IGreet>().Should().NotBeNull();
-        this.ServiceProvider.GetServices<IGreet>().Should().NotBeNullOrEmpty();
+        var greeter = this.ServiceProvider.GetRequiredService<IGreet>();
+        greeter.Should().NotBeNull();
+        greeter.Greet().Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]

@@ -51,7 +51,7 @@ public static class ISerializerExtensions
     /// <returns>The deserialized value, if any</returns>
     public static object? Deserialize(this ISerializer serializer, byte[]? byteArray, Type type)
     {
-        if (byteArray == null || !byteArray.Any()) return null;
+        if (byteArray == null || byteArray.Length == 0) return null;
         using var stream = new MemoryStream(byteArray);
         return serializer.Deserialize(stream, type);
     }
@@ -65,7 +65,7 @@ public static class ISerializerExtensions
     /// <returns>The deserialized value, if any</returns>
     public static T? Deserialize<T>(this ISerializer serializer, byte[]? byteArray)
     {
-        if (byteArray == null || !byteArray.Any()) return default;
+        if (byteArray == null || byteArray.Length == 0) return default;
         using var stream = new MemoryStream(byteArray);
         return serializer.Deserialize<T>(stream);
     }
@@ -102,7 +102,7 @@ public static class ISerializerExtensions
     /// <returns>The converted value, if any</returns>
     public static object? Convert(this ISerializer serializer, object? source, Type targetType)
     {
-        if (targetType == null) throw new ArgumentNullException(nameof(targetType));
+        ArgumentNullException.ThrowIfNull(targetType);
         if (source == null) return null;
         if (targetType.IsAssignableFrom(source.GetType())) return source;
         var byteArray = serializer.SerializeToByteArray(source);

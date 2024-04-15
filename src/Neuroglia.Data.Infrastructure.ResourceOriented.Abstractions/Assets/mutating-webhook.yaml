@@ -9,7 +9,7 @@ spec:
     plural: mutating-webhooks
     shortNames:
       - mwh
-  group: hylo.io
+  group: neuroglia.io
   version: v1
   scope: Cluster
   versions:

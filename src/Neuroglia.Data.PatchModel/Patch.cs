@@ -44,12 +44,12 @@ public class Patch
     /// Gets the patch type
     /// </summary>
     [DataMember(IsRequired = true)]
-    public virtual string Type { get; protected set; } = null!;
+    public virtual string Type { get; set; } = null!;
 
     /// <summary>
     /// Gets the patch document
     /// </summary>
     [DataMember(IsRequired = true)]
-    public virtual object Document { get; protected set; } = null!;
+    public virtual object Document { get; set; } = null!;
 
 }
