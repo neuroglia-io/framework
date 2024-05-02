@@ -128,7 +128,7 @@ public class JavaScriptExpressionEvaluator
                         })
                     ;
                 }); ;
-            jsEngine.SetValue("input", data);
+            jsEngine.SetValue("$", data);
             if (args != null) foreach (var arg in args) jsEngine.SetValue(arg.Key, arg.Value);
             var result = jsEngine.Evaluate(expression).UnwrapIfPromise().ToObject();
             if (expectedType == typeof(object)) return result;

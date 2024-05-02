@@ -53,7 +53,7 @@ public class JavaScriptExpressionEvaluatorTests
     {
         //arrange
         var value = 42;
-        var expression = "input.value";
+        var expression = "$.value";
         var data = new { value };
 
         //act
@@ -64,11 +64,25 @@ public class JavaScriptExpressionEvaluatorTests
     }
 
     [Fact]
-    public async Task Evaluate_ComplexTypeOutput_ShouldWork()
+    public async Task Evaluate_PrimitiveInput_ShouldWork()
+    {
+        //arrange
+        var expression = "$";
+        var data = 42;
+
+        //act
+        var result = (int)(await this.ExpressionEvaluator.EvaluateAsync<double>(expression, data));
+
+        //assert
+        result.Should().Be(data);
+    }
+
+    [Fact]
+    public async Task Evaluate_ObjectTypeOutput_ShouldWork()
     {
         //arrange
         var value = 42;
-        var expression = "${ input }";
+        var expression = "$";
         var data = new { value };
 
         //act
@@ -84,7 +98,7 @@ public class JavaScriptExpressionEvaluatorTests
         //arrange
         var bar = "bar";
         var baz = new { foo = "bar" };
-        var obj = new { foo = "${ input.bar }", bar = "foo", baz };
+        var obj = new { foo = "${ $.bar }", bar = "foo", baz };
         var data = new { bar };
         var expectedResult = new { foo = bar, bar = "foo", baz = baz.ToExpandoObject() };
 
@@ -100,7 +114,7 @@ public class JavaScriptExpressionEvaluatorTests
     {
         //arrange
         var data = JsonSerializer.Default.Deserialize<List<object>>(File.ReadAllText(Path.Combine("Assets", "dogs.json")))!;
-        var expression = "input.filter(i => i.category?.name === CONST.category)[0]";
+        var expression = "$.filter(i => i.category?.name === CONST.category)[0]";
         var args = new Dictionary<string, object>() { { "CONST", new { category = "Pugal" } } };
 
         //act
@@ -130,10 +144,9 @@ public class JavaScriptExpressionEvaluatorTests
         //arrange
         var data = new { };
         var expression = File.ReadAllText(Path.Combine("Assets", "pets.expression.js.txt"));
-        var args = new Dictionary<string, object>() { { "CONST", new { category = "Pugal" } } };
 
         //act
-        dynamic? result = await this.ExpressionEvaluator.EvaluateAsync(expression, data, args);
+        dynamic? result = await this.ExpressionEvaluator.EvaluateAsync(expression, data);
 
         //assert
         Assert.NotEmpty(result?.pets);
@@ -145,7 +158,7 @@ public class JavaScriptExpressionEvaluatorTests
         //arrange
         var json = File.ReadAllText(Path.Combine("Assets", "inputWithEscapedJson.json"));
         var data = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(json)!;
-        var expression = "input._user";
+        var expression = "$._user";
 
         //act
         dynamic? result = await this.ExpressionEvaluator.EvaluateAsync(expression, data);

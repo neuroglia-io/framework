@@ -1,1 +1,1 @@
-﻿input.say.replace('${greeting}', input.someGreeting)
+﻿$.say.replace('${greeting}', $.someGreeting)
