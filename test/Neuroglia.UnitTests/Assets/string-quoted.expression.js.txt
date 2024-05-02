@@ -1,1 +1,1 @@
-﻿`${input.foo} is "bar"`
+﻿`${$.foo} is "bar"`
