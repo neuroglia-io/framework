@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 	<PackageTags>neuroglia framework serialization</PackageTags>
-    <Version>4.9.8</Version>
+    <Version>4.9.9</Version>
     <NeutralLanguage>en</NeutralLanguage>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
