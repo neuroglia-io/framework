@@ -71,7 +71,7 @@ public class JsonSerializerTests
         deserialized.Should().Equal(toSerialize);
     }
 
-    abstract class Mammal
+    abstract record Mammal
     {
 
         protected Mammal(string family)
@@ -83,7 +83,7 @@ public class JsonSerializerTests
 
     }
 
-    class Dog
+    record Dog
         : Mammal
     {
 
