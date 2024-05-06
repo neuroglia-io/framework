@@ -12,7 +12,6 @@
 // limitations under the License.
 
 using Neuroglia.Serialization.Json;
-using Neuroglia.UnitTests.Data.Events;
 
 namespace Neuroglia.UnitTests.Cases.Serialization;
 
