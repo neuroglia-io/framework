@@ -33,6 +33,44 @@ public class JsonSerializerTests
 
     }
 
+    [Fact]
+    public void Serialize_Deserialize_Equatable_Dictionary_Should_Work()
+    {
+        //arrange
+        var toSerialize = new EquatableDictionary<string, Dog>()
+        {
+            new("Puddle", new("Puddle")),
+            new("Labrador",new("Labrador")),
+            new("Shepperd",new("Shepperd"))
+        };
+
+        //act
+        var json = JsonSerializer.Default.SerializeToText(toSerialize);
+        var deserialized = JsonSerializer.Default.Deserialize<EquatableDictionary<string, Dog>>(json);
+
+        //assert
+        deserialized.Should().Equal(toSerialize);
+    }
+
+    [Fact]
+    public void Serialize_Deserialize_Equatable_List_Should_Work()
+    {
+        //arrange
+        var toSerialize = new EquatableList<Dog>()
+       {
+            new("Puddle"),
+            new("Labrador"),
+            new("Shepperd")
+        };
+
+        //act
+        var json = JsonSerializer.Default.SerializeToText(toSerialize);
+        var deserialized = JsonSerializer.Default.Deserialize<EquatableList<Dog>>(json);
+
+        //assert
+        deserialized.Should().Equal(toSerialize);
+    }
+
     abstract class Mammal
     {
 
