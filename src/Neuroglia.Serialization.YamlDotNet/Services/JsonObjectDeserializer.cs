@@ -20,23 +20,18 @@ namespace Neuroglia.Serialization.Yaml;
 /// <summary>
 /// Represents the <see cref="INodeDeserializer"/> used to deserialize <see cref="JsonObject"/>s
 /// </summary>
-public class JsonObjectDeserializer
-    : INodeDeserializer
+/// <remarks>
+/// Initializes a new <see cref="JsonObjectDeserializer"/>
+/// </remarks>
+/// <param name="inner">The inner <see cref="INodeDeserializer"/></param>
+public class JsonObjectDeserializer(INodeDeserializer inner)
+        : INodeDeserializer
 {
-
-    /// <summary>
-    /// Initializes a new <see cref="JsonObjectDeserializer"/>
-    /// </summary>
-    /// <param name="inner">The inner <see cref="INodeDeserializer"/></param>
-    public JsonObjectDeserializer(INodeDeserializer inner)
-    {
-        this.Inner = inner;
-    }
 
     /// <summary>
     /// Gets the inner <see cref="INodeDeserializer"/>
     /// </summary>
-    protected INodeDeserializer Inner { get; }
+    protected INodeDeserializer Inner { get; } = inner;
 
     /// <inheritdoc/>
     public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value)

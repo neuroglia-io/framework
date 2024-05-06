@@ -11,7 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections;
+using System.Text;
 using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
 namespace Neuroglia.Serialization.Yaml;
@@ -32,9 +35,22 @@ public class EquatableListSerializer
     /// <inheritdoc/>
     public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
     {
-        if (value == null) return;
-        var node = Json.JsonSerializer.Default.SerializeToNode(value);
-        new JsonNodeTypeConverter().WriteYaml(emitter, node, type);
+        if (value == null || value is not IEnumerable collection) return;
+        emitter.Emit(new SequenceStart(null, null, false, SequenceStyle.Block));
+        foreach (var item in collection)
+        {
+            var keyYaml = YamlSerializer.Default.Serialize(item);
+            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(keyYaml));
+            using var streamReader = new StreamReader(stream);
+            var parser = new Parser(streamReader);
+            while (parser.MoveNext())
+            {
+                if (parser.Current == null || parser.Current is DocumentEnd) break;
+                if (parser.Current is StreamStart || parser.Current is DocumentStart) continue;
+                emitter.Emit(parser.Current);
+            }
+        }
+        emitter.Emit(new SequenceEnd());
     }
 
 }
