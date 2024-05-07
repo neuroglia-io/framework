@@ -25,7 +25,7 @@ namespace Neuroglia.Data.Infrastructure.ResourceOriented.Services;
 /// </remarks>
 /// <param name="jsonSerializer">The service used to serialize/deserialize objects to/from JSON</param>
 /// <param name="repository">The service used to manage the application's <see cref="IResource"/>s</param>
-public class DefaultResourceValidator(IJsonSerializer jsonSerializer, IRepository repository)
+public class DefaultResourceValidator(IJsonSerializer jsonSerializer, IResourceRepository repository)
     : IResourceMutator
 {
 
@@ -37,7 +37,7 @@ public class DefaultResourceValidator(IJsonSerializer jsonSerializer, IRepositor
     /// <summary>
     /// Gets the service used to manage the application's <see cref="IResource"/>s
     /// </summary>
-    protected IRepository Repository { get; } = repository;
+    protected IResourceRepository Repository { get; } = repository;
 
     /// <inheritdoc/>
     public bool AppliesTo(Operation operation, string group, string version, string plural, string? @namespace = null) => operation == Operation.Create;

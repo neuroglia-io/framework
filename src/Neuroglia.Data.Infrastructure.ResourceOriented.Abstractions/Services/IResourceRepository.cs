@@ -16,8 +16,8 @@ namespace Neuroglia.Data.Infrastructure.ResourceOriented.Services;
 /// <summary>
 /// Defines the fundamentals of a service used to store and manage <see cref="IResource"/>s
 /// </summary>
-public interface IRepository
-: IDisposable, IAsyncDisposable
+public interface IResourceRepository
+    : IDisposable, IAsyncDisposable
 {
 
     /// <summary>

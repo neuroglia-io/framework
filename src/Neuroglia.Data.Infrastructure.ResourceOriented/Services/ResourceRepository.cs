@@ -18,16 +18,16 @@ using Neuroglia.Security.Services;
 namespace Neuroglia.Data.Infrastructure.ResourceOriented.Services;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IRepository"/> interface
+/// Represents the default implementation of the <see cref="IResourceRepository"/> interface
 /// </summary>
-public class Repository
-    : IRepository
+public class ResourceRepository
+    : IResourceRepository
 {
 
     private bool _disposed;
 
     /// <summary>
-    /// Initializes a new <see cref="Repository"/>
+    /// Initializes a new <see cref="ResourceRepository"/>
     /// </summary>
     /// <param name="loggerFactory">The service used to create <see cref="ILogger"/>s</param>
     /// <param name="userInfoProvider">The service used to provide information about users</param>
@@ -35,7 +35,7 @@ public class Repository
     /// <param name="versionControl">The service used to control versioning of admitted resources</param>
     /// <param name="database">The current resource database</param>
     /// <param name="patchHandlers">An <see cref="IEnumerable{T}"/> containing known <see cref="IPatchHandler"/>s</param>
-    public Repository(ILoggerFactory loggerFactory, IUserInfoProvider userInfoProvider, IAdmissionControl admissionControl, IVersionControl versionControl, IDatabase database, IEnumerable<IPatchHandler> patchHandlers)
+    public ResourceRepository(ILoggerFactory loggerFactory, IUserInfoProvider userInfoProvider, IAdmissionControl admissionControl, IVersionControl versionControl, IDatabase database, IEnumerable<IPatchHandler> patchHandlers)
     {
         this.Logger = loggerFactory.CreateLogger(this.GetType());
         this.UserInfoProvider = userInfoProvider;
@@ -247,9 +247,9 @@ public class Repository
     }
 
     /// <summary>
-    /// Disposes of the <see cref="IRepository"/>
+    /// Disposes of the <see cref="IResourceRepository"/>
     /// </summary>
-    /// <param name="disposing">A boolean indicating whether or not to dispose of the <see cref="IRepository"/></param>
+    /// <param name="disposing">A boolean indicating whether or not to dispose of the <see cref="IResourceRepository"/></param>
     /// <returns>A new <see cref="ValueTask"/></returns>
     protected virtual ValueTask DisposeAsync(bool disposing)
     {
@@ -272,9 +272,9 @@ public class Repository
     }
 
     /// <summary>
-    /// Disposes of the <see cref="IRepository"/>
+    /// Disposes of the <see cref="IResourceRepository"/>
     /// </summary>
-    /// <param name="disposing">A boolean indicating whether or not to dispose of the <see cref="IRepository"/></param>
+    /// <param name="disposing">A boolean indicating whether or not to dispose of the <see cref="IResourceRepository"/></param>
     protected virtual void Dispose(bool disposing)
     {
         if (!this._disposed)

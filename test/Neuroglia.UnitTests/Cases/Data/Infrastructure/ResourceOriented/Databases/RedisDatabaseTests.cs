@@ -34,7 +34,7 @@ public class RedisDatabaseTests
         services.AddHostedService(provider => new ContainerBootstrapper(provider.GetRequiredService<IContainer>()));
         services.AddSingleton<IConnectionMultiplexer>(provider => ConnectionMultiplexer.Connect($"localhost:{provider.GetRequiredService<IContainer>().GetMappedPublicPort(RedisContainerBuilder.PublicPort)}"));
         services.AddSingleton<Neuroglia.Data.Infrastructure.ResourceOriented.Services.IDatabase, RedisDatabase>();
-        services.AddSingleton<IRepository, Repository>();
+        services.AddSingleton<IResourceRepository, ResourceRepository>();
     }
 
 }

@@ -37,7 +37,7 @@ public class ResourceController<TResource>
     /// <param name="loggerFactory">The service used to create <see cref="ILogger"/>s</param>
     /// <param name="controllerOptions">The service used to access the current <see cref="IOptions{TOptions}"/></param>
     /// <param name="repository">The service used to manage <see cref="IResource"/>s</param>
-    public ResourceController(ILoggerFactory loggerFactory, IOptions<ResourceControllerOptions<TResource>> controllerOptions, IRepository repository)
+    public ResourceController(ILoggerFactory loggerFactory, IOptions<ResourceControllerOptions<TResource>> controllerOptions, IResourceRepository repository)
     {
         this.Logger = loggerFactory.CreateLogger(this.GetType());
         this.Options = controllerOptions.Value;
@@ -57,7 +57,7 @@ public class ResourceController<TResource>
     /// <summary>
     /// Gets the service used to manage <see cref="IResource"/>s
     /// </summary>
-    protected IRepository Repository { get; }
+    protected IResourceRepository Repository { get; }
 
     /// <summary>
     /// Gets the service used to watch changes on <see cref="IResource"/>s to control

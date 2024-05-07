@@ -45,7 +45,7 @@ internal sealed class TestRepositoryBuilder(Action<IConfiguration, IServiceColle
         return this;
     }
 
-    internal async Task<IRepository> BuildAsync()
+    internal async Task<IResourceRepository> BuildAsync()
     {
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", true)
@@ -70,7 +70,7 @@ internal sealed class TestRepositoryBuilder(Action<IConfiguration, IServiceColle
         foreach (var hostedService in _serviceProvider.GetServices<IHostedService>()) 
             await hostedService.StartAsync(default).ConfigureAwait(false);
 
-        var repository = this._serviceProvider.GetRequiredService<IRepository>();
+        var repository = this._serviceProvider.GetRequiredService<IResourceRepository>();
 
         foreach (var definition in this._definitions) await repository.AddAsync(definition.ConvertTo<ResourceDefinition>()!, false).ConfigureAwait(false);
 

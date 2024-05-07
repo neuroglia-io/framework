@@ -68,7 +68,7 @@ public class AdmissionControl(IServiceProvider serviceProvider, IEnumerable<IPat
 
         try
         {
-            mutators.AddRange(await this.ServiceProvider.GetRequiredService<IRepository>()
+            mutators.AddRange(await this.ServiceProvider.GetRequiredService<IResourceRepository>()
                 .GetMutatingWebhooksFor(request.Operation, request.Resource, cancellationToken)
                 .Select(wh => ActivatorUtilities.CreateInstance<WebhookResourceMutator>(this.ServiceProvider, wh))
                 .ToListAsync(cancellationToken).ConfigureAwait(false));
@@ -106,7 +106,7 @@ public class AdmissionControl(IServiceProvider serviceProvider, IEnumerable<IPat
         var validators = this.ServiceProvider.GetServices<IResourceValidator>().Where(m => m.AppliesTo(request)).ToList();
         try
         { 
-            validators.AddRange(await this.ServiceProvider.GetRequiredService<IRepository>()
+            validators.AddRange(await this.ServiceProvider.GetRequiredService<IResourceRepository>()
                 .GetMutatingWebhooksFor(request.Operation, request.Resource, cancellationToken)
                 .Select(wh => ActivatorUtilities.CreateInstance<WebhookResourceValidator>(this.ServiceProvider, wh))
                 .ToListAsync(cancellationToken));
