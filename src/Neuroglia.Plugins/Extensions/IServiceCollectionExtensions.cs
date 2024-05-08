@@ -76,15 +76,15 @@ public static class IServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
     /// <param name="serviceType">The type of the contract implemented by sourced plugins. Must be an interface</param>
-    /// <param name="defaultImplementation">The default implementation, if any, of the service contract</param>
+    /// <param name="defaultImplementationFactory">A <see cref="Func{T, TResult}"/> used to create the default implementation, if any, of the service contract</param>
     /// <param name="sourceName">The name of the plugin source, if any, to get the service implementation from</param>
     /// <param name="serviceLifetime">The plugin service lifetime</param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddPlugin(this IServiceCollection services, Type serviceType, object? defaultImplementation = null, string? sourceName = null, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
+    public static IServiceCollection AddPlugin(this IServiceCollection services, Type serviceType, Func<IServiceProvider, object>? defaultImplementationFactory = null, string? sourceName = null, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
     {
         if (!serviceType.IsInterface) throw new ArgumentException("The plugin contract must be an interface", nameof(serviceType));
         services.TryAdd(new ServiceDescriptor(typeof(IEnumerable<>).MakeGenericType(serviceType), provider => provider.GetRequiredService<IPluginProvider>().GetPlugins(serviceType, sourceName).OfType(serviceType), serviceLifetime));
-        services.TryAdd(new ServiceDescriptor(serviceType, provider => PluginProxy.Create(provider.GetRequiredService<IPluginProvider>(), serviceType, defaultImplementation, sourceName), serviceLifetime));
+        services.TryAdd(new ServiceDescriptor(serviceType, provider => PluginProxy.Create(provider.GetRequiredService<IPluginProvider>(), serviceType, defaultImplementationFactory == null ? null : defaultImplementationFactory(provider), sourceName), serviceLifetime));
         return services;
     }
 
@@ -93,14 +93,14 @@ public static class IServiceCollectionExtensions
     /// </summary>
     /// <typeparam name="TService">The type of the contract implemented by sourced plugins. Must be an interface</typeparam>
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-    /// <param name="defaultImplementation">The default implementation, if any, of the service contract</param>
+    /// <param name="defaultImplementationFactory">A <see cref="Func{T, TResult}"/> used to create the default implementation, if any, of the service contract</param>
     /// <param name="sourceName">The name of the plugin source, if any, to get the service implementation from</param>
     /// <param name="serviceLifetime">The plugin service lifetime</param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddPlugin<TService>(this IServiceCollection services, TService? defaultImplementation = null, string? sourceName = null, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
+    public static IServiceCollection AddPlugin<TService>(this IServiceCollection services, Func<IServiceProvider, TService>? defaultImplementationFactory = null, string? sourceName = null, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
         where TService : class
     {
-        return services.AddPlugin(typeof(TService), defaultImplementation, sourceName, serviceLifetime);
+        return services.AddPlugin(typeof(TService), defaultImplementationFactory, sourceName, serviceLifetime);
     }
 
     /// <summary>
