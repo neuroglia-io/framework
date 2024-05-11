@@ -14,6 +14,7 @@
 using Microsoft.Extensions.Logging;
 using Neuroglia.Data.PatchModel.Services;
 using Neuroglia.Security.Services;
+using System.Net;
 
 namespace Neuroglia.Data.Infrastructure.ResourceOriented.Services;
 
@@ -96,6 +97,14 @@ public class ResourceRepository
             var patchHandler = this.PatchHandlers.FirstOrDefault(h => h.Supports(result.Patch!.Type)) ?? throw new NullReferenceException($"No service registered to handle patches of type '{result.Patch!.Type}'");
             storageResource = (await patchHandler.ApplyPatchAsync(result.Patch!.Document, resource.ConvertTo<Resource>(), cancellationToken).ConfigureAwait(false))!;
             var storageVersion = resourceDefinition.GetStorageVersion();
+            if (resourceDefinition.Spec.Scope == ResourceScope.Namespaced)
+            {
+                var @namespace = storageResource.GetNamespace();
+                if (string.IsNullOrWhiteSpace(@namespace)) 
+                    throw new ProblemDetailsException(ResourceProblemDetails.ResourceAdmissionFailed(Operation.Create, resourceReference, [new KeyValuePair<string, string[]>("namespace", [ProblemDescriptions.NamespacedResourceMutDefineNamespace])]));
+                else if(await this.GetAsync<Namespace>(@namespace, null, cancellationToken).ConfigureAwait(false) == null) 
+                    throw new ProblemDetailsException(ResourceProblemDetails.ResourceAdmissionFailed(Operation.Create, resourceReference, [new KeyValuePair<string, string[]>("namespace", [StringFormatter.Format(ProblemDescriptions.ResourceNotFound, resource.GetQualifiedName())])]));
+            }
             if (resource.ApiVersion != storageVersion.Name) storageResource = await this.VersionControl.ConvertToStorageVersionAsync(new VersioningContext(resourceReference, resourceDefinition, storageResource), cancellationToken).ConfigureAwait(false);
         }
 

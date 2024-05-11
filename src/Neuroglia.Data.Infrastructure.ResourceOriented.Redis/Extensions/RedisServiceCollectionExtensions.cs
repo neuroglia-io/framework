@@ -29,13 +29,14 @@ public static class RedisServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
     /// <param name="connectionString">The Redis connection string to use</param>
+    /// <param name="lifetime">The <see cref="RedisDatabase"/>'s <see cref="ServiceLifetime"/></param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddRedisDatabase(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddRedisDatabase(this IServiceCollection services, string connectionString, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
         services.TryAddSingleton<IConnectionMultiplexer>(provider => ConnectionMultiplexer.Connect(connectionString));
-        services.AddSingleton<RedisDatabase>();
-        services.AddSingleton<Services.IDatabase>(provider => provider.GetRequiredService<RedisDatabase>());
+        services.Add(new(typeof(RedisDatabase), typeof(RedisDatabase), lifetime));
+        services.Add(new(typeof(Services.IDatabase), provider => provider.GetRequiredService<RedisDatabase>(), lifetime));
         return services;
     }
 

@@ -12,6 +12,7 @@
 // limitations under the License.
 
 
+using Humanizer.Localisation;
 using Neuroglia.Data.Infrastructure.ResourceOriented.Properties;
 using System.Net;
 
@@ -54,7 +55,9 @@ public static class ResourceProblemDetails
             ProblemTypes.NotFound,
             ProblemTitles.NotFound,
             (int)HttpStatusCode.NotFound,
-            StringFormatter.Format(ProblemDescriptions.ResourceNotFound, resource)
+            StringFormatter.Format(ProblemDescriptions.ResourceNotFound, string.IsNullOrWhiteSpace(resource.Namespace) 
+                ? $"{resource.Definition.Group}/{resource.Definition.Version}/{resource.Definition.Plural}/{resource.Name}"
+                : $"{resource.Definition.Group}/{resource.Definition.Version}/namespace/{resource.Namespace}/{resource.Definition.Plural}/{resource.Name}")
         );
     }
 
@@ -70,7 +73,9 @@ public static class ResourceProblemDetails
             ProblemTypes.NotModified,
             ProblemTitles.NotModified,
             (int)HttpStatusCode.NotModified,
-            StringFormatter.Format(ProblemDescriptions.ResourceNotModified, resource)
+            StringFormatter.Format(ProblemDescriptions.ResourceNotModified, string.IsNullOrWhiteSpace(resource.Namespace)
+                ? $"{resource.Definition.Group}/{resource.Definition.Version}/{resource.Definition.Plural}/{resource.Name}"
+                : $"{resource.Definition.Group}/{resource.Definition.Version}/namespace/{resource.Namespace}/{resource.Definition.Plural}/{resource.Name}")
         );
     }
 
@@ -86,7 +91,9 @@ public static class ResourceProblemDetails
             ProblemTypes.UnsupportedSubResource,
             ProblemTitles.Unsupported,
             (int)HttpStatusCode.BadRequest,
-            StringFormatter.Format(ProblemDescriptions.UnsupportedSubResource, subResource)
+            StringFormatter.Format(ProblemDescriptions.UnsupportedSubResource, string.IsNullOrWhiteSpace(subResource.Namespace)
+                ? $"{subResource.Definition.Group}/{subResource.Definition.Version}/{subResource.Definition.Plural}/{subResource.Name}"
+                : $"{subResource.Definition.Group}/{subResource.Definition.Version}/namespace/{subResource.Namespace}/{subResource.Definition.Plural}/{subResource.Name}")
         );
     }
 

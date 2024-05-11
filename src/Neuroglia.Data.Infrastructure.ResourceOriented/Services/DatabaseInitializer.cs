@@ -33,6 +33,7 @@ public class DatabaseInitializer
     {
         this.Logger = loggerFactory.CreateLogger(this.GetType());
         this.ServiceProvider = serviceProvider;
+        this.ServiceScope = this.ServiceProvider.CreateScope();
     }
 
     /// <summary>
@@ -46,9 +47,14 @@ public class DatabaseInitializer
     protected IServiceProvider ServiceProvider { get; }
 
     /// <summary>
+    /// Gets the current <see cref="IServiceScope"/>
+    /// </summary>
+    protected IServiceScope ServiceScope { get; }
+
+    /// <summary>
     /// Gets the <see cref="IDatabase"/> to initialize
     /// </summary>
-    protected IDatabase Database => this.ServiceProvider.GetRequiredService<IDatabase>();
+    protected IDatabase Database => this.ServiceScope.ServiceProvider.GetRequiredService<IDatabase>();
 
     /// <inheritdoc/>
     public virtual Task StartAsync(CancellationToken stoppingToken) => this.InitializeAsync(stoppingToken);
@@ -73,6 +79,7 @@ public class DatabaseInitializer
             }
             this.Logger.LogDebug("Resource database has been seeded");
         }
+        this.ServiceScope.Dispose();
         this.Logger.LogDebug("Resource database has been successfully initialized");
     }
 
