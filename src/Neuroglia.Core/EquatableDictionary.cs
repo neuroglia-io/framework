@@ -24,11 +24,9 @@ namespace Neuroglia;
 /// <typeparam name="TValue">The type of values contained by the dictionary</typeparam>
 [CollectionDataContract]
 public record EquatableDictionary<TKey, TValue>
-    : IDictionary, IDictionary<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>
+    : IDictionary<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>
     where TKey : notnull
 {
-
-    readonly object _syncRoot = new();
 
     /// <summary>
     /// Initializes a new <see cref="EquatableDictionary{TKey, TValue}"/>
@@ -60,20 +58,6 @@ public record EquatableDictionary<TKey, TValue>
 
     /// <inheritdoc/>
     public bool IsReadOnly => this.Items.IsReadOnly;
-
-    ICollection IDictionary.Keys => this.Items.Keys.ToList();
-
-    ICollection IDictionary.Values => this.Items.Values.ToList();
-
-    bool IDictionary.IsFixedSize => this.IsReadOnly;
-
-    bool IDictionary.IsReadOnly => this.IsReadOnly;
-
-    int ICollection.Count => this.Count;
-
-    bool ICollection.IsSynchronized => false;
-
-    object ICollection.SyncRoot => this._syncRoot;
 
     /// <inheritdoc/>
     public object? this[object key] { get => this[(TKey)key]; set => this[(TKey)key] = (TValue)value!; }
@@ -132,15 +116,5 @@ public record EquatableDictionary<TKey, TValue>
     }
 
     IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
-
-    void IDictionary.Add(object key, object? value) => this.Add((TKey)key, (TValue)value!);
-
-    bool IDictionary.Contains(object key) => this.ContainsKey((TKey)key);
-
-    IDictionaryEnumerator IDictionary.GetEnumerator() => new Hashtable(this.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)).GetEnumerator();
-
-    void IDictionary.Remove(object key) => this.Remove((TKey)key);
-
-    void ICollection.CopyTo(Array array, int index) => this.CopyTo((KeyValuePair<TKey, TValue>[])array, index);
 
 }

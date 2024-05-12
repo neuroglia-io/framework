@@ -35,11 +35,17 @@ public class EquatableDictionarySerializer
     /// <inheritdoc/>
     public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
     {
-        if (value == null || value is not IDictionary mapping) return;
+        if (value == null) return;
         emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, isImplicit: true, MappingStyle.Block));
-        foreach (DictionaryEntry kvp in mapping)
+        var dictionaryType = type.GetGenericType(typeof(IDictionary<,>))!;
+        var keyType = dictionaryType.GetGenericArguments()[0];
+        var valueType = dictionaryType.GetGenericArguments()[1];
+        var keyProperty = typeof(KeyValuePair<,>).MakeGenericType(keyType, valueType).GetProperty(nameof(KeyValuePair<object, object>.Key))!;
+        var valueProperty = typeof(KeyValuePair<,>).MakeGenericType(keyType, valueType).GetProperty(nameof(KeyValuePair<object, object>.Value))!;
+        foreach (var kvp in ((IEnumerable)value))
         {
-            var keyYaml = YamlSerializer.Default.Serialize(kvp.Key);
+            var key = keyProperty.GetValue(kvp);
+            var keyYaml = YamlSerializer.Default.Serialize(key);
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(keyYaml));
             var streamReader = new StreamReader(stream);
             var parser = new Parser(streamReader);
@@ -52,7 +58,8 @@ public class EquatableDictionarySerializer
             streamReader.Dispose();
             stream.Dispose();
 
-            var valueYaml = YamlSerializer.Default.Serialize(kvp.Value);
+            var kvpValue = valueProperty.GetValue(kvp);
+            var valueYaml = YamlSerializer.Default.Serialize(kvpValue);
             stream = new MemoryStream(Encoding.UTF8.GetBytes(valueYaml));
             streamReader = new StreamReader(stream);
             parser = new Parser(streamReader);
@@ -67,7 +74,5 @@ public class EquatableDictionarySerializer
         }
         emitter.Emit(new MappingEnd());
     }
-
-
 
 }
