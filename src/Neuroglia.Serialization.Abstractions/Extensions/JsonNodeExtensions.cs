@@ -46,11 +46,12 @@ public static class JsonNodeExtensions
     /// <returns>The unwrapped <see cref="JsonArray"/></returns>
     public static IEnumerable<object>? ToObject(this JsonArray jsonArray)
     {
+        var results = new List<object>();
         foreach (var jsonNode in jsonArray)
         {
-            if (jsonNode == null) yield return null!;
-            else yield return jsonNode!.ToObject()!;
+            results.Add(jsonNode?.ToObject()!);
         }
+        return results;
     }
 
     /// <summary>
