@@ -13,6 +13,7 @@
 
 using Neuroglia.Data.Expressions.Services;
 using Neuroglia.Serialization;
+using Neuroglia.Serialization.Json;
 using System.Collections;
 using System.Text.RegularExpressions;
 
@@ -37,8 +38,9 @@ public static partial class IExpressionEvaluatorExtensions
     public static async Task<TResult?> EvaluateAsync<TResult>(this IExpressionEvaluator evaluator, string expression, object input, IDictionary<string, object>? arguments = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(expression)) throw new ArgumentNullException(nameof(expression));
-        if (input == null) throw new ArgumentNullException(nameof(input));
-        return (TResult?)await evaluator.EvaluateAsync(expression, input, arguments, typeof(TResult), cancellationToken).ConfigureAwait(false);
+        return input == null
+            ? throw new ArgumentNullException(nameof(input))
+            : (TResult?)await evaluator.EvaluateAsync(expression, input, arguments, typeof(TResult), cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -53,18 +55,19 @@ public static partial class IExpressionEvaluatorExtensions
     /// <returns>The mutated object</returns>
     public static async Task<object?> EvaluateAsync(this IExpressionEvaluator evaluator, object expression, object input, IDictionary<string, object>? arguments = null, Type? expectedType = null, CancellationToken cancellationToken = default)
     {
-        if (evaluator == null) throw new ArgumentNullException(nameof(evaluator));
+        ArgumentNullException.ThrowIfNull(evaluator);
         if (expression.GetType().IsPrimitiveType())
         {
             if (expression is string expressionString && expressionString.IsRuntimeExpression()) return await evaluator.EvaluateAsync(expressionString, input, arguments, null, cancellationToken).ConfigureAwait(false);
             else return expression;
         }
-        var expressionProperties = expression.ToDictionary()!;
+        var expressionProperties = (IDictionary<string, object>)JsonSerializer.Default.Convert(expression, typeof(IDictionary<string, object>))!;
         var outputProperties = new Dictionary<string, object>();
         foreach (var property in expressionProperties)
         {
             var value = property.Value;
             if (property.Value is string expressionString && expressionString.IsRuntimeExpression()) value = await evaluator.EvaluateAsync(expressionString, input, arguments, null, cancellationToken).ConfigureAwait(false);
+            else if (property.Value == null) outputProperties[property.Key] = null!;
             else if (!property.Value.GetType().IsPrimitiveType())
             {
                 if (property.Value is IDictionary<string, object> expando)
@@ -87,7 +90,7 @@ public static partial class IExpressionEvaluatorExtensions
                     value = await evaluator.EvaluateAsync(property.Value, input, arguments, null, cancellationToken).ConfigureAwait(false);
                 }
             }
-            outputProperties.Add(property.Key, value!);
+            outputProperties[property.Key] = value!;
         }
         return expectedType == null || expectedType.IsAssignableFrom(typeof(Dictionary<string, object>)) ? outputProperties : Serialization.Json.JsonSerializer.Default.Convert(outputProperties, expectedType);
     }
