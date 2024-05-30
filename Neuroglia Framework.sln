@@ -110,7 +110,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Security.AspNetCo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.ResourceOriented", "src\Neuroglia.Data.Infrastructure.ResourceOriented\Neuroglia.Data.Infrastructure.ResourceOriented.csproj", "{602949C1-BC44-4E22-AA2E-C79EE5EDD083}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.Infrastructure.ResourceOriented.Redis", "src\Neuroglia.Data.Infrastructure.ResourceOriented.Redis\Neuroglia.Data.Infrastructure.ResourceOriented.Redis.csproj", "{25689B2F-D1F3-4611-8059-E43788C26407}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Data.Infrastructure.ResourceOriented.Redis", "src\Neuroglia.Data.Infrastructure.ResourceOriented.Redis\Neuroglia.Data.Infrastructure.ResourceOriented.Redis.csproj", "{25689B2F-D1F3-4611-8059-E43788C26407}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.Infrastructure.Redis", "src\Neuroglia.Data.Infrastructure.Redis\Neuroglia.Data.Infrastructure.Redis.csproj", "{73C0C7CF-E5C6-4E50-96A6-2C69B5EA776F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -314,6 +316,10 @@ Global
 		{25689B2F-D1F3-4611-8059-E43788C26407}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25689B2F-D1F3-4611-8059-E43788C26407}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25689B2F-D1F3-4611-8059-E43788C26407}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73C0C7CF-E5C6-4E50-96A6-2C69B5EA776F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73C0C7CF-E5C6-4E50-96A6-2C69B5EA776F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73C0C7CF-E5C6-4E50-96A6-2C69B5EA776F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73C0C7CF-E5C6-4E50-96A6-2C69B5EA776F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -368,6 +374,7 @@ Global
 		{661C5BA3-8EA4-45A1-A00F-64C7B5344003} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{602949C1-BC44-4E22-AA2E-C79EE5EDD083} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{25689B2F-D1F3-4611-8059-E43788C26407} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{73C0C7CF-E5C6-4E50-96A6-2C69B5EA776F} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}
