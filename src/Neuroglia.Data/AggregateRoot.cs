@@ -11,6 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+
 namespace Neuroglia.Data;
 
 /// <summary>
@@ -30,21 +33,26 @@ public abstract class AggregateRoot<TKey, TState>
     protected AggregateRoot() { }
 
     /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
     public virtual TKey Id => this.State.Id;
 
     object IIdentifiable.Id => this.Id;
 
     /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
     public virtual DateTimeOffset CreatedAt => this.State.CreatedAt;
 
     /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
     public virtual DateTimeOffset? LastModified => this.State.LastModified;
 
-    private readonly List<IDomainEvent> _pendingEvents = [];
+    readonly List<IDomainEvent> _pendingEvents = [];
     /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
     public virtual IReadOnlyList<IDomainEvent> PendingEvents => this._pendingEvents.AsReadOnly();
 
     /// <inheritdoc/>
+    [DataMember, JsonInclude]
     public virtual TState State { get; protected set; } = new();
 
     IAggregateState<TKey> IAggregateRoot<TKey>.State => this.State;

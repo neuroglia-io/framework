@@ -52,6 +52,7 @@
     <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.Mongo\Neuroglia.Data.Infrastructure.Mongo.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.ObjectStorage.Minio\Neuroglia.Data.Infrastructure.ObjectStorage.Minio.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Guards\Neuroglia.Data.Guards.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.Redis\Neuroglia.Data.Infrastructure.Redis.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.ResourceOriented.Redis\Neuroglia.Data.Infrastructure.ResourceOriented.Redis.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.PatchModel\Neuroglia.Data.PatchModel.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Schemas.Json\Neuroglia.Data.Schemas.Json.csproj" />

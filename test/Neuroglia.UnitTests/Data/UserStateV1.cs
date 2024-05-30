@@ -13,6 +13,7 @@
 
 using Neuroglia.Data;
 using Neuroglia.UnitTests.Data.Events;
+using System.Text.Json.Serialization;
 
 namespace Neuroglia.UnitTests.Data;
 
@@ -20,26 +21,37 @@ public record UserStateV1
     : AggregateState<string>
 {
 
+    [JsonInclude]
     public string FirstName { get; set; } = null!;
 
+    [JsonInclude]
     public string LastName { get; set; } = null!;
 
+    [JsonInclude]
     public string Email { get; set; } = null!;
 
+    [JsonInclude]
     public bool EmailVerified { get; protected set; }
 
+    [JsonInclude]
     public bool IsLoggedIn { get; protected set; }
 
+    [JsonInclude]
     public DateTimeOffset? LastOnline { get; protected set; }
 
+    [JsonInclude]
     public Address? Address { get; protected set; }
 
+    [JsonInclude]
     public string? PhoneNumber { get; protected set; }
 
+    [JsonInclude]
     public bool IsV1 { get; protected set; }
 
+    [JsonInclude]
     public bool IsV2 { get; protected set; }
 
+    [JsonInclude]
     public bool IsV3 { get; protected set; }
 
     /// In real use-case, the reducer for the deprecated event should be removed
