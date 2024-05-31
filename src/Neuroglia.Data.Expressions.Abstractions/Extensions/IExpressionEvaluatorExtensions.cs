@@ -15,7 +15,6 @@ using Neuroglia.Data.Expressions.Services;
 using Neuroglia.Serialization;
 using Neuroglia.Serialization.Json;
 using System.Collections;
-using System.Text.RegularExpressions;
 
 namespace Neuroglia.Data.Expressions;
 
@@ -119,11 +118,8 @@ public static partial class IExpressionEvaluatorExtensions
     public static async Task<bool> EvaluateConditionAsync(this IExpressionEvaluator evaluator, string expression, object input, IDictionary<string, object>? arguments = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(expression)) throw new ArgumentNullException(nameof(expression));
-        if (input == null) throw new ArgumentNullException(nameof(input));
+        ArgumentNullException.ThrowIfNull(input);
         return (bool?)await evaluator.EvaluateAsync(expression, input, arguments, typeof(bool), cancellationToken).ConfigureAwait(false) == true;
     }
-
-    [GeneratedRegex("\"\\$\\{.+?\\}\"", RegexOptions.Compiled)]
-    private static partial Regex MatchRuntimeExpressionRegex();
 
 }

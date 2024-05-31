@@ -113,7 +113,7 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_LargeData_ShouldWork()
     {
         //arrange
-        var data = JsonSerializer.Default.Deserialize<List<object>>(File.ReadAllText(Path.Combine("Assets", "dogs.json")))!;
+        var data = JsonSerializer.Default.Deserialize<List<object>>(File.ReadAllText(Path.Combine("Assets", "expressions", "dogs.json")))!;
         var expression = "$.filter(i => i.category?.name === CONST.category)[0]";
         var args = new Dictionary<string, object>() { { "CONST", new { category = "Pugal" } } };
 
@@ -143,7 +143,7 @@ public class JavaScriptExpressionEvaluatorTests
     {
         //arrange
         var data = new { };
-        var expression = File.ReadAllText(Path.Combine("Assets", "pets.expression.js.txt"));
+        var expression = File.ReadAllText(Path.Combine("Assets", "expressions", "pets.expression.js.txt"));
 
         //act
         dynamic? result = await this.ExpressionEvaluator.EvaluateAsync(expression, data);
@@ -156,7 +156,7 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_EscapedJsonInput_ShouldWork()
     {
         //arrange
-        var json = File.ReadAllText(Path.Combine("Assets", "inputWithEscapedJson.json"));
+        var json = File.ReadAllText(Path.Combine("Assets", "expressions", "inputWithEscapedJson.json"));
         var data = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(json)!;
         var expression = "$._user";
 
@@ -171,8 +171,8 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_String_Concatenation_ShouldWork()
     {
         //arrange
-        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-concat.input.json")))!;
-        var expression = File.ReadAllText(Path.Combine("Assets", "string-concat.expression.js.txt"));
+        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "expressions", "string-concat.input.json")))!;
+        var expression = File.ReadAllText(Path.Combine("Assets", "expressions", "string-concat.expression.js.txt"));
 
         //act
         var result = (string)(await this.ExpressionEvaluator.EvaluateAsync(expression, data, null, typeof(string)))!;
@@ -185,8 +185,8 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_String_Interpolation_ShouldWork()
     {
         //arrange
-        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-interpolation.input.json")))!;
-        var expression = File.ReadAllText(Path.Combine("Assets", "string-interpolation.expression.js.txt"));
+        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "expressions", "string-interpolation.input.json")))!;
+        var expression = File.ReadAllText(Path.Combine("Assets", "expressions", "string-interpolation.expression.js.txt"));
 
         //act
         var result = (string)(await this.ExpressionEvaluator.EvaluateAsync(expression, data, null, typeof(string)))!;
@@ -199,8 +199,8 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_Complex_String_Substitution_ShouldWork()
     {
         //arrange
-        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-substitution.input.json")))!;
-        var expression = File.ReadAllText(Path.Combine("Assets", "string-substitution.expression.js.txt"));
+        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "expressions", "string-substitution.input.json")))!;
+        var expression = File.ReadAllText(Path.Combine("Assets", "expressions", "string-substitution.expression.js.txt"));
 
         //act
         var result = (string)(await this.ExpressionEvaluator.EvaluateAsync(expression, data, null, typeof(string)))!;
@@ -213,8 +213,8 @@ public class JavaScriptExpressionEvaluatorTests
     public async Task Evaluate_String_With_Escaped_Quotes_ShouldWork()
     {
         //arrange
-        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "string-quoted.input.json")))!;
-        var expression = File.ReadAllText(Path.Combine("Assets", "string-quoted.expression.js.txt"));
+        var data = JsonSerializer.Default.Deserialize<ExpandoObject>(File.ReadAllText(Path.Combine("Assets", "expressions", "string-quoted.input.json")))!;
+        var expression = File.ReadAllText(Path.Combine("Assets", "expressions", "string-quoted.expression.js.txt"));
 
         //act
         var result = (string)(await this.ExpressionEvaluator.EvaluateAsync(expression, data, null, typeof(string)))!;
