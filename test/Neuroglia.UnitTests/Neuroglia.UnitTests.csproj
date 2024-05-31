@@ -61,6 +61,8 @@
     <ProjectReference Include="..\..\src\Neuroglia.Measurements\Neuroglia.Measurements.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Mediation.FluentValidation\Neuroglia.Mediation.FluentValidation.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Plugins\Neuroglia.Plugins.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Scripting.NodeJS\Neuroglia.Scripting.NodeJS.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Scripting.Python\Neuroglia.Scripting.Python.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Security.AspNetCore\Neuroglia.Security.AspNetCore.csproj" />
   </ItemGroup>
 
@@ -68,55 +70,61 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\dogs.json">
+    <None Update="Assets\expressions\dogs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\inputWithEscapedJson.json">
+    <None Update="Assets\expressions\inputWithEscapedJson.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\openapi.json">
+    <None Update="Assets\expressions\openapi.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\pets.expression.jq.txt">
+    <None Update="Assets\expressions\pets.expression.jq.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\pets.expression.js.txt">
+    <None Update="Assets\expressions\pets.expression.js.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-concat.expression.jq.txt">
+    <None Update="Assets\expressions\string-concat.expression.jq.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-concat.expression.js.txt">
+    <None Update="Assets\expressions\string-concat.expression.js.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-concat.input.json">
+    <None Update="Assets\expressions\string-concat.input.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-interpolation.expression.jq.txt">
+    <None Update="Assets\expressions\string-interpolation.expression.jq.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-interpolation.expression.js.txt">
+    <None Update="Assets\expressions\string-interpolation.expression.js.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-interpolation.input.json">
+    <None Update="Assets\expressions\string-interpolation.input.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-quoted.expression.jq.txt">
+    <None Update="Assets\expressions\string-quoted.expression.jq.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-quoted.expression.js.txt">
+    <None Update="Assets\expressions\string-quoted.expression.js.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-quoted.input.json">
+    <None Update="Assets\expressions\string-quoted.input.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-substitution.expression.jq.txt">
+    <None Update="Assets\expressions\string-substitution.expression.jq.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-substitution.expression.js.txt">
+    <None Update="Assets\expressions\string-substitution.expression.js.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Assets\string-substitution.input.json">
+    <None Update="Assets\expressions\string-substitution.input.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\scripts\import-requests.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\scripts\import-axios.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -49,7 +49,6 @@ public static class RedisServiceCollectionExtensions
     /// <typeparam name="TEntity">The type of the managed entities</typeparam>
     /// <typeparam name="TKey">The type of key used to identify and distinct managed entities</typeparam>
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-    /// <param name="connectionString">The Redis connection string</param>
     /// <param name="lifetime">The lifetime of the repository</param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddRedisRepository<TEntity, TKey>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)

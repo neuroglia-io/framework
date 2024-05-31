@@ -13,17 +13,17 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Neuroglia.Data.Expressions.Services;
+namespace Neuroglia.Scripting.Services;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IExpressionEvaluator"/> interface
+/// Represents the default implementation of the <see cref="IScriptExecutorProvider"/> interface
 /// </summary>
 /// <remarks>
-/// Initializes a new <see cref="ExpressionEvaluatorProvider"/>
+/// Initializes a new <see cref="ScriptExecutorProvider"/>
 /// </remarks>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
-public class ExpressionEvaluatorProvider(IServiceProvider serviceProvider)
-    : IExpressionEvaluatorProvider
+public class ScriptExecutorProvider(IServiceProvider serviceProvider)
+    : IScriptExecutorProvider
 {
 
     /// <summary>
@@ -31,13 +31,13 @@ public class ExpressionEvaluatorProvider(IServiceProvider serviceProvider)
     /// </summary>
     protected IServiceProvider ServiceProvider { get; } = serviceProvider;
     /// <inheritdoc/>
-    public virtual IExpressionEvaluator? GetEvaluator(string language)
+    public virtual IScriptExecutor? GetExecutor(string language)
     {
         if (string.IsNullOrEmpty(language)) throw new ArgumentNullException(nameof(language));
-        return this.GetEvaluators(language).FirstOrDefault();
+        return this.GetExecutors(language).FirstOrDefault();
     }
 
     /// <inheritdoc/>
-    public virtual IEnumerable<IExpressionEvaluator> GetEvaluators(string language) => string.IsNullOrWhiteSpace(language) ? throw new ArgumentNullException(nameof(language)) : this.ServiceProvider.GetServices<IExpressionEvaluator>().Where(s => s.Supports(language));
+    public virtual IEnumerable<IScriptExecutor> GetExecutors(string language) => string.IsNullOrWhiteSpace(language) ? throw new ArgumentNullException(nameof(language)) : this.ServiceProvider.GetServices<IScriptExecutor>().Where(s => s.Supports(language));
 
 }
