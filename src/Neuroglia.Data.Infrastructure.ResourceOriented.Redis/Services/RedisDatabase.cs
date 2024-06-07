@@ -123,6 +123,8 @@ public class RedisDatabase
         Guard.AgainstArgument(group).WhenNullOrWhitespace();
         Guard.AgainstArgument(version).WhenNullOrWhitespace();
         Guard.AgainstArgument(plural).WhenNullOrWhitespace();
+        var key = this.BuildResourceKey(group, version, plural, resource.GetName(), resource.GetNamespace());
+        if (await this.Database.KeyExistsAsync(key).ConfigureAwait(false)) throw new ProblemDetailsException(ResourceProblemDetails.ResourceAlreadyExists(new ResourceReference(new(resource.Definition.Group, resource.Definition.Version, resource.Definition.Plural), resource.GetName(), resource.GetNamespace())));
         return await this.WriteResourceAsync(group, version, plural, resource.ConvertTo<Resource>()!, true, ResourceWatchEventType.Created, cancellationToken).ConfigureAwait(false);
     }
 
@@ -180,7 +182,7 @@ public class RedisDatabase
         if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
         if (string.IsNullOrWhiteSpace(plural)) throw new ArgumentNullException(nameof(plural));
         var resourceDefinition = await this.GetDefinitionAsync(group, plural, cancellationToken).ConfigureAwait(false) ?? throw new ProblemDetailsException(ResourceProblemDetails.ResourceDefinitionNotFound(new ResourceDefinitionReference(group, version, plural)));
-        var observable = this.ResourceWatchEvents.Where(e => e.Resource.GetGroup() == group && e.Resource.GetVersion() == version && e.Resource.Kind == resourceDefinition.Spec.Names.Kind && string.IsNullOrWhiteSpace(@namespace) ? true : e.Resource.GetNamespace() == @namespace);
+        var observable = this.ResourceWatchEvents.Where(e => e.Resource.GetGroup() == group && e.Resource.GetVersion() == version && e.Resource.Kind == resourceDefinition.Spec.Names.Kind && string.IsNullOrWhiteSpace(@namespace) || e.Resource.GetNamespace() == @namespace);
         if (labelSelectors?.Any() == true) observable = observable.Where(e => labelSelectors.All(s => s.Selects(e.Resource)));
         return new ResourceWatch(observable, false);
     }

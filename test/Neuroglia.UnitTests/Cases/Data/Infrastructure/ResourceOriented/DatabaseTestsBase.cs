@@ -171,11 +171,11 @@ public abstract class DatabaseTestsBase
         }
 
         //act
-        var fooCollection = await repository.ListAsync<FakeNamespacedResource>(@namespace, new LabelSelector[] { new("fake-label", LabelSelectionOperator.Equals, "foo") });
-        var barCollection = await repository.ListAsync<FakeNamespacedResource>(@namespace, new LabelSelector[] { new("fake-label", LabelSelectionOperator.Contains, "bar") });
-        var bazCollection = await repository.ListAsync<FakeNamespacedResource>(@namespace, new LabelSelector[] { new("fake-label", LabelSelectionOperator.NotContains, "foo", "bar") });
-        var barBazCollection = await repository.ListAsync<FakeNamespacedResource>(@namespace, new LabelSelector[] { new("fake-label", LabelSelectionOperator.Contains, "bar", "baz") });
-        var notFooCollection = await repository.ListAsync<FakeNamespacedResource>(@namespace, new LabelSelector[] { new("fake-label", LabelSelectionOperator.NotEquals, "foo") });
+        var fooCollection = await repository.ListAsync<FakeNamespacedResource>(@namespace, [new("fake-label", LabelSelectionOperator.Equals, "foo")]);
+        var barCollection = await repository.ListAsync<FakeNamespacedResource>(@namespace, [new("fake-label", LabelSelectionOperator.Contains, "bar")]);
+        var bazCollection = await repository.ListAsync<FakeNamespacedResource>(@namespace, [new("fake-label", LabelSelectionOperator.NotContains, "foo", "bar")]);
+        var barBazCollection = await repository.ListAsync<FakeNamespacedResource>(@namespace, [new("fake-label", LabelSelectionOperator.Contains, "bar", "baz")]);
+        var notFooCollection = await repository.ListAsync<FakeNamespacedResource>(@namespace, [new("fake-label", LabelSelectionOperator.NotEquals, "foo")]);
 
         //assert
         fooCollection.Should().NotBeNull();
@@ -254,11 +254,11 @@ public abstract class DatabaseTestsBase
         }
 
         //act
-        var fooCollection = await repository.ListAsync<FakeClusterResource>(null, new LabelSelector[] { new("fake-label", LabelSelectionOperator.Equals, "foo") });
-        var barCollection = await repository.ListAsync<FakeClusterResource>(null, new LabelSelector[] { new("fake-label", LabelSelectionOperator.Contains, "bar") });
-        var bazCollection = await repository.ListAsync<FakeClusterResource>(null, new LabelSelector[] { new("fake-label", LabelSelectionOperator.NotContains, "foo", "bar") });
-        var barBazCollection = await repository.ListAsync<FakeClusterResource>(null, new LabelSelector[] { new("fake-label", LabelSelectionOperator.Contains, "bar", "baz") });
-        var notFooCollection = await repository.ListAsync<FakeClusterResource>(null, new LabelSelector[] { new("fake-label", LabelSelectionOperator.NotEquals, "foo") });
+        var fooCollection = await repository.ListAsync<FakeClusterResource>(null, [new("fake-label", LabelSelectionOperator.Equals, "foo")]);
+        var barCollection = await repository.ListAsync<FakeClusterResource>(null, [new("fake-label", LabelSelectionOperator.Contains, "bar")]);
+        var bazCollection = await repository.ListAsync<FakeClusterResource>(null, [new("fake-label", LabelSelectionOperator.NotContains, "foo", "bar")]);
+        var barBazCollection = await repository.ListAsync<FakeClusterResource>(null, [new("fake-label", LabelSelectionOperator.Contains, "bar", "baz")]);
+        var notFooCollection = await repository.ListAsync<FakeClusterResource>(null, [new("fake-label", LabelSelectionOperator.NotEquals, "foo")]);
 
         //assert
         fooCollection.Should().NotBeNull();

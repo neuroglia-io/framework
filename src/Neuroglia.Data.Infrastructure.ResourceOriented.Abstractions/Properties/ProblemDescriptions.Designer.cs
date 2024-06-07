@@ -115,6 +115,15 @@ namespace Neuroglia.Data.Infrastructure.ResourceOriented.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The specified resource &apos;{resource}&apos; already exists.
+        /// </summary>
+        public static string ResourceAlreadyExists {
+            get {
+                return ResourceManager.GetString("ResourceAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to convert resource &apos;{resource}&apos; to version &apos;{version}&apos;:\n{errors}.
         /// </summary>
         public static string ResourceConversionFailed {

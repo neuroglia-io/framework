@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using Humanizer.Localisation;
 using Neuroglia.Data.Infrastructure.ResourceOriented.Properties;
 using System.Net;
 
@@ -40,6 +38,24 @@ public static class ResourceProblemDetails
             StringFormatter.Format(ProblemDescriptions.ResourceSchemaValidationFailed, resource.Definition.Group, resource.Definition.Version, resource.Definition.Plural),
             null,
             evaluationResults.Errors?.Select(e => new KeyValuePair<string, string[]>(e.Key, [e.Value]))
+        );
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="ProblemDetails"/> that describes failure to create a specific resource because a resource with the same name and namespace already exists
+    /// </summary>
+    /// <param name="resource">The resource that could not be found</param>
+    /// <returns>A new <see cref="ProblemDetails"/></returns>
+    public static ProblemDetails ResourceAlreadyExists(IResourceReference resource)
+    {
+        return new
+        (
+            ProblemTypes.Conflict,
+            ProblemTitles.Conflict,
+            (int)HttpStatusCode.BadRequest,
+            StringFormatter.Format(ProblemDescriptions.ResourceAlreadyExists, string.IsNullOrWhiteSpace(resource.Namespace)
+                ? $"{resource.Definition.Group}/{resource.Definition.Version}/{resource.Definition.Plural}/{resource.Name}"
+                : $"{resource.Definition.Group}/{resource.Definition.Version}/namespace/{resource.Namespace}/{resource.Definition.Plural}/{resource.Name}")
         );
     }
 

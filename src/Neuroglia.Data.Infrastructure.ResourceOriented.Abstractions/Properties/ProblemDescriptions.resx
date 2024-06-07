@@ -135,6 +135,9 @@
   <data name="ResourceAdmissionFailed" xml:space="preserve">
     <value>Failed to admit operation '{operation}' the specified resource '{resource}':\n{errors}</value>
   </data>
+  <data name="ResourceAlreadyExists" xml:space="preserve">
+    <value>The specified resource '{resource}' already exists</value>
+  </data>
   <data name="ResourceConversionFailed" xml:space="preserve">
     <value>Failed to convert resource '{resource}' to version '{version}':\n{errors}</value>
   </data>

@@ -26,6 +26,10 @@ public static class ProblemTypes
     /// </summary>
     public static readonly Uri AdmissionFailed = new(BaseUri, "admission-failed");
     /// <summary>
+    /// Gets the <see cref="Uri"/> that references a problem due to a conflict
+    /// </summary>
+    public static readonly Uri Conflict = new(BaseUri, "conflict");
+    /// <summary>
     /// Gets the <see cref="Uri"/> that references a failure to convert a resource to a specific version
     /// </summary>
     public static readonly Uri ConversionFailed = new(BaseUri, "conversion-failed");
