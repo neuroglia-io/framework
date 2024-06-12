@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Humanizer.Localisation;
 using Json.Patch;
 using Microsoft.Extensions.Logging;
 using Neuroglia.Data.Guards;
@@ -123,8 +124,9 @@ public class RedisDatabase
         Guard.AgainstArgument(group).WhenNullOrWhitespace();
         Guard.AgainstArgument(version).WhenNullOrWhitespace();
         Guard.AgainstArgument(plural).WhenNullOrWhitespace();
+        if (resource.Metadata.Name?.Trim().EndsWith('-') == true) resource.Metadata.Name = $"{resource.Metadata.Name}{Guid.NewGuid().ToString("N")[..15].ToLowerInvariant()}";
         var key = this.BuildResourceKey(group, version, plural, resource.GetName(), resource.GetNamespace());
-        if (await this.Database.KeyExistsAsync(key).ConfigureAwait(false)) throw new ProblemDetailsException(ResourceProblemDetails.ResourceAlreadyExists(new ResourceReference(new(resource.Definition.Group, resource.Definition.Version, resource.Definition.Plural), resource.GetName(), resource.GetNamespace())));
+        if (await this.Database.KeyExistsAsync(key).ConfigureAwait(false)) throw new ProblemDetailsException(ResourceProblemDetails.ResourceAlreadyExists(new ResourceReference(new(group, version, plural), resource.GetName(), resource.GetNamespace())));
         return await this.WriteResourceAsync(group, version, plural, resource.ConvertTo<Resource>()!, true, ResourceWatchEventType.Created, cancellationToken).ConfigureAwait(false);
     }
 
@@ -188,7 +190,7 @@ public class RedisDatabase
     }
 
     /// <inheritdoc/>
-    public virtual async Task<IResource> PatchResourceAsync(Patch patch, string group, string version, string plural, string name, string? @namespace = null, bool dryRun = false, CancellationToken cancellationToken = default)
+    public virtual async Task<IResource> PatchResourceAsync(Patch patch, string group, string version, string plural, string name, string? @namespace = null, string? resourceVersion = null, bool dryRun = false, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(group)) throw new ArgumentNullException(nameof(group));
         if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
@@ -198,8 +200,9 @@ public class RedisDatabase
         var patchHandler = this.PatchHandlers.FirstOrDefault(h => h.Supports(patch.Type)) ?? throw new NullReferenceException($"Failed to find a registered service used to handle patches of type '{patch.Type}'");
         var resourceReference = new ResourceReference(new(group, version, plural), name, @namespace);
         var originalResource = (await this.GetResourceAsync(group, version, plural, name, @namespace, cancellationToken).ConfigureAwait(false))?.ConvertTo<Resource>() ?? throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotFound(resourceReference));
-        var updatedResource = await patchHandler.ApplyPatchAsync(patch.Document, originalResource, cancellationToken).ConfigureAwait(false)!;
+        if(!string.IsNullOrWhiteSpace(resourceVersion) && !originalResource.Metadata.ResourceVersion!.Equals(resourceVersion, StringComparison.OrdinalIgnoreCase)) throw new ProblemDetailsException(ResourceProblemDetails.ResourceOptimisticConcurrencyCheckFailed(resourceReference, resourceVersion!, originalResource.Metadata.ResourceVersion!));
 
+        var updatedResource = await patchHandler.ApplyPatchAsync(patch.Document, originalResource, cancellationToken).ConfigureAwait(false)!;
         var purgedPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, updatedResource);
         purgedPatch = new JsonPatch(purgedPatch.Operations.Where(o => (o.Path.Segments[0] == nameof(IMetadata.Metadata).ToCamelCase() && (o.Path.Segments[1] == nameof(ResourceMetadata.Annotations).ToCamelCase()
             || o.Path.Segments[1] == nameof(ResourceMetadata.Labels).ToCamelCase())) || o.Path.Segments.First() == nameof(ISpec.Spec).ToCamelCase()));
@@ -221,19 +224,20 @@ public class RedisDatabase
         var patchHandler = this.PatchHandlers.FirstOrDefault(h => h.Supports(PatchType.JsonPatch)) ?? throw new NullReferenceException($"Failed to find a registered service used to handle patches of type '{PatchType.JsonPatch}'");
         var resourceReference = new ResourceReference(new(group, version, plural), name, @namespace);
         var originalResource = (await this.GetResourceAsync(group, version, plural, name, @namespace, cancellationToken).ConfigureAwait(false))?.ConvertTo<Resource>() ?? throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotFound(resourceReference));
+        if (originalResource.Metadata.ResourceVersion != resource.ConvertTo<Resource>()!.Metadata.ResourceVersion) throw new ProblemDetailsException(ResourceProblemDetails.ResourceOptimisticConcurrencyCheckFailed(resourceReference, resource.Metadata.ResourceVersion!, originalResource.Metadata.ResourceVersion!));
+
         var jsonPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, resource);
         jsonPatch = new JsonPatch(jsonPatch.Operations.Where(o => (o.Path.Segments[0] == nameof(IMetadata.Metadata).ToCamelCase() && (o.Path.Segments[1] == nameof(ResourceMetadata.Annotations).ToCamelCase()
              || o.Path.Segments[1] == nameof(ResourceMetadata.Labels).ToCamelCase())) || o.Path.Segments.First() == nameof(ISpec.Spec).ToCamelCase()));
 
         if (!jsonPatch.Operations.Any()) throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotModified(resourceReference));
         var updatedResource = (await patchHandler.ApplyPatchAsync(jsonPatch, originalResource, cancellationToken).ConfigureAwait(false))!;
-        if (originalResource.Metadata.ResourceVersion != resource.ConvertTo<Resource>()!.Metadata.ResourceVersion) throw new ProblemDetailsException(ResourceProblemDetails.ResourceOptimisticConcurrencyCheckFailed(resourceReference, resource.Metadata.ResourceVersion!, originalResource.Metadata.ResourceVersion!));
-
+        
         return await this.WriteResourceAsync(group, version, plural, updatedResource, true, ResourceWatchEventType.Updated, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public virtual async Task<IResource> PatchSubResourceAsync(Patch patch, string group, string version, string plural, string name, string subResource, string? @namespace = null, bool dryRun = false, CancellationToken cancellationToken = default)
+    public virtual async Task<IResource> PatchSubResourceAsync(Patch patch, string group, string version, string plural, string name, string subResource, string? @namespace = null, string? resourceVersion = null, bool dryRun = false, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(group)) throw new ArgumentNullException(nameof(group));
         if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
@@ -244,8 +248,9 @@ public class RedisDatabase
         var patchHandler = this.PatchHandlers.FirstOrDefault(h => h.Supports(patch.Type)) ?? throw new NullReferenceException($"Failed to find a registered service used to handle patches of type '{patch.Type}'");
         var resourceReference = new SubResourceReference(new(group, version, plural), name, subResource, @namespace);
         var originalResource = (await this.GetResourceAsync(group, version, plural, name, @namespace, cancellationToken).ConfigureAwait(false))?.ConvertTo<Resource>() ?? throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotFound(resourceReference));
-        var updatedResource = (await patchHandler.ApplyPatchAsync(patch.Document, originalResource, cancellationToken).ConfigureAwait(false))!;
+        if (!string.IsNullOrWhiteSpace(resourceVersion) && !originalResource.Metadata.ResourceVersion!.Equals(resourceVersion, StringComparison.OrdinalIgnoreCase)) throw new ProblemDetailsException(ResourceProblemDetails.ResourceOptimisticConcurrencyCheckFailed(resourceReference, resourceVersion!, originalResource.Metadata.ResourceVersion!));
 
+        var updatedResource = (await patchHandler.ApplyPatchAsync(patch.Document, originalResource, cancellationToken).ConfigureAwait(false))!;
         var purgedPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, updatedResource);
         purgedPatch = new JsonPatch(purgedPatch.Operations.Where(o => o.Path.Segments.First() == nameof(IStatus.Status).ToCamelCase()));
         if (!purgedPatch.Operations.Any()) throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotModified(resourceReference));
@@ -267,12 +272,13 @@ public class RedisDatabase
         var patchHandler = this.PatchHandlers.FirstOrDefault(h => h.Supports(PatchType.JsonPatch)) ?? throw new NullReferenceException($"Failed to find a registered service used to handle patches of type '{PatchType.JsonPatch}'");
         var resourceReference = new SubResourceReference(new(group, version, plural), name, subResource, @namespace);
         var originalResource = (await this.GetResourceAsync(group, version, plural, name, @namespace, cancellationToken).ConfigureAwait(false))?.ConvertTo<Resource>() ?? throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotFound(resourceReference));
+        if (originalResource.Metadata.ResourceVersion != resource.ConvertTo<Resource>()!.Metadata.ResourceVersion) throw new ProblemDetailsException(ResourceProblemDetails.ResourceOptimisticConcurrencyCheckFailed(resourceReference, resource.Metadata.ResourceVersion!, originalResource.Metadata.ResourceVersion!));
+
         var jsonPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, resource);
         jsonPatch = new JsonPatch(jsonPatch.Operations.Where(o => o.Path.Segments.First() == nameof(IStatus.Status).ToCamelCase()));
 
         if (!jsonPatch.Operations.Any()) throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotModified(new ResourceReference(new(resource.Definition.Group, resource.Definition.Version, resource.Definition.Plural), resource.GetName(), resource.GetNamespace())));
         var updatedResource = (await patchHandler.ApplyPatchAsync(jsonPatch, originalResource, cancellationToken).ConfigureAwait(false))!;
-        if (originalResource.Metadata.ResourceVersion != resource.ConvertTo<Resource>()!.Metadata.ResourceVersion) throw new ProblemDetailsException(ResourceProblemDetails.ResourceOptimisticConcurrencyCheckFailed(resourceReference, resource.Metadata.ResourceVersion!, originalResource.Metadata.ResourceVersion!));
 
         return await this.WriteResourceAsync(group, version, plural, updatedResource, false, ResourceWatchEventType.Updated, cancellationToken).ConfigureAwait(false); ;
     }

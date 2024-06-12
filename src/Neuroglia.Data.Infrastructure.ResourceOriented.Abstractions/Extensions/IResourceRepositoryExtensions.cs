@@ -213,16 +213,17 @@ public static class IResourceRepositoryExtensions
     /// <param name="patch">The patch to apply</param>
     /// <param name="name">The name of the <see cref="IResource"/> to patch</param>
     /// <param name="namespace">The namespace the <see cref="IResource"/> to patch belongs to, if any</param>
+    /// <param name="resourceVersion">The expected resource version, if any, used for optimistic concurrency</param>
     /// <param name="dryRun">A boolean indicating whether or not to persist the changes induced by the operation</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The replaced <see cref="IResource"/></returns>
-    public static async Task<TResource> PatchAsync<TResource>(this IResourceRepository repository, Patch patch, string name, string? @namespace = null, bool dryRun = false, CancellationToken cancellationToken = default)
+    public static async Task<TResource> PatchAsync<TResource>(this IResourceRepository repository, Patch patch, string name, string? @namespace = null, string? resourceVersion = null, bool dryRun = false, CancellationToken cancellationToken = default)
         where TResource : class, IResource, new()
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
         ArgumentNullException.ThrowIfNull(patch);
         var resource = new TResource();
-        var result = await repository.PatchAsync(patch, resource.Definition.Group, resource.Definition.Version, resource.Definition.Plural, name, @namespace, dryRun, cancellationToken).ConfigureAwait(false);
+        var result = await repository.PatchAsync(patch, resource.Definition.Group, resource.Definition.Version, resource.Definition.Plural, name, @namespace, resourceVersion, dryRun, cancellationToken).ConfigureAwait(false);
         return result.ConvertTo<TResource>()!;
     }
 
@@ -251,16 +252,17 @@ public static class IResourceRepositoryExtensions
     /// <param name="patch">The patch to apply</param>
     /// <param name="name">The name of the <see cref="IResource"/> to patch the status of</param>
     /// <param name="namespace">The namespace the <see cref="IResource"/> to patch the status of belongs to, if any</param>
+    /// <param name="resourceVersion">The expected resource version, if any, used for optimistic concurrency</param>
     /// <param name="dryRun">A boolean indicating whether or not to persist the changes induced by the operation</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The replaced <see cref="IResource"/></returns>
-    public static async Task<TResource> PatchStatusAsync<TResource>(this IResourceRepository repository, Patch patch, string name, string? @namespace = null, bool dryRun = false, CancellationToken cancellationToken = default)
+    public static async Task<TResource> PatchStatusAsync<TResource>(this IResourceRepository repository, Patch patch, string name, string? @namespace = null, string? resourceVersion = null, bool dryRun = false, CancellationToken cancellationToken = default)
         where TResource : class, IResource, new()
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
         ArgumentNullException.ThrowIfNull(patch);
         var resource = new TResource();
-        var result = await repository.PatchSubResourceAsync(patch, resource.Definition.Group, resource.Definition.Version, resource.Definition.Plural, name, "status", @namespace, dryRun, cancellationToken).ConfigureAwait(false);
+        var result = await repository.PatchSubResourceAsync(patch, resource.Definition.Group, resource.Definition.Version, resource.Definition.Plural, name, "status", @namespace, resourceVersion, dryRun, cancellationToken).ConfigureAwait(false);
         return result.ConvertTo<TResource>()!;
     }
 

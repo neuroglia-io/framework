@@ -72,6 +72,19 @@ public static class IResourceExtensions
     public static string GetQualifiedName(this IResource resource) => string.IsNullOrWhiteSpace(resource.GetNamespace()) ? resource.GetName() : $"{resource.GetName()}.{resource.GetNamespace()}";
 
     /// <summary>
+    /// Creates a new <see cref="ResourceReference"/>
+    /// </summary>
+    /// <typeparam name="TResource">The type of <see cref="IResource"/> to get an <see cref="ResourceReference"/> for</typeparam>
+    /// <param name="resource">The <see cref="IResource"/> to create a new <see cref="ResourceReference"/> for</param>
+    /// <returns>A new <see cref="ResourceReference"/></returns>
+    public static ResourceReference GetReference<TResource>(this TResource resource)
+        where TResource : class, IResource, new()
+    {
+        ArgumentNullException.ThrowIfNull(resource);
+        return new ResourceReference<TResource>(resource.GetName(), resource.GetNamespace());
+    }
+
+    /// <summary>
     /// Determines whether or not the <see cref="IResource"/> is the specified type
     /// </summary>
     /// <param name="resource">The <see cref="IResource"/> to check</param>

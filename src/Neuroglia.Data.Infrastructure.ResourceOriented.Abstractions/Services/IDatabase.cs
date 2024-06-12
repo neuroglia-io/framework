@@ -128,10 +128,11 @@ public interface IDatabase
     /// <param name="plural">The plural name of the type of <see cref="IResource"/> to patch</param>
     /// <param name="name">The name of the <see cref="IResource"/> to patch</param>
     /// <param name="namespace">The namespace the <see cref="IResource"/> to patch belongs to, if any</param>
+    /// <param name="resourceVersion">The expected resource version, if any. Used for optimistic concurrency</param>
     /// <param name="dryRun">A boolean indicating whether or not to persist the changes resulting from the operation</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The deleted <see cref="IResource"/></returns>
-    Task<IResource> PatchResourceAsync(Patch patch, string group, string version, string plural, string name, string? @namespace = null, bool dryRun = false, CancellationToken cancellationToken = default);
+    Task<IResource> PatchResourceAsync(Patch patch, string group, string version, string plural, string name, string? @namespace = null, string? resourceVersion = null, bool dryRun = false, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Patches the specified <see cref="IResource"/>'s sub resource
@@ -143,10 +144,11 @@ public interface IDatabase
     /// <param name="name">The name of the <see cref="IResource"/> to patch</param>
     /// <param name="subResource">The name of the sub resource to patch ex: status)</param>
     /// <param name="namespace">The namespace the <see cref="IResource"/> to patch belongs to, if any</param>
+    /// <param name="resourceVersion">The expected resource version, if any. Used for optimistic concurrency</param>
     /// <param name="dryRun">A boolean indicating whether or not to persist the changes resulting from the operation</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The deleted <see cref="IResource"/></returns>
-    Task<IResource> PatchSubResourceAsync(Patch patch, string group, string version, string plural, string name, string subResource, string? @namespace = null, bool dryRun = false, CancellationToken cancellationToken = default);
+    Task<IResource> PatchSubResourceAsync(Patch patch, string group, string version, string plural, string name, string subResource, string? @namespace = null, string? resourceVersion = null, bool dryRun = false, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Removes the specified <see cref="IResource"/>

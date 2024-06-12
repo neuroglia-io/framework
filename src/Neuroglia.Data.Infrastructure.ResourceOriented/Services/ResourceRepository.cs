@@ -14,7 +14,6 @@
 using Microsoft.Extensions.Logging;
 using Neuroglia.Data.PatchModel.Services;
 using Neuroglia.Security.Services;
-using System.Net;
 
 namespace Neuroglia.Data.Infrastructure.ResourceOriented.Services;
 
@@ -164,7 +163,7 @@ public class ResourceRepository
     }
 
     /// <inheritdoc/>
-    public virtual async Task<IResource> PatchAsync(Patch patch, string group, string version, string plural, string name, string? @namespace = null, bool dryRun = false, CancellationToken cancellationToken = default)
+    public virtual async Task<IResource> PatchAsync(Patch patch, string group, string version, string plural, string name, string? @namespace = null, string? resourceVersion = null, bool dryRun = false, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(patch);
         if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
@@ -184,7 +183,7 @@ public class ResourceRepository
         if (diffPatch.Operations.Any(o => o.Path.Segments[0] == nameof(Resource.Metadata).ToCamelCase() ? o.Path.Segments[1] != nameof(ResourceMetadata.Labels).ToCamelCase() && o.Path.Segments[1] != nameof(ResourceMetadata.Annotations).ToCamelCase() : o.Path.Segments.First() != "spec"))
             throw new ProblemDetailsException(ResourceProblemDetails.InvalidResourcePatch(resourceReference));
 
-        return await this.Database.PatchResourceAsync(patchToApply, group, version, plural, name, @namespace, dryRun, cancellationToken).ConfigureAwait(false);
+        return await this.Database.PatchResourceAsync(patchToApply, group, version, plural, name, @namespace, resourceVersion, dryRun, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
@@ -215,7 +214,7 @@ public class ResourceRepository
     }
 
     /// <inheritdoc/>
-    public virtual async Task<IResource> PatchSubResourceAsync(Patch patch, string group, string version, string plural, string name, string subResource, string? @namespace = null, bool dryRun = false, CancellationToken cancellationToken = default)
+    public virtual async Task<IResource> PatchSubResourceAsync(Patch patch, string group, string version, string plural, string name, string subResource, string? @namespace = null, string? resourceVersion = null, bool dryRun = false, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(patch);
         if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
@@ -234,7 +233,7 @@ public class ResourceRepository
         var diffPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, patchedResource);
         if (diffPatch.Operations.Any(o => o.Path.Segments.First() != subResource)) throw new ProblemDetailsException(ResourceProblemDetails.InvalidSubResourcePatch(resourceReference));
 
-        return await this.Database.PatchSubResourceAsync(patchToApply, group, version, plural, name, subResource, @namespace, dryRun, cancellationToken).ConfigureAwait(false);
+        return await this.Database.PatchSubResourceAsync(patchToApply, group, version, plural, name, subResource, @namespace, resourceVersion, dryRun, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
