@@ -86,7 +86,7 @@ public class AdmissionControl(IServiceProvider serviceProvider, IEnumerable<IPat
             if (result.Patch != null) 
             {
                 var patchHandler = this.PatchHandlers.FirstOrDefault(h => h.Supports(result.Patch.Type)) ?? throw new NullReferenceException($"Failed to find a registered handler for patches of type '{result.Patch.Type}'");
-                request.UpdatedState = await patchHandler.ApplyPatchAsync(result.Patch, request.UpdatedState, cancellationToken).ConfigureAwait(false);
+                request.UpdatedState = await patchHandler.ApplyPatchAsync(result.Patch.Document, request.UpdatedState ?? request.OriginalState, cancellationToken).ConfigureAwait(false);
             }
         }
 
