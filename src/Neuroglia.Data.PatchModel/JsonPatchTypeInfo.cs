@@ -47,7 +47,7 @@ public class JsonPatchTypeInfo
     public virtual JsonPatchPropertyInfo? GetProperty(JsonPointer path)
     {
         var pathStr = path.ToString();
-        if (int.TryParse(path.Segments.Last().Value, out var index)) pathStr = JsonPointer.Create(path.Segments[..^1]).ToString();
+        if (int.TryParse(path[^1], out var index)) pathStr = JsonPointer.Create(path[..^1].Select(s => (PointerSegment)s).ToArray()).ToString();
         return Properties.FirstOrDefault(p => p.Path.Equals(pathStr, StringComparison.OrdinalIgnoreCase));
     }
 
@@ -61,7 +61,7 @@ public class JsonPatchTypeInfo
     /// <returns>The value of an object's property</returns>
     public virtual async Task<object?> GetValueAsync(IServiceProvider provider, object source, JsonPointer path, CancellationToken cancellationToken = default)
     {
-        var property = GetProperty(path) ?? throw new NullReferenceException($"Failed to find a property at path '{path.ToString(JsonPointerStyle.Plain)}'");
+        var property = GetProperty(path) ?? throw new NullReferenceException($"Failed to find a property at path '{path}'");
         return await property.GetValueAsync(provider, source, cancellationToken).ConfigureAwait(false);
     }
 
@@ -76,7 +76,7 @@ public class JsonPatchTypeInfo
     /// <returns>A new awaitable <see cref="Task"/></returns>
     public virtual async Task SetValueAsync(IServiceProvider provider, object source, JsonPointer path, object? value, CancellationToken cancellationToken = default)
     {
-        var property = GetProperty(path) ?? throw new NullReferenceException($"Failed to find a property at path '{path.ToString(JsonPointerStyle.Plain)}'");
+        var property = GetProperty(path) ?? throw new NullReferenceException($"Failed to find a property at path '{path}'");
         if (property.ReplaceAsync == null) throw new NullReferenceException($"The '{nameof(JsonPatchPropertyInfo.ReplaceAsync)}' delegate has not been configured for property at '{path}'");
         await property.ReplaceAsync(provider, source, PatchOperation.Replace(path, value == null ? null : JsonSerializer.Default.SerializeToNode(value)), cancellationToken).ConfigureAwait(false);
     }
@@ -191,7 +191,7 @@ public class JsonPatchTypeInfo
                 var propertySource = source is IAggregateRoot aggregate ? aggregate.State : source;
                 var sourceValue = property.GetValue(propertySource);
                 var valueToAdd = operation.Value == null ? null : JsonSerializer.Default.Deserialize(operation.Value, property.PropertyType)!;
-                if (int.TryParse(operation.Path.Segments.Last().Value, out var index))
+                if (int.TryParse(operation.Path[^1], out var index))
                 {
                     if (property.PropertyType == typeof(string) || !typeof(IEnumerable).IsAssignableFrom(property.PropertyType)) throw new NotSupportedException($"Cannot index a value of type '{property.PropertyType.Name}'");
                     if (sourceValue == null) throw new ArgumentOutOfRangeException($"The target property '{property.Name}' is null and cannot be indexed", nameof(index));
@@ -229,7 +229,7 @@ public class JsonPatchTypeInfo
                 var index = (int?)null;
                 if (indexParameter != null)
                 {
-                    var lastPathSegment = operation.Path.Segments.Last().Value;
+                    var lastPathSegment = operation.Path[^1];
                     if (lastPathSegment.All(c => char.IsDigit(c)))
                     {
                         if (int.TryParse(lastPathSegment, out var indexValue)) index = indexValue;
@@ -271,7 +271,7 @@ public class JsonPatchTypeInfo
             var propertySource = source is IAggregateRoot aggregate ? aggregate.State : source;
             var sourceValue = property.GetValue(propertySource);
             var valueToAdd = await typeInfo.GetValueAsync(provider, source, operation.From, cancellationToken).ConfigureAwait(false);
-            if (int.TryParse(operation.Path.Segments.Last().Value, out var index))
+            if (int.TryParse(operation.Path[^1], out var index))
             {
                 if (property.PropertyType == typeof(string) || !typeof(IEnumerable).IsAssignableFrom(property.PropertyType)) throw new NotSupportedException($"Cannot index a value of type '{property.PropertyType.Name}'");
                 if (sourceValue == null) throw new ArgumentOutOfRangeException($"The target property '{property.Name}' is null and cannot be indexed", nameof(index));
@@ -315,7 +315,7 @@ public class JsonPatchTypeInfo
                 var index = (int?)null;
                 if (indexParameter != null)
                 {
-                    var lastPathSegment = operation.Path.Segments.Last().Value;
+                    var lastPathSegment = operation.Path[^1];
                     if (lastPathSegment.All(c => char.IsDigit(c)))
                     {
                         if (int.TryParse(lastPathSegment, out var indexValue)) index = indexValue;
@@ -344,7 +344,7 @@ public class JsonPatchTypeInfo
             var sourceProperty = typeInfo.GetProperty(operation.From) ?? throw new NullReferenceException($"Failed to find a property at '{operation.Path}'");
             var sourceValues = (object?)null;
 
-            if (int.TryParse(operation.Path.Segments.Last().Value, out var index))
+            if (int.TryParse(operation.Path[^1], out var index))
             {
                 if (property.PropertyType == typeof(string) || !typeof(IEnumerable).IsAssignableFrom(property.PropertyType)) throw new NotSupportedException($"Cannot index a value of type '{property.PropertyType.Name}'");
                 if (targetValue == null) throw new ArgumentOutOfRangeException($"The target property '{property.Name}' is null and cannot be indexed", nameof(index));
@@ -410,7 +410,7 @@ public class JsonPatchTypeInfo
                 var index = (int?)null;
                 if (indexParameter != null)
                 {
-                    var lastPathSegment = operation.Path.Segments.Last().Value;
+                    var lastPathSegment = operation.Path[^1];
                     if (lastPathSegment.All(c => char.IsDigit(c)))
                     {
                         if (int.TryParse(lastPathSegment, out var indexValue)) index = indexValue;
@@ -447,7 +447,7 @@ public class JsonPatchTypeInfo
                 var values = property.GetValue(propertySource);
                 if (operation.Path.IsArrayIndexer())
                 {
-                    if (values is ICollection collection) collection.Remove(collection.GetElementAt(int.Parse(operation.Path.Segments.Last().Value)));
+                    if (values is ICollection collection) collection.Remove(collection.GetElementAt(int.Parse(operation.Path[^1])));
                     else throw new InvalidOperationException($"The targeted property at path '{operation.Path}' is not a collection and does not support removing items");
                 }
                 else property.SetValue(propertySource, null);
@@ -467,7 +467,7 @@ public class JsonPatchTypeInfo
         return (provider, source, operation, cancellationToken) =>
         {
             var indexParameter = parameters.FirstOrDefault(p => typeof(int).IsAssignableFrom(p.ParameterType)) ?? throw new TargetParameterCountException($"A method used to reduce a JSON Patch operation of type '{OperationType.Remove}' must declare exactly one 'index' parameter of type 'int'");
-            if (!int.TryParse(operation.Path.Segments.Last().Value, out var index)) throw new NullReferenceException($"The path of a JSON Patch operation of type '{OperationType.Remove}' must end with the index of the item to remove");
+            if (!int.TryParse(operation.Path[^1], out var index)) throw new NullReferenceException($"The path of a JSON Patch operation of type '{OperationType.Remove}' must end with the index of the item to remove");
             return Task.Run(() => method.Invoke(source, [index]), cancellationToken);
         };
     }
@@ -505,7 +505,7 @@ public class JsonPatchTypeInfo
                 {
                     var enumerableType = valueType.GetGenericType(typeof(IEnumerable<>)) ?? throw new InvalidOperationException($"The targeted property at path '{operation.Path}' is not an enumerable and does not support indexing items"); ;
                     valueType = enumerableType.GetEnumerableElementType();
-                    if (value is IEnumerable enumerable) value = enumerable.GetElementAt(int.Parse(operation.Path.Segments.Last().Value));
+                    if (value is IEnumerable enumerable) value = enumerable.GetElementAt(int.Parse(operation.Path[^1]));
                 }
                 var other = operation.Value == null ? null : JsonSerializer.Default.Deserialize(operation.Value, valueType);
                 if (value?.Equals(other) != true) throw new OptimisticConcurrencyException($"The JSON Patch operation of type '{OperationType.Test}' failed for property at '{operation.Path}'.\r\nExpected value '{other}'\r\nActual value: '{value}'");
@@ -531,7 +531,7 @@ public class JsonPatchTypeInfo
                 {
                     var enumerableType = valueType.GetGenericType(typeof(IEnumerable<>)) ?? throw new InvalidOperationException($"The targeted property at path '{operation.Path}' is not an enumerable and does not support indexing items"); ;
                     valueType = enumerableType.GetEnumerableElementType();
-                    if (value is IEnumerable enumerable) value = enumerable.GetElementAt(int.Parse(operation.Path.Segments.Last().Value));
+                    if (value is IEnumerable enumerable) value = enumerable.GetElementAt(int.Parse(operation.Path[^1]));
                 }
                 var other = operation.Value == null ? null : JsonSerializer.Default.Deserialize(operation.Value, valueType);
                 if (value?.Equals(other) != true) throw new OptimisticConcurrencyException($"The JSON Patch operation of type '{OperationType.Test}' failed for property at '{operation.Path}'.\r\nExpected value '{other}'\r\nActual value: '{value}'");

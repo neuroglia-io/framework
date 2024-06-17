@@ -119,7 +119,7 @@ public class JavaScriptExpressionEvaluator
                         // customizing object wrapping to set array prototype to objects
                         .SetWrapObjectHandler((engine, target, type) =>
                         {
-                            var instance = new ObjectWrapper(engine, target);
+                            var instance = ObjectWrapper.Create(engine, target);
                             if (DetermineIfObjectIsArrayLikeClrCollection(target.GetType()))
                             {
                                 instance.Prototype = engine.Intrinsics.Array.PrototypeObject;

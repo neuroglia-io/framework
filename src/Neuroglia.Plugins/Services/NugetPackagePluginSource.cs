@@ -269,7 +269,7 @@ public class NugetPackagePluginSource
             var components = userInfo.Split(':', StringSplitOptions.RemoveEmptyEntries);
             var username = components.Length > 0 ? components[0] : null;
             var password = components.Length > 1 ? components[1] : null;
-            packageSource.Credentials = new PackageSourceCredential(source, username, password, true, null);
+            packageSource.Credentials = new PackageSourceCredential(source, username!, password!, true, null);
         }
 
         return packageSource;

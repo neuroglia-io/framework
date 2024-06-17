@@ -26,20 +26,20 @@ public static class JsonPointerExtensions
     /// </summary>
     /// <param name="pointer">The <see cref="JsonPointer"/> to convert</param>
     /// <returns>A new <see cref="JsonPointer"/></returns>
-    public static JsonPointer ToCamelCase(this JsonPointer pointer) => JsonPointer.Create(pointer.Segments.Select(s => PointerSegment.Parse(s.Value.ToCamelCase())).ToArray());
+    public static JsonPointer ToCamelCase(this JsonPointer pointer) => JsonPointer.Create(pointer.Select(s => (PointerSegment)s.ToCamelCase()).ToArray());
 
     /// <summary>
     /// Determines whether or not the <see cref="JsonPointer"/> is an array indexer
     /// </summary>
     /// <param name="pointer">The <see cref="JsonPointer"/> to check</param>
     /// <returns>A boolean indicating whether or not the <see cref="JsonPointer"/> is an array indexer</returns>
-    public static bool IsArrayIndexer(this JsonPointer pointer) => int.TryParse(pointer.Segments.Last().Value, out _);
+    public static bool IsArrayIndexer(this JsonPointer pointer) => int.TryParse(pointer[^1], out _);
 
     /// <summary>
     /// Creates a new <see cref="JsonPointer"/> without indexer
     /// </summary>
     /// <param name="pointer">The <see cref="JsonPointer"/> to remove the indexer of</param>
     /// <returns>A new <see cref="JsonPointer"/></returns>
-    public static JsonPointer WithoutArrayIndexer(this JsonPointer pointer) => pointer.IsArrayIndexer() ? JsonPointer.Create(pointer.Segments[..^1]) : pointer;
+    public static JsonPointer WithoutArrayIndexer(this JsonPointer pointer) => pointer.IsArrayIndexer() ? JsonPointer.Create(pointer[..^1].Select(p => (PointerSegment)p).ToArray()) : pointer;
 
 }
