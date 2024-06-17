@@ -38,7 +38,7 @@ public class MediatorOptionsBuilder
     /// <inheritdoc/>
     public virtual IMediatorOptionsBuilder ScanAssembly(Assembly assembly)
     {
-        if (assembly == null) throw new ArgumentNullException(nameof(assembly));
+        ArgumentNullException.ThrowIfNull(assembly);
         if (!this.Options.AssembliesToScan.Contains(assembly)) this.Options.AssembliesToScan.Add(assembly);
         return this;
     }
@@ -46,7 +46,7 @@ public class MediatorOptionsBuilder
     /// <inheritdoc/>
     public virtual IMediatorOptionsBuilder UseDefaultPipelineBehavior(Type pipelineType)
     {
-        if (pipelineType == null) throw new ArgumentNullException(nameof(pipelineType));
+        ArgumentNullException.ThrowIfNull(pipelineType);
         if (pipelineType.GetGenericType(typeof(IMiddleware<,>)) == null) throw new ArgumentException($"The specified type must be an implementation of the '{typeof(IMiddleware<,>).Name}' interface", nameof(pipelineType));
         this.Options.DefaultPipelineBehaviors.Add(pipelineType);
         return this;

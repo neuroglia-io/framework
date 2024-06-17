@@ -42,7 +42,7 @@ public static class MemberInfoExtensions
     /// <returns>The <see cref="MemberInfo"/> overriden by the <see cref="MemberInfo"/>, if any</returns>
     public static MemberInfo GetOverridenMember(this MemberInfo extended)
     {
-        if (extended == null) throw new ArgumentNullException(nameof(extended));
+        ArgumentNullException.ThrowIfNull(extended);
         var declaringType = extended.DeclaringType!;
         if (declaringType == extended.ReflectedType) declaringType = declaringType.GetDeclaringTypeOf(extended);
         return extended switch

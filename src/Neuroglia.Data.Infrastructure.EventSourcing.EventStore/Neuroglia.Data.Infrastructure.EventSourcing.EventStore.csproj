@@ -29,12 +29,12 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="23.2.1" />
-	<PackageReference Include="EventStore.Client.Grpc.ProjectionManagement" Version="23.2.1" />
-	<PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.2.1" />
+	<PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="23.3.3" />
+	<PackageReference Include="EventStore.Client.Grpc.ProjectionManagement" Version="23.3.3" />
+	<PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.3.3" />
 	<PackageReference Include="Lambda2Js" Version="3.1.4" />
 	<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
-	<PackageReference Include="System.Reactive" Version="6.0.0" />
+	<PackageReference Include="System.Reactive" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>

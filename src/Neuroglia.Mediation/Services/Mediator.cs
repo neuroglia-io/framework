@@ -50,7 +50,7 @@ public class Mediator
     public virtual async Task<TResult> ExecuteAsync<TResult>(IRequest<TResult> request, CancellationToken cancellationToken = default) 
         where TResult : IOperationResult
     {
-        if (request == null) throw new ArgumentNullException(nameof(request));
+        ArgumentNullException.ThrowIfNull(request);
         var requestType = request.GetType();
         using var activity = _activitySource.StartActivity(requestType.Name);
         activity?.AddTag("request.type", requestType.FullName);

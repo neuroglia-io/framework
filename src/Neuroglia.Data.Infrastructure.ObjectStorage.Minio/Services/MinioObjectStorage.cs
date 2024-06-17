@@ -123,7 +123,7 @@ public class MinioObjectStorage
         if (string.IsNullOrWhiteSpace(bucketName)) throw new ArgumentNullException(nameof(bucketName));
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
         if (string.IsNullOrWhiteSpace(contentType)) throw new ArgumentNullException(nameof(contentType));
-        if (stream == null) throw new ArgumentNullException(nameof(stream));
+        ArgumentNullException.ThrowIfNull(stream);
         if (!size.HasValue) size = (ulong)stream.Length;
 
         try

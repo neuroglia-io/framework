@@ -128,7 +128,7 @@ public class Volume
     /// <returns>A new <see cref="Volume"/> resulting from the addition</returns>
     public virtual Volume Add(Volume volume)
     {
-        if (volume == null) throw new ArgumentNullException(nameof(volume));
+        ArgumentNullException.ThrowIfNull(volume);
         if (volume.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(volume), "Cannot compare volumes with different types of unit");
         return new Volume(this.Value + volume.Value * (this.Unit.Ratio / volume.Unit.Ratio), this.Unit);
     }
@@ -140,7 +140,7 @@ public class Volume
     /// <returns>A new <see cref="Volume"/> resulting from the subtraction</returns>
     public virtual Volume Subtract(Volume volume)
     {
-        if (volume == null) throw new ArgumentNullException(nameof(volume));
+        ArgumentNullException.ThrowIfNull(volume);
         if (volume.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(volume), "Cannot compare volumes with different types of unit");
         return new Volume(this.Value - volume.Value * (this.Unit.Ratio / volume.Unit.Ratio), this.Unit);
     }
@@ -155,7 +155,7 @@ public class Volume
     /// <returns>A new <see cref="Volume"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
     public new virtual Volume ConvertTo(UnitOfMeasurement unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Type != UnitOfMeasurementType.Volume) throw new ArgumentException("The specified unit of measurement must be of type 'volume'", nameof(unit));
         return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }

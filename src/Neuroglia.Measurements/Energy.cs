@@ -128,7 +128,7 @@ public class Energy
     /// <returns>A new <see cref="Energy"/> resulting from the addition</returns>
     public virtual Energy Add(Energy energy)
     {
-        if (energy == null) throw new ArgumentNullException(nameof(energy));
+        ArgumentNullException.ThrowIfNull(energy);
         if (energy.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(energy), "Cannot compare energies with different types of unit");
         return new Energy(this.Value + energy.Value * (this.Unit.Ratio / energy.Unit.Ratio), this.Unit);
     }
@@ -140,7 +140,7 @@ public class Energy
     /// <returns>A new <see cref="Energy"/> resulting from the subtraction</returns>
     public virtual Energy Subtract(Energy energy)
     {
-        if (energy == null) throw new ArgumentNullException(nameof(energy));
+        ArgumentNullException.ThrowIfNull(energy);
         if (energy.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(energy), "Cannot compare energies with different types of unit");
         return new Energy(this.Value - energy.Value * (this.Unit.Ratio / energy.Unit.Ratio), this.Unit);
     }
@@ -155,7 +155,7 @@ public class Energy
     /// <returns>A new <see cref="Energy"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
     public new virtual Energy ConvertTo(UnitOfMeasurement unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Type != UnitOfMeasurementType.Energy) throw new ArgumentException("The specified unit of measurement must be of type 'energy'", nameof(unit));
         return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }

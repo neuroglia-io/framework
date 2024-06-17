@@ -84,7 +84,7 @@ public class NsmTreeNode<T>
     /// <param name="node">The <see cref="NsmTreeNode{T}"/> to append</param>
     public virtual void Append(NsmTreeNode<T> node)
     {
-        if (node == null) throw new ArgumentNullException(nameof(node));
+        ArgumentNullException.ThrowIfNull(node);
         if (this.ReadOnly) throw new InvalidOperationException("Cannot update a node that is read-only");
 
         this._childNodes ??= new();

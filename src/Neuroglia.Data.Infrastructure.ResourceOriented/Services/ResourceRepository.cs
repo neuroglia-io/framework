@@ -180,7 +180,7 @@ public class ResourceRepository
         var patchHandler = this.PatchHandlers.FirstOrDefault(h => h.Supports(patchToApply.Type)) ?? throw new NullReferenceException($"No service registered to handle patches of type '{patchToApply.Type}'");
         var patchedResource = (await patchHandler.ApplyPatchAsync(patchToApply!.Document, originalResource.ConvertTo<Resource>(), cancellationToken).ConfigureAwait(false))!;
         var diffPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, patchedResource);
-        if (diffPatch.Operations.Any(o => o.Path.Segments[0] == nameof(Resource.Metadata).ToCamelCase() ? o.Path.Segments[1] != nameof(ResourceMetadata.Labels).ToCamelCase() && o.Path.Segments[1] != nameof(ResourceMetadata.Annotations).ToCamelCase() : o.Path.Segments.First() != "spec"))
+        if (diffPatch.Operations.Any(o => o.Path[0] == nameof(Resource.Metadata).ToCamelCase() ? o.Path[1] != nameof(ResourceMetadata.Labels).ToCamelCase() && o.Path[1] != nameof(ResourceMetadata.Annotations).ToCamelCase() : o.Path[0] != "spec"))
             throw new ProblemDetailsException(ResourceProblemDetails.InvalidResourcePatch(resourceReference));
 
         return await this.Database.PatchResourceAsync(patchToApply, group, version, plural, name, @namespace, resourceVersion, dryRun, cancellationToken).ConfigureAwait(false);
@@ -231,7 +231,7 @@ public class ResourceRepository
         var patchHandler = this.PatchHandlers.FirstOrDefault(h => h.Supports(patchToApply.Type)) ?? throw new NullReferenceException($"No service registered to handle patches of type '{patchToApply.Type}'");
         var patchedResource = (await patchHandler.ApplyPatchAsync(patchToApply.Document, originalResource.ConvertTo<Resource>(), cancellationToken).ConfigureAwait(false))!;
         var diffPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, patchedResource);
-        if (diffPatch.Operations.Any(o => o.Path.Segments.First() != subResource)) throw new ProblemDetailsException(ResourceProblemDetails.InvalidSubResourcePatch(resourceReference));
+        if (diffPatch.Operations.Any(o => o.Path[0] != subResource)) throw new ProblemDetailsException(ResourceProblemDetails.InvalidSubResourcePatch(resourceReference));
 
         return await this.Database.PatchSubResourceAsync(patchToApply, group, version, plural, name, subResource, @namespace, resourceVersion, dryRun, cancellationToken).ConfigureAwait(false);
     }

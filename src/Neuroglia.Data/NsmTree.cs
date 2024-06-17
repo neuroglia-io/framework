@@ -41,7 +41,7 @@ public class NsmTree<T>
     public static NsmTree<T> BuildFor(IEnumerable<T> rootItems, Func<T, IEnumerable<T>> childrenResolver)
     {
         if (rootItems == null || !rootItems.Any()) throw new ArgumentNullException(nameof(rootItems));
-        if (childrenResolver == null) throw new ArgumentNullException(nameof(childrenResolver));
+        ArgumentNullException.ThrowIfNull(childrenResolver);
 
         var rootNode = new NsmTreeNode<T>(0, 0, 0, null, default!);
         Populate(rootNode, rootItems, childrenResolver);
@@ -58,8 +58,8 @@ public class NsmTree<T>
     /// <param name="childrenResolver">A function used to resolve the children of a given item</param>
     protected static void Populate(NsmTreeNode<T> parent, IEnumerable<T>? items, Func<T, IEnumerable<T>> childrenResolver)
     {
-        if (parent == null) throw new ArgumentNullException(nameof(parent));
-        if (childrenResolver == null) throw new ArgumentNullException(nameof(childrenResolver));
+        ArgumentNullException.ThrowIfNull(parent);
+        ArgumentNullException.ThrowIfNull(childrenResolver);
         if (items == null || !items.Any()) return;
 
         var lastRight = parent.Left;

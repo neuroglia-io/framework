@@ -26,7 +26,7 @@ public static class AdmissionReviewRequestExtensions
     /// <returns>A new <see cref="Patch"/></returns>
     public static Patch GetDiffPatch(this AdmissionReviewRequest request)
     {
-        if (request == null) throw new ArgumentNullException(nameof(request));
+        ArgumentNullException.ThrowIfNull(request);
         return new(PatchType.JsonPatch, JsonPatchUtility.CreateJsonPatchFromDiff(request.OriginalState, request.UpdatedState));
     }
 

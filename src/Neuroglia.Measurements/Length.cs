@@ -110,7 +110,7 @@ public class Length
     /// <returns>A new <see cref="Length"/> resulting from the addition</returns>
     public virtual Length Add(Length length)
     {
-        if (length == null) throw new ArgumentNullException(nameof(length));
+        ArgumentNullException.ThrowIfNull(length);
         if (length.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(length), "Cannot compare lengths with different types of unit");
         return new Length(this.Value + length.Value * (this.Unit.Ratio / length.Unit.Ratio), this.Unit);
     }
@@ -122,7 +122,7 @@ public class Length
     /// <returns>A new <see cref="Length"/> resulting from the subtraction</returns>
     public virtual Length Subtract(Length length)
     {
-        if (length == null) throw new ArgumentNullException(nameof(length));
+        ArgumentNullException.ThrowIfNull(length);
         if (length.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(length), "Cannot compare lengths with different types of unit");
         return new Length(this.Value - length.Value * (this.Unit.Ratio / length.Unit.Ratio), this.Unit);
     }
@@ -137,7 +137,7 @@ public class Length
     /// <returns>A new <see cref="Length"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
     public new virtual Length ConvertTo(UnitOfMeasurement unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Type != UnitOfMeasurementType.Length) throw new ArgumentException("The specified unit of measurement must be of type 'length'", nameof(unit));
         return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }

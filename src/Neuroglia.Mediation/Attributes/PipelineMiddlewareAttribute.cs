@@ -28,7 +28,7 @@ public class PipelineMiddlewareAttribute
     /// <param name="priority">The priority of the the referenced <see cref="IMiddleware{TRequest, TResult}"/></param>
     public PipelineMiddlewareAttribute(Type pipelineBehaviorType, int priority = 99)
     {
-        if (pipelineBehaviorType == null) throw new ArgumentNullException(nameof(pipelineBehaviorType));
+        ArgumentNullException.ThrowIfNull(pipelineBehaviorType);
         if (pipelineBehaviorType.GetGenericType(typeof(IMiddleware<,>)) == null) throw new ArgumentException($"The specified type must be implement the '{typeof(IMiddleware<,>).Name}' interface", nameof(pipelineBehaviorType));
         this.PipelineBehaviorType = pipelineBehaviorType;
         this.Priority = priority;

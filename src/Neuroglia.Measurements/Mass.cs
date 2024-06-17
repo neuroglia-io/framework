@@ -134,7 +134,7 @@ public class Mass
     /// <returns>A new <see cref="Mass"/> resulting from the addition</returns>
     public virtual Mass Add(Mass mass)
     {
-        if (mass == null) throw new ArgumentNullException(nameof(mass));
+        ArgumentNullException.ThrowIfNull(mass);
         if (mass.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(mass), "Cannot compare masses with different types of unit");
         return new Mass(this.Value + mass.Value * (this.Unit.Ratio / mass.Unit.Ratio), this.Unit);
     }
@@ -146,7 +146,7 @@ public class Mass
     /// <returns>A new <see cref="Mass"/> resulting from the subtraction</returns>
     public virtual Mass Subtract(Mass mass)
     {
-        if (mass == null) throw new ArgumentNullException(nameof(mass));
+        ArgumentNullException.ThrowIfNull(mass);
         if (mass.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(mass), "Cannot compare masses with different types of unit");
         return new Mass(this.Value - mass.Value * (this.Unit.Ratio / mass.Unit.Ratio), this.Unit);
     }
@@ -161,7 +161,7 @@ public class Mass
     /// <returns>A new <see cref="Mass"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
     public new virtual Mass ConvertTo(UnitOfMeasurement unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Type != UnitOfMeasurementType.Mass) throw new ArgumentException("The specified unit of measurement must be of type 'mass'", nameof(unit));
         return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }

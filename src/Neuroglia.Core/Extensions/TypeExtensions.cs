@@ -159,7 +159,7 @@ public static class TypeExtensions
     public static Type? GetGenericType(this Type extended, Type genericTypeDefinition)
     {
         Type? baseType, result;
-        if (genericTypeDefinition == null) throw new ArgumentNullException(nameof(genericTypeDefinition));
+        ArgumentNullException.ThrowIfNull(genericTypeDefinition);
         if (!genericTypeDefinition.IsGenericTypeDefinition) throw new ArgumentException("The specified type is not a generic type definition", nameof(genericTypeDefinition));
         baseType = extended;
         while (baseType != null)
@@ -181,7 +181,7 @@ public static class TypeExtensions
     public static IEnumerable<Type> GetGenericTypes(this Type extended, Type genericTypeDefinition)
     {
         var results = new List<Type>();
-        if (genericTypeDefinition == null) throw new ArgumentNullException(nameof(genericTypeDefinition));
+        ArgumentNullException.ThrowIfNull(genericTypeDefinition);
         if (!genericTypeDefinition.IsGenericTypeDefinition) throw new ArgumentException("The specified type is not a generic type definition", nameof(genericTypeDefinition));
         var baseType = extended;
         while (baseType != null)
@@ -227,8 +227,8 @@ public static class TypeExtensions
     /// <returns>A boolean indicating whether or not the type declares the specified <see cref="MemberInfo"/></returns>
     public static bool DeclaresMember(this Type extended, MemberInfo member)
     {
-        if (extended == null) throw new ArgumentNullException(nameof(extended));
-        if (member == null) throw new ArgumentNullException(nameof(member));
+        ArgumentNullException.ThrowIfNull(extended);
+        ArgumentNullException.ThrowIfNull(member);
         return member switch
         {
             FieldInfo field => extended.GetField(field.Name) != null,
@@ -246,8 +246,8 @@ public static class TypeExtensions
     /// <returns>The declaring type of the specified <see cref="MemberInfo"/></returns>
     public static Type GetDeclaringTypeOf(this Type extended, MemberInfo member)
     {
-        if (extended == null) throw new ArgumentNullException(nameof(extended));
-        if (member == null) throw new ArgumentNullException(nameof(member));
+        ArgumentNullException.ThrowIfNull(extended);
+        ArgumentNullException.ThrowIfNull(member);
         var interfaces = extended.GetInterfaces();
         var declaringType = interfaces.FirstOrDefault(t => t.DeclaresMember(member));
         if (declaringType != null) return declaringType;

@@ -59,9 +59,9 @@ public static class IServiceCollectionExtensions
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddEventSourcingRepository(this IServiceCollection services, Type aggregateType, Type keyType, Type implementationType, ServiceLifetime lifetime = ServiceLifetime.Scoped)
     {
-        if (aggregateType == null) throw new ArgumentNullException(nameof(aggregateType));
+        ArgumentNullException.ThrowIfNull(aggregateType);
         if (!typeof(IAggregateRoot<>).MakeGenericType(keyType).IsAssignableFrom(aggregateType)) throw new ArgumentException("The specified type must be an IAggregateRoot<TKey> implementation", nameof(aggregateType));
-        if (keyType == null) throw new ArgumentNullException(nameof(keyType));
+        ArgumentNullException.ThrowIfNull(keyType);
 
         services.TryAdd(new ServiceDescriptor(implementationType, implementationType, lifetime));
 

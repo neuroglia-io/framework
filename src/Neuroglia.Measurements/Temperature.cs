@@ -86,7 +86,7 @@ public class Temperature
     /// <returns>A new <see cref="Temperature"/> resulting from the addition</returns>
     public virtual Temperature Add(Temperature temperature)
     {
-        if (temperature == null) throw new ArgumentNullException(nameof(temperature));
+        ArgumentNullException.ThrowIfNull(temperature);
         if (temperature.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(temperature), "Cannot compare temperatures with different types of unit");
         return new Temperature(this.Value + temperature.Value * (this.Unit.Ratio / temperature.Unit.Ratio), this.Unit);
     }
@@ -98,7 +98,7 @@ public class Temperature
     /// <returns>A new <see cref="Temperature"/> resulting from the subtraction</returns>
     public virtual Temperature Subtract(Temperature temperature)
     {
-        if (temperature == null) throw new ArgumentNullException(nameof(temperature));
+        ArgumentNullException.ThrowIfNull(temperature);
         if (temperature.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(temperature), "Cannot compare temperatures with different types of unit");
         return new Temperature(this.Value - temperature.Value * (this.Unit.Ratio / temperature.Unit.Ratio), this.Unit);
     }
@@ -113,7 +113,7 @@ public class Temperature
     /// <returns>A new <see cref="Temperature"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
     public new virtual Temperature ConvertTo(UnitOfMeasurement unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Type != UnitOfMeasurementType.Temperature) throw new ArgumentException("The specified unit of measurement must be of type 'temperature'", nameof(unit));
         return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }

@@ -27,7 +27,7 @@ public static class RetryBackoffDurationExtensions
     /// <returns>A new <see cref="TimeSpan"/> that represents the backoff duration for the specified retry attempt</returns>
     public static TimeSpan ForAttempt(this RetryBackoffDuration duration, int attemptNumber)
     {
-        if (duration == null) throw new ArgumentNullException(nameof(duration));
+        ArgumentNullException.ThrowIfNull(duration);
         var result = duration.Type switch
         {
             RetryBackoffDurationType.Constant => duration.Period,

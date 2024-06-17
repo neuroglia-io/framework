@@ -110,7 +110,7 @@ public class Surface
     /// <returns>A new <see cref="Surface"/> resulting from the addition</returns>
     public virtual Surface Add(Surface surface)
     {
-        if (surface == null) throw new ArgumentNullException(nameof(surface));
+        ArgumentNullException.ThrowIfNull(surface);
         if (surface.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(surface), "Cannot compare surfaces with different types of unit");
         return new Surface(this.Value + surface.Value * (this.Unit.Ratio / surface.Unit.Ratio), this.Unit);
     }
@@ -122,7 +122,7 @@ public class Surface
     /// <returns>A new <see cref="Surface"/> resulting from the subtraction</returns>
     public virtual Surface Subtract(Surface surface)
     {
-        if (surface == null) throw new ArgumentNullException(nameof(surface));
+        ArgumentNullException.ThrowIfNull(surface);
         if (surface.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(surface), "Cannot compare surfaces with different types of unit");
         return new Surface(this.Value - surface.Value * (this.Unit.Ratio / surface.Unit.Ratio), this.Unit);
     }
@@ -137,7 +137,7 @@ public class Surface
     /// <returns>A new <see cref="Surface"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
     public new virtual Surface ConvertTo(UnitOfMeasurement unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Type != UnitOfMeasurementType.Surface) throw new ArgumentException("The specified unit of measurement must be of type 'surface'", nameof(unit));
         return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }

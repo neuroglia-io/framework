@@ -60,7 +60,7 @@ public class Measurement
     /// <returns>A new <see cref="Measurement"/> resulting from the addition</returns>
     public virtual Measurement Add(Measurement measurement)
     {
-        if (measurement == null) throw new ArgumentNullException(nameof(measurement));
+        ArgumentNullException.ThrowIfNull(measurement);
         if (measurement.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(measurement), "Cannot compare measurements with different types of unit");
         return new Measurement(this.Value + measurement.Value * (this.Unit.Ratio / measurement.Unit.Ratio), this.Unit);
     }
@@ -72,7 +72,7 @@ public class Measurement
     /// <returns>A new <see cref="Measurement"/> resulting from the subtraction</returns>
     public virtual Measurement Subtract(Measurement measurement)
     {
-        if (measurement == null) throw new ArgumentNullException(nameof(measurement));
+        ArgumentNullException.ThrowIfNull(measurement);
         if (measurement.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(measurement), "Cannot compare measurements with different types of unit");
         return new Measurement(this.Value - measurement.Value * (this.Unit.Ratio / measurement.Unit.Ratio), this.Unit);
     }
@@ -118,7 +118,7 @@ public class Measurement
     /// <returns>A new <see cref="Measurement"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
     public virtual Measurement ConvertTo(UnitOfMeasurement unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Type != this.Unit.Type) throw new ArgumentException($"The specified unit of measurement must be of type '{EnumHelper.Stringify(this.Unit.Type)}'", nameof(unit));
         return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }

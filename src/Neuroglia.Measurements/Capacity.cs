@@ -134,7 +134,7 @@ public class Capacity
     /// <returns>A new <see cref="Capacity"/> resulting from the addition</returns>
     public virtual Capacity Add(Capacity capacity)
     {
-        if (capacity == null) throw new ArgumentNullException(nameof(capacity));
+        ArgumentNullException.ThrowIfNull(capacity);
         if (capacity.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(capacity), "Cannot compare capacities with different types of unit");
         return new Capacity(this.Value + capacity.Value * (this.Unit.Ratio / capacity.Unit.Ratio), this.Unit);
     }
@@ -146,7 +146,7 @@ public class Capacity
     /// <returns>A new <see cref="Capacity"/> resulting from the subtraction</returns>
     public virtual Capacity Subtract(Capacity capacity)
     {
-        if (capacity == null) throw new ArgumentNullException(nameof(capacity));
+        ArgumentNullException.ThrowIfNull(capacity);
         if (capacity.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(capacity), "Cannot compare capacities with different types of unit");
         return new Capacity(this.Value - capacity.Value * (this.Unit.Ratio / capacity.Unit.Ratio), this.Unit);
     }
@@ -161,7 +161,7 @@ public class Capacity
     /// <returns>A new <see cref="Capacity"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
     public new virtual Capacity ConvertTo(UnitOfMeasurement unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Type != UnitOfMeasurementType.Capacity) throw new ArgumentException("The specified unit of measurement must be of type 'capacity'", nameof(unit));
         return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }

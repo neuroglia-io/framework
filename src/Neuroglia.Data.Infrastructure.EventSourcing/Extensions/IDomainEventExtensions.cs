@@ -26,7 +26,7 @@ public static class IDomainEventExtensions
     /// <returns>The <see cref="IEventDescriptor"/> of the specified <see cref="IDomainEvent"/></returns>
     public static IEventDescriptor GetDescriptor(this IDomainEvent e)
     {
-        if (e == null) throw new ArgumentNullException(nameof(e));
+        ArgumentNullException.ThrowIfNull(e);
         return new EventDescriptor(e.GetTypeName(), e);
     }
 

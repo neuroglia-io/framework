@@ -40,7 +40,7 @@ public class ReflectionBasedJsonPatchHandler
     /// <inheritdoc/>
     public virtual async Task<T?> ApplyPatchAsync<T>(object patch, T? target, CancellationToken cancellationToken = default)
     {
-        if (patch == null) throw new ArgumentNullException(nameof(patch));
+        ArgumentNullException.ThrowIfNull(patch);
         if (target == null) return default;
 
         var jsonPatch = JsonSerializer.Default.Deserialize<JsonPatch>(JsonSerializer.Default.SerializeToText(patch))!;

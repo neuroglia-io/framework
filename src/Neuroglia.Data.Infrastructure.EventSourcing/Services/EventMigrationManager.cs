@@ -54,15 +54,15 @@ public class EventMigrationManager
     /// <inheritdoc/>
     public virtual void RegisterEventMigration(Type sourceType, Func<IServiceProvider, object, object> handler)
     {
-        if (sourceType == null) throw new ArgumentNullException(nameof(sourceType));
-        if (handler == null) throw new ArgumentNullException(nameof(handler));
+        ArgumentNullException.ThrowIfNull(sourceType);
+        ArgumentNullException.ThrowIfNull(handler);
         this.Migrations.AddOrUpdate(sourceType, handler, (key, current) => handler);
     }
 
     /// <inheritdoc/>
     public virtual object MigrateEventToLatest(object e)
     {
-        if (e == null) throw new ArgumentNullException(nameof(e));
+        ArgumentNullException.ThrowIfNull(e);
         if (!this.Migrations.TryGetValue(e.GetType(), out var handler) || handler == null) return e;
         return this.MigrateEventToLatest(handler.Invoke(this.ServiceProvider, e));
     }

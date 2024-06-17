@@ -67,7 +67,7 @@ public class JQExpressionEvaluator
     public virtual async Task<object?> EvaluateAsync(string expression, object input, IDictionary<string, object>? args = null, Type? expectedType = null, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(expression)) throw new ArgumentNullException(nameof(expression));
-        if (input == null) throw new ArgumentNullException(nameof(input));
+        ArgumentNullException.ThrowIfNull(input);
         if (expectedType == null) expectedType = typeof(object);
 
         expression = expression.Trim();

@@ -26,7 +26,7 @@ public static class IDomainEventExtensions
     /// <returns>The <see cref="IDomainEvent"/>'s type name</returns>
     public static string GetTypeName(this IDomainEvent e)
     {
-        if (e == null) throw new ArgumentNullException(nameof(e));
+        ArgumentNullException.ThrowIfNull(e);
         return e.GetType().Name.Replace("DomainEvent", "").SplitCamelCase().ToKebabCase();
     }
 

@@ -73,7 +73,7 @@ public class Unit
     /// <returns>A new <see cref="Unit"/> resulting from the addition</returns>
     public virtual Unit Add(Unit unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(unit), "Cannot compare units with different types of unit");
         return new Unit(Math.Round(this.Value + unit.Value * (this.Unit.Ratio / unit.Unit.Ratio), RoundingPrecision), this.Unit);
     }
@@ -85,7 +85,7 @@ public class Unit
     /// <returns>A new <see cref="Unit"/> resulting from the subtraction</returns>
     public virtual Unit Subtract(Unit unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Unit.Type != this.Unit.Type) throw new ArgumentNullException(nameof(unit), "Cannot compare units with different types of unit");
         return new Unit(Math.Round(this.Value - unit.Value * (this.Unit.Ratio / unit.Unit.Ratio), RoundingPrecision), this.Unit);
     }
@@ -100,7 +100,7 @@ public class Unit
     /// <returns>A new <see cref="Unit"/> measured using the specified <see cref="UnitOfMeasurement"/></returns>
     public new virtual Unit ConvertTo(UnitOfMeasurement unit)
     {
-        if (unit == null) throw new ArgumentNullException(nameof(unit));
+        ArgumentNullException.ThrowIfNull(unit);
         if (unit.Type != UnitOfMeasurementType.Unit) throw new ArgumentException("The specified unit of measurement must be of type 'unit'", nameof(unit));
         return new(this.Value * (unit.Ratio / this.Unit.Ratio), unit);
     }

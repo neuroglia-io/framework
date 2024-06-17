@@ -27,8 +27,8 @@ public static class LabelSelectorExtensions
     /// <returns>A boolean indicating whether or not the <see cref="LabelSelector"/> selects the specified <see cref="IResource"/></returns>
     public static bool Selects(this LabelSelector selector, IResource resource)
     {
-        if (selector == null) throw new ArgumentNullException(nameof(selector));
-        if (resource == null) throw new ArgumentNullException(nameof(resource));
+        ArgumentNullException.ThrowIfNull(selector);
+        ArgumentNullException.ThrowIfNull(resource);
         if (resource.Metadata.Labels == null) return false;
         if (!resource.Metadata.Labels.TryGetValue(selector.Key, out var labelValue) || string.IsNullOrWhiteSpace(labelValue)) return false;
         return selector.Operator switch

@@ -204,8 +204,8 @@ public class RedisDatabase
 
         var updatedResource = await patchHandler.ApplyPatchAsync(patch.Document, originalResource, cancellationToken).ConfigureAwait(false)!;
         var purgedPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, updatedResource);
-        purgedPatch = new JsonPatch(purgedPatch.Operations.Where(o => (o.Path.Segments[0] == nameof(IMetadata.Metadata).ToCamelCase() && (o.Path.Segments[1] == nameof(ResourceMetadata.Annotations).ToCamelCase()
-            || o.Path.Segments[1] == nameof(ResourceMetadata.Labels).ToCamelCase())) || o.Path.Segments.First() == nameof(ISpec.Spec).ToCamelCase()));
+        purgedPatch = new JsonPatch(purgedPatch.Operations.Where(o => (o.Path[0] == nameof(IMetadata.Metadata).ToCamelCase() && (o.Path[1] == nameof(ResourceMetadata.Annotations).ToCamelCase()
+            || o.Path[1] == nameof(ResourceMetadata.Labels).ToCamelCase())) || o.Path[0] == nameof(ISpec.Spec).ToCamelCase()));
         if (!purgedPatch.Operations.Any()) throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotModified(resourceReference));
         patchHandler = this.PatchHandlers.FirstOrDefault(h => h.Supports(PatchType.JsonPatch)) ?? throw new NullReferenceException($"Failed to find a registered service used to handle patches of type '{PatchType.JsonPatch}'");
         updatedResource = (await patchHandler.ApplyPatchAsync(purgedPatch, originalResource, cancellationToken).ConfigureAwait(false))!;
@@ -227,8 +227,8 @@ public class RedisDatabase
         if (originalResource.Metadata.ResourceVersion != resource.ConvertTo<Resource>()!.Metadata.ResourceVersion) throw new ProblemDetailsException(ResourceProblemDetails.ResourceOptimisticConcurrencyCheckFailed(resourceReference, resource.Metadata.ResourceVersion!, originalResource.Metadata.ResourceVersion!));
 
         var jsonPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, resource);
-        jsonPatch = new JsonPatch(jsonPatch.Operations.Where(o => (o.Path.Segments[0] == nameof(IMetadata.Metadata).ToCamelCase() && (o.Path.Segments[1] == nameof(ResourceMetadata.Annotations).ToCamelCase()
-             || o.Path.Segments[1] == nameof(ResourceMetadata.Labels).ToCamelCase())) || o.Path.Segments.First() == nameof(ISpec.Spec).ToCamelCase()));
+        jsonPatch = new JsonPatch(jsonPatch.Operations.Where(o => (o.Path[0] == nameof(IMetadata.Metadata).ToCamelCase() && (o.Path[1] == nameof(ResourceMetadata.Annotations).ToCamelCase()
+             || o.Path[1] == nameof(ResourceMetadata.Labels).ToCamelCase())) || o.Path[0] == nameof(ISpec.Spec).ToCamelCase()));
 
         if (!jsonPatch.Operations.Any()) throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotModified(resourceReference));
         var updatedResource = (await patchHandler.ApplyPatchAsync(jsonPatch, originalResource, cancellationToken).ConfigureAwait(false))!;
@@ -252,7 +252,7 @@ public class RedisDatabase
 
         var updatedResource = (await patchHandler.ApplyPatchAsync(patch.Document, originalResource, cancellationToken).ConfigureAwait(false))!;
         var purgedPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, updatedResource);
-        purgedPatch = new JsonPatch(purgedPatch.Operations.Where(o => o.Path.Segments.First() == nameof(IStatus.Status).ToCamelCase()));
+        purgedPatch = new JsonPatch(purgedPatch.Operations.Where(o => o.Path[0] == nameof(IStatus.Status).ToCamelCase()));
         if (!purgedPatch.Operations.Any()) throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotModified(resourceReference));
         patchHandler = this.PatchHandlers.FirstOrDefault(h => h.Supports(PatchType.JsonPatch)) ?? throw new NullReferenceException($"Failed to find a registered service used to handle patches of type '{PatchType.JsonPatch}'");
         updatedResource = (await patchHandler.ApplyPatchAsync(purgedPatch, originalResource, cancellationToken).ConfigureAwait(false))!;
@@ -275,7 +275,7 @@ public class RedisDatabase
         if (originalResource.Metadata.ResourceVersion != resource.ConvertTo<Resource>()!.Metadata.ResourceVersion) throw new ProblemDetailsException(ResourceProblemDetails.ResourceOptimisticConcurrencyCheckFailed(resourceReference, resource.Metadata.ResourceVersion!, originalResource.Metadata.ResourceVersion!));
 
         var jsonPatch = JsonPatchUtility.CreateJsonPatchFromDiff(originalResource, resource);
-        jsonPatch = new JsonPatch(jsonPatch.Operations.Where(o => o.Path.Segments.First() == nameof(IStatus.Status).ToCamelCase()));
+        jsonPatch = new JsonPatch(jsonPatch.Operations.Where(o => o.Path[0] == nameof(IStatus.Status).ToCamelCase()));
 
         if (!jsonPatch.Operations.Any()) throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotModified(new ResourceReference(new(resource.Definition.Group, resource.Definition.Version, resource.Definition.Plural), resource.GetName(), resource.GetNamespace())));
         var updatedResource = (await patchHandler.ApplyPatchAsync(jsonPatch, originalResource, cancellationToken).ConfigureAwait(false))!;

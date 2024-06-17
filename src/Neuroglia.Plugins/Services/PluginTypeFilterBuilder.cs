@@ -28,7 +28,7 @@ public class PluginTypeFilterBuilder
     /// <inheritdoc/>
     public IPluginTypeFilterBuilder AssignableTo(Type type)
     {
-        if (type == null) throw new ArgumentNullException(nameof(type));
+        ArgumentNullException.ThrowIfNull(type);
         if (!type.IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(type));
         this.Filter.Criteria.Add(new() { AssignableTo = type.AssemblyQualifiedName });
         return this;
@@ -37,7 +37,7 @@ public class PluginTypeFilterBuilder
     /// <inheritdoc/>
     public virtual IPluginTypeFilterBuilder Implements(Type type)
     {
-        if (type == null) throw new ArgumentNullException(nameof(type));
+        ArgumentNullException.ThrowIfNull(type);
         if (!type.IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(type));
         this.Filter.Criteria.Add(new() { Implements = type.AssemblyQualifiedName });
         return this;
@@ -46,7 +46,7 @@ public class PluginTypeFilterBuilder
     /// <inheritdoc/>
     public virtual IPluginTypeFilterBuilder InheritsFrom(Type type)
     {
-        if (type == null) throw new ArgumentNullException(nameof(type));
+        ArgumentNullException.ThrowIfNull(type);
         if (!type.IsInterface) throw new ArgumentException($"The specified type must be an interface", nameof(type));
         this.Filter.Criteria.Add(new() { InheritsFrom = type.AssemblyQualifiedName });
         return this;
