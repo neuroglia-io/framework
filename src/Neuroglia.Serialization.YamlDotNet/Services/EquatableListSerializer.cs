@@ -22,7 +22,8 @@ namespace Neuroglia.Serialization.Yaml;
 /// <summary>
 /// Represents the <see cref="IYamlTypeConverter"/> used to serialize <see cref="EquatableList{T}"/> instances
 /// </summary>
-public class EquatableListSerializer
+/// <param name="serializerFactory">A function used to create the underlying <see cref="YamlDotNet.Serialization.ISerializer"/></param>
+public class EquatableListSerializer(Func<YamlDotNet.Serialization.ISerializer> serializerFactory)
     : IYamlTypeConverter
 {
 
@@ -36,10 +37,11 @@ public class EquatableListSerializer
     public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
     {
         if (value == null || value is not IEnumerable collection) return;
+        var serializer = serializerFactory();
         emitter.Emit(new SequenceStart(null, null, false, SequenceStyle.Block));
         foreach (var item in collection)
         {
-            var keyYaml = YamlSerializer.Default.Serialize(item);
+            var keyYaml = serializer.Serialize(item);
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(keyYaml));
             using var streamReader = new StreamReader(stream);
             var parser = new Parser(streamReader);

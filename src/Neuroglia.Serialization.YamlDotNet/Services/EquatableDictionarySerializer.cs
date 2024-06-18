@@ -22,7 +22,8 @@ namespace Neuroglia.Serialization.Yaml;
 /// <summary>
 /// Represents the <see cref="IYamlTypeConverter"/> used to serialize <see cref="EquatableDictionary{TKey, TValue}"/> instances
 /// </summary>
-public class EquatableDictionarySerializer
+/// <param name="serializerFactory">A function used to create the underlying <see cref="YamlDotNet.Serialization.ISerializer"/></param>
+public class EquatableDictionarySerializer(Func<YamlDotNet.Serialization.ISerializer> serializerFactory)
     : IYamlTypeConverter
 {
 
@@ -36,6 +37,7 @@ public class EquatableDictionarySerializer
     public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
     {
         if (value == null) return;
+        var serializer = serializerFactory();
         emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, isImplicit: true, MappingStyle.Block));
         var dictionaryType = type.GetGenericType(typeof(IDictionary<,>))!;
         var keyType = dictionaryType.GetGenericArguments()[0];
@@ -45,7 +47,7 @@ public class EquatableDictionarySerializer
         foreach (var kvp in ((IEnumerable)value))
         {
             var key = keyProperty.GetValue(kvp);
-            var keyYaml = YamlSerializer.Default.Serialize(key);
+            var keyYaml = serializer.Serialize(key);
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(keyYaml));
             var streamReader = new StreamReader(stream);
             var parser = new Parser(streamReader);
@@ -59,7 +61,7 @@ public class EquatableDictionarySerializer
             stream.Dispose();
 
             var kvpValue = valueProperty.GetValue(kvp);
-            var valueYaml = YamlSerializer.Default.Serialize(kvpValue);
+            var valueYaml = serializer.Serialize(kvpValue);
             stream = new MemoryStream(Encoding.UTF8.GetBytes(valueYaml));
             streamReader = new StreamReader(stream);
             parser = new Parser(streamReader);
