@@ -11,7 +11,7 @@
     <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 	<PackageTags>neuroglia framework data infrastructure event-sourcing es event-store</PackageTags>
-    <Version>4.12.0</Version>
+    <Version>4.12.1</Version>
     <NeutralLanguage>en</NeutralLanguage>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
