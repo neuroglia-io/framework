@@ -1,10 +1,10 @@
 ﻿@implements IDisposable
 
-<g class="cluster @Cluster.CssClass" transform="translate(@Cluster.X.ToInvariantString(), @Cluster.Y.ToInvariantString())">
+<g class="cluster @Cluster.CssClass" transform="translate(@Cluster.Position.X, @Cluster.Position.Y)">
     <g class="cluster-shape">
         @if (Cluster.Shape == NodeShape.Circle)
         {
-            <Circle BBox="Cluster.BBox" />
+            <Circle BoundingBox="Cluster.BBox" />
         }
         else if (Cluster.Shape == NodeShape.Ellipse)
         {
@@ -12,54 +12,35 @@
         }
         else
         {        
-            <Rectangle BBox="Cluster.BBox" RadiusX="Cluster.RadiusX" RadiusY="Cluster.RadiusY" />
+            <Rectangle BBox="Cluster.BBox" RadiusX="Cluster.Radius?.X" RadiusY="Cluster.Radius?.Y" />
         }
     </g>
     @if (!string.IsNullOrWhiteSpace(Cluster.Label)) {
         <g class="label">
             <foreignObject 
-                x="@(Cluster.BBox!.X.ToInvariantString())"
-                y="@((Cluster.BBox!.Height / 2).ToInvariantString())" 
-                width="@Cluster.BBox!.Width.ToInvariantString()" 
+                x="@Cluster.Position!.X"
+                y="@(Cluster.Size.Height / 2)" 
+                width="@Cluster.Size.Width" 
                 height="@Constants.LabelHeight"
             >
                 <div>@Cluster.Label</div>
             </foreignObject>
         </g>
     }
-    @if (Graph.EnableProfiling) {
-        <circle cx="0" cy="0" r="1" fill="red"></circle>
-    }
 </g>
 
 @code {
-    private IGraphViewModel? graph;
+
+    IGraphViewModel? graph;
+    IGraphElement? element;
+    bool isDirty;
+    bool disposed;
+
     [CascadingParameter] public virtual IGraphViewModel Graph { get; set; } = null!;
     
-    private IGraphElement? element;
     [Parameter] public virtual IGraphElement Element { get; set; } = null!;
 
     protected virtual IClusterViewModel Cluster => (IClusterViewModel)this.Element;
-
-    protected bool isDirty = false;       
-    protected ProfilingTimer? profilingTimer;
-    protected bool enableProfiling
-    {
-        get => this.Graph?.EnableProfiling ?? false;
-        set
-        {
-            if (this.Graph != null && this.Graph.EnableProfiling != value) {
-                this.Graph.EnableProfiling = value;
-            }
-            if (value) this.CreateProfilingTimer();
-        }
-    }
-
-    protected virtual void CreateProfilingTimer()
-    {
-        if (this.profilingTimer == null)
-            this.profilingTimer = new ProfilingTimer("ClusterTemplate", 3);
-    } 
 
     protected override void OnParametersSet()
     {
@@ -74,20 +55,12 @@
             this.Cluster.Changed += this.TriggerRender;
             this.isDirty = true;
         }
-        if (this.enableProfiling) this.CreateProfilingTimer();
-        this.profilingTimer?.Start();
     }
 
     protected void TriggerRender()
     {
-        this.profilingTimer?.Start();
         this.isDirty = true;
         this.StateHasChanged();
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-        this.profilingTimer?.Stop();
     }
 
     protected override bool ShouldRender()
@@ -95,19 +68,13 @@
         if (!this.isDirty) return false;
         this.isDirty = false;
         return true;
-
     }
 
-    private bool disposed;
     protected virtual void Dispose(bool disposing)
     {
         if (!this.disposed)
         {
             this.Cluster.Changed -= this.TriggerRender;
-            if (this.enableProfiling && this.profilingTimer != null)
-            {
-                this.profilingTimer.Dispose();
-            }
             this.disposed = true;
         }
     }

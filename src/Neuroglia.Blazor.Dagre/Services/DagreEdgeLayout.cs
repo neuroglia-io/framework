@@ -11,12 +11,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Blazor.Dagre.Models;
+using Dagre;
+using Neuroglia.Blazor.Dagre.Models;
+
+namespace Neuroglia.Blazor.Dagre.Services;
 
 /// <summary>
-/// Represents the <see cref="IGraphLib.SetGraph(object)"/> configuration used by Dagre
+/// Represents the Dagre implementation of the <see cref="IEdgeLayout"/> interface
 /// </summary>
-public interface IDagreGraphConfig
-    : IDagreGraphLayoutOptions, ILabeled, IDimension, IMetadata
+/// <param name="edge">The underlying <see cref="DagreInputEdge"/></param>
+public class DagreEdgeLayout(DagreInputEdge edge)
+    : IEdgeLayout
 {
+
+    /// <inheritdoc/>
+    public virtual IReadOnlyCollection<Point> Points { get; } = edge.Points.Select(p => new Point(p.X, p.Y)).ToList().AsReadOnly();
+
 }

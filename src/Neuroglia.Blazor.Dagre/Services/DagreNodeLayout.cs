@@ -11,9 +11,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Blazor.Dagre.Models;
+using Dagre;
+using Neuroglia.Blazor.Dagre.Models;
 
-public interface IBoundingBox
-    : IPosition, IDimension
+namespace Neuroglia.Blazor.Dagre.Services;
+
+/// <summary>
+/// Represents the Dagre implementation of the <see cref="INodeLayout"/> interface
+/// </summary>
+/// <param name="node">The underlying <see cref="DagreInputNode"/></param>
+public class DagreNodeLayout(DagreInputNode node)
+    : INodeLayout
 {
+
+    /// <inheritdoc/>
+    public virtual Point Position { get; } = new(node.X, node.Y);
+
 }

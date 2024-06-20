@@ -13,9 +13,9 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
-public interface IDimension
-{
-    double? Width { get; set; }
-
-    double? Height { get; set; }
-}
+/// <summary>
+/// Represents the size of a 2D shape
+/// </summary>
+/// <param name="Width">The width</param>
+/// <param name="Height">The height</param>
+public record Size(double Width, double Height);

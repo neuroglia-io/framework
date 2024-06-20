@@ -13,12 +13,17 @@
 
 using Neuroglia.Blazor.Dagre.Models;
 
-namespace Neuroglia.Blazor.Dagre;
+namespace Neuroglia.Blazor.Dagre.Services;
 
-public interface IDagreService
-    : IGraphLibJsonConverter
+/// <summary>
+/// Defines the fundamentals of an edge layout
+/// </summary>
+public interface IEdgeLayout
 {
-    Task<IGraphViewModel> ComputePositionsAsync(IGraphViewModel graphViewModel, IDagreGraphOptions? options = null);
-    Task<IGraphLib> GraphAsync(IDagreGraphOptions? options = null);
-    Task<IGraphLib?> LayoutAsync(IGraphLib graph);
+
+    /// <summary>
+    /// Gets a list of the points the edge is made out of
+    /// </summary>
+    IReadOnlyCollection<Point> Points { get; }
+
 }

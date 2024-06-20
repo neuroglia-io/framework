@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Neuroglia..Eventing.CloudEvents\Neuroglia.Eventing.CloudEvents.csproj" />
+    <ProjectReference Include="..\Neuroglia.Eventing.CloudEvents\Neuroglia.Eventing.CloudEvents.csproj" />
   </ItemGroup>
 
 </Project>

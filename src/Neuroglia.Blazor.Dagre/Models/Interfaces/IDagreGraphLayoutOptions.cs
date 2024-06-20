@@ -13,8 +13,12 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Defines the fundamentals of the options used to configure a Dagre graph layout
+/// </summary>
 public interface IDagreGraphLayoutOptions
 {
+
     /// <summary>
     /// Direction for rank nodes. Can be TB, BT, LR, or RL, where T = top, B = bottom, L = left, and R = right.
     /// The static class <see cref="DagreGraphDirection"/> can be used: DagreGraphDirection.TopToBottom, DagreGraphDirection.BottomToTop, DagreGraphDirection.LeftToRight, DagreGraphDirection.RightToLeft

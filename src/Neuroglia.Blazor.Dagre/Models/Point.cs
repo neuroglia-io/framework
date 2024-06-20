@@ -14,20 +14,8 @@
 namespace Neuroglia.Blazor.Dagre.Models;
 
 /// <summary>
-/// Used to serialize/deserialize a <see cref="IGraphLib"/> to/from JSON
+/// Represents a position in a 2D space
 /// </summary>
-public interface IGraphLibJsonConverter
-{
-    /// <summary>
-    /// Serializes a <see cref="IGraphLib"/> to JSON (aka GraphLib json.write(g))
-    /// </summary>
-    /// <param name="graph"></param>
-    /// <returns>The serialized <see cref="IGraphLib"/></returns>
-    Task<string> SerializeAsync(IGraphLib graph);
-    /// <summary>
-    /// Deserializes a JSON to a 
-    /// </summary>
-    /// <param name="json"></param> <see cref="IGraphLib"/> (aka GraphLib json.read(json))
-    /// <returns>The deserialized <see cref="IGraphLib"/></returns>
-    Task<IGraphLib> DeserializeAsync(string json);
-}
+/// <param name="X">The position on the horizontal axis</param>
+/// <param name="Y">The position on the vertical axis</param>
+public record Point(double X, double Y);

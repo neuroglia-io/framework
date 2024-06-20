@@ -14,29 +14,14 @@
 namespace Neuroglia.Blazor.Dagre.Models;
 
 /// <summary>
-/// Represents a <see cref="IGraphLib"/> edge
+/// Defines the fundamentals of an object that can be styled using CSS
 /// </summary>
-public interface IGraphLibEdge
-    : IMetadata
+public interface ICssStyleable
 {
-    /// <summary>
-    /// The name that uniquely identifies a multi-edge.
-    /// </summary>
-    string? Name { get; set; }
 
     /// <summary>
-    /// The id of one node
+    /// Gets/sets the object's CSS class
     /// </summary>
-    string V { get; set; }
-
-    /// <summary>
-    /// The id of the other node
-    /// </summary>
-    string W { get; set; }
-
-    /// <summary>
-    /// The edge points
-    /// </summary>
-    IPosition[]? Points { get; set; }
+    string? CssClass { get; set; }
 
 }

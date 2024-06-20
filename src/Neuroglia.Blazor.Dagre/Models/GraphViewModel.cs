@@ -12,73 +12,62 @@
 // limitations under the License.
 
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Neuroglia.Blazor.Dagre.Behaviors;
+using Neuroglia.Blazor.Dagre.Services;
 using Neuroglia.Blazor.Dagre.Templates;
 using System.Collections.ObjectModel;
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
-public class GraphViewModel
+/// <summary>
+/// Represents the default implementation of the <see cref="IGraphViewModel"/> interface
+/// </summary>
+/// <param name="graphLayout">The graph's layout</param>
+public class GraphViewModel(IGraphLayout graphLayout)
     : GraphElement, IGraphViewModel
 {
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual IGraphLib? DagreGraph { get; set; }
 
-    double? _x;
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? X
-    {
-        get => this._x;
-        set
-        {
-            this._x = value;
-            this.OnChange();
-        }
-    }
-
-    double? _y;
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Y
-    {
-        get => this._y;
-        set
-        {
-            this._y = value;
-            this.OnChange();
-        }
-    }
-
-    double? _width;
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Width
-    {
-        get => this._width;
-        set
-        {
-            this._width = value;
-            this.OnChange();
-        }
-    }
-
-    double? _height;
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Height
-    {
-        get => this._height;
-        set
-        {
-            this._height = value;
-            this.OnChange();
-        }
-    }
-
+    Point _position = new(0, 0);
+    Size _size = new(0, 0);
     decimal _scale;
+    bool _enableProfiling;
+    readonly Dictionary<Type, GraphBehavior> _behaviors = [];
+    readonly Dictionary<string, INodeViewModel> _nodes = [];
+    readonly Dictionary<string, INodeViewModel> _allNodes = [];
+    readonly Dictionary<string, IEdgeViewModel> _edges = [];
+    readonly Dictionary<string, IClusterViewModel> _clusters = [];
+    readonly Dictionary<string, IClusterViewModel> _allClusters = [];
+    readonly Dictionary<Type, Type> _components = [];
+    readonly Collection<Type> _svgDefinitionComponents = [];
+    readonly Type _defaultNodeComponentType = typeof(NodeTemplate);
+    readonly Type _defaultClusterComponentType = typeof(ClusterTemplate);
+    readonly Type _defaultEdgeComponentType = typeof(EdgeTemplate);
+
+    /// <inheritdoc/>
+    public virtual IGraphLayout GraphLayout { get; } = graphLayout;
+
+    /// <inheritdoc/>
+    public virtual Point Position
+    {
+        get => this._position;
+        set
+        {
+            this._position = value;
+            this.OnChange();
+        }
+    }
+
+    /// <inheritdoc/>
+    public virtual Size Size
+    {
+        get => this._size;
+        set
+        {
+            this._size = value;
+            this.OnChange();
+        }
+    }
+
+    /// <inheritdoc/>
     public virtual decimal Scale
     {
         get => this._scale;
@@ -89,40 +78,25 @@ public class GraphViewModel
         }
     }
 
-    /// <summary>
-    /// The first level graph nodes (direct children)
-    /// </summary>
-    protected readonly Dictionary<Guid, INodeViewModel> _nodes;
-    public virtual IReadOnlyDictionary<Guid, INodeViewModel> Nodes => this._nodes;
+    /// <inheritdoc/>
+    public virtual IReadOnlyDictionary<string, INodeViewModel> Nodes => this._nodes;
 
-    /// <summary>
-    /// The flattened graph nodes (nested children)
-    /// </summary>
-    protected readonly Dictionary<Guid, INodeViewModel> _allNodes;
-    public virtual IReadOnlyDictionary<Guid, INodeViewModel> AllNodes => this._allNodes;
+    /// <inheritdoc/>
+    public virtual IReadOnlyDictionary<string, INodeViewModel> AllNodes => this._allNodes;
 
-    /// <summary>
-    /// The graph edges
-    /// </summary>
-    protected readonly Dictionary<Guid, IEdgeViewModel> _edges;
-    public virtual IReadOnlyDictionary<Guid, IEdgeViewModel> Edges => this._edges;
+    /// <inheritdoc/>
+    public virtual IReadOnlyDictionary<string, IEdgeViewModel> Edges => this._edges;
 
-    /// <summary>
-    /// The first level graph clusters (direct children)
-    /// </summary>
-    protected readonly Dictionary<Guid, IClusterViewModel> _clusters;
-    public virtual IReadOnlyDictionary<Guid, IClusterViewModel> Clusters => this._clusters;
+    /// <inheritdoc/>
+    public virtual IReadOnlyDictionary<string, IClusterViewModel> Clusters => this._clusters;
 
-    /// <summary>
-    /// The flattened graph clusters (nested children)
-    /// </summary>
-    protected readonly Dictionary<Guid, IClusterViewModel> _allClusters;
-    public virtual IReadOnlyDictionary<Guid, IClusterViewModel> AllClusters => this._allClusters;
+    /// <inheritdoc/>
+    public virtual IReadOnlyDictionary<string, IClusterViewModel> AllClusters => this._allClusters;
 
-    protected readonly Collection<Type> _svgDefinitionComponents;
-    public virtual IReadOnlyCollection<Type> SvgDefinitionComponents => this._svgDefinitionComponents;
+    /// <inheritdoc/>
+    public virtual IReadOnlyCollection<Type> SvgComponentTypes => this._svgDefinitionComponents;
 
-    protected bool _enableProfiling = false;
+    /// <inheritdoc/>
     public virtual bool EnableProfiling
     {
         get => this._enableProfiling;
@@ -134,122 +108,22 @@ public class GraphViewModel
     }
 
     /// <summary>
-    /// The map of node type and their component type
+    /// Gets the default component type for nodes
     /// </summary>
-    protected readonly Dictionary<Type, Type> _components;
-
-    readonly Type _defaultNodeComponentType = typeof(NodeTemplate);
     protected virtual Type DefaultNodeComponentType => this._defaultNodeComponentType;
 
-    readonly Type _defaultClusterComponentType = typeof(ClusterTemplate);
+    /// <summary>
+    /// Gets the default component type for clusters
+    /// </summary>
     protected virtual Type DefaultClusterComponentType => this._defaultClusterComponentType;
 
-    readonly Type _defaultEdgeComponentType = typeof(EdgeTemplate);
+    /// <summary>
+    /// Gets the default component type for edges
+    /// </summary>
     protected virtual Type DefaultEdgeComponentType => this._defaultEdgeComponentType;
 
-    readonly Dictionary<Type, GraphBehavior> _behaviors;
-
-    public event MouseEventHandler? MouseMove;
-    public event MouseEventHandler? MouseDown;
-    public event MouseEventHandler? MouseUp;
-    public event MouseEventHandler? MouseEnter;
-    public event MouseEventHandler? MouseLeave;
-    public event WheelEventHandler? Wheel;
-
-    public GraphViewModel(
-        Dictionary<Guid, INodeViewModel>? nodes = null,
-        Dictionary<Guid, IEdgeViewModel>? edges = null,
-        Dictionary<Guid, IClusterViewModel>? clusters = null,
-        Collection<Type>? svgDefinitions = null,
-        string? cssClass = null,
-        double? width = null,
-        double? height = null,
-        string? label = null,
-        Type? componentType = null,
-        bool enableProfiling = false
-    )
-        : base(label, cssClass, componentType)
-    {
-        this._nodes = nodes ?? [];
-        this._edges = edges ?? []; ;
-        this._clusters = clusters ?? [];
-        this._svgDefinitionComponents = svgDefinitions ?? [typeof(ArrowDefinitionTemplate)];
-        this.Scale = 1;
-        this.X = 0;
-        this.Y = 0;
-        this.Width = width;
-        this.Height = height;
-        this._components = [];
-        this._allNodes = [];
-        this._allClusters = [];
-        this._behaviors = [];
-        this.EnableProfiling = enableProfiling;
-        // this.RegisterBehavior(new DebugEventsBehavior(this));
-        this.RegisterBehavior(new ZoomBehavior(this));
-        this.RegisterBehavior(new PanBehavior(this));
-        // this.RegisterBehavior(new MoveNodeBehavior(this));
-        foreach (var node in this._nodes.Values)
-        {
-            if (node == null) continue;
-            this._allNodes.Add(node.Id, node);
-        }
-        foreach (var cluster in this._clusters.Values)
-        {
-            if (cluster == null)  continue;
-            cluster.ChildAdded += this.OnChildAdded;
-            this._allClusters.Add(cluster.Id, cluster);
-            this.Flatten(cluster);
-        }
-    }
-
-
-    /// <summary>
-    /// Adds the provided <see cref="IGraphElement"/> to the graph
-    /// </summary>
-    /// <param name="node"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    public virtual async Task AddElementAsync(IGraphElement element)
-    {
-        ArgumentNullException.ThrowIfNull(element);
-        if (element is IEdgeViewModel edge)
-        {
-            await this.AddEdgeAsync(edge);
-            return;
-        }
-        if (element is IClusterViewModel cluster)
-        {
-            await this.AddClusterAsync(cluster);
-            return;
-        }
-        if (element is INodeViewModel node)
-        {
-            await this.AddNodeAsync(node);
-            return;
-        }
-        throw new Exception("Unknown element type");
-    }
-
-    /// <summary>
-    /// Adds the provided <see cref="IGraphElement"/>s to the graph
-    /// </summary>
-    /// <param name="node"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    public virtual async Task AddElementsAsync(IEnumerable<IGraphElement> elements)
-    {
-        if (elements == null || !elements.Any()) throw new ArgumentNullException(nameof(elements));
-        foreach (var element in elements) await this.AddElementAsync(element);
-        this.OnChange();
-    }
-
-    /// <summary>
-    /// Adds the provided <see cref="IClusterViewModel"/> to the graph
-    /// </summary>
-    /// <param name="cluster"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    protected virtual async Task AddClusterAsync(IClusterViewModel cluster)
+    /// <inheritdoc/>
+    public virtual IClusterViewModel AddCluster(IClusterViewModel cluster)
     {
         ArgumentNullException.ThrowIfNull(cluster);
         this._clusters.Add(cluster.Id, cluster);
@@ -257,82 +131,51 @@ public class GraphViewModel
         cluster.ChildAdded += this.OnChildAdded;
         this.Flatten(cluster);
         this.OnChange();
-        await Task.CompletedTask;
+        return cluster;
     }
 
-    /// <summary>
-    /// Adds the provided <see cref="INodeViewModel"/> to the graph
-    /// </summary>
-    /// <param name="node"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    protected virtual async Task AddNodeAsync(INodeViewModel node)
+    /// <inheritdoc/>
+    public virtual INodeViewModel AddNode(INodeViewModel node)
     {
         ArgumentNullException.ThrowIfNull(node);
-        if (node is IClusterViewModel cluster)
-        {
-            await this.AddClusterAsync(cluster);
-            return;
-        }
+        if (node is IClusterViewModel cluster) return this.AddCluster(cluster);
         this._nodes.Add(node.Id, node);
         this._allNodes.Add(node.Id, node);
+        this.GraphLayout.AddNode(node);
         this.OnChange();
-        await Task.CompletedTask;
+        return node;
     }
 
-    /// <summary>
-    /// Adds the provided <see cref="IEdgeViewModel"/> to the graph
-    /// </summary>
-    /// <param name="node"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    protected virtual async Task AddEdgeAsync(IEdgeViewModel edge)
+    /// <inheritdoc/>
+    public virtual IEdgeViewModel AddEdge(INodeViewModel source, INodeViewModel target)
     {
-        ArgumentNullException.ThrowIfNull(edge);
-        this._edges.Add(edge.Id, edge);
+        ArgumentNullException.ThrowIfNull(source);
+        ArgumentNullException.ThrowIfNull(target);
+        var link = new EdgeViewModel(source, target);
+        this._edges.Add($"{source.Id}:{target.Id}", link);
+        this.GraphLayout.AddEdge(source, target);
         this.OnChange();
-        await Task.CompletedTask;
+        return link;
     }
 
-    /// <summary>
-    /// Registers a component type associated with a node type
-    /// </summary>
-    /// <typeparam name="TNode"></typeparam>
-    /// <typeparam name="TComponent"></typeparam>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    /// <exception cref="ArgumentException"></exception>
-    public virtual async Task RegisterComponentTypeAsync<TElement, TComponent>()
+    /// <inheritdoc/>
+    public virtual void RegisterComponentType<TElement, TComponent>()
         where TElement : IGraphElement
         where TComponent : ComponentBase
     {
         var elementType = typeof(TElement);
         var componentType = typeof(TComponent);
-        if (elementType == null)
-        {
-            throw new ArgumentNullException(nameof(TElement));
-        }
-        if (componentType == null)
-        {
-            throw new ArgumentNullException(nameof(TComponent));
-        }
-        if (this._components.ContainsKey(elementType))
-        {
-            throw new ArgumentException("An element with the same key already exists in the dictionary.");
-        }
+        if (elementType == null) throw new ArgumentNullException(nameof(TElement));
+        if (componentType == null) throw new ArgumentNullException(nameof(TComponent));
+        if (this._components.ContainsKey(elementType)) throw new ArgumentException("An element with the same key already exists in the dictionary.");
         this._components.Add(elementType, componentType);
-        await Task.CompletedTask;
     }
 
-    /// <summary>
-    /// Gets the component type associated with the specified node type
-    /// </summary>
-    /// <typeparam name="TNode"></typeparam>
-    /// <param name="node"></param>
-    /// <returns></returns>
-    public virtual Type GetComponentTypeAsync<TElement>(TElement element)
+    /// <inheritdoc/>
+    public virtual Type GetComponentType<TElement>(TElement element)
         where TElement : IGraphElement
     {
+        ArgumentNullException.ThrowIfNull(element);
         if (element.ComponentType != null) return element.ComponentType;
         var elementType = element.GetType();
         if (_components.TryGetValue(elementType, out Type? value))  return value;
@@ -341,10 +184,26 @@ public class GraphViewModel
         return this.DefaultNodeComponentType;
     }
 
+    /// <inheritdoc/>
+    public virtual void Layout()
+    {
+        this.GraphLayout.Compute();
+        foreach (var node in this._allNodes.Values)
+        {
+            var nodeLayout = this.GraphLayout.GetNode(node);
+            node.Position = nodeLayout.Position;
+        }
+        foreach (var edge in this._edges.Values)
+        {
+            var edgeLayout = this.GraphLayout.GetEdge(edge);
+            edge.Points = edgeLayout.Points;
+        }
+    }
+
     /// <summary>
     /// Adds nested nodes/clusters to allNodes/Clusters
     /// </summary>
-    /// <param name="cluster"></param>
+    /// <param name="cluster">The <see cref="IClusterViewModel"/> to flatten</param>
     public virtual void Flatten(IClusterViewModel cluster)
     {
         foreach (var subClusters in cluster.AllClusters.Values)
@@ -362,8 +221,7 @@ public class GraphViewModel
     /// <summary>
     /// Adds the provided <see cref="GraphBehavior"/>
     /// </summary>
-    /// <param name="graphBehavior"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="graphBehavior">The <see cref="GraphBehavior"/> to add</param>
     public virtual void RegisterBehavior(GraphBehavior graphBehavior)
     {
         var behaviorType = graphBehavior.GetType();
@@ -374,8 +232,7 @@ public class GraphViewModel
     /// <summary>
     /// Removes the provided <see cref="GraphBehavior"/>
     /// </summary>
-    /// <param name="graphBehavior"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="graphBehavior">The <see cref="GraphBehavior"/> to add</param>
     public virtual void UnregisterBehavior(GraphBehavior graphBehavior)
     {
         var behaviorType = graphBehavior.GetType();
@@ -384,36 +241,10 @@ public class GraphViewModel
         this._behaviors.Remove(behaviorType);
     }
 
-    public virtual async Task OnMouseMoveAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
-    {
-        if (this.MouseMove != null) await this.MouseMove.Invoke(new (e, sender, element));
-    }
-
-    public virtual async Task OnMouseDownAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
-    {
-        if (this.MouseDown != null) await this.MouseDown.Invoke(new(e, sender, element));
-    }
-
-    public virtual async Task OnMouseUpAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
-    {
-        if (this.MouseUp != null) await this.MouseUp.Invoke(new(e, sender, element));
-    }
-
-    public virtual async Task OnMouseEnterAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
-    {
-        if (this.MouseEnter != null) await this.MouseEnter.Invoke(new(e, sender, element));
-    }
-
-    public virtual async Task OnMouseLeaveAsync(ElementReference sender, MouseEventArgs e, IGraphElement? element)
-    {
-        if (this.MouseLeave != null) await this.MouseLeave.Invoke(new(e, sender, element));
-    }
-
-    public virtual async Task OnWheelAsync(ElementReference sender, WheelEventArgs e, IGraphElement? element)
-    {
-        if (this.Wheel != null) await this.Wheel.Invoke(new(e, sender, element));
-    }
-
+    /// <summary>
+    /// Handles the addition of the specified child <see cref="INodeViewModel"/>
+    /// </summary>
+    /// <param name="child">The added <see cref="INodeViewModel"/></param>
     public virtual void OnChildAdded(INodeViewModel child)
     {
         if (child is IClusterViewModel cluster)
@@ -427,4 +258,5 @@ public class GraphViewModel
         }
         this.OnChange();
     }
+
 }

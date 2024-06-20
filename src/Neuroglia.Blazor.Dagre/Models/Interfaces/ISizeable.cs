@@ -13,7 +13,16 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
-public interface ICssClass
+/// <summary>
+/// Defines the fundamentals of an object that can be sized
+/// </summary>
+public interface ISizeable
 {
-    string? CssClass { get; set; }
+
+    /// <summary>
+    /// Gets/sets the object's size
+    /// </summary>
+    Size Size { get; set; }
+
 }
+

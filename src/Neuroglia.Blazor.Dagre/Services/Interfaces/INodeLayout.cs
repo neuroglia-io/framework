@@ -11,16 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Blazor.Dagre.Models;
+using Neuroglia.Blazor.Dagre.Models;
 
-public interface IGraphLibNode
-    : IIdentifiable, IDimension, IPosition, ILabeled, IMetadata
+namespace Neuroglia.Blazor.Dagre.Services;
+
+/// <summary>
+/// Defines the fundamentals of a node layout
+/// </summary>
+public interface INodeLayout
 {
-    string? Class { get; set; }
 
-    double? Rx { get; set; }
+    /// <summary>
+    /// Gets the node's position
+    /// </summary>
+    Point Position { get; }
 
-    double? Ry { get; set; }
-
-    string? Shape { get; set; }
 }

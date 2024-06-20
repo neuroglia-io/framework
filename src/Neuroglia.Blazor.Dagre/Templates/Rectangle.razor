@@ -1,16 +1,18 @@
 ﻿<rect 
-    x="@(BBox.X.ToInvariantString())" 
-    y="@(BBox.Y.ToInvariantString())" 
-    width="@(BBox.Width.ToInvariantString())" 
-    height="@(BBox.Height.ToInvariantString())"
-    rx="@((RadiusX ?? 0).ToInvariantString())"
-    ry="@((RadiusY ?? 0).ToInvariantString())"
+    x="@Position.X" 
+    y="@Position.Y" 
+    width="@Size.Width" 
+    height="@Size.Height"
+    rx="@(RadiusX ?? 0)"
+    ry="@(RadiusY ?? 0)"
 />
 
 @code {
     
-    [Parameter] public virtual IBoundingBox BBox { get; set; } = null!;
-    
+    [Parameter] public virtual Point Position { get; set; } = new(0, 0);
+
+    [Parameter] public virtual Size Size { get; set; } = new(100, 30);
+
     [Parameter] public virtual double? RadiusX { get; set; }
     
     [Parameter] public virtual double? RadiusY { get; set; }

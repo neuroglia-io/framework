@@ -13,7 +13,13 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Defines the fundamentals of the options used to configure a Dagre graph
+/// </summary>
 public interface IDagreGraphOptions
-    : IDagreGraphConfig, IGraphLibOptions
+    : IDagreGraphLayoutOptions, ILabeled, ISizeable, IMetadata
 {
+
+
+
 }

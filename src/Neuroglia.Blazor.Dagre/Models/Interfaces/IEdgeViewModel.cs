@@ -13,16 +13,41 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Defines the fundamentals of a graph link view model
+/// </summary>
 public interface IEdgeViewModel
     : IGraphElement
 {
-    Guid SourceId { get; set; }
-    Guid TargetId { get; set; }
-    ICollection<IPosition> Points { get; set; }
-    string? LabelPosition { get; set; }
-    double? LabelOffset { get; set; }
-    string Shape { get; set; }
-    string? StartMarkerId { get; set; }
-    string? EndMarkerId { get; set; }
-    IBoundingBox BBox { get; }
+
+    /// <summary>
+    /// Gets the source <see cref="INodeViewModel"/>
+    /// </summary>
+    INodeViewModel Source { get; }
+
+    /// <summary>
+    /// Gets the target <see cref="INodeViewModel"/>
+    /// </summary>
+    INodeViewModel Target { get;  }
+
+    /// <summary>
+    /// Gets a list containing the link's points
+    /// </summary>
+    IReadOnlyCollection<Point> Points { get; set; }
+
+    /// <summary>
+    /// Gets the edge's bounding box
+    /// </summary>
+    BoundingBox Bounds { get; }
+
+    string? LabelPosition { get; }
+
+    double? LabelOffset { get; }
+
+    string Shape { get; }
+
+    string? StartMarkerId { get; }
+
+    string? EndMarkerId { get; }
+
 }

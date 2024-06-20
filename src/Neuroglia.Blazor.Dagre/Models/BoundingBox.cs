@@ -13,31 +13,9 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
-public class BoundingBox
-    : IBoundingBox
-{
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? X { get; set; }
-
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Y { get; set; }
-
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Width { get; set; }
-
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Height { get; set; }
-
-    public BoundingBox() { }
-
-    public BoundingBox(double? width, double? height, double? x, double? y) {
-        this.Width = width;
-        this.Height = height;
-        this.X = x;
-        this.Y = y;
-    }
-}
+/// <summary>
+/// Represents the bounding box of a 2D shape
+/// </summary>
+/// <param name="Position">The position</param>
+/// <param name="Size">The size</param>
+public record BoundingBox(Point Position, Size Size);

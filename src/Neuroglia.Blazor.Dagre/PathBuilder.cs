@@ -17,24 +17,18 @@ namespace Neuroglia.Blazor.Dagre;
 
 public static class PathBuilder
 {
-    public static string GetLinearPath(ICollection<IPosition> points)
+    public static string GetLinearPath(IEnumerable<Point> points)
     {
         var path = new SvgPath();
         foreach (var point in points)
         {
-            if (string.IsNullOrEmpty(path.GetPath()))
-            {
-                path.MoveTo(point);
-            }
-            else
-            {
-                path.LineTo(point);
-            }
+            if (string.IsNullOrEmpty(path.GetPath())) path.MoveTo(point);
+            else path.LineTo(point);
         }
         return path.GetPath();
     }
 
-    public static string GetBSplinePath(ICollection<IPosition> points)
+    public static string GetBSplinePath(IEnumerable<Point> points)
     {
         throw new NotImplementedException(); // todo
     }

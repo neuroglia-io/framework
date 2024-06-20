@@ -44,8 +44,13 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <PackageReference Include="Dagre.NET" Version="1.0.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.6" />
     <PackageReference Include="Neuroglia.Serialization.NewtonsoftJson" Version="4.11.3" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Folder Include="Behaviors\" />
   </ItemGroup>
 	
 </Project>
