@@ -39,14 +39,14 @@ public record ProblemDetails
     /// <param name="instance">A <see cref="Uri"/> reference that identifies the specific occurrence of the problem.It may or may not yield further information if dereferenced</param>
     /// <param name="errors">An optional collection containing error messages mapped per error code</param>
     /// <param name="extensionData">A mapping containing problem details extension data, if any</param>
-    public ProblemDetails(Uri type, string title, int status, string? detail = null, Uri? instance = null, IEnumerable<KeyValuePair<string, string[]>>? errors = null, IDictionary<string, object>? extensionData = null)
+    public ProblemDetails(Uri type, string title, int status, string? detail = null, Uri? instance = null, IDictionary<string, string[]>? errors = null, IDictionary<string, object>? extensionData = null)
     {
         this.Type = type ?? throw new ArgumentNullException(nameof(type));
         this.Title = title ?? throw new ArgumentNullException(nameof(title));
         this.Status = status;
         this.Detail = detail;
         this.Instance = instance;
-        this.Errors = errors?.WithValueSemantics();
+        this.Errors = errors;
         this.ExtensionData = extensionData;
     }
 
@@ -84,7 +84,7 @@ public record ProblemDetails
     /// Gets/sets an optional collection containing error messages mapped per error code
     /// </summary>
     [DataMember(Order = 6, Name = "errors"), JsonPropertyName("errors")]
-    public virtual EquatableList<KeyValuePair<string, string[]>>? Errors { get; set; }
+    public virtual IDictionary<string, string[]>? Errors { get; set; }
 
     /// <summary>
     /// Gets/sets a mapping containing problem details extension data, if any

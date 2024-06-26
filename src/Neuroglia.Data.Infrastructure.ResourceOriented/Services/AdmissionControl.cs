@@ -125,7 +125,7 @@ public class AdmissionControl(IServiceProvider serviceProvider, IEnumerable<IPat
 
         var results = tasks.Select(t => t.Result);
         if (results.All(t => t.Allowed)) return new(request.Uid, true);
-        else return new(request.Uid, false, null, new ProblemDetails(ProblemTypes.AdmissionFailed, ProblemTitles.AdmissionFailed, (int)HttpStatusCode.BadRequest, errors: results.Where(r => !r.Allowed && r.Problem != null && r.Problem.Errors != null).SelectMany(r => r.Problem!.Errors!)));
+        else return new(request.Uid, false, null, new ProblemDetails(ProblemTypes.AdmissionFailed, ProblemTitles.AdmissionFailed, (int)HttpStatusCode.BadRequest, errors: results.Where(r => !r.Allowed && r.Problem != null && r.Problem.Errors != null).SelectMany(r => r.Problem!.Errors!).ToDictionary(e => e.Key, e => e.Value)));
     }
 
 }
