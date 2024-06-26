@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using Neuroglia.Data.Infrastructure.ResourceOriented.Properties;
+using System.Linq;
 using System.Net;
 
 namespace Neuroglia.Data.Infrastructure.ResourceOriented;
@@ -37,7 +38,7 @@ public static class ResourceProblemDetails
             (int)HttpStatusCode.BadRequest,
             StringFormatter.Format(ProblemDescriptions.ResourceSchemaValidationFailed, resource.Definition.Group, resource.Definition.Version, resource.Definition.Plural),
             null,
-            evaluationResults.Errors?.Select(e => new KeyValuePair<string, string[]>(e.Key, [e.Value]))
+            evaluationResults.Errors?.ToDictionary(e => e.Key, e => new string[] { e.Value })
         );
     }
 
