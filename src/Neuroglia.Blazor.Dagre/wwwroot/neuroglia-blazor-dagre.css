@@ -1,4 +1,14 @@
-﻿.graph-container {
+﻿.svg-definitions {
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: absolute;
+  top: -100px;
+  left: -100px;
+}
+
+.graph-container {
   width: 100%;
   height: 100%;
 }
