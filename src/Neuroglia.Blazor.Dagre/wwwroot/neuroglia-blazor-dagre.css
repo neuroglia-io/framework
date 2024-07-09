@@ -1,4 +1,9 @@
-﻿.svg-definitions {
+﻿:root {
+  --stroke-color: #333;
+  --fill-color: #fff;
+}
+
+.svg-definitions {
   width: 0 !important;
   height: 0 !important;
   margin: 0 !important;
@@ -16,14 +21,14 @@
 .node rect,
 .node circle,
 .node ellipse {
-  stroke: #333;
-  fill: #fff;
+  stroke: var(--stroke-color);
+  fill: var(--fill-color);
   stroke-width: 1px;
 }
 
 .edge-path path {
   fill: none;
-  stroke: #333;
+  stroke: var(--stroke-color);
   stroke-width: 1.5px;
 }
 
@@ -31,7 +36,7 @@
   fill: rgba(0, 0, 0, 0.2);
 }
 
-.label div {
+.label-content {
   text-align: center;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -39,7 +44,7 @@
 }
 
 #end-arrow {
-  fill: #333;
+  fill: var(--stroke-color);
 }
 
 .graph-controls .btn {
@@ -48,20 +53,18 @@
   line-height: 0.5;
   border-radius: 0.25rem;
   vertical-align: middle;
-  color: #333;
-  fill: #333;
-  border-color: #333;
+  color: var(--stroke-color);
+  fill: var(--stroke-color);
+  border-color: var(--stroke-color);
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
 .graph-controls .btn svg {
   width: 18px;
   height: 18px;
 }
-
 .graph-controls .btn:hover {
-  color: #fff;
-  fill: #fff;
-  background-color: #333;
-  border-color: #333;
+  color: var(--fill-color);
+  fill: var(--fill-color);
+  background-color: var(--stroke-color);
+  border-color: var(--stroke-color);
 }
