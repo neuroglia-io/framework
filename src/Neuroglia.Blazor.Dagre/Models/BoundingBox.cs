@@ -21,22 +21,22 @@ namespace Neuroglia.Blazor.Dagre.Models;
 /// <remarks>
 /// Initializes a <see cref="BoundingBox"/> using the given parameters
 /// </remarks>
-/// <param name="x">The horizontal position of the <see cref="BoundingBox"/></param>
-/// <param name="y">The vertical position of the <see cref="BoundingBox"/></param>
 /// <param name="width">The width of the <see cref="BoundingBox"/></param>
 /// <param name="height">The height of the <see cref="BoundingBox"/></param>
-public class BoundingBox(double? x = null, double? y = null, double? width = null, double? height = null)
+/// <param name="x">The horizontal position of the <see cref="BoundingBox"/></param>
+/// <param name="y">The vertical position of the <see cref="BoundingBox"/></param>
+public class BoundingBox(double width = 0, double height = 0, double x = 0, double y = 0)
         : IPositionable, ISizeable
 {
     /// <inheritdoc/>
-    public double X { get; set; } = x ?? 0;
+    public double X { get; set; } = x;
 
     /// <inheritdoc/>
-    public double Y { get; set; } = y ?? 0;
+    public double Y { get; set; } = y;
 
     /// <inheritdoc/>
-    public double Width { get; set; } = width ?? 0;
+    public double Width { get; set; } = width;
 
     /// <inheritdoc/>
-    public double Height { get; set; } = height ?? 0;
+    public double Height { get; set; } = height;
 }
