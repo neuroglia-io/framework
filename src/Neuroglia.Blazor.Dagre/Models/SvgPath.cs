@@ -19,12 +19,10 @@ public class SvgPath
 
     public virtual string GetPath() => this.Path;
 
-    public virtual SvgPath MoveTo(IPosition position)
+    public virtual SvgPath MoveTo(IPositionable position)
     {
         ArgumentNullException.ThrowIfNull(position);
-        if (position.X == null) throw new ArgumentNullException(nameof(position.X));
-        if (position.Y == null) throw new ArgumentNullException(nameof(position.Y));
-        return this.MoveTo(position.X.Value, position.Y.Value);
+        return this.MoveTo(position.X, position.Y);
     }
 
     public virtual SvgPath MoveTo(double x, double y)
@@ -33,12 +31,10 @@ public class SvgPath
         return this;
     }
 
-    public virtual SvgPath LineTo(IPosition position)
+    public virtual SvgPath LineTo(IPositionable position)
     {
         ArgumentNullException.ThrowIfNull(position);
-        if (position.X == null) throw new ArgumentNullException(nameof(position.X));
-        if (position.Y == null) throw new ArgumentNullException(nameof(position.Y));
-        return this.LineTo(position.X.Value, position.Y.Value);
+        return this.LineTo(position.X, position.Y);
     }
 
     public virtual SvgPath LineTo(double x, double y)
@@ -47,15 +43,11 @@ public class SvgPath
         return this;
     }
 
-    public virtual SvgPath QuadraticCurveTo(IPosition control1, IPosition position)
+    public virtual SvgPath QuadraticCurveTo(IPositionable control1, IPositionable position)
     {
         ArgumentNullException.ThrowIfNull(control1);
-        if (control1.X == null) throw new ArgumentNullException(nameof(control1.X));
-        if (control1.Y == null) throw new ArgumentNullException(nameof(control1.Y));
         ArgumentNullException.ThrowIfNull(position);
-        if (position.X == null) throw new ArgumentNullException(nameof(position.X));
-        if (position.Y == null) throw new ArgumentNullException(nameof(position.Y));
-        return this.QuadraticCurveTo(control1.X.Value, control1.Y.Value, position.X.Value, position.Y.Value);
+        return this.QuadraticCurveTo(control1.X, control1.Y, position.X, position.Y);
     }
 
     public virtual SvgPath QuadraticCurveTo(double control1x, double control1y, double x, double y)
@@ -64,18 +56,12 @@ public class SvgPath
         return this;
     }
 
-    public virtual SvgPath BezierCurveTo(IPosition control1, IPosition control2, IPosition position)
+    public virtual SvgPath BezierCurveTo(IPositionable control1, IPositionable control2, IPositionable position)
     {
         ArgumentNullException.ThrowIfNull(control1);
-        if (control1.X == null) throw new ArgumentNullException(nameof(control1.X));
-        if (control1.Y == null) throw new ArgumentNullException(nameof(control1.Y));
         ArgumentNullException.ThrowIfNull(control2);
-        if (control2.X == null) throw new ArgumentNullException(nameof(control2.X));
-        if (control2.Y == null) throw new ArgumentNullException(nameof(control2.Y));
         ArgumentNullException.ThrowIfNull(position);
-        if (position.X == null) throw new ArgumentNullException(nameof(position.X));
-        if (position.Y == null) throw new ArgumentNullException(nameof(position.Y));
-        return this.BezierCurveTo(control1.X.Value, control1.Y.Value, control2.X.Value, control2.Y.Value, position.X.Value, position.Y.Value);
+        return this.BezierCurveTo(control1.X, control1.Y, control2.X, control2.Y, position.X, position.Y);
     }
 
     public virtual SvgPath BezierCurveTo(double control1x, double control1y, double control2x, double control2y, double x, double y)

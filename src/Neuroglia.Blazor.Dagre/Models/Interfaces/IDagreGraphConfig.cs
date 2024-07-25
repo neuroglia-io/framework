@@ -17,6 +17,6 @@ namespace Neuroglia.Blazor.Dagre.Models;
 /// Represents the <see cref="IGraphLib.SetGraph(object)"/> configuration used by Dagre
 /// </summary>
 public interface IDagreGraphConfig
-    : IDagreGraphLayoutOptions, ILabeled, IDimension, IMetadata
+    : IDagreGraphLayoutOptions, ILabeled, ISizeable, IMetadata
 {
 }

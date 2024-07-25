@@ -11,23 +11,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.ObjectModel;
-
 namespace Neuroglia.Blazor.Dagre.Models;
 
-public class EdgeViewModel(Guid sourceId, Guid targetId, string? label = null, string? cssClass = null, string? shape = null, ICollection<IPosition>? points = null, Type? componentType = null)
+public class EdgeViewModel(string sourceId, string targetId, string? label = null, string? cssClass = null, string? shape = null, IEnumerable<IPositionable>? points = null, Type? componentType = null)
     : GraphElement(label, cssClass, componentType), IEdgeViewModel
 {
+    /// <inheritdoc/>
+    public virtual string SourceId { get; set; } = sourceId;
 
-    public virtual Guid SourceId { get; set; } = sourceId;
-    public virtual Guid TargetId { get; set; } = targetId;
+    /// <inheritdoc/>
+    public virtual string TargetId { get; set; } = targetId;
 
-    private ICollection<IPosition> _points = points ?? [];
-    public virtual ICollection<IPosition> Points { 
+    private IEnumerable<IPositionable> _points = points ?? [];
+    /// <inheritdoc/>
+    public virtual IEnumerable<IPositionable> Points { 
         get => this._points; 
         set
         {
-            this._points = value;
+            this._points = [..value];
             var minX = this.Points.Min(p => p.X);
             var maxX = this.Points.Max(p => p.X);
             var minY = this.Points.Min(p => p.Y);
@@ -36,21 +37,30 @@ public class EdgeViewModel(Guid sourceId, Guid targetId, string? label = null, s
             var height = maxY - minY;
             var x = minX + width / 2;
             var y = minY + height / 2;
-            this.BBox = new BoundingBox(width, height, x, y);
+            this.Bounds = new BoundingBox(width, height, x, y);
         }
     }
 
+    /// <inheritdoc/>
     [System.Text.Json.Serialization.JsonPropertyName("labelpos")]
     [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     [Newtonsoft.Json.JsonProperty(PropertyName = "labelpos", NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public virtual string? LabelPosition { get; set; }
 
+    /// <inheritdoc/>
     [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public virtual double? LabelOffset { get; set; }
 
+    /// <inheritdoc/>
     public virtual string Shape { get; set; } = shape ?? EdgeShape.BSpline;
+
+    /// <inheritdoc/>
     public virtual string? StartMarkerId { get; set; }
+
+    /// <inheritdoc/>
     public virtual string? EndMarkerId { get; set; } = Constants.EdgeEndArrowId;
-    public virtual IBoundingBox BBox { get; set; } = new BoundingBox();
+
+    /// <inheritdoc/>
+    public virtual BoundingBox Bounds { get; set; } = new BoundingBox();
 }

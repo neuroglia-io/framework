@@ -13,9 +13,19 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Defines the fundamentals of a graph element
+/// </summary>
 public interface IGraphElement
-    : IIdentifiable, ILabeled, ICssClass, IMetadata
+    : IIdentifiable, ILabeled, ICssStylable, IMetadata
 {
+
+    /// <summary>
+    /// Gets the type of the component used to represents the graph element
+    /// </summary>
     Type? ComponentType { get; set; }
+    /// <summary>
+    /// The event fired whenever the graph element changes
+    /// </summary>
     event Action? Changed;
 }

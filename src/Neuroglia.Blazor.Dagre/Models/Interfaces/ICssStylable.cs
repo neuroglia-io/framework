@@ -13,9 +13,13 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
-public interface IDimension
+/// <summary>
+/// Defines the fundamentals of an object that can be styled using CSS classes
+/// </summary>
+public interface ICssStylable
 {
-    double? Width { get; set; }
-
-    double? Height { get; set; }
+    /// <summary>
+    /// Gets/sets the object's CSS class
+    /// </summary>
+    string? CssClass { get; set; }
 }

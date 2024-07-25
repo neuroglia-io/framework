@@ -1,10 +1,10 @@
 ﻿<ellipse 
     cx="0" 
     cy="0"
-    rx="@(BBox.Width.ToInvariantString())"
-    ry="@(BBox.Height.ToInvariantString())"
+    rx="@(Bounds.Width.ToInvariantString())"
+    ry="@(Bounds.Height.ToInvariantString())"
 />
 
 @code {
-    [Parameter] public virtual IBoundingBox BBox { get; set; } = null!;
+    [Parameter] public virtual BoundingBox Bounds { get; set; } = null!;
 }

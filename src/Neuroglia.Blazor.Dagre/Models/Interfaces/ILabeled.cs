@@ -13,7 +13,13 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Defines the fundamentals of an object with a label
+/// </summary>
 public interface ILabeled
 {
+    /// <summary>
+    /// Gets/set the object's label
+    /// </summary>
     string? Label { get; set; }
 }

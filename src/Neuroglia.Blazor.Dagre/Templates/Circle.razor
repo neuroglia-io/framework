@@ -1,9 +1,9 @@
 ﻿<circle 
     cx="0" 
     cy="0"
-    r="@(BBox.Width.ToInvariantString())"
+    r="@(Bounds.Width.ToInvariantString())"
 />
 
 @code {
-    [Parameter] public virtual IBoundingBox BBox { get; set; } = null!;
+    [Parameter] public virtual BoundingBox Bounds { get; set; } = null!;
 }

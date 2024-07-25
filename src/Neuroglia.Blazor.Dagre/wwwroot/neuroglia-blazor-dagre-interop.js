@@ -23,25 +23,25 @@
         graphElement.addEventListener("wheel", e => e.preventDefault(), { passive: false });
     }
     window.neuroglia.blazor.getCenter = (graphElement) => {
-        const svgBbox = graphElement.getBoundingClientRect();
-        const graphBbox = graphElement.getBBox();
+        const svgBounds = graphElement.getBoundingClientRect();
+        const graphBounds = graphElement.getBBox();
         return {
-            x: (svgBbox.width - graphBbox.width) / 2,
-            y: (svgBbox.height - graphBbox.height) / 2
+            x: (svgBounds.width - graphBounds.width) / 2,
+            y: (svgBounds.height - graphBounds.height) / 2
         };
     }
     window.neuroglia.blazor.getScale = (graphElement) => {
-        const svgBbox = graphElement.getBoundingClientRect();
-        const graphBbox = graphElement.querySelector('g.graph').getBBox();
-        const wScale = Math.floor(svgBbox.width) / Math.ceil(graphBbox.width);
-        const hScale = Math.floor(svgBbox.height) / Math.ceil(graphBbox.height);
-        if (graphBbox.width / graphBbox.height >= 1) {
-            if (graphBbox.height * wScale < svgBbox.height) {
+        const svgBounds = graphElement.getBoundingClientRect();
+        const graphBounds = graphElement.querySelector('g.graph').getBBox();
+        const wScale = Math.floor(svgBounds.width) / Math.ceil(graphBounds.width);
+        const hScale = Math.floor(svgBounds.height) / Math.ceil(graphBounds.height);
+        if (graphBounds.width / graphBounds.height >= 1) {
+            if (graphBounds.height * wScale < svgBounds.height) {
                 return wScale;
             }
             return hScale;
         }
-        else if (graphBbox.width * hScale < svgBbox.width) {
+        else if (graphBounds.width * hScale < svgBounds.width) {
             return hScale;
         }
         return wScale;

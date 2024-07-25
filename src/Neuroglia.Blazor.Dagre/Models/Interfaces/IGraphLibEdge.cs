@@ -37,6 +37,6 @@ public interface IGraphLibEdge
     /// <summary>
     /// The edge points
     /// </summary>
-    IPosition[]? Points { get; set; }
+    IPositionable[]? Points { get; set; }
 
 }

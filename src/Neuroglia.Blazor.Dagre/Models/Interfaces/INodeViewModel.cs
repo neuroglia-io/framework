@@ -13,12 +13,39 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Defines the fundamentals of a node's view model
+/// </summary>
 public interface INodeViewModel
-    : IGraphElement, IPosition, IDimension, IRadius
+    : IGraphElement, IPositionable, ISizeable, IRadius
 {
-    Guid? ParentId { get; set; }
+    /// <summary>
+    /// Gets/sets the id of the node's parent, if any
+    /// </summary>
+    string? ParentId { get; set; }
+    /// <summary>
+    /// Gets/sets the node's shape
+    /// </summary>
     string? Shape { get; set; }
-    IBoundingBox? BBox { get; }
-    void SetGeometry(double? x, double? y, double? width, double? height);
+
+    /// <summary>
+    /// Gets/sets the <see cref="BoundingBox"/> of the node
+    /// </summary>
+    BoundingBox? Bounds { get; }
+
+    /// <summary>
+    /// Sets the <see cref="INodeViewModel"/>'s <see cref="BoundingBox"/> using measurments
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    void SetBounds(double x, double y, double width, double height);
+
+    /// <summary>
+    /// Moves the node
+    /// </summary>
+    /// <param name="deltaX">The distance to move the node on the horizontal axis</param>
+    /// <param name="deltaY">The distance to move the node on the vertical axis</param>
     void Move(double deltaX, double deltaY);
 }

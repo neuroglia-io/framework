@@ -13,8 +13,20 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Defines the fundamentals of an object that has a radius
+/// </summary>
 public interface IRadius
 {
-    double? RadiusX { get; set; }
-    double? RadiusY { get; set; }
+
+    /// <summary>
+    /// Gets/sets the object's horizontal radius
+    /// </summary>
+    double RadiusX { get; set; }
+
+    /// <summary>
+    /// Gets/sets the object's vertical radius
+    /// </summary>
+    double RadiusY { get; set; }
+
 }

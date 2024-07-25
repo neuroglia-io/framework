@@ -29,8 +29,8 @@
         <CascadingValue Value="graph">
             <svg @ref="graphReference"
                 class="graph-canvas @graph.CssClass"
-                width="@(graph.Width?.ToString() ?? "100%")" 
-                height="@(graph.Height?.ToString() ?? "100%")"
+                 width="@(graph.Width != 0 ? graph.Width.ToString() : "100%")"
+                 height="@(graph.Height != 0 ? graph.Height.ToString() : "100%")"
                 @onmouseenter="HandleOnMouseEnter"
                 @onmouseleave="HandleOnMouseLeave"
                 @onmousedown="HandleOnMouseDown"
@@ -39,7 +39,7 @@
                 @onwheel="HandleOnWheel"
             >
                 <defs>
-                    @foreach(var def in graph.SvgDefinitionComponents)
+                    @foreach(var def in graph.ReferenceableComponentTypes)
                     {
                         <DynamicComponent @key="def" Type="def" />
                     }
@@ -53,7 +53,7 @@
                         {
                             @if (cluster != null)
                             {
-                                <InteractiveDynamicComponent @key="cluster" Type="graph.GetComponentTypeAsync(cluster)" Parameters="GetComponentParameter(cluster)" />
+                                <InteractiveDynamicComponent @key="cluster" Type="graph.GetComponentType(cluster)" Parameters="GetComponentParameter(cluster)" />
                             }
                         }
                     </g>
@@ -62,7 +62,7 @@
                         {
                             @if (edge != null)
                             {
-                                <DynamicComponent @key="edge" Type="graph.GetComponentTypeAsync(edge)" Parameters="GetComponentParameter(edge)" />
+                                <DynamicComponent @key="edge" Type="graph.GetComponentType(edge)" Parameters="GetComponentParameter(edge)" />
                             }
                         }
                     </g>
@@ -71,7 +71,7 @@
                         {
                             @if (node != null)
                             {
-                                <InteractiveDynamicComponent @key="node" Type="graph.GetComponentTypeAsync(node)" Parameters="GetComponentParameter(node)" />
+                                <InteractiveDynamicComponent @key="node" Type="graph.GetComponentType(node)" Parameters="GetComponentParameter(node)" />
                             }
                         }
                     </g>

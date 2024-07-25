@@ -1,15 +1,15 @@
 ﻿<rect 
-    x="@(BBox.X.ToInvariantString())" 
-    y="@(BBox.Y.ToInvariantString())" 
-    width="@(BBox.Width.ToInvariantString())" 
-    height="@(BBox.Height.ToInvariantString())"
+    x="@(Bounds.X.ToInvariantString())" 
+    y="@(Bounds.Y.ToInvariantString())" 
+    width="@(Bounds.Width.ToInvariantString())" 
+    height="@(Bounds.Height.ToInvariantString())"
     rx="@((RadiusX ?? 0).ToInvariantString())"
     ry="@((RadiusY ?? 0).ToInvariantString())"
 />
 
 @code {
     
-    [Parameter] public virtual IBoundingBox BBox { get; set; } = null!;
+    [Parameter] public virtual BoundingBox Bounds { get; set; } = null!;
     
     [Parameter] public virtual double? RadiusX { get; set; }
     

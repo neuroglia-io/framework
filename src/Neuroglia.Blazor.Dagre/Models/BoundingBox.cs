@@ -13,31 +13,30 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
-public class BoundingBox
-    : IBoundingBox
+/// <summary>
+/// Represents the bounding box of a 2D shape
+/// </summary>
+/// <param name="Position">The position</param>
+/// <param name="Size">The size</param>
+/// <remarks>
+/// Initializes a <see cref="BoundingBox"/> using the given parameters
+/// </remarks>
+/// <param name="x">The horizontal position of the <see cref="BoundingBox"/></param>
+/// <param name="y">The vertical position of the <see cref="BoundingBox"/></param>
+/// <param name="width">The width of the <see cref="BoundingBox"/></param>
+/// <param name="height">The height of the <see cref="BoundingBox"/></param>
+public class BoundingBox(double? x = null, double? y = null, double? width = null, double? height = null)
+        : IPositionable, ISizeable
 {
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? X { get; set; }
+    /// <inheritdoc/>
+    public double X { get; set; } = x ?? 0;
 
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Y { get; set; }
+    /// <inheritdoc/>
+    public double Y { get; set; } = y ?? 0;
 
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Width { get; set; }
+    /// <inheritdoc/>
+    public double Width { get; set; } = width ?? 0;
 
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Height { get; set; }
-
-    public BoundingBox() { }
-
-    public BoundingBox(double? width, double? height, double? x, double? y) {
-        this.Width = width;
-        this.Height = height;
-        this.X = x;
-        this.Y = y;
-    }
+    /// <inheritdoc/>
+    public double Height { get; set; } = height ?? 0;
 }
