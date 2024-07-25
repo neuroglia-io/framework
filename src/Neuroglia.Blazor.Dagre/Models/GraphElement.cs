@@ -20,7 +20,7 @@ public abstract class GraphElement
     : IGraphElement
 {
     /// <inheritdoc />
-    public virtual Guid Id { get; set; } = Guid.NewGuid();
+    public virtual string Id { get; set; } = Guid.NewGuid().ToString();
 
     /// <summary>
     /// Stores the element's label
@@ -119,9 +119,6 @@ public abstract class GraphElement
     /// <summary>
     /// Invokes the change action
     /// </summary>
-    protected virtual void OnChange()
-    {
-        this.Changed?.Invoke();
-    }
+    protected virtual void OnChange() => this.Changed?.Invoke();
 
 }

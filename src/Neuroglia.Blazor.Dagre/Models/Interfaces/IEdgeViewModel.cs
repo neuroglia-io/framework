@@ -13,16 +13,54 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Defines the fundamentals of a graph link view model
+/// </summary>
 public interface IEdgeViewModel
     : IGraphElement
 {
-    Guid SourceId { get; set; }
-    Guid TargetId { get; set; }
-    ICollection<IPosition> Points { get; set; }
+    /// <summary>
+    /// Gets/sets the id of the node at the beginning of the edge
+    /// </summary>
+    string SourceId { get; set; }
+
+    /// <summary>
+    /// Gets/sets the id of the node at the end of the edge 
+    /// </summary>
+    string TargetId { get; set; }
+
+    /// <summary>
+    /// Gets a list containing the link's points
+    /// </summary>
+    IEnumerable<IPositionable> Points { get; set; }
+
+    /// <summary>
+    /// Gets the edge's bounding box
+    /// </summary>
+    BoundingBox Bounds { get; }
+
+    /// <summary>
+    /// Gets/sets the <see cref="EdgeLabelPosition"/>, where the label should be place relative to the <see cref="IEdgeViewModel"/>
+    /// </summary>
     string? LabelPosition { get; set; }
+
+    /// <summary>
+    /// Gets/sets the offset between the <see cref="IEdgeViewModel"/> and its label
+    /// </summary>
     double? LabelOffset { get; set; }
+
+    /// <summary>
+    /// Gets/sets the <see cref="EdgeShape"/> of the <see cref="IEdgeViewModel"/>
+    /// </summary>
     string Shape { get; set; }
+
+    /// <summary>
+    /// Gets/sets the id of the marker used at the source end of the <see cref="IEdgeViewModel"/>
+    /// </summary>
     string? StartMarkerId { get; set; }
+
+    /// <summary>
+    /// Gets/sets the id of the marker used at the target end of the <see cref="IEdgeViewModel"/>
+    /// </summary>
     string? EndMarkerId { get; set; }
-    IBoundingBox BBox { get; }
 }

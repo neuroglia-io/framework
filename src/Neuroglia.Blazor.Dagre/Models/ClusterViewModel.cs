@@ -13,33 +13,55 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Represents the default implementation of the <see cref="IClusterViewModel"/>
+/// </summary>
 public class ClusterViewModel
     : NodeViewModel, IClusterViewModel
 {
-    protected readonly Dictionary<Guid, INodeViewModel> _children;
-    public virtual IReadOnlyDictionary<Guid, INodeViewModel> Children => this._children;
+    protected readonly Dictionary<string, INodeViewModel> _children;
+    /// <inheritdoc/>
+    public virtual IReadOnlyDictionary<string, INodeViewModel> Children => this._children;
 
-    protected readonly Dictionary<Guid, INodeViewModel> _allNodes;
-    public virtual IReadOnlyDictionary<Guid, INodeViewModel> AllNodes => this._allNodes;
+    protected readonly Dictionary<string, INodeViewModel> _allNodes;
+    /// <inheritdoc/>
+    public virtual IReadOnlyDictionary<string, INodeViewModel> AllNodes => this._allNodes;
 
-    protected readonly Dictionary<Guid, IClusterViewModel> _allClusters;
-    public virtual IReadOnlyDictionary<Guid, IClusterViewModel> AllClusters => this._allClusters;
+    protected readonly Dictionary<string, IClusterViewModel> _allClusters;
+    /// <inheritdoc/>
+    public virtual IReadOnlyDictionary<string, IClusterViewModel> AllClusters => this._allClusters;
 
+    /// <inheritdoc/>
     public event Action<INodeViewModel>? ChildAdded;
 
+    /// <summary>
+    /// Initializes a new <see cref="ClusterViewModel"/>
+    /// </summary>
+    /// <param name="children"></param>
+    /// <param name="label"></param>
+    /// <param name="cssClass"></param>
+    /// <param name="shape"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="radiusX"></param>
+    /// <param name="radiusY"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="componentType"></param>
+    /// <param name="parentId"></param>
     public ClusterViewModel(
-        Dictionary<Guid, INodeViewModel>? children = null,
+        Dictionary<string, INodeViewModel>? children = null,
         string? label = "",
         string? cssClass = null,
         string? shape = null,
-        double? width = Constants.ClusterWidth,
-        double? height = Constants.ClusterHeight,
-        double? radiusX = Constants.ClusterRadius,
-        double? radiusY = Constants.ClusterRadius,
-        double? x = 0,
-        double? y = 0,
+        double width = Constants.ClusterWidth,
+        double height = Constants.ClusterHeight,
+        double radiusX = Constants.ClusterRadius,
+        double radiusY = Constants.ClusterRadius,
+        double x = 0,
+        double y = 0,
         Type? componentType = null,
-        Guid? parentId = null
+        string? parentId = null
     )
         : base(label, cssClass, shape, width, height, radiusX, radiusY, x, y, componentType, parentId)
     {
@@ -66,10 +88,17 @@ public class ClusterViewModel
         }
     }
 
+    /// <summary>
+    /// Moves the <see cref="ClusterViewModel"/> 
+    /// </summary>
+    /// <param name="deltaX">The horizontal distance</param>
+    /// <param name="deltaY">The veritcal distance</param>
     public override void Move(double deltaX, double deltaY)
     {
         if (deltaX == 0 && deltaY == 0)
+        {
             return;
+        }
         base.Move(deltaX, deltaY);
         foreach(var child in this._children.Values)
         {
@@ -83,7 +112,7 @@ public class ClusterViewModel
     /// <param name="node"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public virtual async Task AddChildAsync(INodeViewModel node)
+    public virtual void AddChild(INodeViewModel node)
     {
         ArgumentNullException.ThrowIfNull(node);
         node.ParentId = this.Id;
@@ -98,7 +127,6 @@ public class ClusterViewModel
         }
         this._allNodes.Add(node.Id, node);
         this.OnChange();
-        await Task.CompletedTask;
     }
 
     /// <summary>
@@ -125,16 +153,19 @@ public class ClusterViewModel
         }
     }
 
+    /// <summary>
+    /// Handles changes to the cluster's children
+    /// </summary>
     protected virtual void OnChildChanged()
     {
-        var minX = this.Children.Values.Select(node => node.X - (node.Width ?? 0) / 2).Min();
-        var maxX = this.Children.Values.Select(node => node.X + (node.Width ?? 0) / 2).Max();
-        var minY = this.Children.Values.Select(node => node.Y - (node.Height ?? 0) / 2).Min();
-        var maxY = this.Children.Values.Select(node => node.Y + (node.Height ?? 0) / 2).Max();
+        var minX = this.Children.Values.Select(node => node.X - node.Width / 2).Min();
+        var maxX = this.Children.Values.Select(node => node.X + node.Width / 2).Max();
+        var minY = this.Children.Values.Select(node => node.Y - node.Height / 2).Min();
+        var maxY = this.Children.Values.Select(node => node.Y + node.Height / 2).Max();
         var x = (minX + maxX) / 2;
         var y = (minY + maxY) / 2;
         var width = maxX - minX + Constants.ClusterPaddingX;
         var height = maxY - minY + Constants.ClusterPaddingY;
-        this.SetGeometry(x, y, width, height);
+        this.SetBounds(x, y, width, height);
     }
 }

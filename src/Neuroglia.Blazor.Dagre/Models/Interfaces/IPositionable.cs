@@ -13,10 +13,20 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
-public interface IPosition
+/// <summary>
+/// Defines the fundamentals of an object that can be positioned 
+/// </summary>
+public interface IPositionable
 {
-    double? X { get; set; }
 
-    double? Y { get; set; }
+    /// <summary>
+    /// Gets/sets the object's horizontal position
+    /// </summary>
+    double X { get; set; }
+
+    /// <summary>
+    /// Gets/sets the object's vertical position
+    /// </summary>
+    double Y { get; set; }
 
 }

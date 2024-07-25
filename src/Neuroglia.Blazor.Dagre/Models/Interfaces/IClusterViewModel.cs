@@ -13,12 +13,35 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Defines the fundamentals of a view model for a cluster, which is a type of node view model containing child nodes and clusters.
+/// </summary>
 public interface IClusterViewModel
-    : IGraphElement, INodeViewModel
+    : INodeViewModel
 {
-    IReadOnlyDictionary<Guid, INodeViewModel> Children { get; }
-    IReadOnlyDictionary<Guid, INodeViewModel> AllNodes { get; }
-    IReadOnlyDictionary<Guid, IClusterViewModel> AllClusters { get; }
-    Task AddChildAsync(INodeViewModel node);
+    /// <summary>
+    /// Gets the dictionary of child nodes in the cluster.
+    /// </summary>
+    IReadOnlyDictionary<string, INodeViewModel> Children { get; }
+
+    /// <summary>
+    /// Gets the dictionary of all nodes in the cluster, including nested nodes.
+    /// </summary>
+    IReadOnlyDictionary<string, INodeViewModel> AllNodes { get; }
+
+    /// <summary>
+    /// Gets the dictionary of all clusters in the cluster, including nested clusters.
+    /// </summary>
+    IReadOnlyDictionary<string, IClusterViewModel> AllClusters { get; }
+
+    /// <summary>
+    /// Adds a child node to the cluster.
+    /// </summary>
+    /// <param name="node">The node to be added as a child.</param>
+    void AddChild(INodeViewModel node);
+
+    /// <summary>
+    /// Occurs when a child node is added to the cluster.
+    /// </summary>
     event Action<INodeViewModel>? ChildAdded;
 }

@@ -1,26 +1,26 @@
 ﻿@implements IDisposable
 
-<g class="node @Node.CssClass" transform="translate(@((Node.X ?? 0).ToInvariantString()), @((Node.Y ?? 0).ToInvariantString()))">
+<g class="node @Node.CssClass" transform="translate(@(Node.X.ToInvariantString()), @(Node.Y.ToInvariantString()))">
     <g class="node-shape">
         @if (Node.Shape == NodeShape.Circle)
         {
-            <Circle BBox="Node.BBox" />
+            <Circle Bounds="Node.Bounds" />
         }
         else if (Node.Shape == NodeShape.Ellipse)
         {
-            <Ellipse BBox="Node.BBox" />
+            <Ellipse Bounds="Node.Bounds" />
         }
         else
         {
-            <Rectangle BBox="Node.BBox" RadiusX="Node.RadiusX" RadiusY="Node.RadiusY" />
+            <Rectangle Bounds="Node.Bounds" RadiusX="Node.RadiusX" RadiusY="Node.RadiusY" />
         }
     </g>
     @if (!string.IsNullOrWhiteSpace(Node.Label)) {
         <g class="label">
             <foreignObject 
-                x="@((Node.BBox!.X).ToInvariantString())"
+                x="@((Node.Bounds!.X).ToInvariantString())"
                 y="@((0 - Constants.LabelHeight / 2).ToInvariantString())" 
-                width="@Node.BBox!.Width.ToInvariantString()" 
+                width="@Node.Bounds!.Width.ToInvariantString()" 
                 height="@Constants.LabelHeight"
             >
                 <div class="label-content">@Node.Label</div>

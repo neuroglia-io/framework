@@ -14,7 +14,7 @@
 namespace Neuroglia.Blazor.Dagre.Models;
 
 public interface IGraphLibNode
-    : IIdentifiable, IDimension, IPosition, ILabeled, IMetadata
+    : IIdentifiable, ISizeable, IPositionable, ILabeled, IMetadata
 {
     string? Class { get; set; }
 

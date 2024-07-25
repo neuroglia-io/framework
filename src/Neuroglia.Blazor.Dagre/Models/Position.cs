@@ -13,18 +13,32 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
-public class Position
-    : IPosition
+/// <summary>
+/// Represents a position in a 2D space.
+/// </summary>
+public class Position 
+    : IPositionable
 {
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? X { get; set; }
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Y { get; set; }
+    /// <summary>
+    /// Gets or sets the X coordinate.
+    /// </summary>
+    public virtual double X { get; set; } = 0;
 
+    /// <summary>
+    /// Gets or sets the Y coordinate.
+    /// </summary>
+    public virtual double Y { get; set; } = 0;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Position"/> class with default values (0, 0).
+    /// </summary>
     public Position() { }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Position"/> class with specified X and Y coordinates.
+    /// </summary>
+    /// <param name="x">The X coordinate.</param>
+    /// <param name="y">The Y coordinate.</param>
     public Position(double x, double y)
     {
         this.X = x;

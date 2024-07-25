@@ -4,23 +4,23 @@
     <g class="cluster-shape">
         @if (Cluster.Shape == NodeShape.Circle)
         {
-            <Circle BBox="Cluster.BBox" />
+            <Circle Bounds="Cluster.Bounds" />
         }
         else if (Cluster.Shape == NodeShape.Ellipse)
         {
-            <Ellipse BBox="Cluster.BBox" />
+            <Ellipse Bounds="Cluster.Bounds" />
         }
         else
         {        
-            <Rectangle BBox="Cluster.BBox" RadiusX="Cluster.RadiusX" RadiusY="Cluster.RadiusY" />
+            <Rectangle Bounds="Cluster.Bounds" RadiusX="Cluster.RadiusX" RadiusY="Cluster.RadiusY" />
         }
     </g>
     @if (!string.IsNullOrWhiteSpace(Cluster.Label)) {
         <g class="label">
             <foreignObject 
-                x="@(Cluster.BBox!.X.ToInvariantString())"
-                y="@((Cluster.BBox!.Height / 2).ToInvariantString())" 
-                width="@Cluster.BBox!.Width.ToInvariantString()" 
+                x="@(Cluster.Bounds!.X.ToInvariantString())"
+                y="@((Cluster.Bounds!.Height / 2).ToInvariantString())" 
+                width="@Cluster.Bounds!.Width.ToInvariantString()" 
                 height="@Constants.LabelHeight"
             >
                 <div>@Cluster.Label</div>

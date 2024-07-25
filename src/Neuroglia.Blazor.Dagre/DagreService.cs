@@ -48,29 +48,29 @@ public class DagreService(IJSRuntime jSRuntime)
         }
         // build the dagre/graphlib graph
         var graph = await this.GraphAsync(options);
-        var nodes = graphViewModel.AllNodes.Values.Concat( graphViewModel.AllClusters.Values);
+        var nodes = graphViewModel.AllNodes.Values.Concat(graphViewModel.AllClusters.Values);
         foreach (var node in nodes)
         {
-            await graph.SetNodeAsync(node.Id.ToString(), node);
-            if (node.ParentId != null) await graph.SetParentAsync(node.Id.ToString(), node.ParentId.ToString()!);
+            await graph.SetNodeAsync(node.Id, node);
+            if (node.ParentId != null) await graph.SetParentAsync(node.Id, node.ParentId!);
         }
         foreach(var edge in graphViewModel.Edges.Values)
         {
-            if (options?.Multigraph == true) await graph.SetEdgeAsync(edge.SourceId.ToString(), edge.TargetId.ToString(), edge, edge.Id.ToString());
-            else await graph.SetEdgeAsync(edge.SourceId.ToString(), edge.TargetId.ToString(), edge);
+            if (options?.Multigraph == true) await graph.SetEdgeAsync(edge.SourceId, edge.TargetId, edge, edge.Id);
+            else await graph.SetEdgeAsync(edge.SourceId, edge.TargetId, edge);
         }
         await this.LayoutAsync(graph);
         // update our view models with the computed values
         foreach (var node in nodes)
         {
-            var graphNode = await graph.NodeAsync(node.Id.ToString());
-            node.SetGeometry(graphNode.X, graphNode.Y, graphNode.Width, graphNode.Height);
+            var graphNode = await graph.NodeAsync(node.Id);
+            node.SetBounds(graphNode.X, graphNode.Y, graphNode.Width, graphNode.Height);
         }
         foreach (var edge in graphViewModel.Edges.Values)
         {
             GraphLibEdge graphEdge;
-            if (options?.Multigraph == true)  graphEdge = await graph.EdgeAsync(edge.SourceId.ToString(), edge.TargetId.ToString(), edge.Id.ToString());
-            else graphEdge = await graph.EdgeAsync(edge.SourceId.ToString(), edge.TargetId.ToString());
+            if (options?.Multigraph == true)  graphEdge = await graph.EdgeAsync(edge.SourceId, edge.TargetId, edge.Id);
+            else graphEdge = await graph.EdgeAsync(edge.SourceId, edge.TargetId);
             if (graphEdge?.Points != null) edge.Points = [.. graphEdge.Points];
         }
         graphViewModel.DagreGraph = graph;

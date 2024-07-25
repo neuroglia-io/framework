@@ -113,13 +113,13 @@ Let's use a custom component for the `Action` node of the `Get Started` sample
 
 <g class="node @Node.CssClass" transform="translate(@X, @Y)">
     <g transform="translate(-@HalfHeight, -@HalfHeight)">
-        <polygon stroke="black" stroke-width="1" fill="white" points="0,@HalfHeight @HalfHeight,0 @Node.BBox!.Height,@HalfHeight @HalfHeight,@Node.BBox!.Height" />
+        <polygon stroke="black" stroke-width="1" fill="white" points="0,@HalfHeight @HalfHeight,0 @Node.Bounds!.Height,@HalfHeight @HalfHeight,@Node.Bounds!.Height" />
         <text alignment-baseline="middle" text-anchor="middle" x="@HalfHeight" y="@HalfHeight" font-size="24" font-weight="bold">!</text>
     </g>
     @if (!string.IsNullOrWhiteSpace(Node.Label)) {
         <g class="label">
             <foreignObject 
-                x="@BBoxX"
+                x="@BoundsX"
                 y="@HalfHeight" 
                 width="@Width" 
                 height="@Consts.LabelHeight"
@@ -138,10 +138,10 @@ Let's use a custom component for the `Action` node of the `Get Started` sample
     protected virtual INodeViewModel Node => (INodeViewModel)this.Element;
     protected virtual string? X => this.Node.X.ToInvariantString();
     protected virtual string? Y => this.Node.Y.ToInvariantString();
-    protected virtual string? Width => this.Node.BBox.Width.ToInvariantString();
-    protected virtual string? Height => this.Node.BBox.Height.ToInvariantString();
-    protected virtual string? HalfHeight => (this.Node.BBox.Height / 2).ToInvariantString();
-    protected virtual string? BBoxX => this.Node.BBox.X.ToInvariantString();
+    protected virtual string? Width => this.Node.Bounds.Width.ToInvariantString();
+    protected virtual string? Height => this.Node.Bounds.Height.ToInvariantString();
+    protected virtual string? HalfHeight => (this.Node.Bounds.Height / 2).ToInvariantString();
+    protected virtual string? BoundsX => this.Node.Bounds.X.ToInvariantString();
 }
 ```
 

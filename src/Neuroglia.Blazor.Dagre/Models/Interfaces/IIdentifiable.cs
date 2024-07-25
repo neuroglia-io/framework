@@ -13,7 +13,14 @@
 
 namespace Neuroglia.Blazor.Dagre.Models;
 
+/// <summary>
+/// Defines the fundamentals of an identifiable object
+/// </summary>
 public interface IIdentifiable
 {
-    Guid Id { get; set; }
+
+    /// <summary>
+    /// Gets the object's unique identifier
+    /// </summary>
+    string Id { get; }
 }

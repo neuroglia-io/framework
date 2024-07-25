@@ -7,9 +7,9 @@
     @if (LabelCenter != null && !string.IsNullOrWhiteSpace(Edge.Label)) {
         <g class="edge-label label">
             <foreignObject 
-                x="@((LabelCenter.X - Edge.BBox.Width / 2).ToInvariantString())"
+                x="@((LabelCenter.X - Edge.Bounds.Width / 2).ToInvariantString())"
                 y="@(LabelCenter.Y.ToInvariantString())" 
-                width="@Edge.BBox.Width.ToInvariantString()" 
+                width="@Edge.Bounds.Width.ToInvariantString()" 
                 height="@Constants.LabelHeight"
             >
                 <div>@Edge.Label</div>
@@ -31,7 +31,7 @@
 
     protected virtual IEdgeViewModel Edge => (IEdgeViewModel)this.Element;
 
-    protected virtual IPosition? LabelCenter { get; set; }
+    protected virtual IPositionable? LabelCenter { get; set; }
 
     protected override void OnParametersSet()
     {

@@ -16,7 +16,8 @@ using Microsoft.JSInterop;
 namespace Neuroglia.Blazor.Dagre.Models;
 
 /// <summary>
-/// Provides data structures for undirected and directed multi-graphs
+/// Provides data structures for undirected and directed multi-graphs.
+/// See https://github.com/dagrejs/graphlib
 /// </summary>
 public interface IGraphLib
     : IMetadata

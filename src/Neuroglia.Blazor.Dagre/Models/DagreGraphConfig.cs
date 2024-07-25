@@ -72,14 +72,10 @@ public class DagreGraphConfig
     public virtual string? Ranker { get; set; }
 
     /// <inheritdoc />
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Width { get; set; }
+    public virtual double Width { get; set; }
 
     /// <inheritdoc />
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Height { get; set; }
+    public virtual double Height { get; set; }
 
     /// <inheritdoc />
     [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
@@ -138,8 +134,8 @@ public class DagreGraphConfig
         this.MarginY = marginY;
         this.Acyclicer = acyclicer;
         this.Ranker = ranker;
-        this.Width = width;
-        this.Height = height;
+        this.Width = width ?? 0;
+        this.Height = height ?? 0;
         this.Label = label;
         this.Metadata = metadata;
     }

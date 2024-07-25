@@ -17,7 +17,7 @@ public class GraphLibNode
     : IGraphLibNode
 {
     /// <inheritdoc />
-    public virtual Guid Id { get; set; } = Guid.NewGuid();
+    public virtual string Id { get; set; } = Guid.NewGuid().ToString();
 
     /// <inheritdoc />
     [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
@@ -47,21 +47,13 @@ public class GraphLibNode
     [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public virtual string? Shape { get; set; }
 
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Width { get; set; }
+    public virtual double Width { get; set; }
 
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Height { get; set; }
+    public virtual double Height { get; set; }
 
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? X { get; set; }
+    public virtual double X { get; set; }
 
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual double? Y { get; set; }
+    public virtual double Y { get; set; }
 
     public GraphLibNode()
         : base()
