@@ -7,12 +7,12 @@
     @if (LabelCenter != null && !string.IsNullOrWhiteSpace(Edge.Label)) {
         <g class="edge-label label">
             <foreignObject 
-                x="@((LabelCenter.X - Edge.Bounds.Width / 2).ToInvariantString())"
+                x="@(LabelCenter.X.ToInvariantString())"
                 y="@(LabelCenter.Y.ToInvariantString())" 
                 width="@Edge.Bounds.Width.ToInvariantString()" 
-                height="@Constants.LabelHeight"
+                height="@Edge.Bounds.Height.ToInvariantString()"
             >
-                <div>@Edge.Label</div>
+                <div class="label-content">@Edge.Label</div>
             </foreignObject>
         </g>
     }
@@ -20,6 +20,10 @@
         @foreach(var point in Edge.Points)
         {
             <circle cx="@point.X" cy="@point.Y" r="1" fill="red" />
+        }
+        @if (Edge.Bounds != null)
+        {
+            <Rectangle Bounds="Edge.Bounds" />
         }
     }
 </g>
@@ -36,8 +40,9 @@
     protected override void OnParametersSet()
     {
         if (this.Edge.Points.Any()) {
-            var index = (int)Math.Ceiling((double)(this.Edge.Points.Count() / 2)) - 1;
-            this.LabelCenter = this.Edge.Points.ElementAt(index);
+            var middlePointIndex = (int)Math.Ceiling((double)(this.Edge.Points.Count() / 2)) - 1;
+            var middlePoint = this.Edge.Points.ElementAt(middlePointIndex);
+            this.LabelCenter = new Position(middlePoint.X - (this.Edge.Bounds.Width / 2), middlePoint.Y);
         }
     }
 

@@ -23,6 +23,9 @@ public interface IGraphElement
     /// <summary>
     /// Gets the type of the component used to represents the graph element
     /// </summary>
+    /// 
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
     Type? ComponentType { get; set; }
     /// <summary>
     /// The event fired whenever the graph element changes

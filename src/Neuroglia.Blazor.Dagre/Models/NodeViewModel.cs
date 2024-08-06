@@ -119,9 +119,9 @@ public class NodeViewModel
 
     BoundingBox _bounds = new();
     /// <inheritdoc/>
-    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
-    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public virtual BoundingBox? Bounds => this._bounds;
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public virtual BoundingBox Bounds => this._bounds;
 
     public NodeViewModel()
         : this("", null, null, Constants.NodeWidth, Constants.NodeHeight, Constants.NodeRadius, Constants.NodeRadius, 0, 0, null, null)
@@ -195,6 +195,9 @@ public class NodeViewModel
         this.OnChange();
     }
 
+    /// <summary>
+    /// Updates the bounding box
+    /// </summary>
     private void UpdateBounds()
     {
         this._bounds = this.Shape switch

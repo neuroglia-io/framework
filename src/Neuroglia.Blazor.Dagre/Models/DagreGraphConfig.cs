@@ -89,6 +89,16 @@ public class DagreGraphConfig
     [Newtonsoft.Json.JsonExtensionData]
     public virtual IDictionary<string, object>? Metadata { get; set; }
 
+    /// <inheritdoc />
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public virtual double EdgeLabelWidth { get; set; }
+
+    /// <inheritdoc />
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public virtual double EdgeLabelHeight { get; set; }
+
     public DagreGraphConfig() { }
 
     public DagreGraphConfig(IDagreGraphConfig? config = null)
@@ -105,7 +115,9 @@ public class DagreGraphConfig
               config?.Width,
               config?.Height,
               config?.Label,
-              config?.Metadata
+              config?.Metadata,
+              config?.EdgeLabelWidth,
+              config?.EdgeLabelHeight
         )
     {}
 
@@ -122,7 +134,9 @@ public class DagreGraphConfig
         double? width = null,
         double? height = null,
         string? label = null,
-        IDictionary<string, object>? metadata = null
+        IDictionary<string, object>? metadata = null,
+        double? edgeLabelWidth = null,
+        double? edgeLabelHeight = null
     )
     {
         this.Direction = direction;
@@ -138,5 +152,7 @@ public class DagreGraphConfig
         this.Height = height ?? 0;
         this.Label = label;
         this.Metadata = metadata;
+        this.EdgeLabelWidth = edgeLabelWidth ?? Constants.EdgeLabelWidth;
+        this.EdgeLabelHeight = edgeLabelHeight ?? Constants.EdgeLabelHeight;
     }
 }
