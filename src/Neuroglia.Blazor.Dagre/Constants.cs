@@ -31,6 +31,8 @@ public static class Constants
 
     public const double LabelHeight = 25;
 
+    public const double EdgeLabelWidth = 100;
+    public const double EdgeLabelHeight = 50;
     public const string EdgeEndArrowId = "end-arrow";
 
     public const decimal MinScale = 0.2M;

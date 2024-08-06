@@ -17,7 +17,7 @@ namespace Neuroglia.Blazor.Dagre.Models;
 /// Defines the fundamentals of a graph link view model
 /// </summary>
 public interface IEdgeViewModel
-    : IGraphElement
+    : IGraphElement, ISizeable
 {
     /// <summary>
     /// Gets/sets the id of the node at the beginning of the edge

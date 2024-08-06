@@ -26,8 +26,8 @@
         const svgBounds = graphElement.getBoundingClientRect();
         const graphBounds = graphElement.getBBox();
         return {
-            x: (svgBounds.width - graphBounds.width) / 2,
-            y: (svgBounds.height - graphBounds.height) / 2
+            x: ((svgBounds.width - graphBounds.width) / 2) - Math.min(graphBounds.x, 0),
+            y: ((svgBounds.height - graphBounds.height) / 2) - Math.min(graphBounds.y, 0)
         };
     }
     window.neuroglia.blazor.getScale = (graphElement) => {

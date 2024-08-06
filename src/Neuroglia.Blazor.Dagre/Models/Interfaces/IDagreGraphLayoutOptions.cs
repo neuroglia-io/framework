@@ -75,4 +75,24 @@ public interface IDagreGraphLayoutOptions
     /// Default: network-simplex
     /// </summary>
     string? Ranker { get; set; }
+
+    /// <summary>
+    /// Represents the default edge label width
+    /// 
+    /// Default: 100
+    /// </summary>
+    /// <remarks>
+    /// This is specific to Neuroglia.Blazor.Dagre
+    /// </remarks>
+    double EdgeLabelWidth { get; set; }
+
+    /// <summary>
+    /// Represents the default edge label height
+    /// 
+    /// Default: 50
+    /// </summary>
+    /// <remarks>
+    /// This is specific to Neuroglia.Blazor.Dagre
+    /// </remarks>
+    double EdgeLabelHeight { get; set; }
 }

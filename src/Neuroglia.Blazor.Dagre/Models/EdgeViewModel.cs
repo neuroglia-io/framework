@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Newtonsoft.Json.Linq;
+
 namespace Neuroglia.Blazor.Dagre.Models;
 
 public class EdgeViewModel(string sourceId, string targetId, string? label = null, string? cssClass = null, string? shape = null, IEnumerable<IPositionable>? points = null, Type? componentType = null)
@@ -24,20 +26,37 @@ public class EdgeViewModel(string sourceId, string targetId, string? label = nul
 
     private IEnumerable<IPositionable> _points = points ?? [];
     /// <inheritdoc/>
-    public virtual IEnumerable<IPositionable> Points { 
-        get => this._points; 
+    public virtual IEnumerable<IPositionable> Points
+    {
+        get => this._points;
         set
         {
-            this._points = [..value];
-            var minX = this.Points.Min(p => p.X);
-            var maxX = this.Points.Max(p => p.X);
-            var minY = this.Points.Min(p => p.Y);
-            var maxY = this.Points.Max(p => p.Y);
-            var width = maxX - minX;
-            var height = maxY - minY;
-            var x = minX + width / 2;
-            var y = minY + height / 2;
-            this.Bounds = new BoundingBox(width, height, x, y);
+            this._points = [.. value];
+            this.UpdateBounds();
+        }
+    }
+
+    double _width = Constants.EdgeLabelWidth;
+    /// <inheritdoc/>
+    public virtual double Width
+    {
+        get => this._width;
+        set
+        {
+            this._width = value;
+            this.UpdateBounds();
+        }
+    }
+
+    double _height = Constants.EdgeLabelHeight;
+    /// <inheritdoc/>
+    public virtual double Height
+    {
+        get => this._height;
+        set
+        {
+            this._height = value;
+            this.UpdateBounds();
         }
     }
 
@@ -61,6 +80,17 @@ public class EdgeViewModel(string sourceId, string targetId, string? label = nul
     /// <inheritdoc/>
     public virtual string? EndMarkerId { get; set; } = Constants.EdgeEndArrowId;
 
+    BoundingBox _bounds = new BoundingBox(Constants.EdgeLabelWidth, Constants.EdgeLabelHeight);
     /// <inheritdoc/>
-    public virtual BoundingBox Bounds { get; set; } = new BoundingBox();
+    [System.Text.Json.Serialization.JsonIgnore]
+    [Newtonsoft.Json.JsonIgnore]
+    public virtual BoundingBox Bounds => this._bounds;
+
+    private void UpdateBounds()
+    {
+        var minX = this.Points.Min(p => p.X);
+        var maxX = this.Points.Max(p => p.X);
+        this._bounds = new BoundingBox(this.Width, this.Height, minX, maxX);
+        this.OnChange();
+    }
 }
