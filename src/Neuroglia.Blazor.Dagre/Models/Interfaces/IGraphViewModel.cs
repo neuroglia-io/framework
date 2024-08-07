@@ -100,7 +100,7 @@ public interface IGraphViewModel
     /// <summary>
     /// Occurs when the graph view model changes
     /// </summary>
-    event Action? Changed;
+    event EventHandler? Changed;
 
     /// <summary>
     /// Registers a component type associated with a node type

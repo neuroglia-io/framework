@@ -19,11 +19,11 @@ namespace Neuroglia.Blazor.Dagre.Behaviors;
 internal class MoveNodeBehavior
     : GraphBehavior
 {
-    protected double _previousX = 0;
-    protected double _previousY = 0;
-    protected double _movementX = 0;
-    protected double _movementY = 0;
-    protected INodeViewModel? _target = null;
+    double _previousX = 0;
+    double _previousY = 0;
+    double _movementX = 0;
+    double _movementY = 0;
+    INodeViewModel? _target = null;
 
     public MoveNodeBehavior(IGraphViewModel graph)
         : base(graph)

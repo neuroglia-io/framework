@@ -12,7 +12,7 @@
                 width="@Edge.Bounds.Width.ToInvariantString()" 
                 height="@Edge.Bounds.Height.ToInvariantString()"
             >
-                <div class="label-content">@Edge.Label</div>
+                <div title="@Edge.Label" class="label-content">@Edge.Label</div>
             </foreignObject>
         </g>
     }
@@ -40,9 +40,12 @@
     protected override void OnParametersSet()
     {
         if (this.Edge.Points.Any()) {
-            var middlePointIndex = (int)Math.Ceiling((double)(this.Edge.Points.Count() / 2)) - 1;
+            var middlePointIndex = (int)Math.Ceiling((double)this.Edge.Points.Count() / 2d) - 1;
             var middlePoint = this.Edge.Points.ElementAt(middlePointIndex);
-            this.LabelCenter = new Position(middlePoint.X - (this.Edge.Bounds.Width / 2), middlePoint.Y);
+            this.LabelCenter = new Position(
+                middlePoint.X - (this.Edge.Bounds.Width / 2), 
+                middlePoint.Y - (this.Edge.Bounds.Height / 2)
+            );
         }
     }
 

@@ -30,5 +30,5 @@ public interface IGraphElement
     /// <summary>
     /// The event fired whenever the graph element changes
     /// </summary>
-    event Action? Changed;
+    event EventHandler? Changed;
 }

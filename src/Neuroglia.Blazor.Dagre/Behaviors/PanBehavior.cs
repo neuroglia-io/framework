@@ -20,11 +20,11 @@ internal class PanBehavior
     : GraphBehavior
 {
 
-    protected bool _enableMovement = false;
-    protected double _previousX = 0;
-    protected double _previousY = 0;
-    protected double _movementX = 0;
-    protected double _movementY = 0;
+    bool _enableMovement = false;
+    double _previousX = 0;
+    double _previousY = 0;
+    double _movementX = 0;
+    double _movementY = 0;
 
     public PanBehavior(IGraphViewModel graph)
         : base(graph)

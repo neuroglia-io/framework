@@ -43,5 +43,5 @@ public interface IClusterViewModel
     /// <summary>
     /// Occurs when a child node is added to the cluster.
     /// </summary>
-    event Action<INodeViewModel>? ChildAdded;
+    event EventHandler<INodeViewModel>? ChildAdded;
 }
