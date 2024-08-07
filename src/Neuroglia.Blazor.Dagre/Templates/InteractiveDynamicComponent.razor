@@ -26,10 +26,10 @@
     IDictionary<string, object>? parameters;
     [Parameter] public virtual IDictionary<string, object> Parameters { get; set; } = null!;
 
-    protected ElementReference elementReference;
-    protected bool isDirty = false;
-    protected ProfilingTimer? profilingTimer;
-    protected bool enableProfiling
+    ElementReference elementReference;
+    bool isDirty = false;
+    ProfilingTimer? profilingTimer;
+    protected bool EnableProfiling
     {
         get => this.Graph?.EnableProfiling ?? false;
         set
@@ -64,7 +64,7 @@
             this.type = this.Type;
             this.isDirty = true;
         }
-        if (this.enableProfiling) this.CreateProfilingTimer();
+        if (this.EnableProfiling) this.CreateProfilingTimer();
         this.profilingTimer?.Start();
     }
 
@@ -98,7 +98,7 @@
     {
         if (!this.disposed)
         {
-            if (this.enableProfiling && this.profilingTimer != null)
+            if (this.EnableProfiling && this.profilingTimer != null)
             {
                 this.profilingTimer.Dispose();
             }

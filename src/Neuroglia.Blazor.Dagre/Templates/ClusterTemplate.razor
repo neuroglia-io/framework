@@ -23,7 +23,7 @@
                 width="@Cluster.Bounds!.Width.ToInvariantString()" 
                 height="@Constants.LabelHeight"
             >
-                <div>@Cluster.Label</div>
+                <div title="@Cluster.Label">@Cluster.Label</div>
             </foreignObject>
         </g>
     }
@@ -78,7 +78,7 @@
         this.profilingTimer?.Start();
     }
 
-    protected void TriggerRender()
+    protected void TriggerRender(object? sender, EventArgs e)
     {
         this.profilingTimer?.Start();
         this.isDirty = true;

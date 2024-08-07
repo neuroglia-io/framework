@@ -90,50 +90,50 @@ public class GraphViewModel
     /// <summary>
     /// The first level graph nodes (direct children)
     /// </summary>
-    protected readonly Dictionary<string, INodeViewModel> nodes;
+    readonly Dictionary<string, INodeViewModel> _nodes;
     /// <inheritdoc/>
-    public virtual IReadOnlyDictionary<string, INodeViewModel> Nodes => this.nodes;
+    public virtual IReadOnlyDictionary<string, INodeViewModel> Nodes => this._nodes;
 
     /// <summary>
     /// The flattened graph nodes (nested children)
     /// </summary>
-    protected readonly Dictionary<string, INodeViewModel> allNodes;
+    readonly Dictionary<string, INodeViewModel> _allNodes;
     /// <inheritdoc/>
-    public virtual IReadOnlyDictionary<string, INodeViewModel> AllNodes => this.allNodes;
+    public virtual IReadOnlyDictionary<string, INodeViewModel> AllNodes => this._allNodes;
 
     /// <summary>
     /// The graph edges
     /// </summary>
-    protected readonly Dictionary<string, IEdgeViewModel> edges;
+    readonly Dictionary<string, IEdgeViewModel> _edges;
     /// <inheritdoc/>
-    public virtual IReadOnlyDictionary<string, IEdgeViewModel> Edges => this.edges;
+    public virtual IReadOnlyDictionary<string, IEdgeViewModel> Edges => this._edges;
 
     /// <summary>
     /// The first level graph clusters (direct children)
     /// </summary>
-    protected readonly Dictionary<string, IClusterViewModel> clusters;
+    readonly Dictionary<string, IClusterViewModel> _clusters;
     /// <inheritdoc/>
-    public virtual IReadOnlyDictionary<string, IClusterViewModel> Clusters => this.clusters;
+    public virtual IReadOnlyDictionary<string, IClusterViewModel> Clusters => this._clusters;
 
     /// <summary>
     /// The flattened graph clusters (nested children)
     /// </summary>
-    protected readonly Dictionary<string, IClusterViewModel> allClusters;
+    readonly Dictionary<string, IClusterViewModel> _allClusters;
     /// <inheritdoc/>
-    public virtual IReadOnlyDictionary<string, IClusterViewModel> AllClusters => this.allClusters;
+    public virtual IReadOnlyDictionary<string, IClusterViewModel> AllClusters => this._allClusters;
 
-    protected readonly Collection<Type> referenceableComponentTypes;
+    readonly Collection<Type> _referenceableComponentTypes;
     /// <inheritdoc/>
-    public virtual IReadOnlyCollection<Type> ReferenceableComponentTypes => this.referenceableComponentTypes;
+    public virtual IReadOnlyCollection<Type> ReferenceableComponentTypes => this._referenceableComponentTypes;
 
-    protected bool enableProfiling = false;
+    bool _enableProfiling = false;
     /// <inheritdoc/>
     public virtual bool EnableProfiling
     {
-        get => this.enableProfiling;
+        get => this._enableProfiling;
         set
         {
-            this.enableProfiling = value;
+            this._enableProfiling = value;
             this.OnChange();
         }
     }
@@ -141,16 +141,16 @@ public class GraphViewModel
     /// <summary>
     /// The map of node type and their component type
     /// </summary>
-    protected readonly Dictionary<Type, Type> components;
+    readonly Dictionary<Type, Type> _components;
 
-    readonly Type defaultNodeComponentType = typeof(NodeTemplate);
-    protected virtual Type DefaultNodeComponentType => this.defaultNodeComponentType;
+    readonly Type _defaultNodeComponentType = typeof(NodeTemplate);
+    protected virtual Type DefaultNodeComponentType => this._defaultNodeComponentType;
 
-    readonly Type defaultClusterComponentType = typeof(ClusterTemplate);
-    protected virtual Type DefaultClusterComponentType => this.defaultClusterComponentType;
+    readonly Type _defaultClusterComponentType = typeof(ClusterTemplate);
+    protected virtual Type DefaultClusterComponentType => this._defaultClusterComponentType;
 
-    readonly Type defaultEdgeComponentType = typeof(EdgeTemplate);
-    protected virtual Type DefaultEdgeComponentType => this.defaultEdgeComponentType;
+    readonly Type _defaultEdgeComponentType = typeof(EdgeTemplate);
+    protected virtual Type DefaultEdgeComponentType => this._defaultEdgeComponentType;
 
     readonly Dictionary<Type, GraphBehavior> _behaviors;
 
@@ -186,34 +186,34 @@ public class GraphViewModel
     )
         : base(label, cssClass, componentType)
     {
-        this.nodes = nodes ?? [];
-        this.edges = edges ?? []; ;
-        this.clusters = clusters ?? [];
-        this.referenceableComponentTypes = referenceableComponentTypes ?? [typeof(ArrowDefinitionTemplate)];
+        this._nodes = nodes ?? [];
+        this._edges = edges ?? []; ;
+        this._clusters = clusters ?? [];
+        this._referenceableComponentTypes = referenceableComponentTypes ?? [typeof(ArrowDefinitionTemplate)];
         this.Scale = 1;
         this.X = 0;
         this.Y = 0;
         this.Width = width;
         this.Height = height;
-        this.components = [];
-        this.allNodes = [];
-        this.allClusters = [];
+        this._components = [];
+        this._allNodes = [];
+        this._allClusters = [];
         this._behaviors = [];
         this.EnableProfiling = enableProfiling;
         // this.RegisterBehavior(new DebugEventsBehavior(this));
         this.RegisterBehavior(new ZoomBehavior(this));
         this.RegisterBehavior(new PanBehavior(this));
         // this.RegisterBehavior(new MoveNodeBehavior(this));
-        foreach (var node in this.nodes.Values)
+        foreach (var node in this._nodes.Values)
         {
             if (node == null) continue;
-            this.allNodes.Add(node.Id, node);
+            this._allNodes.Add(node.Id, node);
         }
-        foreach (var cluster in this.clusters.Values)
+        foreach (var cluster in this._clusters.Values)
         {
             if (cluster == null)  continue;
             cluster.ChildAdded += this.OnChildAdded;
-            this.allClusters.Add(cluster.Id, cluster);
+            this._allClusters.Add(cluster.Id, cluster);
             this.Flatten(cluster);
         }
     }
@@ -263,8 +263,8 @@ public class GraphViewModel
     public virtual IClusterViewModel AddCluster(IClusterViewModel cluster)
     {
         ArgumentNullException.ThrowIfNull(cluster);
-        this.clusters.Add(cluster.Id, cluster);
-        this.allClusters.Add(cluster.Id, cluster);
+        this._clusters.Add(cluster.Id, cluster);
+        this._allClusters.Add(cluster.Id, cluster);
         cluster.ChildAdded += this.OnChildAdded;
         this.Flatten(cluster);
         this.OnChange();
@@ -284,8 +284,8 @@ public class GraphViewModel
         {
             return this.AddCluster(cluster);
         }
-        this.nodes.Add(node.Id, node);
-        this.allNodes.Add(node.Id, node);
+        this._nodes.Add(node.Id, node);
+        this._allNodes.Add(node.Id, node);
         this.OnChange();
         return node;
     }
@@ -299,7 +299,7 @@ public class GraphViewModel
     public virtual IEdgeViewModel AddEdge(IEdgeViewModel edge)
     {
         ArgumentNullException.ThrowIfNull(edge);
-        this.edges.Add(edge.Id, edge);
+        this._edges.Add(edge.Id, edge);
         this.OnChange();
         return edge;
     }
@@ -326,11 +326,11 @@ public class GraphViewModel
         {
             throw new ArgumentNullException(nameof(TComponent));
         }
-        if (this.components.ContainsKey(elementType))
+        if (this._components.ContainsKey(elementType))
         {
             throw new ArgumentException("An element with the same key already exists in the dictionary.");
         }
-        this.components.Add(elementType, componentType);
+        this._components.Add(elementType, componentType);
     }
 
     /// <summary>
@@ -344,7 +344,7 @@ public class GraphViewModel
     {
         if (element.ComponentType != null) return element.ComponentType;
         var elementType = element.GetType();
-        if (components.TryGetValue(elementType, out Type? value))  return value;
+        if (_components.TryGetValue(elementType, out Type? value))  return value;
         if (element is IClusterViewModel) return this.DefaultClusterComponentType;
         if (element is IEdgeViewModel) return this.DefaultEdgeComponentType;
         return this.DefaultNodeComponentType;
@@ -359,12 +359,12 @@ public class GraphViewModel
         foreach (var subClusters in cluster.AllClusters.Values)
         {
             if (subClusters == null) continue;
-            this.allClusters.Add(subClusters.Id, subClusters);
+            this._allClusters.Add(subClusters.Id, subClusters);
         }
         foreach (var subNode in cluster.AllNodes.Values)
         {
             if (subNode == null) continue;
-            this.allNodes.Add(subNode.Id, subNode);
+            this._allNodes.Add(subNode.Id, subNode);
         }
     }
 
@@ -430,16 +430,16 @@ public class GraphViewModel
     }
 
     /// <inheritdoc/>
-    public virtual void OnChildAdded(INodeViewModel child)
+    public virtual void OnChildAdded(object? sender, INodeViewModel child)
     {
         if (child is IClusterViewModel cluster)
         {
-            this.allClusters.Add(cluster.Id, cluster);
+            this._allClusters.Add(cluster.Id, cluster);
             this.Flatten(cluster);
         }
         else if (child is INodeViewModel node)
         {
-            this.allNodes.Add(node.Id, node);
+            this._allNodes.Add(node.Id, node);
         }
         this.OnChange();
     }

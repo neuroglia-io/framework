@@ -111,10 +111,10 @@
 
     [Parameter] public EventCallback<GraphEventArgs<WheelEventArgs>> OnWheel { get; set; }
 
-    protected ElementReference graphReference;
-    protected bool isDirty = false;
-    protected ProfilingTimer? profilingTimer;
-    protected bool enableProfiling
+    ElementReference graphReference;
+    bool isDirty = false;
+    ProfilingTimer? profilingTimer;
+    protected bool EnableProfiling
     {
         get => this.graph?.EnableProfiling ?? false;
         set
@@ -137,7 +137,7 @@
         if (this.Graph != null && this.graph != this.Graph)
         {
             this.graph = this.Graph;
-            if (this.enableProfiling) this.CreateProfilingTimer();
+            if (this.EnableProfiling) this.CreateProfilingTimer();
             this.RemoveHandlers();
             this.graph.Changed += this.TriggerRender;
             this.graph.MouseEnter += this.InvokeMouseEnter;
@@ -168,7 +168,7 @@
         
     }
 
-    protected void TriggerRender()
+    protected void TriggerRender(object? sender, EventArgs e)
     {
         this.profilingTimer?.Start();
         this.isDirty = true;
@@ -224,7 +224,7 @@
         if (this.graph != null)
         {
             await this.DagreService.ComputePositionsAsync(this.graph, this.Options);
-            this.TriggerRender();
+            this.TriggerRender(this, new());
             await this.ZoomToFit();
         }
     }
@@ -250,7 +250,7 @@
         if (this.graph == null) 
             return;
         this.graph.Scale = Math.Clamp(await this.JSRuntime.InvokeAsync<decimal>("neuroglia.blazor.getScale", this.graphReference), Constants.MinScale, Constants.MaxScale);
-        this.TriggerRender();
+        this.TriggerRender(this, new());
         await this.Center();
     }
 
@@ -305,7 +305,7 @@
         if (!this.disposed)
         {
             this.RemoveHandlers();
-            if (this.enableProfiling && this.profilingTimer != null)
+            if (this.EnableProfiling && this.profilingTimer != null)
             {
                 this.profilingTimer.Dispose();
             }

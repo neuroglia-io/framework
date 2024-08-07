@@ -19,36 +19,24 @@ namespace Neuroglia.Blazor.Dagre.Models;
 public class ClusterViewModel
     : NodeViewModel, IClusterViewModel
 {
-    protected readonly Dictionary<string, INodeViewModel> _children;
+    readonly Dictionary<string, INodeViewModel> _children;
     /// <inheritdoc/>
     public virtual IReadOnlyDictionary<string, INodeViewModel> Children => this._children;
 
-    protected readonly Dictionary<string, INodeViewModel> _allNodes;
+    readonly Dictionary<string, INodeViewModel> _allNodes;
     /// <inheritdoc/>
     public virtual IReadOnlyDictionary<string, INodeViewModel> AllNodes => this._allNodes;
 
-    protected readonly Dictionary<string, IClusterViewModel> _allClusters;
+    readonly Dictionary<string, IClusterViewModel> _allClusters;
     /// <inheritdoc/>
     public virtual IReadOnlyDictionary<string, IClusterViewModel> AllClusters => this._allClusters;
 
     /// <inheritdoc/>
-    public event Action<INodeViewModel>? ChildAdded;
+    public event EventHandler<INodeViewModel>? ChildAdded;
 
     /// <summary>
     /// Initializes a new <see cref="ClusterViewModel"/>
     /// </summary>
-    /// <param name="children"></param>
-    /// <param name="label"></param>
-    /// <param name="cssClass"></param>
-    /// <param name="shape"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="radiusX"></param>
-    /// <param name="radiusY"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="componentType"></param>
-    /// <param name="parentId"></param>
     public ClusterViewModel(
         Dictionary<string, INodeViewModel>? children = null,
         string? label = "",
@@ -109,16 +97,13 @@ public class ClusterViewModel
     /// <summary>
     /// Adds the provided <see cref="INodeViewModel"/> to the cluster
     /// </summary>
-    /// <param name="node"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
     public virtual void AddChild(INodeViewModel node)
     {
         ArgumentNullException.ThrowIfNull(node);
         node.ParentId = this.Id;
         node.Changed += OnChildChanged;
         this._children.Add(node.Id, node);
-        this.ChildAdded?.Invoke(node);
+        this.ChildAdded?.Invoke(this, node);
         if (node is IClusterViewModel cluster)
         {
             this._allClusters.Add(cluster.Id, cluster);
@@ -156,7 +141,7 @@ public class ClusterViewModel
     /// <summary>
     /// Handles changes to the cluster's children
     /// </summary>
-    protected virtual void OnChildChanged()
+    protected virtual void OnChildChanged(object? sender, EventArgs e)
     {
         var minX = this.Children.Values.Select(node => node.X - node.Width / 2).Min();
         var maxX = this.Children.Values.Select(node => node.X + node.Width / 2).Max();

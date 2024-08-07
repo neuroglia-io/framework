@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Newtonsoft.Json.Linq;
-
 namespace Neuroglia.Blazor.Dagre.Models;
 
 public class EdgeViewModel(string sourceId, string targetId, string? label = null, string? cssClass = null, string? shape = null, IEnumerable<IPositionable>? points = null, Type? componentType = null)
@@ -24,7 +22,7 @@ public class EdgeViewModel(string sourceId, string targetId, string? label = nul
     /// <inheritdoc/>
     public virtual string TargetId { get; set; } = targetId;
 
-    private IEnumerable<IPositionable> _points = points ?? [];
+    IEnumerable<IPositionable> _points = points ?? [];
     /// <inheritdoc/>
     public virtual IEnumerable<IPositionable> Points
     {
@@ -86,6 +84,9 @@ public class EdgeViewModel(string sourceId, string targetId, string? label = nul
     [Newtonsoft.Json.JsonIgnore]
     public virtual BoundingBox Bounds => this._bounds;
 
+    /// <summary>
+    /// Updates the bounding box
+    /// </summary>
     private void UpdateBounds()
     {
         var minX = this.Points.Min(p => p.X);

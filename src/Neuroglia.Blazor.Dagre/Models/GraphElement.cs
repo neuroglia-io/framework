@@ -25,7 +25,7 @@ public abstract class GraphElement
     /// <summary>
     /// Stores the element's label
     /// </summary>
-    protected string? _label;
+    string? _label;
     /// <inheritdoc />
     [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -42,7 +42,7 @@ public abstract class GraphElement
     /// <summary>
     /// Stores the element's component type
     /// </summary>
-    protected Type? _componentType;
+    Type? _componentType;
     /// <inheritdoc />
     [System.Text.Json.Serialization.JsonIgnore]
     [Newtonsoft.Json.JsonIgnore]
@@ -59,7 +59,7 @@ public abstract class GraphElement
     /// <summary>
     /// Stores the element's css class
     /// </summary>
-    protected string? _cssClass;
+    string? _cssClass;
     /// <inheritdoc />
     [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -77,7 +77,7 @@ public abstract class GraphElement
     /// <summary>
     /// Stores the element's metadata
     /// </summary>
-    protected IDictionary<string, object>? _metadata = null;
+    IDictionary<string, object>? _metadata = null;
     /// <inheritdoc />
     [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     [System.Text.Json.Serialization.JsonExtensionData]
@@ -96,7 +96,7 @@ public abstract class GraphElement
     /// <summary>
     /// The action tiggered when a property changes
     /// </summary>
-    public event Action? Changed;
+    public event EventHandler? Changed;
 
     /// <summary>
     /// Constructs a new <see cref="GraphElement"/>
@@ -119,6 +119,6 @@ public abstract class GraphElement
     /// <summary>
     /// Invokes the change action
     /// </summary>
-    protected virtual void OnChange() => this.Changed?.Invoke();
+    protected virtual void OnChange() => this.Changed?.Invoke(this, new());
 
 }
