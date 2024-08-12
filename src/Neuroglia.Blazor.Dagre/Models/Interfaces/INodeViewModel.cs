@@ -36,11 +36,11 @@ public interface INodeViewModel
     /// <summary>
     /// Sets the <see cref="INodeViewModel"/>'s <see cref="BoundingBox"/> using measurments
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    void SetBounds(double x, double y, double width, double height);
+    /// <param name="width">The width</param>
+    /// <param name="height">The height</param>
+    /// <param name="x">The horizontal position</param>
+    /// <param name="y">The vertical position</param>
+    void SetBounds(double width, double height, double x, double y);
 
     /// <summary>
     /// Moves the node

@@ -39,14 +39,10 @@
 
     protected override void OnParametersSet()
     {
-        if (this.Edge.Points.Any()) {
-            var middlePointIndex = (int)Math.Ceiling((double)this.Edge.Points.Count() / 2d) - 1;
-            var middlePoint = this.Edge.Points.ElementAt(middlePointIndex);
-            this.LabelCenter = new Position(
-                middlePoint.X - (this.Edge.Bounds.Width / 2), 
-                middlePoint.Y - (this.Edge.Bounds.Height / 2)
-            );
-        }
+        this.LabelCenter = new Position(
+            this.Edge.X - (this.Edge.Width / 2),
+            this.Edge.Y - (this.Edge.Height / 2)
+        );
     }
 
     protected virtual string GetPath(IEdgeViewModel edge)

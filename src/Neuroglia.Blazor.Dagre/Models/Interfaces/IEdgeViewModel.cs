@@ -17,7 +17,7 @@ namespace Neuroglia.Blazor.Dagre.Models;
 /// Defines the fundamentals of a graph link view model
 /// </summary>
 public interface IEdgeViewModel
-    : IGraphElement, ISizeable
+    : IGraphElement, ISizeable, IPositionable
 {
     /// <summary>
     /// Gets/sets the id of the node at the beginning of the edge
@@ -63,4 +63,14 @@ public interface IEdgeViewModel
     /// Gets/sets the id of the marker used at the target end of the <see cref="IEdgeViewModel"/>
     /// </summary>
     string? EndMarkerId { get; set; }
+
+    /// <summary>
+    /// Sets the <see cref="IEdgeViewModel"/>'s measurments
+    /// </summary>
+    /// <param name="points">The edge's points</param>
+    /// <param name="width">The width</param>
+    /// <param name="height">The height</param>
+    /// <param name="x">The label center horizontal position</param>
+    /// <param name="y">The label center vertical position</param>
+    void SetBounds(IEnumerable<IPositionable> points, double width, double height, double x, double y);
 }

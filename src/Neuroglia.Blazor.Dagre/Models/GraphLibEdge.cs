@@ -44,4 +44,14 @@ public class GraphLibEdge
     [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public virtual Position[]? Points { get; set; }
     IPositionable[]? IGraphLibEdge.Points { get => this.Points; set => this.Points = value?.OfType<Position>()?.ToArray(); }
+
+    /// <inheritdoc />
+    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public virtual double? X { get; set; }
+
+    /// <inheritdoc />
+    [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
+    [Newtonsoft.Json.JsonProperty(NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public virtual double? Y { get; set; }
 }
