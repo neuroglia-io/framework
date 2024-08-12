@@ -34,6 +34,30 @@ public class EdgeViewModel(string sourceId, string targetId, string? label = nul
         }
     }
 
+    double _x = 0;
+    /// <inheritdoc/>
+    public virtual double X
+    {
+        get => this._x;
+        set
+        {
+            this._x = value;
+            this.OnChange();
+        }
+    }
+
+    double _y = 0;
+    /// <inheritdoc/>
+    public virtual double Y
+    {
+        get => this._y;
+        set
+        {
+            this._y = value;
+            this.OnChange();
+        }
+    }
+
     double _width = Constants.EdgeLabelWidth;
     /// <inheritdoc/>
     public virtual double Width
@@ -84,14 +108,38 @@ public class EdgeViewModel(string sourceId, string targetId, string? label = nul
     [Newtonsoft.Json.JsonIgnore]
     public virtual BoundingBox Bounds => this._bounds;
 
+    /// <inheritdoc/>
+    public virtual void SetBounds(IEnumerable<IPositionable> points, double width = 0, double height = 0, double x = 0, double y = 0)
+    {
+        this._points = points;
+        this._x = x;
+        this._y = y;
+        this._width = width;
+        this._height = height;
+        this.UpdateBounds();
+    }
+
     /// <summary>
     /// Updates the bounding box
     /// </summary>
     private void UpdateBounds()
     {
-        var minX = this.Points.Min(p => p.X);
-        var maxX = this.Points.Max(p => p.X);
-        this._bounds = new BoundingBox(this.Width, this.Height, minX, maxX);
+        var minX = 0d;
+        var maxX = 0d;
+        var minY = 0d;
+        var maxY = 0d;
+        if (this.Points.Any())
+        {
+            minX = this.Points.Min(p => p.X);
+            maxX = this.Points.Max(p => p.X);
+            minY = this.Points.Min(p => p.Y);
+            maxY = this.Points.Max(p => p.Y);
+        }
+        var width = maxX - minX;
+        var height = maxY - minY;
+        var x = minX + width;
+        var y = minY + height;
+        this._bounds = new BoundingBox(Math.Max(width, 1), Math.Max(height, 1), minX, minY);
         this.OnChange();
     }
 }

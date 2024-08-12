@@ -39,4 +39,14 @@ public interface IGraphLibEdge
     /// </summary>
     IPositionable[]? Points { get; set; }
 
+    /// <summary>
+    /// Gets/sets the edge label center's horizontal position
+    /// </summary>
+    double? X { get; set; }
+
+    /// <summary>
+    /// Gets/sets the edge label center's vertical position
+    /// </summary>
+    double? Y { get; set; }
+
 }

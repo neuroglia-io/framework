@@ -24,21 +24,16 @@ namespace Neuroglia.Blazor.Dagre;
 /// Creates a new instance of DagreService
 /// </remarks>
 /// <param name="jSRuntime"></param>
-public class DagreService(IJSRuntime jSRuntime)
-    : IDagreService
+public class GraphLayoutService(IJSRuntime jSRuntime)
+    : IGraphLayoutService
 {
     /// <summary>
     /// The JS Runtime instance
     /// </summary>
     readonly IJSRuntime _jsRuntime = jSRuntime;
 
-    /// <summary>
-    /// Computes the nodes and edges position of the provided <see cref="IGraphViewModel"/>
-    /// </summary>
-    /// <param name="graphViewModel"></param>
-    /// <param name="options"></param>
-    /// <returns>The updated <see cref="IGraphViewModel"/></returns>
-    public virtual async Task<IGraphViewModel> ComputePositionsAsync(IGraphViewModel graphViewModel, IDagreGraphOptions? options = null)
+    /// <inheritdoc/>
+    public virtual async Task<IGraphViewModel> ComputeLayoutAsync(IGraphViewModel graphViewModel, IDagreGraphOptions? options = null)
     {
         ProfilingTimer? profilingTimer = null;
         if (graphViewModel.EnableProfiling)
@@ -46,8 +41,8 @@ public class DagreService(IJSRuntime jSRuntime)
             profilingTimer = new("ComputePositionsAsync");
             profilingTimer.Start();
         }
-        // build the dagre/graphlib graph
-        var graph = await this.GraphAsync(options);
+        // create a dagre/graphlib graph instance
+        var graph = await this.CreateGraphAsync(options);
         var nodes = graphViewModel.AllNodes.Values.Concat(graphViewModel.AllClusters.Values);
         foreach (var node in nodes)
         {
@@ -64,14 +59,15 @@ public class DagreService(IJSRuntime jSRuntime)
         foreach (var node in nodes)
         {
             var graphNode = await graph.NodeAsync(node.Id);
-            node.SetBounds(graphNode.X, graphNode.Y, graphNode.Width, graphNode.Height);
+            node.SetBounds(graphNode.Width, graphNode.Height, graphNode.X, graphNode.Y);
         }
         foreach (var edge in graphViewModel.Edges.Values)
         {
             GraphLibEdge graphEdge;
             if (options?.Multigraph == true)  graphEdge = await graph.EdgeAsync(edge.SourceId, edge.TargetId, edge.Id);
             else graphEdge = await graph.EdgeAsync(edge.SourceId, edge.TargetId);
-            if (graphEdge?.Points != null) edge.Points = [.. graphEdge.Points];
+            //if (graphEdge?.Points != null) edge.Points = [.. graphEdge.Points];
+            edge.SetBounds(graphEdge.Points ?? [], edge.Width, edge.Height, graphEdge.X ?? edge.X, graphEdge.Y ?? edge.Y);
         }
         graphViewModel.DagreGraph = graph;
         if (profilingTimer != null)
@@ -90,7 +86,7 @@ public class DagreService(IJSRuntime jSRuntime)
     /// </summary>
     /// <param name="options"></param>
     /// <returns></returns>
-    public virtual async Task<IGraphLib> GraphAsync(IDagreGraphOptions? options = null)
+    async Task<IGraphLib> CreateGraphAsync(IDagreGraphOptions? options = null)
     {
         var graphLibOptions = new GraphLibOptions(options);
         graphLibOptions.Multigraph ??= true;
@@ -108,7 +104,7 @@ public class DagreService(IJSRuntime jSRuntime)
     /// </summary>
     /// <param name="graph"></param>
     /// <returns></returns>
-    public virtual async Task<IGraphLib?> LayoutAsync(IGraphLib graph) => await this._jsRuntime.InvokeAsync<IJSObjectReference>("neuroglia.blazor.dagre.layout", await graph.InstanceAsync()) as IGraphLib;
+    async Task<IGraphLib?> LayoutAsync(IGraphLib graph) => await this._jsRuntime.InvokeAsync<IJSObjectReference>("neuroglia.blazor.dagre.layout", await graph.InstanceAsync()) as IGraphLib;
     
     /// <inheritdoc/>
     public virtual async Task<string> SerializeAsync(IGraphLib graph) => await this._jsRuntime.InvokeAsync<string>("neuroglia.blazor.dagre.write", await graph.InstanceAsync());

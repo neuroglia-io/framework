@@ -151,6 +151,6 @@ public class ClusterViewModel
         var y = (minY + maxY) / 2;
         var width = maxX - minX + Constants.ClusterPaddingX;
         var height = maxY - minY + Constants.ClusterPaddingY;
-        this.SetBounds(x, y, width, height);
+        this.SetBounds(width, height, x, y);
     }
 }

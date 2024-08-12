@@ -15,10 +15,17 @@ using Neuroglia.Blazor.Dagre.Models;
 
 namespace Neuroglia.Blazor.Dagre;
 
-public interface IDagreService
+/// <summary>
+/// Represents the service used to compute the graph layout
+/// </summary>
+public interface IGraphLayoutService
     : IGraphLibJsonConverter
 {
-    Task<IGraphViewModel> ComputePositionsAsync(IGraphViewModel graphViewModel, IDagreGraphOptions? options = null);
-    Task<IGraphLib> GraphAsync(IDagreGraphOptions? options = null);
-    Task<IGraphLib?> LayoutAsync(IGraphLib graph);
+    /// <summary>
+    /// Computes the nodes and egdes positions
+    /// </summary>
+    /// <param name="graphViewModel">The graph to compute the layout of</param>
+    /// <param name="options">The Drage options</param>
+    /// <returns>The computed graph</returns>
+    Task<IGraphViewModel> ComputeLayoutAsync(IGraphViewModel graphViewModel, IDagreGraphOptions? options = null);
 }

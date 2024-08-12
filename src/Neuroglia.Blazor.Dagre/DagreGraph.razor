@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
-@inject IDagreService DagreService
+@inject IGraphLayoutService GraphLayoutService
 @inject IJSRuntime JSRuntime
 @implements IDisposable
 
@@ -223,7 +223,7 @@
     {
         if (this.graph != null)
         {
-            await this.DagreService.ComputePositionsAsync(this.graph, this.Options);
+            await this.GraphLayoutService.ComputeLayoutAsync(this.graph, this.Options);
             this.TriggerRender(this, new());
             await this.ZoomToFit();
         }

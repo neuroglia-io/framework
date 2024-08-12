@@ -157,7 +157,7 @@ public class NodeViewModel
     }
 
     /// <inheritdoc/>
-    public virtual void SetBounds(double x = 0, double y = 0, double width = 0, double height = 0)
+    public virtual void SetBounds(double width = 0, double height = 0, double x = 0, double y = 0)
     {
         bool changed = false;
         if (this._x != x)
