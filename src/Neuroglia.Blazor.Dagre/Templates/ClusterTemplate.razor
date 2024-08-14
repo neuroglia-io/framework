@@ -1,6 +1,6 @@
 ﻿@implements IDisposable
 
-<g class="cluster @Cluster.CssClass" transform="translate(@Cluster.X.ToInvariantString(), @Cluster.Y.ToInvariantString())">
+<g id="@Cluster.Id" class="cluster @Cluster.CssClass" transform="translate(@Cluster.X.ToInvariantString(), @Cluster.Y.ToInvariantString())">
     <g class="cluster-shape">
         @if (Cluster.Shape == NodeShape.Circle)
         {

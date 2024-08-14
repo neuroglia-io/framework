@@ -1,6 +1,6 @@
 ﻿@implements IDisposable
 
-<g class="node @Node.CssClass" transform="translate(@(Node.X.ToInvariantString()), @(Node.Y.ToInvariantString()))">
+<g id="@Node.Id" class="node @Node.CssClass" transform="translate(@(Node.X.ToInvariantString()), @(Node.Y.ToInvariantString()))">
     <g class="node-shape">
         @if (Node.Shape == NodeShape.Circle)
         {
