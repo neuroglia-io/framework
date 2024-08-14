@@ -429,7 +429,6 @@ public class GraphViewModel
         if (this.Wheel != null) await this.Wheel.Invoke(new(e, sender, element));
     }
 
-    /// <inheritdoc/>
     public virtual void OnChildAdded(object? sender, INodeViewModel child)
     {
         if (child is IClusterViewModel cluster)

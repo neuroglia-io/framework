@@ -66,6 +66,7 @@ public class ClusterViewModel
             child.Changed += OnChildChanged;
             if (child is IClusterViewModel cluster)
             {
+                cluster.ChildAdded += this.OnChildAdded;
                 this._allClusters.Add(cluster.Id, cluster);
                 this.Flatten(cluster);
             }
@@ -106,12 +107,29 @@ public class ClusterViewModel
         this.ChildAdded?.Invoke(this, node);
         if (node is IClusterViewModel cluster)
         {
+            cluster.ChildAdded += this.OnChildAdded;
             this._allClusters.Add(cluster.Id, cluster);
             this.Flatten(cluster);
             return;
         }
         this._allNodes.Add(node.Id, node);
         this.OnChange();
+    }
+
+    /// <inheritdoc/>
+    public virtual void OnChildAdded(object? sender, INodeViewModel child)
+    {
+        if (child is IClusterViewModel cluster)
+        {
+            this._allClusters.Add(cluster.Id, cluster);
+            this.Flatten(cluster);
+        }
+        else if (child is INodeViewModel node)
+        {
+            this._allNodes.Add(node.Id, node);
+        }
+        this.OnChange();
+        this.ChildAdded?.Invoke(this, child);
     }
 
     /// <summary>
