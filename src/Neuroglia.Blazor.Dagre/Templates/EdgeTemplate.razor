@@ -1,4 +1,4 @@
-﻿<g class="edge-path @Edge.CssClass">
+﻿<g id="@($"{Edge.SourceId}-{Edge.TargetId}{(!string.IsNullOrEmpty(Edge.Label) ? $"-{Edge.Label}" : "")}")" class="edge-path @Edge.CssClass">
     <path 
         d="@GetPath(Edge)"
         marker-start="@GetDefinitionUrl(Edge.StartMarkerId)"
@@ -9,8 +9,8 @@
             <foreignObject 
                 x="@(LabelCenter.X.ToInvariantString())"
                 y="@(LabelCenter.Y.ToInvariantString())" 
-                width="@Edge.Bounds.Width.ToInvariantString()" 
-                height="@Edge.Bounds.Height.ToInvariantString()"
+                width="@Edge.Width.ToInvariantString()" 
+                height="@Edge.Height.ToInvariantString()"
             >
                 <div title="@Edge.Label" class="label-content">@Edge.Label</div>
             </foreignObject>
