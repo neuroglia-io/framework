@@ -14,6 +14,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Neuroglia.Data.Infrastructure.Redis.Services;
 
@@ -91,13 +92,13 @@ public class RedisTextDocumentRepository<TKey>
     {
         var documentKey = this.BuildKey(key);
         if (!await this.Database.KeyExistsAsync(documentKey).ConfigureAwait(false)) return null;
-        return await this.ReadDocumentMetadataAsync(documentKey, cancellationToken).ConfigureAwait(false);
+        return await this.ReadDocumentMetadataAsync(key, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
     public virtual async IAsyncEnumerable<ITextDocument<TKey>> GetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        foreach(var key in await this.Database.ListRangeAsync(_ListKey).ConfigureAwait(false)) yield return await this.ReadDocumentMetadataAsync(key!, cancellationToken).ConfigureAwait(false);
+        foreach(var key in await this.Database.ListRangeAsync(_ListKey).ConfigureAwait(false)) yield return await this.ReadDocumentMetadataAsync((TKey)(object)key!, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
@@ -132,10 +133,10 @@ public class RedisTextDocumentRepository<TKey>
         var watchEventType = await this.Database.KeyExistsAsync(documentKey).ConfigureAwait(false)
             ? TextDocumentWatchEventType.Appended 
             : TextDocumentWatchEventType.Created;
-        var watchEvent = new TextDocumentWatchEvent(watchEventType, text);
+        var watchEvent = new TextDocumentWatchEvent(key, watchEventType, text);
         var json = this.JsonSerializer.SerializeToText(watchEvent);
         await this.Database.StringAppendAsync(documentKey, text).ConfigureAwait(false);
-        await this.WriteDocumentMetadataAsync(documentKey, cancellationToken).ConfigureAwait(false);
+        await this.WriteDocumentMetadataAsync(key, cancellationToken).ConfigureAwait(false);
         if (watchEventType == TextDocumentWatchEventType.Created) await this.Database.ListRightPushAsync(_ListKey, documentKey).ConfigureAwait(false);
         await this.Database.PublishAsync(WatchEventChannel, json).ConfigureAwait(false);
     }
@@ -147,10 +148,10 @@ public class RedisTextDocumentRepository<TKey>
         var watchEventType = await this.Database.KeyExistsAsync(documentKey).ConfigureAwait(false)
            ? TextDocumentWatchEventType.Replaced
            : TextDocumentWatchEventType.Created;
-        var watchEvent = new TextDocumentWatchEvent(watchEventType, text);
+        var watchEvent = new TextDocumentWatchEvent(key, watchEventType, text);
         var json = this.JsonSerializer.SerializeToText(watchEvent);
         await this.Database.StringSetAsync(documentKey, text).ConfigureAwait(false);
-        await this.WriteDocumentMetadataAsync(documentKey, cancellationToken).ConfigureAwait(false);
+        await this.WriteDocumentMetadataAsync(key, cancellationToken).ConfigureAwait(false);
         await this.Database.ListRightPushAsync(_ListKey, documentKey).ConfigureAwait(false);
         await this.Database.PublishAsync(WatchEventChannel, json).ConfigureAwait(false);
     }
@@ -162,6 +163,9 @@ public class RedisTextDocumentRepository<TKey>
         if (!await this.Database.KeyExistsAsync(documentKey).ConfigureAwait(false)) throw new NullReferenceException($"Failed to find a document with the specified key '{documentKey}'");
         await this.Database.KeyDeleteAsync(documentKey).ConfigureAwait(false);
         await this.Database.ListRemoveAsync(_ListKey, documentKey).ConfigureAwait(false);
+        var watchEvent = new TextDocumentWatchEvent(key, TextDocumentWatchEventType.Deleted);
+        var json = this.JsonSerializer.SerializeToText(watchEvent);
+        await this.Database.PublishAsync(WatchEventChannel, json).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -170,9 +174,9 @@ public class RedisTextDocumentRepository<TKey>
     /// <param name="key">The key of the <see cref="ITextDocument"/> to write</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    protected virtual async Task WriteDocumentMetadataAsync(string key, CancellationToken cancellationToken = default)
+    protected virtual async Task WriteDocumentMetadataAsync(TKey key, CancellationToken cancellationToken = default)
     {
-        var metadataKey = this.BuildDocumentMetadataKey(key);
+        var metadataKey = this.BuildMetadataKey(key);
         var metadata = await this.Database.KeyExistsAsync(metadataKey).ConfigureAwait(false)
             ? await this.ReadDocumentMetadataAsync(key, cancellationToken).ConfigureAwait(false)
             : new TextDocument<TKey>()
@@ -182,7 +186,7 @@ public class RedisTextDocumentRepository<TKey>
                 LastModified = DateTimeOffset.Now
             };
         metadata.LastModified = DateTimeOffset.Now;
-        metadata.Length = await this.Database.StringLengthAsync(this.BuildDocumentKey(key)).ConfigureAwait(false);
+        metadata.Length = await this.Database.StringLengthAsync(this.BuildKey(key)).ConfigureAwait(false);
         var json = this.JsonSerializer.SerializeToText(metadata);
         await this.Database.StringSetAsync(metadataKey, json).ConfigureAwait(false);
     }
@@ -193,9 +197,9 @@ public class RedisTextDocumentRepository<TKey>
     /// <param name="key">The key of the <see cref="ITextDocument"/> to get</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The <see cref="ITextDocument"/> with the specified key, if any</returns>
-    protected virtual async Task<ITextDocument<TKey>> ReadDocumentMetadataAsync(string key, CancellationToken cancellationToken = default)
+    protected virtual async Task<ITextDocument<TKey>> ReadDocumentMetadataAsync(TKey key, CancellationToken cancellationToken = default)
     {
-        var metadataKey = this.BuildDocumentMetadataKey(key);
+        var metadataKey = this.BuildMetadataKey(key);
         var json = await this.Database.StringGetAsync(metadataKey).ConfigureAwait(false);
         return this.JsonSerializer.Deserialize<TextDocument<TKey>>(json!)!;
     }

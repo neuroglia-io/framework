@@ -31,17 +31,23 @@ public record TextDocumentWatchEvent
     /// <summary>
     /// Initializes a new <see cref="TextDocumentWatchEvent"/>
     /// </summary>
+    /// <param name="key">The key of the document that has produced the event</param>
     /// <param name="type">The watch event type</param>
     /// <param name="content">The document's content</param>
-    public TextDocumentWatchEvent(TextDocumentWatchEventType type, string? content = null)
+    public TextDocumentWatchEvent(object key, TextDocumentWatchEventType type, string? content = null)
     {
+        this.Key = key;
         this.Type = type;
         this.Content = content;
     }
+
+    /// <inheritdoc/>
+    public virtual object Key { get; set; } = null!;
 
     /// <inheritdoc/>
     public virtual TextDocumentWatchEventType Type { get; set; }
 
     /// <inheritdoc/>
     public virtual string? Content { get; set; }
+
 }
