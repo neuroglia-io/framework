@@ -22,6 +22,13 @@
                 <polygon points="22 16 24 16 24 8 16 8 16 10 22 10 22 16"/>
                 <polygon points="8 24 16 24 16 22 10 22 10 16 8 16 8 24"/>
             </svg>
+            <svg id="toggle-orientation" viewBox="0 0 16 16">
+                <!-- from https://www.svgrepo.com/svg/371431/orientation -->
+                <path d="M11 2.1c2 0 3 1.3 3 2.9h-1l1.5 2 1.5-2h-1c0-2.2-2-3.9-4-3.9v-1.1l-2 1.5 2 1.5v-0.9z"></path>
+                <path d="M9 9h6v6h-7v-15h-8v16h16v-8h-7v1zM7 8h-1v1h1v6h-6v-14h6v7z"></path>
+                <path d="M2 8h1v1h-1v-1z"></path>
+                <path d="M4 8h1v1h-1v-1z"></path>
+            </svg>
         </defs>
     </svg>
 
@@ -79,21 +86,31 @@
             </svg>
         </CascadingValue>
         <div class="graph-controls">
-            <button class="btn" type="button" @onclick="Center" title="center graph">
-                <svg class="icon-target">
+            @if (ExtraControls != null)
+            {
+                @ExtraControls
+            }
+            <button class="btn" type="button" @onclick="CenterAsync" title="center graph">
+                <svg>
                     <use href="#center-target" />
                 </svg>
             </button>
-            <button class="btn" type="button" @onclick="ZoomToFit" title="zoom to fit">
-                <svg class="icon-target">
+            <button class="btn" type="button" @onclick="ZoomToFitAsync" title="zoom to fit">
+                <svg>
                     <use href="#fit" />
                 </svg>
             </button>
+            <!--<button class="btn" type="button" @onclick="ToggleOrientationAsync" title="toggle orientation">
+                <svg>
+                    <use href="#toggle-orientation" />
+                </svg>
+            </button>-->
         </div>
     </div>
 }
 
 @code {
+    private IDagreGraphOptions? options = null;
     [Parameter] public IDagreGraphOptions? Options { get; set; }
 
     private IGraphViewModel? graph { get; set; }
@@ -110,6 +127,8 @@
     [Parameter] public EventCallback<GraphEventArgs<MouseEventArgs>> OnMouseMove { get; set; }
 
     [Parameter] public EventCallback<GraphEventArgs<WheelEventArgs>> OnWheel { get; set; }
+
+    [Parameter] public RenderFragment? ExtraControls { get; set; }
 
     ElementReference graphReference;
     bool isDirty = false;
@@ -134,6 +153,10 @@
 
     protected override async Task OnParametersSetAsync()
     {
+        if (this.options != this.Options)
+        {
+            this.options = this.Options;
+        }
         if (this.Graph != null && this.graph != this.Graph)
         {
             this.graph = this.Graph;
@@ -165,7 +188,7 @@
         if (!this.isDirty) return false;
         this.isDirty = false;
         return true;
-        
+
     }
 
     protected void TriggerRender(object? sender, EventArgs e)
@@ -223,9 +246,9 @@
     {
         if (this.graph != null)
         {
-            await this.GraphLayoutService.ComputeLayoutAsync(this.graph, this.Options);
+            await this.GraphLayoutService.ComputeLayoutAsync(this.graph, this.options);
             this.TriggerRender(this, new());
-            await this.ZoomToFit();
+            await this.ZoomToFitAsync();
         }
     }
 
@@ -235,7 +258,7 @@
             await this.JSRuntime.InvokeVoidAsync("neuroglia.blazor.preventScroll", this.graphReference);
     }
 
-    protected virtual async Task Center()
+    public virtual async Task CenterAsync()
     {
         if (this.graph == null) 
             return;
@@ -245,13 +268,28 @@
         this.isDirty = true;
     }
 
-    protected virtual async Task ZoomToFit()
+    public virtual async Task ZoomToFitAsync()
     {
         if (this.graph == null) 
             return;
         this.graph.Scale = Math.Clamp(await this.JSRuntime.InvokeAsync<decimal>("neuroglia.blazor.getScale", this.graphReference), Constants.MinScale, Constants.MaxScale);
         this.TriggerRender(this, new());
-        await this.Center();
+        await this.CenterAsync();
+    }
+
+    public virtual async Task ToggleOrientationAsync()
+    {
+        if (this.graph == null || this.options == null)
+            return;
+        if (string.IsNullOrEmpty(this.options.Direction) || this.options.Direction == DagreGraphDirection.TopToBottom)
+        {
+            this.options.Direction = DagreGraphDirection.LeftToRight;
+        }
+        else
+        {
+            this.options.Direction = DagreGraphDirection.TopToBottom;
+        }
+        await this.RefreshAsync();
     }
 
     protected virtual Dictionary<string, object> GetComponentParameter(IGraphElement element)
