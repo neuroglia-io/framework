@@ -11,7 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Humanizer.Localisation;
 using Json.Patch;
 using Microsoft.Extensions.Logging;
 using Neuroglia.Data.Guards;
@@ -38,7 +37,7 @@ public class RedisDatabase
     /// </summary>
     public const string ConnectionStringName = "redis";
     const string ClusterResourcePrefix = "cluster.";
-    static readonly RedisChannel WatchEventChannel = new("watch-events", RedisChannel.PatternMode.Literal);
+    static readonly RedisChannel WatchEventChannel = new("resource-watch-events", RedisChannel.PatternMode.Literal);
 
     bool _disposed;
 

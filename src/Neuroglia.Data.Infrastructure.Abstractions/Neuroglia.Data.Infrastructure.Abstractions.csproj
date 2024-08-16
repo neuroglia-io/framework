@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Neuroglia.Data\Neuroglia.Data.csproj" />
+    <ProjectReference Include="..\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.csproj" />
   </ItemGroup>
 
 </Project>
