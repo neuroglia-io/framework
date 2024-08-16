@@ -33,9 +33,12 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
 	<PackageReference Include="StackExchange.Redis" Version="2.7.33" />
+	<PackageReference Include="System.Linq.Async" Version="6.0.1" />
+	<PackageReference Include="System.Reactive" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Neuroglia.Data.Infrastructure.Abstractions\Neuroglia.Data.Infrastructure.Abstractions.csproj" />
+    <ProjectReference Include="..\Neuroglia.Plugins.Abstractions\Neuroglia.Plugins.Abstractions.csproj" />
     <ProjectReference Include="..\Neuroglia.Serialization.Abstractions\Neuroglia.Serialization.csproj" />
   </ItemGroup>
 
