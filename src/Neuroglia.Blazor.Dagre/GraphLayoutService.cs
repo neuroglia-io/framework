@@ -66,7 +66,6 @@ public class GraphLayoutService(IJSRuntime jSRuntime)
             GraphLibEdge graphEdge;
             if (options?.Multigraph == true)  graphEdge = await graph.EdgeAsync(edge.SourceId, edge.TargetId, edge.Id);
             else graphEdge = await graph.EdgeAsync(edge.SourceId, edge.TargetId);
-            //if (graphEdge?.Points != null) edge.Points = [.. graphEdge.Points];
             edge.SetBounds(graphEdge.Points ?? [], edge.Width, edge.Height, graphEdge.X ?? edge.X, graphEdge.Y ?? edge.Y);
         }
         graphViewModel.DagreGraph = graph;
