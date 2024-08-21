@@ -39,7 +39,7 @@ public class UriTypeSerializer
     public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
     {
         if (value == null) return;
-        emitter.Emit(new Scalar(((Uri)value).ToString()));
+        emitter.Emit(new Scalar(((Uri)value).OriginalString));
     }
 
 }

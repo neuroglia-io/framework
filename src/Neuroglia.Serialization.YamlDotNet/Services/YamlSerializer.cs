@@ -59,10 +59,10 @@ public class YamlSerializer(YamlDotNet.Serialization.ISerializer serializer, IDe
         deserializer
             .IgnoreUnmatchedProperties()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .WithNodeTypeResolver(new InferTypeResolver())
             .WithNodeDeserializer(
                 inner => new StringEnumDeserializer(inner),
                 syntax => syntax.InsteadOf<ScalarNodeDeserializer>())
-            .WithNodeTypeResolver(new InferTypeResolver())
             .WithNodeDeserializer(
                 inner => new JsonObjectDeserializer(inner),
                 syntax => syntax.InsteadOf<DictionaryNodeDeserializer>())
