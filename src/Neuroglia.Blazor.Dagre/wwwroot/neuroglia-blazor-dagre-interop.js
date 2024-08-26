@@ -2,6 +2,18 @@
     if (dagre == null) {
         throw 'dagre needs to be loaded first';
     }
+
+    function copyStyle(element) {
+        const style = getComputedStyle(element);
+        Object.entries(style).forEach(([key, value]) => {
+            const styleName = key.replace(/\-([a-z])/g, match => match[1].toUpperCase());
+            element.style[styleName] = value;
+        });
+        Array.from(element.childNodes)
+            .filter(node => node.nodeType == Node.ELEMENT_NODE)
+            .forEach(node => copyStyle(node));
+    }
+
     window.dagre                  = dagre;
     window.neuroglia              = window.neuroglia || {};
     window.neuroglia.blazor       = window.neuroglia.blazor || {};
@@ -45,5 +57,41 @@
             return hScale;
         }
         return wScale;
+    }
+    window.neuroglia.blazor.saveAsPng = (graphElement) => {
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        const boundingBox = graphElement.querySelector('g.graph').getBBox();
+        canvas.setAttribute('width', boundingBox.width + 'px');
+        canvas.setAttribute('height', boundingBox.height + 'px');
+        canvas.setAttribute('style', 'display: none;');
+        const img = new Image(boundingBox.width, boundingBox.height);
+        img.onerror = (err) => {
+            console.error('There was an error loading the SVG as base64.');
+        };
+        img.onload = async () => {
+            context.drawImage(img, 0, 0, img.width, img.height);
+            const downloadLink = document.createElement('a');
+            downloadLink.download = 'diagram.png';
+            downloadLink.href = canvas.toDataURL('image/png', 1);
+            downloadLink.click();
+            document.body.removeChild(canvas);
+            document.body.removeChild(img);
+            document.body.removeChild(svgClone);
+        };
+        const svgClone = graphElement.cloneNode(true);
+        const defsEl = svgClone.querySelector('defs');
+        const graphElClone = svgClone.querySelector('g.graph');
+        graphElClone.setAttribute('transform', 'scale(1)');
+        document.body.appendChild(svgClone);
+        Array.from(document.querySelectorAll('.svg-definitions defs *')).forEach(def => {
+            defsEl.appendChild(def.cloneNode(true));
+        });
+        copyStyle(svgClone);
+        const svg = new XMLSerializer().serializeToString(svgClone);
+        const base64 = btoa(unescape(encodeURIComponent(svg)));
+        document.body.appendChild(canvas);
+        document.body.appendChild(img);
+        img.src = `data:image/svg+xml;charset=utf-8;base64,${base64}`;
     }
 })();

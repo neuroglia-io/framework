@@ -22,6 +22,11 @@
                 <polygon points="22 16 24 16 24 8 16 8 16 10 22 10 22 16"/>
                 <polygon points="8 24 16 24 16 22 10 22 10 16 8 16 8 24"/>
             </svg>
+            <svg id="save" viewBox="0 0 24 24">
+                <!-- from https://www.svgrepo.com/svg/432286/save-down-2 -->
+                <path d="M18.437,20.948H5.563a2.372,2.372,0,0,1-2.5-2.21v-11a2.372,2.372,0,0,1,2.5-2.211h.462a.5.5,0,0,1,0,1H5.563a1.38,1.38,0,0,0-1.5,1.211v11a1.38,1.38,0,0,0,1.5,1.21H18.437a1.38,1.38,0,0,0,1.5-1.21v-11a1.38,1.38,0,0,0-1.5-1.211h-.462a.5.5,0,0,1,0-1h.462a2.372,2.372,0,0,1,2.5,2.211v11A2.372,2.372,0,0,1,18.437,20.948Z" />
+                <path d="M15.355,10.592l-3,3a.5.5,0,0,1-.35.15.508.508,0,0,1-.36-.15l-3-3a.5.5,0,0,1,.71-.71l2.14,2.139V3.552a.508.508,0,0,1,.5-.5.5.5,0,0,1,.5.5v8.49l2.15-2.16a.5.5,0,0,1,.71.71Z" />
+            </svg>
             <svg id="toggle-orientation" viewBox="0 0 16 16">
                 <!-- from https://www.svgrepo.com/svg/371431/orientation -->
                 <path d="M11 2.1c2 0 3 1.3 3 2.9h-1l1.5 2 1.5-2h-1c0-2.2-2-3.9-4-3.9v-1.1l-2 1.5 2 1.5v-0.9z"></path>
@@ -98,6 +103,11 @@
             <button class="btn" type="button" @onclick="ZoomToFitAsync" title="zoom to fit">
                 <svg>
                     <use href="#fit" />
+                </svg>
+            </button>
+            <button class="btn" type="button" @onclick="SaveAsPngAsync" title="save as png">
+                <svg>
+                    <use href="#save" />
                 </svg>
             </button>
             <!--<button class="btn" type="button" @onclick="ToggleOrientationAsync" title="toggle orientation">
@@ -275,6 +285,13 @@
         this.graph.Scale = Math.Clamp(await this.JSRuntime.InvokeAsync<decimal>("neuroglia.blazor.getScale", this.graphReference), Constants.MinScale, Constants.MaxScale);
         this.TriggerRender(this, new());
         await this.CenterAsync();
+    }
+
+    public virtual async Task SaveAsPngAsync()
+    {
+        if (this.graph == null)
+            return;
+        await this.JSRuntime.InvokeVoidAsync("neuroglia.blazor.saveAsPng", this.graphReference);
     }
 
     public virtual async Task ToggleOrientationAsync()
