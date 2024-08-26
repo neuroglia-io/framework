@@ -41,14 +41,14 @@ public class YamlSerializer(YamlDotNet.Serialization.ISerializer serializer, IDe
         serializer
             .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitEmptyCollections)
             .WithQuotingNecessaryStrings(true)
-            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            //.WithNamingConvention(CamelCaseNamingConvention.Instance)
             .WithTypeConverter(new JsonNodeTypeConverter())
             .WithTypeConverter(new JsonSchemaTypeConverter())
             .WithTypeConverter(new StringEnumSerializer())
             .WithTypeConverter(new UriTypeSerializer())
             .WithTypeConverter(new DateTimeOffsetSerializer())
             .WithTypeConverter(new EquatableListSerializer(() => serializer.Build()))
-            .WithTypeConverter(new EquatableDictionarySerializer(() => serializer.WithNamingConvention(NullNamingConvention.Instance).Build()));
+            .WithTypeConverter(new EquatableDictionarySerializer(() => serializer.Build()));
     };
 
     /// <summary>
@@ -58,7 +58,7 @@ public class YamlSerializer(YamlDotNet.Serialization.ISerializer serializer, IDe
     {
         deserializer
             .IgnoreUnmatchedProperties()
-            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            //.WithNamingConvention(CamelCaseNamingConvention.Instance)
             .WithNodeTypeResolver(new InferTypeResolver())
             .WithNodeDeserializer(
                 inner => new StringEnumDeserializer(inner),
