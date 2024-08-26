@@ -48,7 +48,7 @@ public class YamlSerializer(YamlDotNet.Serialization.ISerializer serializer, IDe
             .WithTypeConverter(new UriTypeSerializer())
             .WithTypeConverter(new DateTimeOffsetSerializer())
             .WithTypeConverter(new EquatableListSerializer(() => serializer.Build()))
-            .WithTypeConverter(new EquatableDictionarySerializer(() => serializer.Build()));
+            .WithTypeConverter(new EquatableDictionarySerializer(() => serializer.WithNamingConvention(NullNamingConvention.Instance).Build()));
     };
 
     /// <summary>
