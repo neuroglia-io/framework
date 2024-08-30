@@ -183,7 +183,7 @@ public class RedisDatabase
         if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
         if (string.IsNullOrWhiteSpace(plural)) throw new ArgumentNullException(nameof(plural));
         var resourceDefinition = await this.GetDefinitionAsync(group, plural, cancellationToken).ConfigureAwait(false) ?? throw new ProblemDetailsException(ResourceProblemDetails.ResourceDefinitionNotFound(new ResourceDefinitionReference(group, version, plural)));
-        var observable = this.ResourceWatchEvents.Where(e => e.Resource.GetGroup() == group && e.Resource.GetVersion() == version && e.Resource.Kind == resourceDefinition.Spec.Names.Kind && string.IsNullOrWhiteSpace(@namespace) || e.Resource.GetNamespace() == @namespace);
+        var observable = this.ResourceWatchEvents.Where(e => e.Resource.GetGroup() == group && e.Resource.GetVersion() == version && e.Resource.Kind == resourceDefinition.Spec.Names.Kind && (string.IsNullOrWhiteSpace(@namespace) || e.Resource.GetNamespace() == @namespace));
         if (labelSelectors?.Any() == true) observable = observable.Where(e => labelSelectors.All(s => s.Selects(e.Resource)));
         return new ResourceWatch(observable, false);
     }
