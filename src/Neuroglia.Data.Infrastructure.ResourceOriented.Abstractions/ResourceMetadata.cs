@@ -11,6 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Humanizer.Localisation;
+
 namespace Neuroglia.Data.Infrastructure.ResourceOriented;
 
 /// <summary>
@@ -92,6 +94,6 @@ public record ResourceMetadata
     public IDictionary<string, object>? ExtensionData { get; set; }
 
     /// <inheritdoc/>
-    public override string? ToString() => string.IsNullOrWhiteSpace(this.Name) ? base.ToString() : string.IsNullOrWhiteSpace(this.Namespace) ? this.Name : $"{this.Namespace}.{this.Name}";
+    public override string? ToString() => string.IsNullOrWhiteSpace(this.Namespace) ? this.Name : $"{this.Name}.{this.Namespace}";
 
 }
