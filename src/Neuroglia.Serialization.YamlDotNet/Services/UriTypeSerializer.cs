@@ -28,7 +28,7 @@ public class UriTypeSerializer
     public virtual bool Accepts(Type type) => typeof(Uri).IsAssignableFrom(type);
 
     /// <inheritdoc/>
-    public virtual object ReadYaml(IParser parser, Type type)
+    public virtual object ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer)
     {
         var scalar = (Scalar)parser.Current!;
         parser.MoveNext();
@@ -36,7 +36,7 @@ public class UriTypeSerializer
     }
 
     /// <inheritdoc/>
-    public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
+    public virtual void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer rootSerializer)
     {
         if (value == null) return;
         emitter.Emit(new Scalar(((Uri)value).OriginalString));

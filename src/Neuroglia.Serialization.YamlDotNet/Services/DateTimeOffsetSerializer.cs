@@ -29,7 +29,7 @@ public class DateTimeOffsetSerializer
     public virtual bool Accepts(Type type) => typeof(DateTimeOffset).IsAssignableFrom(type);
 
     /// <inheritdoc/>
-    public virtual object ReadYaml(IParser parser, Type type)
+    public virtual object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer)
     {
         Scalar scalar = (Scalar)parser.Current!;
         parser.MoveNext();
@@ -37,7 +37,7 @@ public class DateTimeOffsetSerializer
     }
 
     /// <inheritdoc/>
-    public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
+    public virtual void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer)
     {
         if (value == null || value is not DateTimeOffset dateTime) return;
         emitter.Emit(new Scalar(dateTime.ToString("o", CultureInfo.InvariantCulture)));

@@ -31,10 +31,10 @@ public class EquatableDictionarySerializer(Func<YamlDotNet.Serialization.ISerial
     public virtual bool Accepts(Type type) => type.GetGenericType(typeof(EquatableDictionary<,>))?.GetGenericTypeDefinition() == typeof(EquatableDictionary<,>);
 
     /// <inheritdoc/>
-    public virtual object? ReadYaml(IParser parser, Type type) => throw new NotImplementedException();
+    public virtual object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer) => throw new NotImplementedException();
 
     /// <inheritdoc/>
-    public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
+    public virtual void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer rootSerializer)
     {
         if (value == null) return;
         var serializer = serializerFactory();

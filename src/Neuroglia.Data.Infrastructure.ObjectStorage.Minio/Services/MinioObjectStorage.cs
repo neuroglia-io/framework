@@ -13,6 +13,7 @@
 
 using Microsoft.Extensions.Logging;
 using Minio;
+using Minio.ApiEndpoints;
 using Minio.DataModel;
 using Minio.DataModel.Args;
 using Minio.DataModel.Tags;
@@ -170,7 +171,7 @@ public class MinioObjectStorage
                 .WithBucket(bucketName)
                 .WithRecursive(true);
             if (!string.IsNullOrWhiteSpace(prefix)) args = args.WithPrefix(prefix);
-            items = this.MinioClient.ListObjectsAsync(args, cancellationToken).ToAsyncEnumerable();
+            items = this.MinioClient.ListObjectsEnumAsync(args, cancellationToken);
         }
         catch (MinioException ex)
         {

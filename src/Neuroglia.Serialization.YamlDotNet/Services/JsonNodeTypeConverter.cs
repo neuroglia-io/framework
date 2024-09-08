@@ -23,32 +23,24 @@ namespace Neuroglia.Serialization.Yaml;
 /// <summary>
 /// Represents the <see cref="IYamlTypeConverter"/> used to convert <see cref="JsonNode"/>s
 /// </summary>
-public class JsonNodeTypeConverter
+/// <param name="preservePropertyNameCase">A boolean indicating whether or not to preserve the case of the name of converted properties</param>
+public class JsonNodeTypeConverter(bool preservePropertyNameCase = false)
     : IYamlTypeConverter
 {
 
     /// <summary>
-    /// Initializes a new <see cref="JsonNodeTypeConverter"/>
-    /// </summary>
-    /// <param name="preservePropertyNameCase">A boolean indicating whether or not to preserve the case of the name of converted properties</param>
-    public JsonNodeTypeConverter(bool preservePropertyNameCase = false)
-    {
-        this.PreservePropertyNameCase = preservePropertyNameCase;
-    }
-
-    /// <summary>
     /// Gets a boolean indicating whether or not to preserve the case of the name of converted properties
     /// </summary>
-    protected bool PreservePropertyNameCase { get; }
+    protected bool PreservePropertyNameCase { get; } = preservePropertyNameCase;
 
     /// <inheritdoc/>
     public virtual bool Accepts(Type type) => typeof(JsonElement).IsAssignableFrom(type) || typeof(JsonNode).IsAssignableFrom(type);
 
     /// <inheritdoc/>
-    public virtual object? ReadYaml(IParser parser, Type type) => throw new NotSupportedException();
+    public virtual object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer) => throw new NotSupportedException();
 
     /// <inheritdoc/>
-    public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
+    public virtual void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer rootSerializer)
     {
         if (value is JsonElement jsonElement) value = Json.JsonSerializer.Default.SerializeToNode(jsonElement);
         this.WriteJsonNode(emitter, value as JsonNode);
