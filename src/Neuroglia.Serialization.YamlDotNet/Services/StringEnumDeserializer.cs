@@ -38,10 +38,10 @@ public class StringEnumDeserializer
     protected INodeDeserializer Inner { get; }
 
     /// <inheritdoc/>
-    public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value)
+    public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value, ObjectDeserializer rootDeserializer)
     {
-        if (!typeof(Enum).IsAssignableFrom(expectedType)) return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value);
-        if (!this.Inner.Deserialize(reader, typeof(string), nestedObjectDeserializer, out value)) return false;
+        if (!typeof(Enum).IsAssignableFrom(expectedType)) return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value, rootDeserializer);
+        if (!this.Inner.Deserialize(reader, typeof(string), nestedObjectDeserializer, out value, rootDeserializer)) return false;
         var valueStr = (string?)value;
         if (string.IsNullOrWhiteSpace(valueStr)) value = expectedType.GetDefaultValue();
         else value = EnumHelper.Parse(valueStr, expectedType);

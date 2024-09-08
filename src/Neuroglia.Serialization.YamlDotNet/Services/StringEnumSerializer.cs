@@ -28,9 +28,9 @@ public class StringEnumSerializer
     public virtual bool Accepts(Type type) => type.IsEnum;
 
     /// <inheritdoc/>
-    public virtual object ReadYaml(IParser parser, Type type) => throw new NotImplementedException();
+    public virtual object ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer) => throw new NotImplementedException();
 
     /// <inheritdoc/>
-    public virtual void WriteYaml(IEmitter emitter, object? value, Type type) => emitter.Emit(new Scalar(EnumHelper.Stringify((Enum)value!, type)));
+    public virtual void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer rootSerializer) => emitter.Emit(new Scalar(EnumHelper.Stringify((Enum)value!, type)));
 
 }

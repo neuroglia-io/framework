@@ -25,7 +25,7 @@ namespace Neuroglia.Serialization.Yaml;
 /// </remarks>
 /// <param name="inner">The inner <see cref="INodeDeserializer"/></param>
 public class JsonObjectDeserializer(INodeDeserializer inner)
-        : INodeDeserializer
+    : INodeDeserializer
 {
 
     /// <summary>
@@ -34,10 +34,10 @@ public class JsonObjectDeserializer(INodeDeserializer inner)
     protected INodeDeserializer Inner { get; } = inner;
 
     /// <inheritdoc/>
-    public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value)
+    public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value, ObjectDeserializer rootDeserializer)
     {
-        if (!typeof(JsonObject).IsAssignableFrom(expectedType)) return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value);
-        if (!this.Inner.Deserialize(reader, typeof(Dictionary<object, object>), nestedObjectDeserializer, out value)) return false;
+        if (!typeof(JsonObject).IsAssignableFrom(expectedType)) return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value, rootDeserializer);
+        if (!this.Inner.Deserialize(reader, typeof(Dictionary<object, object>), nestedObjectDeserializer, out value, rootDeserializer)) return false;
         value = Json.JsonSerializer.Default.Deserialize<JsonObject>(Json.JsonSerializer.Default.SerializeToText(value!));
         return true;
     }
