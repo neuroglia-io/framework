@@ -95,21 +95,48 @@
             {
                 @ExtraControls
             }
-            <button class="btn" type="button" @onclick="CenterAsync" title="center graph">
-                <svg>
-                    <use href="#center-target" />
-                </svg>
-            </button>
-            <button class="btn" type="button" @onclick="ZoomToFitAsync" title="zoom to fit">
-                <svg>
-                    <use href="#fit" />
-                </svg>
-            </button>
-            <button class="btn" type="button" @onclick="SaveAsPngAsync" title="save as png">
-                <svg>
-                    <use href="#save" />
-                </svg>
-            </button>
+            @if (CenterControl != null)
+            {
+                <CascadingValue Value="CenterAsync" Name="CenterAsync">
+                    @CenterControl
+                </CascadingValue>
+            }
+            else
+            {
+                <button class="btn" type="button" @onclick="CenterAsync" title="Center graph">
+                    <svg>
+                        <use href="#center-target" />
+                    </svg>
+                </button>
+            }
+            @if (ZoomToFitControl != null)
+            {
+                <CascadingValue Value="ZoomToFitAsync" Name="ZoomToFitAsync">
+                    @ZoomToFitControl
+                </CascadingValue>
+            }
+            else
+            {
+                <button class="btn" type="button" @onclick="ZoomToFitAsync" title="Zoom to fit">
+                    <svg>
+                        <use href="#fit" />
+                    </svg>
+                </button>
+            }
+            @if (SaveAsPngControl != null)
+            {
+                <CascadingValue Value="SaveAsPngAsync" Name="SaveAsPngAsync">
+                    @SaveAsPngControl
+                </CascadingValue>
+            }
+            else
+            {
+                <button class="btn" type="button" @onclick="SaveAsPngAsync" title="Save as png">
+                    <svg>
+                        <use href="#save" />
+                    </svg>
+                </button>
+            }
             <!--<button class="btn" type="button" @onclick="ToggleOrientationAsync" title="toggle orientation">
                 <svg>
                     <use href="#toggle-orientation" />
@@ -137,6 +164,12 @@
     [Parameter] public EventCallback<GraphEventArgs<MouseEventArgs>> OnMouseMove { get; set; }
 
     [Parameter] public EventCallback<GraphEventArgs<WheelEventArgs>> OnWheel { get; set; }
+
+    [Parameter] public RenderFragment? CenterControl { get; set; }
+
+    [Parameter] public RenderFragment? ZoomToFitControl { get; set; }
+
+    [Parameter] public RenderFragment? SaveAsPngControl { get; set; }
 
     [Parameter] public RenderFragment? ExtraControls { get; set; }
 
