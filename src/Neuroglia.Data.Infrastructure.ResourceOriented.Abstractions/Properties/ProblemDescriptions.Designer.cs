@@ -106,7 +106,7 @@ namespace Neuroglia.Data.Infrastructure.ResourceOriented.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to admit operation &apos;{operation}&apos; the specified resource &apos;{resource}&apos;:\n{errors}.
+        ///   Looks up a localized string similar to Failed to admit operation &apos;{operation}&apos; on the specified resource &apos;{resource}&apos;:\r\n{errors}.
         /// </summary>
         public static string ResourceAdmissionFailed {
             get {
