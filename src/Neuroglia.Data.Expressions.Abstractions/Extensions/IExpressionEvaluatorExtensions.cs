@@ -60,6 +60,12 @@ public static partial class IExpressionEvaluatorExtensions
             if (expression is string expressionString && expressionString.IsRuntimeExpression()) return await evaluator.EvaluateAsync(expressionString, input, arguments, null, cancellationToken).ConfigureAwait(false);
             else return expression;
         }
+        else if (expression.GetType().IsEnumerable() && expression.GetType() != typeof(string) && expression.GetType().GetGenericType(typeof(IDictionary<,>)) == null && expression.GetType().GetGenericType(typeof(EquatableDictionary<,>)) == null)
+        {
+            var results = new List<object>();
+            foreach (var value in (IEnumerable)expression) results.Add((await evaluator.EvaluateAsync(value, input, arguments, null, cancellationToken).ConfigureAwait(false))!);
+            return results;
+        }
         var expressionProperties = (IDictionary<string, object>)JsonSerializer.Default.Convert(expression, typeof(IDictionary<string, object>))!;
         var outputProperties = new Dictionary<string, object>();
         foreach (var property in expressionProperties)
@@ -91,7 +97,7 @@ public static partial class IExpressionEvaluatorExtensions
             }
             outputProperties[property.Key] = value!;
         }
-        return expectedType == null || expectedType.IsAssignableFrom(typeof(Dictionary<string, object>)) ? outputProperties : Serialization.Json.JsonSerializer.Default.Convert(outputProperties, expectedType);
+        return expectedType == null || expectedType.IsAssignableFrom(typeof(Dictionary<string, object>)) ? outputProperties : JsonSerializer.Default.Convert(outputProperties, expectedType);
     }
 
     /// <summary>
