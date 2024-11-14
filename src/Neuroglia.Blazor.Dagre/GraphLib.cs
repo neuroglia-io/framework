@@ -84,37 +84,37 @@ public class GraphLib(IJSObjectReference jsInstance)
     /// <inheritdoc/>
     public virtual async Task<string[]?> PredecessorsAsync(string v) => await this._jsInstance.InvokeAsync<string[]?>("predecessors", v);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> RemoveEdgeAsync(GraphLibEdge edge) => await this._jsInstance.InvokeAsync<IJSObjectReference>("removeEdge", edge) as IGraphLib;
+    public virtual async Task<IGraphLib> RemoveEdgeAsync(GraphLibEdge edge) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("removeEdge", edge);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> RemoveEdgeAsync(string v, string w, string name) => await this._jsInstance.InvokeAsync<IJSObjectReference>("removeEdge", v, w, name) as IGraphLib;
+    public virtual async Task<IGraphLib> RemoveEdgeAsync(string v, string w, string name) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("removeEdge", v, w, name);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> RemoveNodeAsync(string name) => await this._jsInstance.InvokeAsync<IJSObjectReference>("removeNode", name) as IGraphLib;
+    public virtual async Task<IGraphLib> RemoveNodeAsync(string name) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("removeNode", name);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetDefaultEdgeLabelAsync(object label) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultEdgeLabel", label) as IGraphLib;
+    public virtual async Task<IGraphLib> SetDefaultEdgeLabelAsync(object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultEdgeLabel", label);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetDefaultEdgeLabelAsync(Func<string, object> labelFn) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultEdgeLabel", labelFn) as IGraphLib;
+    public virtual async Task<IGraphLib> SetDefaultEdgeLabelAsync(Func<string, object> labelFn) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultEdgeLabel", labelFn);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetDefaultNodeLabelAsync(object label) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultNodeLabel", label) as IGraphLib;
+    public virtual async Task<IGraphLib> SetDefaultNodeLabelAsync(object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultNodeLabel", label);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetDefaultNodeLabelAsync(Func<string, object> labelFn) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultNodeLabel", labelFn) as IGraphLib;
+    public virtual async Task<IGraphLib> SetDefaultNodeLabelAsync(Func<string, object> labelFn) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultNodeLabel", labelFn);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetGraphAsync(IDagreGraphConfig label) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setGraph", label) as IGraphLib;
+    public virtual async Task<IGraphLib> SetGraphAsync(IDagreGraphConfig label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setGraph", label);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", v, w) as IGraphLib;
+    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", v, w);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w, object label) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", v, w, label) as IGraphLib;
+    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w, object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", v, w, label);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w, object label, string name) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", v, w, label, name) as IGraphLib;
+    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w, object label, string name) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", v, w, label, name);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetEdgeAsync(GraphLibEdge edge, object label) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", edge, label) as IGraphLib;
+    public virtual async Task<IGraphLib> SetEdgeAsync(GraphLibEdge edge, object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", edge, label);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetNodeAsync(string name, object label) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setNode", name, label) as IGraphLib;
+    public virtual async Task<IGraphLib> SetNodeAsync(string name, object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setNode", name, label);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetNodesAsync(string[] names, object label) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setNodes", names, label) as IGraphLib;
+    public virtual async Task<IGraphLib> SetNodesAsync(string[] names, object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setNodes", names, label);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetParentAsync(string v, string p) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setParent", v, p) as IGraphLib;
+    public virtual async Task<IGraphLib> SetParentAsync(string v, string p) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setParent", v, p);
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetPathAsync(string[] nodes, object label) => await this._jsInstance.InvokeAsync<IJSObjectReference>("setPath", nodes, label) as IGraphLib;
+    public virtual async Task<IGraphLib> SetPathAsync(string[] nodes, object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setPath", nodes, label);
     /// <inheritdoc/>
     public virtual async Task<string[]> SinksAsync() => await this._jsInstance.InvokeAsync<string[]>("sinks");
     /// <inheritdoc/>

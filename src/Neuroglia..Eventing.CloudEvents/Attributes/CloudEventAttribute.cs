@@ -16,23 +16,18 @@ namespace Neuroglia.Eventing.CloudEvents;
 /// <summary>
 /// Represents an <see cref="Attribute"/> used to configure the <see cref="CloudEvent"/> enveloppe of a specified type
 /// </summary>
+/// <remarks>
+/// Initializes a new <see cref="CloudEventAttribute"/>
+/// </remarks>
+/// <param name="type">The <see cref="CloudEvent.Type"/> of <see cref="CloudEvent"/>s transporting the marked class as payload</param>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public class CloudEventAttribute
+public class CloudEventAttribute(string type)
     : Attribute
 {
 
     /// <summary>
-    /// Initializes a new <see cref="CloudEventAttribute"/>
-    /// </summary>
-    /// <param name="type">The <see cref="CloudEvent.Type"/> of <see cref="CloudEvent"/>s transporting the marked class as payload</param>
-    public CloudEventAttribute(string type)
-    {
-        this.Type = type;
-    }
-
-    /// <summary>
     /// Gets the <see cref="CloudEvent.Type"/> of <see cref="CloudEvent"/>s transporting the marked class as payload
     /// </summary>
-    public string Type { get; }
+    public string Type { get; } = type;
 
 }
