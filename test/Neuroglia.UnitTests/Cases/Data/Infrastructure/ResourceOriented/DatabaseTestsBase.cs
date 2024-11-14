@@ -16,7 +16,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Data;
 using Neuroglia.Data.Infrastructure.ResourceOriented;
-using Neuroglia.Data.Infrastructure.ResourceOriented.Services;
 using Neuroglia.Serialization.Json;
 
 namespace Neuroglia.UnitTests.Cases.Data.Infrastructure.ResourceOriented;
@@ -115,7 +114,7 @@ public abstract class DatabaseTestsBase
         {
             i.Metadata.ExtensionData = null;
             return i;
-        }).Should().BeEquivalentTo(resources);
+        }).Should().BeEquivalentTo(resources, options => options.AllowingInfiniteRecursion());
     }
 
     [Fact, Priority(4)]
@@ -148,7 +147,7 @@ public abstract class DatabaseTestsBase
         {
             i.Metadata.ExtensionData = null;
             return i;
-        }).Should().BeEquivalentTo(resources);
+        }).Should().BeEquivalentTo(resources, options => options.AllowingInfiniteRecursion());
     }
 
     [Fact, Priority(5)]
@@ -202,7 +201,7 @@ public abstract class DatabaseTestsBase
         {
             i.Metadata.ExtensionData = null;
             return i;
-        }));
+        }), options => options.AllowingInfiniteRecursion());
     }
 
     [Fact, Priority(6)]
@@ -233,7 +232,7 @@ public abstract class DatabaseTestsBase
         {
             i.Metadata.ExtensionData = null;
             return i;
-        }).Should().BeEquivalentTo(resources);
+        }).Should().BeEquivalentTo(resources, options => options.AllowingInfiniteRecursion());
     }
 
     [Fact, Priority(7)]
@@ -285,7 +284,7 @@ public abstract class DatabaseTestsBase
         {
             i.Metadata.ExtensionData = null;
             return i;
-        }));
+        }), options => options.AllowingInfiniteRecursion());
     }
 
     [Fact, Priority(8)]
@@ -319,7 +318,7 @@ public abstract class DatabaseTestsBase
         {
             i.Metadata.ExtensionData = null;
             return i;
-        }).Should().BeEquivalentTo(resources);
+        }).Should().BeEquivalentTo(resources, options => options.AllowingInfiniteRecursion());
     }
 
     [Fact, Priority(9)]
@@ -385,7 +384,7 @@ public abstract class DatabaseTestsBase
         {
             i.Metadata.ExtensionData = null;
             return i;
-        }).Should().BeEquivalentTo(resources);
+        }).Should().BeEquivalentTo(resources, options => options.AllowingInfiniteRecursion());
     }
 
     [Fact, Priority(11)]
