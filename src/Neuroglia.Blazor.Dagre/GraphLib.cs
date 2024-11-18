@@ -23,6 +23,8 @@ public class GraphLib(IJSObjectReference jsInstance)
     : IGraphLib, IAsyncDisposable, IDisposable
 {
 
+    readonly IJSObjectReference _jsInstance = jsInstance;
+
     /// <inheritdoc />
     [System.Text.Json.Serialization.JsonIgnore(Condition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull)]
     [System.Text.Json.Serialization.JsonExtensionData]
@@ -30,110 +32,218 @@ public class GraphLib(IJSObjectReference jsInstance)
     [Newtonsoft.Json.JsonExtensionData]
     public virtual IDictionary<string, object>? Metadata { get; set; }
 
-    /// <summary>
-    /// The Graph js instance
-    /// </summary>
-    readonly IJSObjectReference _jsInstance = jsInstance;
-
     /// <inheritdoc/>
     public virtual async Task<string[]> ChildrenAsync(string v) => await this._jsInstance.InvokeAsync<string[]>("children", v);
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> FilterNodesAsync(Func<string, bool> filter) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("filterNodes", filter);
+    public virtual async Task<IGraphLib> FilterNodesAsync(Func<string, bool> filter)
+    {
+        await this._jsInstance.InvokeVoidAsync("filterNodes", filter);
+        return this;
+    }
+
     /// <inheritdoc/>
     public virtual async Task<IDagreGraphConfig?> GraphAsync() => await this._jsInstance.InvokeAsync<DagreGraphOptions?>("graph");
+
     /// <inheritdoc/>
     public virtual async Task<bool> HasEdgeAsync(string v, string w, string name) => await this._jsInstance.InvokeAsync<bool>("hasEdge", v, w, name);
+
     /// <inheritdoc/>
     public virtual async Task<bool> HasEdgeAsync(GraphLibEdge edge) => await this._jsInstance.InvokeAsync<bool>("hasEdge", edge);
+
     /// <inheritdoc/>
     public virtual async Task<bool> HasNodeAsync(string name) => await this._jsInstance.InvokeAsync<bool>("hasNode", name);
+
     /// <inheritdoc/>
     public virtual async Task<GraphLibEdge> EdgeAsync(string v, string w) => await this._jsInstance.InvokeAsync<GraphLibEdge>("edge", v, w);
+
     /// <inheritdoc/>
     public virtual async Task<GraphLibEdge> EdgeAsync(string v, string w, string name) => await this._jsInstance.InvokeAsync<GraphLibEdge>("edge", v, w, name);
+
     /// <inheritdoc/>
     public virtual async Task<GraphLibEdge> EdgeAsync(GraphLibEdge e) => await this._jsInstance.InvokeAsync<GraphLibEdge>("edge", e);
+
     /// <inheritdoc/>
     public virtual async Task<double> EdgeCountAsync() => await this._jsInstance.InvokeAsync<double>("edgeCount");
+
     /// <inheritdoc/>
     public virtual async Task<GraphLibEdge[]> EdgesAsync() => await this._jsInstance.InvokeAsync<GraphLibEdge[]>("edges");
+
     /// <inheritdoc/>
     public virtual async Task<GraphLibEdge[]?> InEdgesAsync(string v, string w) => await this._jsInstance.InvokeAsync<GraphLibEdge[]?>("inEdges", v, w);
+
     /// <inheritdoc/>
     public virtual async Task<bool> IsCompoundAsync() => await this._jsInstance.InvokeAsync<bool>("isCompound");
+
     /// <inheritdoc/>
     public virtual async Task<bool> IsDirectedAsync() => await this._jsInstance.InvokeAsync<bool>("isDirected");
+
     /// <inheritdoc/>
     public virtual async Task<bool> IsMultigraphAsync() => await this._jsInstance.InvokeAsync<bool>("isMultigraph");
+
     /// <inheritdoc/>
     public virtual async Task<IJSObjectReference> InstanceAsync() => await Task.FromResult(this._jsInstance);
+
     /// <inheritdoc/>
     public virtual async Task<string[]?> NeighborsAsync(string v) => await this._jsInstance.InvokeAsync<string[]?>("neighbors", v);
+
     /// <inheritdoc/>
     public virtual async Task<GraphLibNode> NodeAsync(string name) => await this._jsInstance.InvokeAsync<GraphLibNode>("node", name);
+
     /// <inheritdoc/>
     public virtual async Task<double> NodeCountAsync() => await this._jsInstance.InvokeAsync<double>("nodeCount");
+
     /// <inheritdoc/>
     public virtual async Task<GraphLibEdge[]?> NodeEdgesAsync(string v, string w) => await this._jsInstance.InvokeAsync<GraphLibEdge[]?>("nodeEdges", v, w);
+
     /// <inheritdoc/>
     public virtual async Task<string[]> NodesAsync() => await this._jsInstance.InvokeAsync<string[]>("nodes");
+
     /// <inheritdoc/>
     public virtual async Task<GraphLibEdge[]?> OutEdgesAsync(string v, string w) => await this._jsInstance.InvokeAsync<GraphLibEdge[]?>("outEdges", v, w);
+
     /// <inheritdoc/>
     public virtual async Task<string[]?> ParentAsync(string v) => await this._jsInstance.InvokeAsync<string[]?>("parent", v);
+
     /// <inheritdoc/>
     public virtual async Task<string[]?> PredecessorsAsync(string v) => await this._jsInstance.InvokeAsync<string[]?>("predecessors", v);
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> RemoveEdgeAsync(GraphLibEdge edge) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("removeEdge", edge);
+    public virtual async Task<IGraphLib> RemoveEdgeAsync(GraphLibEdge edge)
+    {
+        await this._jsInstance.InvokeVoidAsync("removeEdge", edge);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> RemoveEdgeAsync(string v, string w, string name) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("removeEdge", v, w, name);
+    public virtual async Task<IGraphLib> RemoveEdgeAsync(string v, string w, string name)
+    {
+        await this._jsInstance.InvokeVoidAsync("removeEdge", v, w, name);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> RemoveNodeAsync(string name) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("removeNode", name);
+    public virtual async Task<IGraphLib> RemoveNodeAsync(string name)
+    {
+        await this._jsInstance.InvokeVoidAsync("removeNode", name);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetDefaultEdgeLabelAsync(object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultEdgeLabel", label);
+    public virtual async Task<IGraphLib> SetDefaultEdgeLabelAsync(object label)
+    {
+        await this._jsInstance.InvokeVoidAsync("setDefaultEdgeLabel", label);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetDefaultEdgeLabelAsync(Func<string, object> labelFn) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultEdgeLabel", labelFn);
+    public virtual async Task<IGraphLib> SetDefaultEdgeLabelAsync(Func<string, object> labelFn)
+    {
+        await this._jsInstance.InvokeVoidAsync("setDefaultEdgeLabel", labelFn);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetDefaultNodeLabelAsync(object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultNodeLabel", label);
+    public virtual async Task<IGraphLib> SetDefaultNodeLabelAsync(object label)
+    {
+        await this._jsInstance.InvokeVoidAsync("setDefaultNodeLabel", label);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetDefaultNodeLabelAsync(Func<string, object> labelFn) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setDefaultNodeLabel", labelFn);
+    public virtual async Task<IGraphLib> SetDefaultNodeLabelAsync(Func<string, object> labelFn)
+    {
+        await this._jsInstance.InvokeVoidAsync("setDefaultNodeLabel", labelFn);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetGraphAsync(IDagreGraphConfig label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setGraph", label);
+    public virtual async Task<IGraphLib> SetGraphAsync(IDagreGraphConfig label)
+    {
+        await this._jsInstance.InvokeVoidAsync("setGraph", label);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", v, w);
+    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w)
+    {
+        await this._jsInstance.InvokeVoidAsync("setEdge", v, w);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w, object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", v, w, label);
+    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w, object label)
+    {
+        await this._jsInstance.InvokeVoidAsync("setEdge", v, w, label);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w, object label, string name) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", v, w, label, name);
+    public virtual async Task<IGraphLib> SetEdgeAsync(string v, string w, object label, string name)
+    {
+        await this._jsInstance.InvokeVoidAsync("setEdge", v, w, label, name);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetEdgeAsync(GraphLibEdge edge, object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setEdge", edge, label);
+    public virtual async Task<IGraphLib> SetEdgeAsync(GraphLibEdge edge, object label)
+    {
+        await this._jsInstance.InvokeVoidAsync("setEdge", edge, label);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetNodeAsync(string name, object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setNode", name, label);
+    public virtual async Task<IGraphLib> SetNodeAsync(string name, object label)
+    {
+        await this._jsInstance.InvokeVoidAsync("setNode", name, label);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetNodesAsync(string[] names, object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setNodes", names, label);
+    public virtual async Task<IGraphLib> SetNodesAsync(string[] names, object label)
+    {
+        await this._jsInstance.InvokeVoidAsync("setNodes", names, label);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetParentAsync(string v, string p) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setParent", v, p);
+    public virtual async Task<IGraphLib> SetParentAsync(string v, string p)
+    {
+        await this._jsInstance.InvokeVoidAsync("setParent", v, p);
+        return this;
+    }
+
     /// <inheritdoc/>
-    public virtual async Task<IGraphLib> SetPathAsync(string[] nodes, object label) => (IGraphLib)await this._jsInstance.InvokeAsync<IJSObjectReference>("setPath", nodes, label);
+    public virtual async Task<IGraphLib> SetPathAsync(string[] nodes, object label)
+    {
+        await this._jsInstance.InvokeVoidAsync("setPath", nodes, label);
+        return this;
+    }
+
     /// <inheritdoc/>
     public virtual async Task<string[]> SinksAsync() => await this._jsInstance.InvokeAsync<string[]>("sinks");
+
     /// <inheritdoc/>
     public virtual async Task<string[]> SourcesAsync() => await this._jsInstance.InvokeAsync<string[]>("sources");
+
     /// <inheritdoc/>
     public virtual async Task<string[]?> SuccessorsAsync(string v) => await this._jsInstance.InvokeAsync<string[]?>("successors", v);
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc/>
     public async ValueTask DisposeAsync()
     {
         await DisposeAsyncCore().ConfigureAwait(false);
         GC.SuppressFinalize(this);
     }
 
+    /// <inheritdoc/>
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
@@ -142,6 +252,7 @@ public class GraphLib(IJSObjectReference jsInstance)
         }
     }
 
+    /// <inheritdoc/>
     protected virtual async ValueTask DisposeAsyncCore()
     {
         if (this._jsInstance is not null)
