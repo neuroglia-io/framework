@@ -13,6 +13,7 @@
 	<PackageTags>neuroglia framework data expressions jq</PackageTags>
     <Version>4.16.1</Version>
     <NeutralLanguage>en</NeutralLanguage>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
