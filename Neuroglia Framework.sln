@@ -122,6 +122,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Scripting.Python"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neuroglia.Blazor.Dagre", "src\Neuroglia.Blazor.Dagre\Neuroglia.Blazor.Dagre.csproj", "{EB99CDD8-FA09-487A-9E69-77220DBB3ABB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Serialization.Xml", "src\Neuroglia.Serialization.Xml\Neuroglia.Serialization.Xml.csproj", "{63C1B21A-6243-4452-9B8F-23E561F6FD36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -344,6 +346,10 @@ Global
 		{EB99CDD8-FA09-487A-9E69-77220DBB3ABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB99CDD8-FA09-487A-9E69-77220DBB3ABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB99CDD8-FA09-487A-9E69-77220DBB3ABB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63C1B21A-6243-4452-9B8F-23E561F6FD36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63C1B21A-6243-4452-9B8F-23E561F6FD36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63C1B21A-6243-4452-9B8F-23E561F6FD36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63C1B21A-6243-4452-9B8F-23E561F6FD36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -403,6 +409,7 @@ Global
 		{33C58854-B730-43C1-A378-E0660FDB2A45} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{6D3E657F-9284-4C0A-A8C3-1CF311816B89} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{EB99CDD8-FA09-487A-9E69-77220DBB3ABB} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{63C1B21A-6243-4452-9B8F-23E561F6FD36} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}

@@ -14,12 +14,12 @@
 using System.Net.Mime;
 using System.Text;
 
-namespace Neuroglia.Serialization.DataContract;
+namespace Neuroglia.Serialization.Xml;
 
 /// <summary>
-/// Represents the DataContract implementation of the <see cref="IXmlSerializer"/>
+/// Represents the default implementation of the <see cref="IXmlSerializer"/>
 /// </summary>
-public class DataContractSerializer
+public class XmlSerializer
     : IXmlSerializer
 {
 
@@ -31,7 +31,20 @@ public class DataContractSerializer
     };
 
     /// <inheritdoc/>
-    public virtual void Serialize(object? value, Stream stream, Type? type = null) => new System.Runtime.Serialization.DataContractSerializer(type ?? value?.GetType()!).WriteObject(stream, value);
+    public virtual void Serialize(object? value, Stream stream, Type? type = null)
+    {
+        if (value == null)
+        {
+            using var writer = new StreamWriter(stream, leaveOpen: true);
+            writer.Write(string.Empty);
+            writer.Flush();
+        }
+        else
+        {
+            var serializer = new System.Xml.Serialization.XmlSerializer(type ?? value.GetType());
+            serializer.Serialize(stream, value);
+        }
+    }
 
     /// <inheritdoc/>
     public virtual string SerializeToText(object? value, Type? type = null)
@@ -40,16 +53,24 @@ public class DataContractSerializer
         this.Serialize(value, stream, type);
         stream.Flush();
         stream.Position = 0;
-        using var streamReader = new StreamReader(stream);
-        return streamReader.ReadToEnd();
+        using var reader = new StreamReader(stream);
+        return reader.ReadToEnd();
     }
 
     /// <inheritdoc/>
-    public virtual object? Deserialize(Stream stream, Type type) => new System.Runtime.Serialization.DataContractSerializer(type).ReadObject(stream);
+    public virtual object? Deserialize(Stream stream, Type type)
+    {
+        ArgumentNullException.ThrowIfNull(stream);
+        ArgumentNullException.ThrowIfNull(type);
+        var serializer = new System.Xml.Serialization.XmlSerializer(type);
+        return serializer.Deserialize(stream);
+    }
 
     /// <inheritdoc/>
     public virtual object? Deserialize(string input, Type type)
     {
+        ArgumentNullException.ThrowIfNull(type);
+        if (string.IsNullOrWhiteSpace(input)) return null;
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(input));
         return this.Deserialize(stream, type);
     }
