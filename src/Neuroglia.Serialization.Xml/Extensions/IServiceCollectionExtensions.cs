@@ -31,6 +31,7 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddXmlSerializer(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
         services.AddSerializer<XmlSerializer>(lifetime);
+        services.Add(new ServiceDescriptor(typeof(IXmlSerializer), provider => provider.GetRequiredService<XmlSerializer>(), lifetime));
         return services;
     }
 

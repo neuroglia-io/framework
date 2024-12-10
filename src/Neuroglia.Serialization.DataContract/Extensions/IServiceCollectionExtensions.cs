@@ -31,6 +31,7 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddDataContractSerializer(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
         services.AddSerializer<DataContractSerializer>(lifetime);
+        services.Add(new ServiceDescriptor(typeof(IXmlSerializer), provider => provider.GetRequiredService<DataContractSerializer>(), lifetime));
         return services;
     }
 
