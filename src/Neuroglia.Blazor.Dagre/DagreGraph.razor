@@ -39,16 +39,16 @@
 
     <div class="graph-container">
         <CascadingValue Value="graph">
-            <svg @ref="graphReference"
-                class="graph-canvas @graph.CssClass"
+            <svg @ref="graphElement"
+                 class="graph-canvas @graph.CssClass"
                  width="@(graph.Width != 0 ? graph.Width.ToString() : "100%")"
                  height="@(graph.Height != 0 ? graph.Height.ToString() : "100%")"
-                @onmouseenter="HandleOnMouseEnter"
-                @onmouseleave="HandleOnMouseLeave"
-                @onmousedown="HandleOnMouseDown"
-                @onmouseup="HandleOnMouseUp"
-                @onmousemove="HandleOnMouseMove"
-                @onwheel="HandleOnWheel"
+                 @onmouseenter="HandleOnMouseEnter"
+                 @onmouseleave="HandleOnMouseLeave"
+                 @onmousedown="HandleOnMouseDown"
+                 @onmouseup="HandleOnMouseUp"
+                 @onmousemove="HandleOnMouseMove"
+                 @onwheel="HandleOnWheel"
             >
                 <defs>
                     @foreach(var def in graph.ReferenceableComponentTypes)
@@ -173,7 +173,7 @@
 
     [Parameter] public RenderFragment? ExtraControls { get; set; }
 
-    ElementReference graphReference;
+    ElementReference graphElement;
     bool isDirty = false;
     ProfilingTimer? profilingTimer;
     protected bool EnableProfiling
@@ -298,14 +298,24 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
-            await this.JSRuntime.InvokeVoidAsync("neuroglia.blazor.preventScroll", this.graphReference);
+            await this.JSRuntime.InvokeVoidAsync("neuroglia.blazor.preventScroll", this.graphElement);
     }
 
     public virtual async Task CenterAsync()
     {
         if (this.graph == null) 
             return;
-        var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graphReference);
+        var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graphElement);
+        this.graph.X = position.X / (double)this.graph.Scale;
+        this.graph.Y = position.Y / (double)this.graph.Scale;
+        this.isDirty = true;
+    }
+
+    public virtual async Task CenterAsync(INodeViewModel node)
+    {
+        if (this.graph == null)
+            return;
+        var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graphElement, node);
         this.graph.X = position.X / (double)this.graph.Scale;
         this.graph.Y = position.Y / (double)this.graph.Scale;
         this.isDirty = true;
@@ -315,7 +325,7 @@
     {
         if (this.graph == null) 
             return;
-        this.graph.Scale = Math.Clamp(await this.JSRuntime.InvokeAsync<decimal>("neuroglia.blazor.getScale", this.graphReference), Constants.MinScale, Constants.MaxScale);
+        this.graph.Scale = Math.Clamp(await this.JSRuntime.InvokeAsync<decimal>("neuroglia.blazor.getScale", this.graphElement), Constants.MinScale, Constants.MaxScale);
         this.TriggerRender(this, new());
         await this.CenterAsync();
     }
@@ -324,7 +334,7 @@
     {
         if (this.graph == null)
             return;
-        await this.JSRuntime.InvokeVoidAsync("neuroglia.blazor.saveAsPng", this.graphReference);
+        await this.JSRuntime.InvokeVoidAsync("neuroglia.blazor.saveAsPng", this.graphElement);
     }
 
     public virtual async Task ToggleOrientationAsync()
@@ -354,37 +364,37 @@
     protected virtual async Task HandleOnMouseEnter(MouseEventArgs e)
     {
         if (this.graph != null)
-            await this.graph.OnMouseEnterAsync(this.graphReference, e, null);
+            await this.graph.OnMouseEnterAsync(this.graphElement, e, null);
     }
 
     protected virtual async Task HandleOnMouseLeave(MouseEventArgs e)
     {
         if (this.graph != null)
-            await this.graph.OnMouseLeaveAsync(this.graphReference, e, null);
+            await this.graph.OnMouseLeaveAsync(this.graphElement, e, null);
     }
 
     protected virtual async Task HandleOnMouseDown(MouseEventArgs e)
     {
         if (this.graph != null)
-            await this.graph.OnMouseDownAsync(this.graphReference, e, null);
+            await this.graph.OnMouseDownAsync(this.graphElement, e, null);
     }
 
     protected virtual async Task HandleOnMouseMove(MouseEventArgs e)
     {
         if (this.graph != null)
-            await this.graph.OnMouseMoveAsync(this.graphReference, e, null);
+            await this.graph.OnMouseMoveAsync(this.graphElement, e, null);
     }
 
     protected virtual async Task HandleOnMouseUp(MouseEventArgs e)
     {
         if (this.graph != null)
-            await this.graph.OnMouseUpAsync(this.graphReference, e, null);
+            await this.graph.OnMouseUpAsync(this.graphElement, e, null);
     }
 
     protected virtual async Task HandleOnWheel(WheelEventArgs e)
     {
         if (this.graph != null)
-            await this.graph.OnWheelAsync(this.graphReference, e, null);
+            await this.graph.OnWheelAsync(this.graphElement, e, null);
     }
 
     private bool disposed;

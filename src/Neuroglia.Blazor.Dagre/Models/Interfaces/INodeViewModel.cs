@@ -34,7 +34,7 @@ public interface INodeViewModel
     BoundingBox? Bounds { get; }
 
     /// <summary>
-    /// Sets the <see cref="INodeViewModel"/>'s <see cref="BoundingBox"/> using measurments
+    /// Sets the <see cref="INodeViewModel"/>'s <see cref="BoundingBox"/> using measurements
     /// </summary>
     /// <param name="width">The width</param>
     /// <param name="height">The height</param>

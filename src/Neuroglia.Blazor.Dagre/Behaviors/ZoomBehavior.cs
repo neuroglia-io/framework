@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Neuroglia.Blazor.Dagre.Models;
 
@@ -29,8 +30,14 @@ internal class ZoomBehavior
     {
         if (e.GraphElement != null)
             return;
-        this.Graph.Scale += (decimal)(e.BaseEvent.DeltaY / Math.Abs(e.BaseEvent.DeltaY)) * -0.1M; ;
-        this.Graph.Scale = Math.Clamp(this.Graph.Scale, Constants.MinScale, Constants.MaxScale);
+        var direction = 0 - (e.BaseEvent.DeltaY / Math.Abs(e.BaseEvent.DeltaY));
+        var zoomFactor = 0.1D;
+        var currentScale = (double)this.Graph.Scale;
+        var scaleChange = direction * zoomFactor * Math.Log2(currentScale + 1);
+        var newScale = Math.Clamp(currentScale + scaleChange, (double)Constants.MinScale, (double)Constants.MaxScale);
+        this.Graph.Scale = (decimal)newScale;
+        //this.Graph.X = newScale / currentScale * ((this.Graph.Width / 2) - e.BaseEvent.OffsetX) + e.BaseEvent.OffsetX;
+        //this.Graph.Y = newScale / currentScale * ((this.Graph.Height / 2) - e.BaseEvent.OffsetY) + e.BaseEvent.OffsetY;
         await Task.CompletedTask;
     }
 

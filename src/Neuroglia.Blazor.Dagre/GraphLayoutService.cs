@@ -74,6 +74,8 @@ public class GraphLayoutService(IJSRuntime jSRuntime)
             profilingTimer.Stop();
             profilingTimer.Dispose();
         }
+        //graphViewModel.Width = nodes.Max(n => n.X + n.Width) - nodes.Min(n => n.X);
+        //graphViewModel.Height = nodes.Max(n => n.Y + n.Height) - nodes.Min(n => n.Y);
         return graphViewModel;
     }
 
