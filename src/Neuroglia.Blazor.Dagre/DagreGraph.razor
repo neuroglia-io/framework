@@ -311,6 +311,16 @@
         this.isDirty = true;
     }
 
+    public virtual async Task CenterAsync(INodeViewModel node)
+    {
+        if (this.graph == null)
+            return;
+        var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graphReference, node);
+        this.graph.X = position.X / (double)this.graph.Scale;
+        this.graph.Y = position.Y / (double)this.graph.Scale;
+        this.isDirty = true;
+    }
+
     public virtual async Task ZoomToFitAsync()
     {
         if (this.graph == null) 
