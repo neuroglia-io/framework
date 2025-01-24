@@ -35,11 +35,12 @@
         graphElement.addEventListener("wheel", e => e.preventDefault(), { passive: false });
     }
     window.neuroglia.blazor.getCenter = (graphElement, node) => {
+        const scale = window.neuroglia.blazor.getScale(graphElement);
         const svgBounds = graphElement.getBoundingClientRect();
         const graphBounds = graphElement.getBBox();
         const center = {
-            x: ((svgBounds.width - graphBounds.width) / 2),
-            y: ((svgBounds.height - graphBounds.height) / 2)
+            x: (((svgBounds.width / scale) - graphBounds.width) / 2),
+            y: (((svgBounds.height / scale) - graphBounds.height) / 2)
         };
         if (!node) return center;
         return {

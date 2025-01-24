@@ -5,10 +5,10 @@
 
 @if (graph != null) {
     <svg class="svg-definitions"
-         version="1.2"
-         baseProfile="tiny"
-         xmlns="http://www.w3.org/2000/svg"
-         xmlns:xlink="http://www.w3.org/1999/xlink">
+    version="1.2"
+    baseProfile="tiny"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
         <defs>
             <svg id="center-target" viewBox="0 0 29.334 29.334">
                 <!-- from https://www.svgrepo.com/svg/174124/circle-outline-with-huge-dot-at-the-center -->
@@ -40,15 +40,15 @@
     <div class="graph-container">
         <CascadingValue Value="graph">
             <svg @ref="graphReference"
-                class="graph-canvas @graph.CssClass"
-                 width="@(graph.Width != 0 ? graph.Width.ToString() : "100%")"
-                 height="@(graph.Height != 0 ? graph.Height.ToString() : "100%")"
-                @onmouseenter="HandleOnMouseEnter"
-                @onmouseleave="HandleOnMouseLeave"
-                @onmousedown="HandleOnMouseDown"
-                @onmouseup="HandleOnMouseUp"
-                @onmousemove="HandleOnMouseMove"
-                @onwheel="HandleOnWheel"
+            class="graph-canvas @graph.CssClass"
+            width="@(graph.Width != 0 ? graph.Width.ToString() : "100%")"
+            height="@(graph.Height != 0 ? graph.Height.ToString() : "100%")"
+            @onmouseenter="HandleOnMouseEnter"
+            @onmouseleave="HandleOnMouseLeave"
+            @onmousedown="HandleOnMouseDown"
+            @onmouseup="HandleOnMouseUp"
+            @onmousemove="HandleOnMouseMove"
+            @onwheel="HandleOnWheel"
             >
                 <defs>
                     @foreach(var def in graph.ReferenceableComponentTypes)
@@ -57,8 +57,8 @@
                     }
                 </defs>
                 <g 
-                    class="graph"
-                    transform="scale(@(graph.Scale.ToInvariantString())) translate(@graph.X.ToInvariantString(), @graph.Y.ToInvariantString())"
+                class="graph"
+                transform="scale(@(graph.Scale.ToInvariantString())) translate(@graph.X.ToInvariantString(), @graph.Y.ToInvariantString())"
                 >
                     <g class="clusters">
                         @foreach(var cluster in graph.AllClusters.Values)
@@ -138,9 +138,9 @@
                 </button>
             }
             <!--<button class="btn" type="button" @onclick="ToggleOrientationAsync" title="toggle orientation">
-                <svg>
-                    <use href="#toggle-orientation" />
-                </svg>
+            <svg>
+            <use href="#toggle-orientation" />
+            </svg>
             </button>-->
         </div>
     </div>
@@ -306,8 +306,8 @@
         if (this.graph == null) 
             return;
         var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graphReference);
-        this.graph.X = position.X / (double)this.graph.Scale;
-        this.graph.Y = position.Y / (double)this.graph.Scale;
+        this.graph.X = position.X;
+        this.graph.Y = position.Y;
         this.isDirty = true;
     }
 
@@ -316,8 +316,8 @@
         if (this.graph == null)
             return;
         var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graphReference, node);
-        this.graph.X = position.X / (double)this.graph.Scale;
-        this.graph.Y = position.Y / (double)this.graph.Scale;
+        this.graph.X = position.X;
+        this.graph.Y = position.Y;
         this.isDirty = true;
     }
 
