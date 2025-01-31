@@ -34,19 +34,23 @@
     window.neuroglia.blazor.preventScroll = (graphElement) => {
         graphElement.addEventListener("wheel", e => e.preventDefault(), { passive: false });
     }
-    window.neuroglia.blazor.getCenter = (graphElement, node) => {
-        const scale = window.neuroglia.blazor.getScale(graphElement);
+    window.neuroglia.blazor.getCenter = (scale, graphElement, node) => {
         const svgBounds = graphElement.getBoundingClientRect();
         const graphBounds = graphElement.getBBox();
-        const center = {
-            x: (((svgBounds.width / scale) - graphBounds.width) / 2),
-            y: (((svgBounds.height / scale) - graphBounds.height) / 2)
+        let center = {
+            x: (((svgBounds.width) - graphBounds.width) / 2),
+            y: (((svgBounds.height) - graphBounds.height) / 2)
         };
-        if (!node) return center;
+        if (node) {
+            center = {
+                x: center.x + ((graphBounds.width / 2) - (node.x * scale)),
+                y: center.y + ((graphBounds.height / 2) - (node.y * scale)),
+            };
+        }
         return {
-            x: center.x + ((graphBounds.width / 2) - node.x),
-            y: center.y + ((graphBounds.height / 2) - node.y),
-        };
+            x: center.x / scale,
+            y: center.y / scale
+        }
     }
     window.neuroglia.blazor.getScale = (graphElement) => {
         const svgBounds = graphElement.getBoundingClientRect();
