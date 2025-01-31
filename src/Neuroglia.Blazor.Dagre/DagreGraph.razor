@@ -305,7 +305,7 @@
     {
         if (this.graph == null) 
             return;
-        var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graphReference);
+        var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graph.Scale, this.graphReference);
         this.graph.X = position.X;
         this.graph.Y = position.Y;
         this.isDirty = true;
@@ -315,7 +315,7 @@
     {
         if (this.graph == null)
             return;
-        var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graphReference, node);
+        var position = await this.JSRuntime.InvokeAsync<BoundingBox>("neuroglia.blazor.getCenter", this.graph.Scale, this.graphReference, node);
         this.graph.X = position.X;
         this.graph.Y = position.Y;
         this.isDirty = true;
