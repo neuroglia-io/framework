@@ -384,8 +384,8 @@ public class EsdbEventStore
         var data = this.Serializer.Deserialize(e.Event.Data.ToArray(), clrType);
         metadata.Remove(EventRecordMetadata.ClrTypeName);
         if (!metadata.Any()) metadata = null;
-        if (subscription == null) return new EventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Position.CommitPosition, e.Event.Created, e.Event.EventType, data, metadata);
-        else return new AckableEventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.Event.EventNumber.ToUInt64(), e.Event.Position.CommitPosition, e.Event.Created, e.Event.EventType, data, metadata, replayed, () => this.OnAckEventAsync(subject!, subscription, e), reason => this.OnNackEventAsync(subject!, subscription, e, reason));
+        if (subscription == null) return new EventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.OriginalEventNumber.ToUInt64(), e.Event.EventNumber.ToUInt64(), e.Event.Created, e.Event.EventType, data, metadata);
+        else return new AckableEventRecord(e.OriginalStreamId, e.Event.EventId.ToString(), e.OriginalEventNumber.ToUInt64(), e.Event.EventNumber.ToUInt64(), e.Event.Created, e.Event.EventType, data, metadata, replayed, () => this.OnAckEventAsync(subject!, subscription, e), reason => this.OnNackEventAsync(subject!, subscription, e, reason));
     }
 
     /// <summary>
