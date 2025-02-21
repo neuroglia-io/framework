@@ -58,7 +58,6 @@ public class JsonSchemaResolver(IJsonSerializer serializer, HttpClient httpClien
     /// <returns>The <see cref="JsonElement"/> representation of the <see cref="JsonSchema"/> to resolve</returns>
     protected virtual async Task<JsonElement> ResolveSchemaAsync(JsonElement schema, JsonElement? rootSchema = null, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(schema);
         rootSchema ??= schema;
 
         switch (schema.ValueKind)
@@ -96,9 +95,6 @@ public class JsonSchemaResolver(IJsonSerializer serializer, HttpClient httpClien
     /// <returns>The <see cref="JsonElement"/> representation of the <see cref="JsonSchema"/> to resolve</returns>
     protected virtual async Task<IEnumerable<JsonElement>> ResolveReferencedSchemasAsync(JsonElement schema, JsonElement rootSchema, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(schema);
-        ArgumentNullException.ThrowIfNull(rootSchema);
-
         if (schema.ValueKind != JsonValueKind.Object) return [];
 
         var refSchemas = new List<JsonElement>();
@@ -133,8 +129,6 @@ public class JsonSchemaResolver(IJsonSerializer serializer, HttpClient httpClien
     /// <returns>The <see cref="JsonElement"/> representation of the <see cref="JsonSchema"/> to resolve</returns>
     protected virtual async Task<JsonElement?> ResolveReferencedSchemaAsync(Uri uri, JsonElement rootSchema, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(uri);
-        ArgumentNullException.ThrowIfNull(rootSchema);
         var useRootSchema = true;
 
         JsonElement? schema;
@@ -161,8 +155,6 @@ public class JsonSchemaResolver(IJsonSerializer serializer, HttpClient httpClien
     /// <returns>The <see cref="JsonElement"/> purged out of references</returns>
     protected virtual JsonElement RemoveReferenceProperties(JsonElement schema)
     {
-        ArgumentNullException.ThrowIfNull(schema);
-
         var node = this.Serializer.SerializeToNode(schema)?.AsObject();
         if (node == null) return schema;
 
