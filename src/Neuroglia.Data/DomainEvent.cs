@@ -21,7 +21,7 @@ namespace Neuroglia.Data;
 /// </summary>
 /// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></typeparam>
 [DataContract]
-public abstract class DomainEvent<TKey>
+public abstract record DomainEvent<TKey>
     : IDomainEvent
     where TKey : IEquatable<TKey>
 {
@@ -66,7 +66,7 @@ public abstract class DomainEvent<TKey>
 /// <typeparam name="TAggregate">The type of <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></typeparam>
 /// <typeparam name="TKey">The type of key used to uniquely identify the <see cref="IAggregateRoot"/> that has produced the <see cref="IDomainEvent"/></typeparam>
 [DataContract]
-public abstract class DomainEvent<TAggregate, TKey>
+public abstract record DomainEvent<TAggregate, TKey>
     : DomainEvent<TKey>, IDomainEvent<TAggregate, TKey>
     where TAggregate : IAggregateRoot<TKey>
     where TKey : IEquatable<TKey>

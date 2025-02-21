@@ -16,7 +16,7 @@ using Neuroglia.Mediation;
 
 namespace Neuroglia.UnitTests.Data.Events;
 
-public class PersonCreatedDomainEvent
+public record PersonCreatedDomainEvent
     : DomainEvent<Person, Guid>
 {
 

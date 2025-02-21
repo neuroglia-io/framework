@@ -15,7 +15,7 @@ using Neuroglia.Data;
 
 namespace Neuroglia.UnitTests.Data.Events;
 
-internal class UserEmailValidatedEvent
+internal record UserEmailValidatedEvent
     : DomainEvent<User, string>
 {
 

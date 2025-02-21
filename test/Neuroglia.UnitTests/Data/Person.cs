@@ -11,10 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Json.Patch;
 using Neuroglia.Data;
 using Neuroglia.Data.PatchModel;
-using Neuroglia.Data.PatchModel.Services;
 using Neuroglia.UnitTests.Data.Events;
 
 namespace Neuroglia.UnitTests.Data;

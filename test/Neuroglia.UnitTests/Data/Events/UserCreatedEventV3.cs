@@ -15,7 +15,7 @@ using Neuroglia.Data;
 
 namespace Neuroglia.UnitTests.Data.Events;
 
-internal class UserCreatedEventV3
+internal record UserCreatedEventV3
     : DomainEvent<User, string>
 {
 

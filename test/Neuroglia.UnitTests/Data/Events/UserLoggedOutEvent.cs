@@ -15,7 +15,7 @@ using Neuroglia.Data;
 
 namespace Neuroglia.UnitTests.Data.Events;
 
-internal class UserLoggedOutEvent
+internal record UserLoggedOutEvent
     : DomainEvent<User, string>
 {
 

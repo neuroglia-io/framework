@@ -15,7 +15,7 @@ using Neuroglia.Data;
 
 namespace Neuroglia.UnitTests.Data.Events;
 
-public class PersonLastNameChangedDomainEvent
+public record PersonLastNameChangedDomainEvent
     : DomainEvent<Person, Guid>
 {
 
