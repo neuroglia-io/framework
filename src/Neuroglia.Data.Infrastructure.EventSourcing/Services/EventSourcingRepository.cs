@@ -90,13 +90,13 @@ public class EventSourcingRepository<TAggregate, TKey>
         ArgumentNullException.ThrowIfNull(aggregate);
 
         var events = aggregate.PendingEvents.ToList();
-        await this.EventStore.AppendAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetDescriptor()), cancellationToken: cancellationToken).ConfigureAwait(false);
+        await this.EventStore.AppendAsync(this.GetStreamIdFor(aggregate.Id), events.Select(e => e.GetDescriptor()), -1, cancellationToken: cancellationToken).ConfigureAwait(false);
 
         aggregate.State.StateVersion = (ulong)events.Count;
         aggregate.ClearPendingEvents();
 
         await this.StateManager.TakeSnapshotAsync(aggregate, cancellationToken).ConfigureAwait(false);
-        if(this.Options.PublishEvents) foreach (var e in events) await this.Mediator.PublishAsync((dynamic)e, cancellationToken).ConfigureAwait(false);
+        if (this.Options.PublishEvents) foreach (var e in events) await this.Mediator.PublishAsync((dynamic)e, cancellationToken).ConfigureAwait(false);
 
         return aggregate;
     }
