@@ -47,7 +47,10 @@ public class MemoryCacheRepository<TEntity, TKey>
         ArgumentNullException.ThrowIfNull(entity);
         var collectionKey = this.BuildCacheKey();
         var entityKey = this.BuildCacheKey(entity.Id);
-        if (this.Cache.TryGetValue(collectionKey, out List<string>? keys) && keys != null && keys.Contains(entityKey)) throw new Exception($"An entity with the specified id '{entity.Id}' already exists in the repository");
+        if (this.Cache.TryGetValue(collectionKey, out List<string>? keys) && keys != null)
+        {
+            if (keys.Contains(entityKey)) throw new Exception($"An entity with the specified id '{entity.Id}' already exists in the repository");
+        }
         else keys = [];
         keys.Add(entityKey);
         this.Cache.Set(collectionKey, keys);
