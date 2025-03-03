@@ -47,7 +47,7 @@ public static class IServiceCollectionExtensions
         where TSerializer : class, ISerializer
     {
         services.TryAdd(new ServiceDescriptor(typeof(TSerializer), typeof(TSerializer), lifetime));
-        services.Add(new ServiceDescriptor(typeof(ISerializer), typeof(TSerializer), lifetime));
+        if (!services.Any(s => s.ServiceType == typeof(ISerializer) && s.ImplementationType == typeof(TSerializer))) services.Add(new ServiceDescriptor(typeof(ISerializer), typeof(TSerializer), lifetime));
         return services;
     }
 
@@ -63,7 +63,7 @@ public static class IServiceCollectionExtensions
         setup ??= JsonSerializer.DefaultOptionsConfiguration!;
         services.Configure(setup);
         services.AddSerializer<JsonSerializer>(lifetime);
-        services.Add(new ServiceDescriptor(typeof(IJsonSerializer), typeof(JsonSerializer), lifetime));
+        services.TryAdd(new ServiceDescriptor(typeof(IJsonSerializer), typeof(JsonSerializer), lifetime));
         return services;
     }
 
