@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -27,7 +27,7 @@
       <PackagePath>\</PackagePath>
       <Pack>True</Pack>
     </None>
-	<None Update="README.md">
+	<None Include="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
