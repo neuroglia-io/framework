@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Json.Schema;
 using System.Text.Json.Nodes;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.Schemas;
 
 namespace Neuroglia.Serialization.Yaml;
 
@@ -34,8 +34,7 @@ public class JsonSchemaTypeConverter
     /// <inheritdoc/>
     public virtual void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer rootSerializer)
     {
-        var schema = value as JsonSchema;
-        if (schema == null) return;
+        if (value is not JsonSchema schema) return;
         var node = Json.JsonSerializer.Default.Deserialize<JsonObject>(Json.JsonSerializer.Default.SerializeToText(schema));
         new JsonNodeTypeConverter().WriteYaml(emitter, node, type, rootSerializer);
     }
