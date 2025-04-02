@@ -178,6 +178,15 @@ namespace Neuroglia.Data.Guards.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The value must not match the pattern &apos;{pattern}&apos;.
+        /// </summary>
+        public static string when_matches {
+            get {
+                return ResourceManager.GetString("when_matches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The value must not be negative.
         /// </summary>
         public static string when_negative {
@@ -219,6 +228,15 @@ namespace Neuroglia.Data.Guards.Properties {
         public static string when_not_equivalent_to {
             get {
                 return ResourceManager.GetString("when_not_equivalent_to", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The value must match the pattern &apos;{pattern}&apos;.
+        /// </summary>
+        public static string when_not_matches {
+            get {
+                return ResourceManager.GetString("when_not_matches", resourceCulture);
             }
         }
         

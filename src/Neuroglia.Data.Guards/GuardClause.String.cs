@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using Neuroglia.Data.Guards.Properties;
+using System.Text.RegularExpressions;
 
 namespace Neuroglia.Data.Guards;
 
@@ -303,6 +304,66 @@ public static class StringGuardClauses
     public static IGuardClause<string> WhenNotContains(this IGuardClause<string> guard, string value, GuardException ex, StringComparison comparisonType = StringComparison.CurrentCulture)
     {
         if (guard.Value == null || value == null || !guard.Value.Contains(value!, comparisonType)) throw ex;
+        return guard;
+    }
+
+    /// <summary>
+    /// Throws when the value matches the specified regular expression
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="pattern">The regular expression pattern the value must not match</param>
+    /// <returns>The configured <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<string> WhenMatches(this IGuardClause<string> guard, string pattern) => guard.WhenMatches(pattern, StringFormatter.Format(GuardExceptionMessages.when_matches, pattern));
+
+    /// <summary>
+    /// Throws when the value matches the specified regular expression
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="pattern">The regular expression pattern the value must not match</param>
+    /// <param name="message">The exception message</param>
+    /// <returns>The configured <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<string> WhenMatches(this IGuardClause<string> guard, string pattern, string message) => guard.WhenMatches(pattern, new GuardException(message, guard.ArgumentName));
+
+    /// <summary>
+    /// Throws when the value matches the specified regular expression
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="pattern">The regular expression pattern the value must not match</param>
+    /// <param name="ex">The <see cref="Exception"/> to throw</param>
+    /// <returns>The configured <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<string> WhenMatches(this IGuardClause<string> guard, string pattern, GuardException ex)
+    {
+        if (string.IsNullOrWhiteSpace(guard.Value) || Regex.IsMatch(guard.Value, pattern)) throw ex;
+        return guard;
+    }
+
+    /// <summary>
+    /// Throws when the value does not match the specified regular expression
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="pattern">The regular expression pattern the value must match</param>
+    /// <returns>The configured <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<string> WhenNotMatches(this IGuardClause<string> guard, string pattern) => guard.WhenNotMatches(pattern, StringFormatter.Format(GuardExceptionMessages.when_not_matches, pattern));
+
+    /// <summary>
+    /// Throws when the value does not match the specified regular expression
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="pattern">The regular expression pattern the value must match</param>
+    /// <param name="message">The exception message</param>
+    /// <returns>The configured <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<string> WhenNotMatches(this IGuardClause<string> guard, string pattern, string message) => guard.WhenNotMatches(pattern, new GuardException(message, guard.ArgumentName));
+
+    /// <summary>
+    /// Throws when the value does not match the specified regular expression
+    /// </summary>
+    /// <param name="guard">The extended <see cref="IGuardClause{T}"/></param>
+    /// <param name="pattern">The regular expression pattern the value must match</param>
+    /// <param name="ex">The <see cref="Exception"/> to throw</param>
+    /// <returns>The configured <see cref="IGuardClause{T}"/></returns>
+    public static IGuardClause<string> WhenNotMatches(this IGuardClause<string> guard, string pattern, GuardException ex)
+    {
+        if (string.IsNullOrWhiteSpace(guard.Value) || !Regex.IsMatch(guard.Value, pattern)) throw ex;
         return guard;
     }
 
