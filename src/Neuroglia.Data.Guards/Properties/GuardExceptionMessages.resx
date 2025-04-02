@@ -156,6 +156,9 @@
   <data name="when_lower_than" xml:space="preserve">
     <value>The value must be higher than '{value}'</value>
   </data>
+  <data name="when_matches" xml:space="preserve">
+    <value>The value must not match the pattern '{pattern}'</value>
+  </data>
   <data name="when_negative" xml:space="preserve">
     <value>The value must not be negative</value>
   </data>
@@ -170,6 +173,9 @@
   </data>
   <data name="when_not_equivalent_to" xml:space="preserve">
     <value>The value must be equivalent to '{value}'</value>
+  </data>
+  <data name="when_not_matches" xml:space="preserve">
+    <value>The value must match the pattern '{pattern}'</value>
   </data>
   <data name="when_not_null" xml:space="preserve">
     <value>The value must be null</value>
