@@ -102,7 +102,7 @@ public class ResourceRepository
                 if (string.IsNullOrWhiteSpace(@namespace)) 
                     throw new ProblemDetailsException(ResourceProblemDetails.ResourceAdmissionFailed(Operation.Create, resourceReference, [new KeyValuePair<string, string[]>("namespace", [ProblemDescriptions.NamespacedResourceMutDefineNamespace])]));
                 else if(await this.GetAsync<Namespace>(@namespace, null, cancellationToken).ConfigureAwait(false) == null) 
-                    throw new ProblemDetailsException(ResourceProblemDetails.ResourceAdmissionFailed(Operation.Create, resourceReference, [new KeyValuePair<string, string[]>("namespace", [StringFormatter.Format(ProblemDescriptions.ResourceNotFound, resource.GetQualifiedName())])]));
+                    throw new ProblemDetailsException(ResourceProblemDetails.ResourceAdmissionFailed(Operation.Create, resourceReference, [new KeyValuePair<string, string[]>("namespace", [StringFormatter.Format(ProblemDescriptions.ResourceNotFound, @namespace)])]));
             }
             if (resource.ApiVersion != storageVersion.Name) storageResource = await this.VersionControl.ConvertToStorageVersionAsync(new VersioningContext(resourceReference, resourceDefinition, storageResource), cancellationToken).ConfigureAwait(false);
         }
