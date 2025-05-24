@@ -36,7 +36,11 @@ public class UserInfoProvider(IUserAccessor userAccessor)
     public virtual UserInfo? GetCurrentUser()
     {
         if (UserAccessor.User == null || UserAccessor.User.Identity?.IsAuthenticated != true) return null;
-        return new(UserAccessor.User.Identity.Name!, UserAccessor.User.Identity.AuthenticationType!, UserAccessor.User.Claims.ToDictionary(c => c.Type, c => c.Value));
+        return new(UserAccessor.User.Identity.Name!, UserAccessor.User.Identity.AuthenticationType!, UserAccessor.User.Claims.Select(c => new ClaimInfo()
+        {
+            Type = c.Type,
+            Value = c.Value
+        }));
     }
 
 }
