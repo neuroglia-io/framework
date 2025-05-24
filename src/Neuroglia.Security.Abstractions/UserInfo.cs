@@ -35,13 +35,13 @@ public record UserInfo
     /// <param name="name">The name of the user to describe</param>
     /// <param name="authenticationType">The name of the mechanism used to authenticate the user</param>
     /// <param name="claims">A key/comma-separated values mapping of the claims used to describe the authenticated user</param>
-    public UserInfo(string name, string authenticationType, IDictionary<string, string>? claims = null)
+    public UserInfo(string name, string authenticationType, IEnumerable<ClaimInfo>? claims = null)
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
         if (string.IsNullOrWhiteSpace(authenticationType)) throw new ArgumentNullException(nameof(authenticationType));
         this.Name = name;
         this.AuthenticationType = authenticationType;
-        this.Claims = claims;
+        this.Claims = claims?.ToList();
     }
 
     /// <summary>
@@ -49,20 +49,20 @@ public record UserInfo
     /// </summary>
     [Required]
     [DataMember(Order = 1, Name = "name", IsRequired = true), JsonPropertyOrder(1), JsonPropertyName("name")]
-    public virtual string Name { get; set; } = null!;
+    public virtual string Name { get; init; } = null!;
 
     /// <summary>
     /// Gets/sets the name of the mechanism used to authenticate the user
     /// </summary>
     [Required]
     [DataMember(Order = 2, Name = "authenticationType", IsRequired = true), JsonPropertyOrder(2), JsonPropertyName("authenticationType")]
-    public virtual string AuthenticationType { get; set; } = null!;
+    public virtual string AuthenticationType { get; init; } = null!;
 
     /// <summary>
     /// Gets/sets a key/comma-separated values mapping of the claims used to describe the authenticated user
     /// </summary>
     [DataMember(Order = 3, Name = "claims", IsRequired = true), JsonPropertyOrder(3), JsonPropertyName("claims")]
-    public virtual IDictionary<string, string>? Claims { get; set; }
+    public virtual IReadOnlyList<ClaimInfo>? Claims { get; init; }
 
     /// <inheritdoc/>
     public override string ToString() => this.Name;
