@@ -33,7 +33,7 @@
 	<PackageReference Include="EventStore.Client.Grpc.ProjectionManagement" Version="23.3.9" />
 	<PackageReference Include="EventStore.Client.Grpc.Streams" Version="23.3.9" />
 	<PackageReference Include="Lambda2Js" Version="3.1.4" />
-	<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.5" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.6" />
 	<PackageReference Include="System.Reactive" Version="6.0.1" />
   </ItemGroup>
 

@@ -82,6 +82,16 @@ public class ResourceRepository
         if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
         if (string.IsNullOrWhiteSpace(plural)) throw new ArgumentNullException(nameof(plural));
 
+        using var activity = Telemetry.ActivitySource.StartActivity("ResourceRepository.Add");
+        activity?.SetTag("resource.group", group);
+        activity?.SetTag("resource.version", version);
+        activity?.SetTag("resource.plural", plural);
+        activity?.SetTag("resource.kind", resource.Kind);
+        activity?.SetTag("resource.name", resource.GetName());
+        activity?.SetTag("resource.namespace", resource.GetNamespace());
+        activity?.SetTag("resource.api_version", resource.ApiVersion);
+        activity?.SetTag("resource.dry_run", dryRun);
+
         IResource storageResource;
         if (resource.IsResourceDefinition() || resource.IsNamespace())
         {
@@ -114,24 +124,54 @@ public class ResourceRepository
     /// <inheritdoc/>
     public virtual Task<IResource?> GetAsync(string group, string version, string plural, string name, string? @namespace = null, CancellationToken cancellationToken = default)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("ResourceRepository.Get");
+        activity?.SetTag("resource.group", group);
+        activity?.SetTag("resource.version", version);
+        activity?.SetTag("resource.plural", plural);
+        activity?.SetTag("resource.name", name);
+        activity?.SetTag("resource.namespace", @namespace);
+
         return this.Database.GetResourceAsync(group, version, plural, name, @namespace, cancellationToken);
     }
 
     /// <inheritdoc/>
     public virtual IAsyncEnumerable<IResource> GetAllAsync(string group, string version, string plural, string? @namespace = null, IEnumerable<LabelSelector>? labelSelectors = null, CancellationToken cancellationToken = default)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("ResourceRepository.GetAll");
+        activity?.SetTag("resource.group", group);
+        activity?.SetTag("resource.version", version);
+        activity?.SetTag("resource.plural", plural);
+        activity?.SetTag("resource.namespace", @namespace);
+        activity?.SetTag("label_selector.count", labelSelectors?.Count() ?? 0);
+
         return this.Database.GetResourcesAsync(group, version, plural, @namespace, labelSelectors, cancellationToken);
     }
 
     /// <inheritdoc/>
     public virtual Task<ICollection> ListAsync(string group, string version, string plural, string? @namespace = null, IEnumerable<LabelSelector>? labelSelectors = null, ulong? maxResults = null, string? continuationToken = null, CancellationToken cancellationToken = default)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("ResourceRepository.List");
+        activity?.SetTag("resource.group", group);
+        activity?.SetTag("resource.version", version);
+        activity?.SetTag("resource.plural", plural);
+        activity?.SetTag("resource.namespace", @namespace);
+        activity?.SetTag("label_selector.count", labelSelectors?.Count() ?? 0);
+        activity?.SetTag("max_results", maxResults);
+        activity?.SetTag("continuation_token", continuationToken is not null);
+
         return this.Database.ListResourcesAsync(group, version, plural, @namespace, labelSelectors, maxResults, continuationToken, cancellationToken);
     }
 
     /// <inheritdoc/>
     public virtual Task<IResourceWatch> WatchAsync(string group, string version, string plural, string? @namespace = null, IEnumerable<LabelSelector>? labelSelectors = null, CancellationToken cancellationToken = default)
     {
+        using var activity = Telemetry.ActivitySource.StartActivity("ResourceRepository.Watch");
+        activity?.SetTag("resource.group", group);
+        activity?.SetTag("resource.version", version);
+        activity?.SetTag("resource.plural", plural);
+        activity?.SetTag("resource.namespace", @namespace);
+        activity?.SetTag("label_selector.count", labelSelectors?.Count() ?? 0);
+
         return this.Database.WatchResourcesAsync(group, version, plural, @namespace, labelSelectors, cancellationToken);
     }
 
@@ -141,6 +181,16 @@ public class ResourceRepository
         ArgumentNullException.ThrowIfNull(resource);
         if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
         if (string.IsNullOrWhiteSpace(plural)) throw new ArgumentNullException(nameof(plural));
+
+        using var activity = Telemetry.ActivitySource.StartActivity("ResourceRepository.Replace");
+        activity?.SetTag("resource.group", group);
+        activity?.SetTag("resource.version", version);
+        activity?.SetTag("resource.plural", plural);
+        activity?.SetTag("resource.kind", resource.Kind);
+        activity?.SetTag("resource.name", resource.GetName());
+        activity?.SetTag("resource.namespace", resource.GetNamespace());
+        activity?.SetTag("resource.api_version", resource.ApiVersion);
+        activity?.SetTag("resource.dry_run", dryRun);
 
         var resourceReference = new ResourceReference(new(group, version, plural), resource.GetName(), resource.GetNamespace());
         if (string.IsNullOrWhiteSpace(resource.Metadata.ResourceVersion)) throw new ProblemDetailsException(ResourceProblemDetails.ResourceVersionRequired(resourceReference));
@@ -170,6 +220,16 @@ public class ResourceRepository
         if (string.IsNullOrWhiteSpace(plural)) throw new ArgumentNullException(nameof(plural));
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
+        using var activity = Telemetry.ActivitySource.StartActivity("ResourceRepository.Patch");
+        activity?.SetTag("resource.group", group);
+        activity?.SetTag("resource.version", version);
+        activity?.SetTag("resource.plural", plural);
+        activity?.SetTag("resource.name", name);
+        activity?.SetTag("resource.namespace", @namespace);
+        activity?.SetTag("resource.version", resourceVersion);
+        activity?.SetTag("resource.dry_run", dryRun);
+        activity?.SetTag("patch.type", patch.Type);
+
         var originalResource = await this.GetAsync(group, version, plural, name, @namespace, cancellationToken).ConfigureAwait(false);
         var resourceReference = new ResourceReference(new(group, version, plural), name, @namespace);
 
@@ -192,6 +252,17 @@ public class ResourceRepository
         ArgumentNullException.ThrowIfNull(resource);
         if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
         if (string.IsNullOrWhiteSpace(plural)) throw new ArgumentNullException(nameof(plural));
+
+        using var activity = Telemetry.ActivitySource.StartActivity("ResourceRepository.ReplaceSubResource");
+        activity?.SetTag("resource.group", group);
+        activity?.SetTag("resource.version", version);
+        activity?.SetTag("resource.plural", plural);
+        activity?.SetTag("resource.kind", resource.Kind);
+        activity?.SetTag("resource.name", resource.GetName());
+        activity?.SetTag("resource.namespace", resource.GetNamespace());
+        activity?.SetTag("resource.api_version", resource.ApiVersion);
+        activity?.SetTag("resource.sub_resource", subResource);
+        activity?.SetTag("resource.dry_run", dryRun);
 
         var resourceReference = new SubResourceReference(new(group, version, plural), resource.GetName(), subResource, resource.GetNamespace());
         if (string.IsNullOrWhiteSpace(resource.Metadata.ResourceVersion)) throw new ProblemDetailsException(ResourceProblemDetails.ResourceVersionRequired(resourceReference));
@@ -221,6 +292,17 @@ public class ResourceRepository
         if (string.IsNullOrWhiteSpace(plural)) throw new ArgumentNullException(nameof(plural));
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
 
+        using var activity = Telemetry.ActivitySource.StartActivity("ResourceRepository.PatchSubResource");
+        activity?.SetTag("resource.group", group);
+        activity?.SetTag("resource.version", version);
+        activity?.SetTag("resource.plural", plural);
+        activity?.SetTag("resource.name", name);
+        activity?.SetTag("resource.namespace", @namespace);
+        activity?.SetTag("resource.version", resourceVersion);
+        activity?.SetTag("resource.sub_resource", subResource);
+        activity?.SetTag("resource.dry_run", dryRun);
+        activity?.SetTag("patch.type", patch.Type);
+
         var originalResource = await this.GetAsync(group, version, plural, name, @namespace, cancellationToken).ConfigureAwait(false);
         var resourceReference = new ResourceReference(new(group, version, plural), name, @namespace);
 
@@ -242,6 +324,14 @@ public class ResourceRepository
         if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
         if (string.IsNullOrWhiteSpace(plural)) throw new ArgumentNullException(nameof(plural));
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+
+        using var activity = Telemetry.ActivitySource.StartActivity("ResourceRepository.Remove");
+        activity?.SetTag("resource.group", group);
+        activity?.SetTag("resource.version", version);
+        activity?.SetTag("resource.plural", plural);
+        activity?.SetTag("resource.name", name);
+        activity?.SetTag("resource.namespace", @namespace);
+        activity?.SetTag("resource.dry_run", dryRun);
 
         var originalResource = await this.GetAsync(group, version, plural, name, @namespace, cancellationToken).ConfigureAwait(false) ?? throw new ProblemDetailsException(ResourceProblemDetails.ResourceNotFound(new ResourceReference(new(group, version, plural), name, @namespace)));
         var resourceReference = new ResourceReference(new(group, version, plural), name, @namespace);
