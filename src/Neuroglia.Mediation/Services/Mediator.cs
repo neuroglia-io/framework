@@ -27,7 +27,7 @@ public class Mediator
     /// <summary>
     /// Gets the <see cref="Mediator"/>'s <see cref="ActivitySource"/> name
     /// </summary>
-    public const string ActivitySourceName = "Neuroglia.Mediation.Diagnostics.ActivitySource";
+    public const string ActivitySourceName = "Neuroglia.Mediation";
 
     static readonly ActivitySource _activitySource = new(ActivitySourceName);
     static readonly ConcurrentDictionary<Type, object> _requestHandlers = [];
