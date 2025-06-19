@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using System.Runtime.ExceptionServices;
 
 namespace Neuroglia.Mediation;
@@ -99,6 +100,7 @@ public class RequestPipeline<TRequest, TResult>
     /// <inheritdoc/>
     public override async Task<TResult> HandleAsync(IRequest<TResult> request, IServiceProvider serviceProvider, CancellationToken cancellationToken = default)
     {
+        Activity.Current?.AddEvent(new ActivityEvent($"Invoking {typeof(TRequest).Name} pipeline"));
         Task<TResult> handler() => this.GetHandler<IRequestHandler<TRequest, TResult>>(serviceProvider).HandleAsync((TRequest)request, cancellationToken);
         return await serviceProvider
             .GetServices<IMiddleware<TRequest, TResult>>()
