@@ -11,22 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Data.Flux;
-
-/// <summary>
-/// Defines the fundamentals of an <see cref="IEffect"/> context
-/// </summary>
-public interface IEffectContext
-{
-
-    /// <summary>
-    /// Gets the current <see cref="IServiceProvider"/>
-    /// </summary>
-    IServiceProvider Services { get; }
-
-    /// <summary>
-    /// Gets the current <see cref="IDispatcher"/>
-    /// </summary>
-    IDispatcher Dispatcher { get; }
-
-}
+global using k8s;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Neuroglia.Data.Infrastructure.ResourceOriented.Services;
+global using Neuroglia.Serialization;
+global using System.Reactive.Disposables;
+global using System.Reactive.Linq;
+global using System.Runtime.CompilerServices;

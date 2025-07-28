@@ -42,5 +42,10 @@ public enum ResourceWatchEventType
     /// Indicates an event that describes a resource-related error
     /// </summary>
     [EnumMember(Value = "error")]
-    Error = 4
+    Error = 4,
+    /// <summary>
+    /// Indicates an event emitted periodically to update the resource version
+    /// </summary>
+    [EnumMember(Value = "bookmark")]
+    Bookmark = 8
 }

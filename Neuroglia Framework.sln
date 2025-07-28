@@ -126,6 +126,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Serialization.Xml
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.Flux", "src\Neuroglia.Data.Flux\Neuroglia.Data.Flux.csproj", "{3E35223C-DDD1-4D6A-B253-55A005AD7B2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neuroglia.Data.Infrastructure.ResourceOriented.Kubernetes", "src\Neuroglia.Data.Infrastructure.ResourceOriented.Kubernetes\Neuroglia.Data.Infrastructure.ResourceOriented.Kubernetes.csproj", "{5C6D9EE8-1021-4D24-8673-53B9BAA9ED27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -356,6 +358,10 @@ Global
 		{3E35223C-DDD1-4D6A-B253-55A005AD7B2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E35223C-DDD1-4D6A-B253-55A005AD7B2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E35223C-DDD1-4D6A-B253-55A005AD7B2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C6D9EE8-1021-4D24-8673-53B9BAA9ED27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C6D9EE8-1021-4D24-8673-53B9BAA9ED27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C6D9EE8-1021-4D24-8673-53B9BAA9ED27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C6D9EE8-1021-4D24-8673-53B9BAA9ED27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -417,6 +423,7 @@ Global
 		{EB99CDD8-FA09-487A-9E69-77220DBB3ABB} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{63C1B21A-6243-4452-9B8F-23E561F6FD36} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 		{3E35223C-DDD1-4D6A-B253-55A005AD7B2A} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
+		{5C6D9EE8-1021-4D24-8673-53B9BAA9ED27} = {BDED6037-3D6E-4781-8C58-2EB7D0E53CEA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B390984D-3A9D-4F6D-A73B-E93CCEB586E4}

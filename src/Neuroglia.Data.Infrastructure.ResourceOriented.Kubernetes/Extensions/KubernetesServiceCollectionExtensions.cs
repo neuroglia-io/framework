@@ -11,34 +11,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Data.Flux;
+namespace Neuroglia.Data.Infrastructure.ResourceOriented.Redis;
 
 /// <summary>
 /// Defines extensions for <see cref="IServiceCollection"/>s
 /// </summary>
-public static class IServiceCollectionExtensions
+public static class KubernetesServiceCollectionExtensions
 {
 
     /// <summary>
-    /// Adds and configures Flux services
+    /// Adds and configures a <see cref="KubernetesDatabase"/>
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-    /// <param name="setup">An <see cref="Action{T}"/> used to setup Flux</param>
+    /// <param name="lifetime">The <see cref="KubernetesDatabase"/>'s <see cref="ServiceLifetime"/></param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddFlux(this IServiceCollection services, Action<IFluxOptionsBuilder> setup)
+    public static IServiceCollection AddRedisDatabase(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
-        var builder = new FluxOptionsBuilder(services);
-        setup(builder);
-        builder.Build();
+        services.Add(new(typeof(KubernetesDatabase), typeof(KubernetesDatabase), lifetime));
+        services.Add(new(typeof(IDatabase), provider => provider.GetRequiredService<KubernetesDatabase>(), lifetime));
         return services;
     }
-
-
-    /// <summary>
-    /// Adds and configures Flux services
-    /// </summary>
-    /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-    /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddFlux(this IServiceCollection services) => services.AddFlux(_ => { });
 
 }

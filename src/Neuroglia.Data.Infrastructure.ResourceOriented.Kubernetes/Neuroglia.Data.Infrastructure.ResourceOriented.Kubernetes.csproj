@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<Company>Neuroglia SRL</Company>
+    <Copyright>Copyright © 2021-Present Neuroglia SRL. All rights reserved.</Copyright>
+    <Authors>Neuroglia SRL</Authors>
+    <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+	<PackageTags>neuroglia framework data infrastructure resource-oriented k8s kubernetes</PackageTags>
+    <Version>4.23.0</Version>
+    <NeutralLanguage>en</NeutralLanguage>
+	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageIcon>logo_white_on_blue_256.png</PackageIcon>
+    <IsPackable>true</IsPackable>
+	<DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="KubernetesClient" Version="17.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Data.Infrastructure.ResourceOriented\Neuroglia.Data.Infrastructure.ResourceOriented.csproj" />
+    <ProjectReference Include="..\Neuroglia.Plugins.Abstractions\Neuroglia.Plugins.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
