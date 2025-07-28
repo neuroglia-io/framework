@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Neuroglia.Data.Infrastructure.ResourceOriented.Redis;
+namespace Neuroglia.Data.Infrastructure.ResourceOriented;
 
 /// <summary>
 /// Defines extensions for <see cref="IServiceCollection"/>s
@@ -25,7 +25,7 @@ public static class KubernetesServiceCollectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
     /// <param name="lifetime">The <see cref="KubernetesDatabase"/>'s <see cref="ServiceLifetime"/></param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddRedisDatabase(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+    public static IServiceCollection AddKubernetesDatabase(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Singleton)
     {
         services.Add(new(typeof(KubernetesDatabase), typeof(KubernetesDatabase), lifetime));
         services.Add(new(typeof(IDatabase), provider => provider.GetRequiredService<KubernetesDatabase>(), lifetime));
