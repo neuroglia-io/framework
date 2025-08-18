@@ -18,6 +18,7 @@ using Neuroglia.Data.PatchModel.Services;
 using Neuroglia.Plugins;
 using Neuroglia.Serialization;
 using StackExchange.Redis;
+using System.Reactive.Joins;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
@@ -142,38 +143,35 @@ public class RedisDatabase
     /// <inheritdoc/>
     public virtual async Task<ICollection> ListResourcesAsync(string group, string version, string plural, string? @namespace = null, IEnumerable<LabelSelector>? labelSelectors = null, ulong? maxResults = null, string? continuationToken = null, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(group)) throw new ArgumentNullException(nameof(group));
-        if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
-        if (string.IsNullOrWhiteSpace(plural)) throw new ArgumentNullException(nameof(plural));
-
-        var resourceDefinition = await this.GetDefinitionAsync(group, plural, cancellationToken).ConfigureAwait(false) ?? throw new ProblemDetailsException(ResourceProblemDetails.ResourceDefinitionNotFound(new ResourceDefinitionReference(group, version, plural)));
-        var items = await this.GetResourcesAsync(group, version, plural, @namespace, labelSelectors, cancellationToken).ToListAsync(cancellationToken).ConfigureAwait(false);
-
-        return new Collection(Resource.BuildApiVersion(group, version), resourceDefinition.Spec.Names.Kind, new() { }, items);
+        ArgumentException.ThrowIfNullOrWhiteSpace(group);
+        ArgumentException.ThrowIfNullOrWhiteSpace(version);
+        ArgumentException.ThrowIfNullOrWhiteSpace(plural);
+        var resourceDefinition = await this.GetDefinitionAsync(group, plural, cancellationToken).ConfigureAwait(false)?? throw new ProblemDetailsException(ResourceProblemDetails.ResourceDefinitionNotFound(new ResourceDefinitionReference(group, version, plural)));
+        long skip = 0;
+        if (!string.IsNullOrWhiteSpace(continuationToken) && (!long.TryParse(continuationToken, out skip) || skip < 0)) throw new Exception($"The specified value '{continuationToken}' is not a valid continuation token");
+        var take = maxResults.HasValue ? (long)maxResults.Value : long.MaxValue;
+        var items = new List<IResource>();
+        await foreach (var resource in GetResourcesAsync(resourceDefinition, @namespace, labelSelectors, take, skip, cancellationToken)) items.Add(resource);
+        string? nextContinuationToken = null;
+        if (items.Count == take && take != long.MaxValue) nextContinuationToken = (skip + take).ToString();
+        var totalCount = await CountAsync(resourceDefinition, @namespace, labelSelectors, cancellationToken).ConfigureAwait(false);
+        var metadata = new CollectionMetadata
+        {
+            ResourceVersion = items.LastOrDefault()?.Metadata.ResourceVersion!,
+            Continue = nextContinuationToken,
+            RemainingItemCount = totalCount.HasValue ? totalCount - (skip + take) : null
+        };
+        return new Collection(Resource.BuildApiVersion(group, version), resourceDefinition.Spec.Names.Kind, metadata, items);
     }
 
     /// <inheritdoc/>
     public virtual async IAsyncEnumerable<IResource> GetResourcesAsync(string group, string version, string plural, string? @namespace = null, IEnumerable<LabelSelector>? labelSelectors = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(group)) throw new ArgumentNullException(nameof(group));
-        if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
-        if (string.IsNullOrWhiteSpace(plural)) throw new ArgumentNullException(nameof(plural));
+        ArgumentException.ThrowIfNullOrWhiteSpace(group);
+        ArgumentException.ThrowIfNullOrWhiteSpace(version);
+        ArgumentException.ThrowIfNullOrWhiteSpace(plural);
         var resourceDefinition = await this.GetDefinitionAsync(group, plural, cancellationToken).ConfigureAwait(false) ?? throw new ProblemDetailsException(ResourceProblemDetails.ResourceDefinitionNotFound(new ResourceDefinitionReference(group, version, plural)));
-        var definitionIndexKey = this.BuildResourceByDefinitionIndexKey(group, plural);
-        var pattern = resourceDefinition.Spec.Scope switch
-        {
-            ResourceScope.Cluster => $"{ClusterResourcePrefix}*",
-            ResourceScope.Namespaced => string.IsNullOrWhiteSpace(@namespace) ? "*" : $"{@namespace}.*",
-            _ => throw new NotSupportedException($"The specified {nameof(ResourceScope)} '{EnumHelper.Stringify(resourceDefinition.Spec.Scope)}' is not supported")
-        };
-        var results = this.Database
-            .HashScanAsync(definitionIndexKey, pattern)
-            .SelectAwait(async e => (await this.ReadResourceAsync((string)e.Value!, cancellationToken).ConfigureAwait(false))!);
-        if (labelSelectors?.Any() == true) results = results.Select(r => r.ConvertTo<Resource>()!).Where(r => labelSelectors.All(s => s.Selects(r)));
-        await foreach (var result in results)
-        {
-            yield return result;
-        }
+        await foreach(var resource in GetResourcesAsync(resourceDefinition, @namespace, labelSelectors, null, null, cancellationToken).WithCancellation(cancellationToken)) yield return resource;
     }
 
     /// <inheritdoc/>
@@ -385,16 +383,29 @@ public class RedisDatabase
     }
 
     /// <summary>
-    /// Writes the specified <see cref="Resource"/> to Redis
+    /// Builds a new hash scan pattern used to find resources by scope and namespace
     /// </summary>
-    /// <param name="group">The group the resource to write belongs to</param>
-    /// <param name="version">The version of the definition of the resource to write belongs to</param>
-    /// <param name="plural">The plural name of the definition of the resource to write belongs to</param>
-    /// <param name="resource">The <see cref="Resource"/> to write</param>
-    /// <param name="specHasChanged">A boolean indicating whether or not the spec has been updated</param>
-    /// <param name="operationType">The type of the write operation to perform</param>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>The persisted <see cref="Resource"/></returns>
+    /// <param name="scope">The <see cref="ResourceScope"/> of the resources to find</param>
+    /// <param name="namespace">The namespace of the resources to find, if any</param>
+    /// <returns>A new hash scan pattern used to find resources by scope and namespace</returns>
+    protected virtual string BuildHashScanPattern(ResourceScope scope, string? @namespace) => scope switch
+    {
+        ResourceScope.Cluster => $"{ClusterResourcePrefix}*",
+        ResourceScope.Namespaced => string.IsNullOrWhiteSpace(@namespace) ? "*" : $"{@namespace}.*",
+        _ => throw new NotSupportedException($"The specified {nameof(ResourceScope)} '{EnumHelper.Stringify(scope)}' is not supported")
+    };
+
+    /// <summary>
+/// Writes the specified <see cref="Resource"/> to Redis
+/// </summary>
+/// <param name="group">The group the resource to write belongs to</param>
+/// <param name="version">The version of the definition of the resource to write belongs to</param>
+/// <param name="plural">The plural name of the definition of the resource to write belongs to</param>
+/// <param name="resource">The <see cref="Resource"/> to write</param>
+/// <param name="specHasChanged">A boolean indicating whether or not the spec has been updated</param>
+/// <param name="operationType">The type of the write operation to perform</param>
+/// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+/// <returns>The persisted <see cref="Resource"/></returns>
     protected virtual async Task<Resource> WriteResourceAsync(string group, string version, string plural, Resource resource, bool specHasChanged, ResourceWatchEventType operationType, CancellationToken cancellationToken = default)
     {
         var key = this.BuildResourceKey(group, version, plural, resource.GetName(), resource.GetNamespace());
@@ -469,6 +480,95 @@ public class RedisDatabase
         var json = (string?)await this.Database.StringGetAsync(key).ConfigureAwait(false);
         if (string.IsNullOrWhiteSpace(json)) return null;
         return this.Serializer.Deserialize<Resource>(json);
+    }
+
+    /// <summary>
+    /// Gets all <see cref="IResource"/>s of the specified type, asynchronously
+    /// </summary>
+    /// <param name="resourceDefinition">The definition of the <see cref="IResource"/>s to get</param>
+    /// <param name="namespace">The namespace the <see cref="IResource"/>s to get belongs to, if any</param>
+    /// <param name="labelSelectors">A collection of objects used to configure the labels to filter the <see cref="IResource"/>s to get by</param>
+    /// <param name="take">The maximum number of <see cref="IResource"/>s to get, if any</param>
+    /// <param name="skip">The number of <see cref="IResource"/>s to skip, if any</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new <see cref="IAsyncEnumerable{T}"/> used to get all matching <see cref="IResource"/>s of type specified type</returns>
+    protected virtual async IAsyncEnumerable<IResource> GetResourcesAsync(IResourceDefinition resourceDefinition, string? @namespace = null, IEnumerable<LabelSelector>? labelSelectors = null, long? take = null, long? skip = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(resourceDefinition);
+        var definitionIndexKey = this.BuildResourceByDefinitionIndexKey(resourceDefinition.Spec.Group, resourceDefinition.Spec.Names.Plural);
+        var pattern = BuildHashScanPattern(resourceDefinition.Spec.Scope, @namespace);
+        const int DefaultPageSize = 250;
+        var totalSkip = Math.Max(0L, skip ?? 0L);
+        var remaining = take is > 0 ? take!.Value : long.MaxValue;
+        var hasLabelFilters = labelSelectors?.Any() == true;
+        var pageSize = (int)Math.Min(DefaultPageSize,remaining == long.MaxValue ? DefaultPageSize : Math.Min(remaining + (totalSkip % DefaultPageSize), int.MaxValue));
+        var pageOffset = (int)(totalSkip % pageSize);
+        long cursor = 0;
+        var fullPagesToSkip = totalSkip / pageSize;
+        while (fullPagesToSkip-- > 0)
+        {
+            var (nextCursor, readCount) = await ScanOnceAdvanceCursorAsync(definitionIndexKey, pattern, pageSize, cursor, 0, cancellationToken).ConfigureAwait(false);
+            cursor = nextCursor;
+            if (readCount == 0 || cursor == 0) yield break;
+        }
+        var firstKeptPage = true;
+        while (remaining > 0)
+        {
+            var (entries, nextCursor, readCount) = await ScanOnceAsync(definitionIndexKey, pattern, pageSize, cursor, firstKeptPage ? pageOffset : 0, cancellationToken).ConfigureAwait(false);
+            firstKeptPage = false;
+            cursor = nextCursor;
+            foreach (var e in entries)
+            {
+                var resource = await this.ReadResourceAsync((string)e.Value!, cancellationToken).ConfigureAwait(false);
+                if (resource is null) continue;
+                if (hasLabelFilters)
+                {
+                    var typed = resource.ConvertTo<Resource>()!;
+                    if (!labelSelectors!.All(s => s.Selects(typed))) continue;
+                }
+                yield return resource;
+                if (--remaining == 0) yield break;
+            }
+            if (cursor == 0 || readCount < pageSize) yield break;
+        }
+        async Task<(IReadOnlyList<HashEntry> Entries, long NextCursor, int ReadCount)> ScanOnceAsync(RedisKey key, RedisValue pat, int size, long cur, int offset, CancellationToken ct)
+        {
+            var page = new List<HashEntry>(size);
+            var count = 0;
+            long next = 0;
+            await foreach (var he in this.Database.HashScanAsync(key, pat, pageSize: size, cursor: cur, pageOffset: offset).WithCancellation(ct))
+            {
+                page.Add(he);
+                count++;
+            }
+            next = (count < size) ? 0 : cur == 0 ? 1 : cur + 1;
+            return (page, next, count);
+        }
+        async Task<(long NextCursor, int ReadCount)> ScanOnceAdvanceCursorAsync(RedisKey key, RedisValue pat, int size, long cur, int offset, CancellationToken ct)
+        {
+            var count = 0;
+            long next = 0;
+            await foreach (var _ in this.Database.HashScanAsync(key, pat, pageSize: size, cursor: cur, pageOffset: offset).WithCancellation(ct)) count++;
+            next = (count < size) ? 0 : cur == 0 ? 1 : cur + 1;
+            return (next, count);
+        }
+    }
+
+    /// <summary>
+    /// Counts the number of resources of the specified type
+    /// </summary>
+    /// <param name="resourceDefinition">The definition of the <see cref="IResource"/>s to count</param>
+    /// <param name="namespace">The namespace the <see cref="IResource"/>s to count belongs to, if any</param>
+    /// <param name="labelSelectors">A collection of objects used to configure the labels to filter the <see cref="IResource"/>s to count by</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The number of resources of the specified type</returns>
+    protected virtual async Task<long?> CountAsync(IResourceDefinition resourceDefinition, string? @namespace = null, IEnumerable<LabelSelector>? labelSelectors = null, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(resourceDefinition);
+        if (labelSelectors != null && labelSelectors.Any()) return null;
+        var definitionIndexKey = this.BuildResourceByDefinitionIndexKey(resourceDefinition.Spec.Group, resourceDefinition.Spec.Names.Plural);
+        var pattern = BuildHashScanPattern(resourceDefinition.Spec.Scope, @namespace);
+        return await Database.HashScanNoValuesAsync(definitionIndexKey, pattern).CountAsync(cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
