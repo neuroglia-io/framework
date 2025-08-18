@@ -287,6 +287,48 @@ public abstract class DatabaseTestsBase
         }), options => options.AllowingInfiniteRecursion());
     }
 
+    [Fact, Priority(7)]
+    public async Task Page_NamespacedResources_Should_Work()
+    {
+        //arrange
+        var @namespace = FakeNamespaceName;
+        var repository = await this.RepositoryBuilder
+            .WithDefinition<FakeNamespacedResourceDefinition>()
+            .WithResource(new Namespace(@namespace))
+            .BuildAsync();
+        FakeNamespacedResource.AutoIncrementIndex = 0;
+        var resourcesPerPage = 5;
+        var page1Resources = new List<FakeNamespacedResource>(resourcesPerPage);
+        for (var i = 0; i < resourcesPerPage; i++)
+        {
+            var resource = FakeNamespacedResource.Create(@namespace);
+            resource = await repository.AddAsync(resource);
+            resource.Metadata.ExtensionData = null;
+            page1Resources.Add(resource);
+        }
+        var page2Resources = new List<FakeNamespacedResource>(resourcesPerPage);
+        for (var i = resourcesPerPage; i < resourcesPerPage + resourcesPerPage; i++)
+        {
+            var resource = FakeNamespacedResource.Create(@namespace);
+            resource = await repository.AddAsync(resource);
+            resource.Metadata.ExtensionData = null;
+            page2Resources.Add(resource);
+        }
+
+        //act
+        var page1 = await repository.ListAsync<FakeNamespacedResource>(@namespace, maxResults: (ulong)resourcesPerPage);
+        var page2 = await repository.ListAsync<FakeNamespacedResource>(@namespace, maxResults: (ulong)resourcesPerPage, continuationToken: page1.Metadata.Continue);
+
+        //assert
+        page1.Should().NotBeNull();
+        page1.Items.Should().NotBeNull();
+        page1.Items.Count.Should().Be(resourcesPerPage);
+
+        page2.Should().NotBeNull();
+        page2.Items.Should().NotBeNull();
+        page1.Items.Count.Should().Be(resourcesPerPage);
+    }
+
     [Fact, Priority(8)]
     public async Task Get_NamespacedResources_Should_Work()
     {
