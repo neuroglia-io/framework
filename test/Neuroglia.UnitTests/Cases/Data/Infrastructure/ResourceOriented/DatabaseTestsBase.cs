@@ -453,8 +453,9 @@ public abstract class DatabaseTestsBase
         await Task.Delay(100);
 
         //assert
-        processedWatchEvents.ToList().Should().HaveCount(resourceCount);
-        processedWatchEvents.ToList().Should().AllSatisfy(e => e.Type.Should().Be(ResourceWatchEventType.Created));
+        //stores that cannot create a resource along with its status, such as Kubernetes, persist the status with a subsequent update
+        processedWatchEvents.ToList().Where(e => e.Type == ResourceWatchEventType.Created).Should().HaveCount(resourceCount);
+        processedWatchEvents.ToList().Should().AllSatisfy(e => e.Type.Should().BeOneOf(ResourceWatchEventType.Created, ResourceWatchEventType.Updated));
     }
 
     [Fact, Priority(12)]
@@ -479,8 +480,9 @@ public abstract class DatabaseTestsBase
         await Task.Delay(100);
 
         //assert
-        processedWatchEvents.ToList().Should().HaveCount(resourceCount);
-        processedWatchEvents.ToList().Should().AllSatisfy(e => e.Type.Should().Be(ResourceWatchEventType.Created));
+        //stores that cannot create a resource along with its status, such as Kubernetes, persist the status with a subsequent update
+        processedWatchEvents.ToList().Where(e => e.Type == ResourceWatchEventType.Created).Should().HaveCount(resourceCount);
+        processedWatchEvents.ToList().Should().AllSatisfy(e => e.Type.Should().BeOneOf(ResourceWatchEventType.Created, ResourceWatchEventType.Updated));
     }
 
     [Fact, Priority(13)]

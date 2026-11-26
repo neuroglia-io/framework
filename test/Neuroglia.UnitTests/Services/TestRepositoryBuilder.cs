@@ -74,13 +74,23 @@ internal sealed class TestRepositoryBuilder(Action<IConfiguration, IServiceColle
 
         foreach (var definition in this._definitions) await repository.AddAsync(definition.ConvertTo<ResourceDefinition>()!, false).ConfigureAwait(false);
 
-        foreach (var resource in this._resources) await repository.AddAsync(resource, resource.GetGroup(), resource.GetVersion(), resource.Definition.Plural, false).ConfigureAwait(false);
+        foreach (var resource in this._resources)
+        {
+            try
+            {
+                await repository.AddAsync(resource, resource.GetGroup(), resource.GetVersion(), resource.Definition.Plural, false).ConfigureAwait(false);
+            }
+            catch (ProblemDetailsException ex) when (resource.IsNamespace() && ex.Problem.Type == ProblemTypes.Conflict)
+            {
+                //namespaces may outlive a test in stores where they cannot be deleted synchronously, such as Kubernetes
+            }
+        }
 
         return repository;
     }
 
 #pragma warning disable CA2012 // Use ValueTasks correctly
-    public void Dispose() => this._serviceProvider.DisposeAsync().GetAwaiter().GetResult();
+    public void Dispose() => this._serviceProvider?.DisposeAsync().GetAwaiter().GetResult();
 #pragma warning restore CA2012 // Use ValueTasks correctly
 
 }
