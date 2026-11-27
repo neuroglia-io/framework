@@ -12,7 +12,9 @@
 // limitations under the License.
 
 using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
+using KurrentDB.Client;
 
 namespace Neuroglia.UnitTests.Containers;
 
@@ -31,12 +33,37 @@ public static class KurrentDBContainerBuilder
             .WithEnvironment("KURRENTDB_START_STANDARD_PROJECTIONS", "true")
             .WithEnvironment("KURRENTDB_INSECURE", "true")
             .WithEnvironment("KURRENTDB_ENABLE_ATOM_PUB_OVER_HTTP", "true")
-            // the port opens before the node can accept writes, which are then refused with 'Server Is Not Ready': the node logs that it leads once it can
+            // the port opens before the node can accept writes, which are then refused with 'Server Is Not Ready': the node logs that it leads once it can.
+            // Even then, its first gRPC calls may still be refused, with 'HTTP_1_1_REQUIRED': the container is only ready once one succeeds
             .WithWaitStrategy(Wait
                 .ForUnixContainer()
                 .UntilPortIsAvailable(PublicPort)
-                .UntilMessageIsLogged("IS LEADER"))
+                .UntilMessageIsLogged("IS LEADER")
+                .AddCustomWaitStrategy(new UntilGrpcCallSucceeds()))
             .Build();
+    }
+
+    /// <summary>
+    /// Waits until the KurrentDB node answers a read over gRPC
+    /// </summary>
+    class UntilGrpcCallSucceeds
+        : IWaitUntil
+    {
+
+        public async Task<bool> UntilAsync(IContainer container)
+        {
+            try
+            {
+                await using var client = new KurrentDBClient(KurrentDBClientSettings.Create($"kurrentdb://{container.Hostname}:{container.GetMappedPublicPort(PublicPort)}?tls=false"));
+                await client.ReadAllAsync(Direction.Forwards, Position.Start, 1).ToListAsync().ConfigureAwait(false);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
     }
 
 }
