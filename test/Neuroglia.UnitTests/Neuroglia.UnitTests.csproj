@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -46,6 +46,7 @@
     <ProjectReference Include="..\..\src\Neuroglia.Data.Expressions.JavaScript\Neuroglia.Data.Expressions.JavaScript.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Expressions.JQ\Neuroglia.Data.Expressions.JQ.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.EventStore\Neuroglia.Data.Infrastructure.EventSourcing.EventStore.csproj" />
+    <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.KurrentDB\Neuroglia.Data.Infrastructure.EventSourcing.KurrentDB.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Memory\Neuroglia.Data.Infrastructure.EventSourcing.Memory.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.EventSourcing.Redis\Neuroglia.Data.Infrastructure.EventSourcing.Redis.csproj" />
     <ProjectReference Include="..\..\src\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj" />

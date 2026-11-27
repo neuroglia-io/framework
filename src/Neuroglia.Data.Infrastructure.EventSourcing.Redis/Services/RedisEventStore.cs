@@ -397,7 +397,7 @@ public class RedisEventStore
     protected virtual async Task<ulong?> GetConsumerCheckpointedPositionAsync(string consumerGroup, string? streamId = null, CancellationToken cancellationToken = default)
     {
         var key = this.GetConsumerCheckpointCacheKey(consumerGroup, streamId);
-        if (await this.Database.KeyExistsAsync(key).ConfigureAwait(false) && ulong.TryParse(await this.Database.StringGetAsync(key).ConfigureAwait(false), out var checkpointedPosition)) return checkpointedPosition;
+        if (await this.Database.KeyExistsAsync(key).ConfigureAwait(false) && ulong.TryParse((string?)await this.Database.StringGetAsync(key).ConfigureAwait(false), out var checkpointedPosition)) return checkpointedPosition;
         else return null;
     }
 

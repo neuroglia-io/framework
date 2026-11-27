@@ -26,6 +26,7 @@ jobs:
           dotnet-version: |
             8.0.x
             9.0.x
+            10.0.x
 
       - name: Restore dependencies
         run: dotnet restore "${{ env.SOLUTION }}"
@@ -59,8 +60,8 @@ jobs:
       - name: Test Data.Infrastructure.EventSourcing.AggregateStateManagerTestsBase
         run: dotnet test "${{ env.SOLUTION }}" --no-build --configuration Debug --no-restore --verbosity normal --filter "FullyQualifiedName~Data.Infrastructure.EventSourcing.AggregateStateManagerTestsBase"
 
-      - name: Test Data.Infrastructure.EventSourcing.EventStores.ESEventStoreTests
-        run: dotnet test "${{ env.SOLUTION }}" --no-build --configuration Debug --no-restore --verbosity normal --filter "FullyQualifiedName~Data.Infrastructure.EventSourcing.EventStores.ESEventStoreTests"
+      - name: Test Data.Infrastructure.EventSourcing.EventStores.KurrentDB
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --configuration Debug --no-restore --verbosity normal --filter "FullyQualifiedName~Data.Infrastructure.EventSourcing.EventStores.KurrentDB"
 
       - name: Test Data.Infrastructure.EventSourcing.EventStores.MemoryEventStoreTests
         run: dotnet test "${{ env.SOLUTION }}" --no-build --configuration Debug --no-restore --verbosity normal --filter "FullyQualifiedName~Data.Infrastructure.EventSourcing.EventStores.MemoryEventStoreTests"
@@ -111,4 +112,4 @@ jobs:
         run: dotnet test "${{ env.SOLUTION }}" --no-build --configuration Debug --no-restore --verbosity normal --filter "FullyQualifiedName~Serialization"
 
       - name: Other tests
-        run: dotnet test "${{ env.SOLUTION }}" --no-build --configuration Debug --no-restore --verbosity normal --filter "FullyQualifiedName\!~Core&FullyQualifiedName\!~Data.NsmTreeTests&FullyQualifiedName\!~Data.Expressions&FullyQualifiedName\!~Data.Guards&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventAggregatorTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventSourcingRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.AggregateStateManagerTestsBase&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventStores.ESEventStoreTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventStores.MemoryEventStoreTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventStores.RedisEventStoreTests&FullyQualifiedName\!~Data.Infrastructure.ObjectStorage&FullyQualifiedName\!~Data.Infrastructure.Repositories.EventSourcingRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.Repositories.MemoryCacheRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.Repositories.MongoRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.ResourceOriented.Databases.RedisDatabaseTests&FullyQualifiedName\!~Data.PatchModel&FullyQualifiedName\!~Data.Schemas.Json&FullyQualifiedName\!~Eventing.CloudEvents&FullyQualifiedName\!~Measurements&FullyQualifiedName\!~Mediation&FullyQualifiedName\!~Plugins&FullyQualifiedName\!~Serialization"
+        run: dotnet test "${{ env.SOLUTION }}" --no-build --configuration Debug --no-restore --verbosity normal --filter "FullyQualifiedName\!~Core&FullyQualifiedName\!~Data.NsmTreeTests&FullyQualifiedName\!~Data.Expressions&FullyQualifiedName\!~Data.Guards&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventAggregatorTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventSourcingRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.AggregateStateManagerTestsBase&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventStores.KurrentDB&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventStores.MemoryEventStoreTests&FullyQualifiedName\!~Data.Infrastructure.EventSourcing.EventStores.RedisEventStoreTests&FullyQualifiedName\!~Data.Infrastructure.ObjectStorage&FullyQualifiedName\!~Data.Infrastructure.Repositories.EventSourcingRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.Repositories.MemoryCacheRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.Repositories.MongoRepositoryTests&FullyQualifiedName\!~Data.Infrastructure.ResourceOriented.Databases.RedisDatabaseTests&FullyQualifiedName\!~Data.PatchModel&FullyQualifiedName\!~Data.Schemas.Json&FullyQualifiedName\!~Eventing.CloudEvents&FullyQualifiedName\!~Measurements&FullyQualifiedName\!~Mediation&FullyQualifiedName\!~Plugins&FullyQualifiedName\!~Serialization"

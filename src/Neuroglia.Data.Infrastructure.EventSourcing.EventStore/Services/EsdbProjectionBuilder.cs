@@ -24,6 +24,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.Services;
 /// </summary>
 /// <param name="name">The name of the projection to build</param>
 /// <param name="projections">The underlying EventStore projection management API client</param>
+[Obsolete("EventStoreDB was renamed KurrentDB: use KurrentDBProjectionBuilder, from the Neuroglia.Data.Infrastructure.EventSourcing.KurrentDB package, instead")]
 public class EsdbProjectionBuilder<TState>(string name, EventStoreProjectionManagementClient projections)
     : IProjectionSourceBuilder<TState>, IProjectionBuilder<TState>
 {

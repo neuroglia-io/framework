@@ -24,6 +24,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.Services;
 /// Initializes a new <see cref="EsdbEventStoreFactory"/>
 /// </remarks>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
+[Obsolete("EventStoreDB was renamed KurrentDB: use KurrentDBEventStoreFactory, from the Neuroglia.Data.Infrastructure.EventSourcing.KurrentDB package, instead")]
 public class EsdbEventStoreFactory(IServiceProvider serviceProvider)
     : IFactory<EsdbEventStore>
 {

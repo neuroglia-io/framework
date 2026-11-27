@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#pragma warning disable CS0618 // the obsolete EventStoreDB package is still tested until it is removed
 using DotNet.Testcontainers.Containers;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,7 @@ public class EsdbEventStoreTests
         var services = new ServiceCollection();
         services.AddLogging();
         services.AddSerialization();
-        services.AddSingleton(EventStoreContainerBuilder.Build());
+        services.AddSingleton(_ => EventStoreContainerBuilder.Build()); // created by the provider, which disposes it, and with it the container, after each test
         services.AddHostedService(provider => new ContainerBootstrapper(provider.GetRequiredService<IContainer>()));
         services.AddSingleton(provider => EventStoreClientSettings.Create($"esdb://{provider.GetRequiredService<IContainer>().Hostname}:{provider.GetRequiredService<IContainer>().GetMappedPublicPort(EventStoreContainerBuilder.PublicPort2)}?tls=false"));
         services.AddSingleton(provider => new EventStoreClient(provider.GetRequiredService<EventStoreClientSettings>()));

@@ -322,7 +322,11 @@ public class RedisDatabase
             OnCommit = () => this.Database.PublishAsync(WatchEventChannel, json)
         });
 
-        await transactions.ToAsyncEnumerable().ForEachAwaitAsync(t => t.CommitAsync(), cancellationToken).ConfigureAwait(false);
+        foreach (var transaction in transactions)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            await transaction.CommitAsync().ConfigureAwait(false);
+        }
 
         return resource;
     }

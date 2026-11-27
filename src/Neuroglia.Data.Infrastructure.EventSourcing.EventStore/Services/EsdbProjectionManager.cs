@@ -21,6 +21,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.Services;
 /// Represents the EventStore implementation of the <see cref="IProjectionManager"/> interface
 /// </summary>
 /// <param name="projections">The underlying EventStore projection management API client</param>
+[Obsolete("EventStoreDB was renamed KurrentDB: use KurrentDBProjectionManager, from the Neuroglia.Data.Infrastructure.EventSourcing.KurrentDB package, instead")]
 [Plugin(Tags = ["projection-manager"]), Factory(typeof(EsdbProjectionManagerFactory))]
 public class EsdbProjectionManager(EventStoreProjectionManagementClient projections)
     : IProjectionManager

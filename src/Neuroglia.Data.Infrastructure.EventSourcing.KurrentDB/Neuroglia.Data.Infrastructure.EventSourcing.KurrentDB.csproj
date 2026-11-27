@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<Company>Neuroglia SRL</Company>
+    <Copyright>Copyright © 2021-Present Neuroglia SRL. All rights reserved.</Copyright>
+    <Authors>Neuroglia SRL</Authors>
+    <RepositoryUrl>https://github.com/neuroglia-io/framework</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+	<PackageTags>neuroglia framework data infrastructure event-sourcing es event-store kurrentdb</PackageTags>
+    <Version>4.24.0</Version>
+    <NeutralLanguage>en</NeutralLanguage>
+	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageIcon>logo_white_on_blue_256.png</PackageIcon>
+    <IsPackable>true</IsPackable>
+	<DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\img\logo_white_on_blue_256.png" Link="logo_white_on_blue_256.png">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="KurrentDB.Client" Version="1.6.1" />
+	<PackageReference Include="Lambda2Js" Version="3.1.4" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.6" />
+	<PackageReference Include="System.Linq.Async" Version="7.0.1" />
+	<PackageReference Include="System.Reactive" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Neuroglia.Data.Infrastructure.EventSourcing\Neuroglia.Data.Infrastructure.EventSourcing.csproj" />
+    <ProjectReference Include="..\Neuroglia.Plugins.Abstractions\Neuroglia.Plugins.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

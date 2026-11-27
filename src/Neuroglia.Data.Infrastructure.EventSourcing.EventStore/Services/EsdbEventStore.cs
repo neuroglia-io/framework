@@ -29,6 +29,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing;
 /// <summary>
 /// Represents the default <see href="https://www.eventstore.com/">Event Store</see> implementation of the <see cref="IEventStore"/> interface
 /// </summary>
+[Obsolete("EventStoreDB was renamed KurrentDB: use KurrentDBEventStore, from the Neuroglia.Data.Infrastructure.EventSourcing.KurrentDB package, instead")]
 [Plugin(Tags = ["event-store"]), Factory(typeof(EsdbEventStoreFactory))]
 public class EsdbEventStore
     : IEventStore

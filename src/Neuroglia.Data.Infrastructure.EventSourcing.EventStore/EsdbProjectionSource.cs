@@ -16,6 +16,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing.EventStore;
 /// <summary>
 /// Enumerates all supported esdb sources
 /// </summary>
+[Obsolete("EventStoreDB was renamed KurrentDB: use KurrentDBProjectionSource, from the Neuroglia.Data.Infrastructure.EventSourcing.KurrentDB package, instead")]
 public enum EsdbProjectionSource
 {
     /// <summary>
