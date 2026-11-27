@@ -71,10 +71,12 @@ public partial record LabelSelector
     /// <inheritdoc/>
     public override string ToString()
     {
+        // a selector without values selects by the existence of the label: 'Values' used to be dereferenced whenever it was null, which threw
+        IEnumerable<string>? values = this.Values?.Count > 0 ? this.Values : string.IsNullOrWhiteSpace(this.Value) ? null : [this.Value];
         return Operator switch
         {
-            LabelSelectionOperator.Contains => string.IsNullOrWhiteSpace(Value) && this.Values?.Any() == false ? Key : $"{Key} in ({Values!.Join(',')})",
-            LabelSelectionOperator.NotContains => string.IsNullOrWhiteSpace(Value) && this.Values?.Any() == false ? $"!{Key}" : $"{Key} notin ({Values!.Join(',')})",
+            LabelSelectionOperator.Contains => values == null ? Key : $"{Key} in ({string.Join(',', values)})",
+            LabelSelectionOperator.NotContains => values == null ? $"!{Key}" : $"{Key} notin ({string.Join(',', values)})",
             LabelSelectionOperator.Equals => $"{Key}={Value}",
             LabelSelectionOperator.NotEquals => $"{Key}!={Value}",
             _ => throw new NotSupportedException($"The specified {nameof(LabelSelectionOperator)} '{Operator}' is not supported"),
