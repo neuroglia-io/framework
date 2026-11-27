@@ -95,7 +95,7 @@ public class CloudEventPublisherTests
     }
 
     [Fact]
-    public void Publish_CloudEvent_UsingBus_Should_Work()
+    public async Task Publish_CloudEvent_UsingBus_Should_Work()
     {
         //arrange
         var id = Guid.NewGuid().ToString("N");
@@ -116,6 +116,9 @@ public class CloudEventPublisherTests
         this.CloudEventBus.OutputStream.OnNext(e);
 
         //assert
+        // the publisher sends the events of the bus asynchronously, after OnNext returns
+        var timeout = DateTime.UtcNow.AddSeconds(5);
+        while (this.PublishedEventsCount < 1 && DateTime.UtcNow < timeout) await Task.Delay(10);
         this.PublishedEventsCount.Should().Be(1);
     }
 
