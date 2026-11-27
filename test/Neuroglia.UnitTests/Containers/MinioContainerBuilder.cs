@@ -28,7 +28,7 @@ public static class MinioContainerBuilder
     {
         return new ContainerBuilder()
             .WithName($"minio-{Guid.NewGuid():N}")
-            .WithImage("minio/minio")
+            .WithImage("cgr.dev/chainguard/minio")
             .WithPortBinding(PublicPort1, true)
             .WithPortBinding(PublicPort2, true)
             .WithCommand("server", "/data")
