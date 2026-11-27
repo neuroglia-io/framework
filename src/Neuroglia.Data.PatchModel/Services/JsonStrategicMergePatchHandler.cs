@@ -28,7 +28,8 @@ public class JsonStrategicMergePatchHandler
     /// <inheritdoc/>
     public virtual Task<T?> ApplyPatchAsync<T>(object patch, T? target, CancellationToken cancellationToken = default)
     {
-        var targetNode = JsonSerializer.Default.SerializeToNode((object?)patch)!;
+        // the target is patched: the patch used to be serialized in its place, which lost every field of the target the patch didn't set
+        var targetNode = JsonSerializer.Default.SerializeToNode((object?)target)!;
         var patchNode = JsonSerializer.Default.SerializeToNode(patch)!;
         return Task.FromResult(JsonSerializer.Default.Deserialize<T?>(JsonStrategicMergePatch.ApplyPatch(targetNode, patchNode)!));
     }

@@ -114,12 +114,22 @@ public class ResourceWatch<TResource>(IObservable<IResourceWatchEvent<TResource>
     /// </summary>
     /// <param name="observable">The service used to observe the <see cref="IResourceWatchEvent"/>s emitted by <see cref="IResource"/>s of the specified type</param>
     /// <param name="disposeObservable">A boolean used to configure whether or not to dispose of the <see cref="System.Reactive.Linq.Observable"/> when disposing of the <see cref="ResourceWatch"/></param>
-    public ResourceWatch(IObservable<IResourceWatchEvent> observable, bool disposeObservable) : this(observable.Select(e => e.OfType<TResource>()), disposeObservable) { }
+    public ResourceWatch(IObservable<IResourceWatchEvent> observable, bool disposeObservable) : this(observable.Select(e => e.OfType<TResource>()), disposeObservable)
+    {
+        // the converted events are observed through a projection, which isn't disposable: the source, e.g. a watch of the database, is the one to dispose
+        this.Source = observable;
+    }
 
     /// <summary>
     /// Gets the service used to observe the <see cref="IResourceWatchEvent{TResource}"/>s emitted by <see cref="IResource"/>s of the specified type
     /// </summary>
     protected IObservable<IResourceWatchEvent<TResource>> Observable { get; } = observable;
+
+    /// <summary>
+    /// Gets the observable that is disposed of with the <see cref="ResourceWatch{TResource}"/>, when <see cref="DisposeObservable"/> is set: the one its events
+    /// are converted from, if any, or else the <see cref="Observable"/>
+    /// </summary>
+    protected object Source { get; } = observable;
 
     /// <summary>
     /// Gets a boolean used to configure whether or not to dispose of the <see cref="System.Reactive.Linq.Observable"/> when disposing of the <see cref="ResourceWatch"/>
@@ -137,17 +147,19 @@ public class ResourceWatch<TResource>(IObservable<IResourceWatchEvent<TResource>
     protected virtual async ValueTask DisposeAsync(bool disposing)
     {
         if (!disposing || this._disposed) return;
-
-        switch (this.Observable)
+        // as the synchronous disposal does, an observable the watch doesn't own, e.g. a database's shared stream of events, is left alone
+        if (this.DisposeObservable)
         {
-            case IAsyncDisposable asyncDisposable:
-                await asyncDisposable.DisposeAsync().ConfigureAwait(false);
-                break;
-            case IDisposable disposable:
-                disposable.Dispose();
-                break;
+            switch (this.Source)
+            {
+                case IAsyncDisposable asyncDisposable:
+                    await asyncDisposable.DisposeAsync().ConfigureAwait(false);
+                    break;
+                case IDisposable disposable:
+                    disposable.Dispose();
+                    break;
+            }
         }
-
         this._disposed = true;
     }
 
@@ -165,7 +177,7 @@ public class ResourceWatch<TResource>(IObservable<IResourceWatchEvent<TResource>
     protected virtual void Dispose(bool disposing)
     {
         if (!disposing || this._disposed) return;
-        if (this.DisposeObservable && this.Observable is IDisposable disposable) disposable.Dispose();
+        if (this.DisposeObservable && this.Source is IDisposable disposable) disposable.Dispose();
         this._disposed = true;
     }
 

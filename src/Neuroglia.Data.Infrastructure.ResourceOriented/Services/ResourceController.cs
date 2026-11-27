@@ -30,6 +30,7 @@ public class ResourceController<TResource>
 {
 
     bool _disposed;
+    readonly SemaphoreSlim _reconciliation = new(1, 1);
 
     /// <summary>
     /// Initializes a new <see cref="ResourceController{TResource}"/>
@@ -85,10 +86,40 @@ public class ResourceController<TResource>
     public virtual async Task StartAsync(CancellationToken cancellationToken)
     {
         this.CancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        await this.ReconcileAsync(this.CancellationTokenSource.Token).ConfigureAwait(false);
+        // a failed reconciliation must not prevent the host from starting: the next tick retries it
+        await this.TryReconcileAsync(this.CancellationTokenSource.Token).ConfigureAwait(false);
         this.Watch = await this.Repository.WatchAsync<TResource>(this.Options.ResourceNamespace, cancellationToken: this.CancellationTokenSource.Token).ConfigureAwait(false);
         this.Watch.SubscribeAsync(this.OnResourceWatchEventAsync);
-        this.ReconciliationTimer = new(async _ => await this.ReconcileAsync(this.CancellationTokenSource.Token).ConfigureAwait(false), null, this.Options.Reconciliation.Interval, this.Options.Reconciliation.Interval);
+        this.ReconciliationTimer = new(async _ => await this.TryReconcileAsync(this.CancellationTokenSource.Token).ConfigureAwait(false), null, this.Options.Reconciliation.Interval, this.Options.Reconciliation.Interval);
+    }
+
+    /// <summary>
+    /// Reconciles the controlled resources, unless a reconciliation is already running, and logs rather than throws the exception a reconciliation fails with
+    /// </summary>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A boolean indicating whether or not the reconciliation ran and succeeded</returns>
+    /// <remarks>
+    /// The reconciliation timer's callback is <c>async void</c>: an exception that escaped it would terminate the process. A slow reconciliation also makes the timer
+    /// skip a tick rather than run concurrently with it
+    /// </remarks>
+    protected virtual async Task<bool> TryReconcileAsync(CancellationToken cancellationToken = default)
+    {
+        if (!await this._reconciliation.WaitAsync(0, CancellationToken.None).ConfigureAwait(false)) return false;
+        try
+        {
+            await this.ReconcileAsync(cancellationToken).ConfigureAwait(false);
+            return true;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { return false; }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "The reconciliation of the resources of type '{resourceType}' failed. It is retried in {interval}", typeof(TResource).Name, this.Options.Reconciliation.Interval);
+            return false;
+        }
+        finally
+        {
+            this._reconciliation.Release();
+        }
     }
 
     /// <inheritdoc/>
@@ -106,18 +137,27 @@ public class ResourceController<TResource>
     protected virtual async Task ReconcileAsync(CancellationToken cancellationToken = default)
     {
         var existingResourceKeys = new HashSet<string>();
-        await foreach (var resource in this.Repository.GetAllAsync<TResource>(this.Options.ResourceNamespace, this.Options.LabelSelectors, cancellationToken).ConfigureAwait(false))
+        var definition = new TResource().Definition;
+        await foreach (var stored in this.Repository.GetAllAsync(definition.Group, definition.Version, definition.Plural, this.Options.ResourceNamespace, this.Options.LabelSelectors, cancellationToken).ConfigureAwait(false))
         {
-            var cacheKey = this.GetResourceCacheKey(resource.GetName(), resource.GetNamespace());
+            var cacheKey = this.GetResourceCacheKey(stored.GetName(), stored.GetNamespace());
+            existingResourceKeys.Add(cacheKey);
+            TResource resource;
+            try { resource = stored.ConvertTo<TResource>()!; }
+            catch (Exception ex)
+            {
+                // a single record that can't be read must not block the others: it is skipped, but not considered deleted
+                this.Logger.LogError(ex, "The resource '{resource}' of type '{resourceType}' could not be read: it is skipped", cacheKey, typeof(TResource).Name);
+                continue;
+            }
             if (this.Resources.TryGetValue(cacheKey, out var cachedState) && cachedState != null)
             {
-                if (cachedState.Metadata.ResourceVersion != resource.Metadata.ResourceVersion) await this.OnResourceUpdatedAsync(cachedState, cancellationToken).ConfigureAwait(false);
+                if (cachedState.Metadata.ResourceVersion != resource.Metadata.ResourceVersion) await this.OnResourceUpdatedAsync(resource, cancellationToken).ConfigureAwait(false);
             }
             else
             {
                 await this.OnResourceCreatedAsync(resource, cancellationToken).ConfigureAwait(false);
             }
-            existingResourceKeys.Add(cacheKey);
         }
         foreach (var resource in this.Resources.ToList().Where(kvp => !existingResourceKeys.Contains(kvp.Key)).Select(kvp => kvp.Value))
         {
@@ -198,6 +238,7 @@ public class ResourceController<TResource>
     protected virtual async ValueTask DisposeAsync(bool disposing)
     {
         if (this._disposed || !disposing) return;
+        if (this.ReconciliationTimer != null) await this.ReconciliationTimer.DisposeAsync().ConfigureAwait(false);
         this.CancellationTokenSource?.Dispose();
         if (this.Watch != null) await this.Watch.DisposeAsync().ConfigureAwait(false);
         this._disposed = true;
@@ -217,6 +258,7 @@ public class ResourceController<TResource>
     protected virtual void Dispose(bool disposing)
     {
         if (this._disposed || !disposing) return;
+        this.ReconciliationTimer?.Dispose();
         this.CancellationTokenSource?.Dispose();
         this.Watch?.Dispose();
         this._disposed = true;

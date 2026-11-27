@@ -34,9 +34,11 @@ public static class EventStoreContainerBuilder
             .WithEnvironment("EVENTSTORE_HTTP_PORT", "2113")
             .WithEnvironment("EVENTSTORE_INSECURE", "true")
             .WithEnvironment("EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP", "true")
+            // the port opens before the node can accept writes, which are then refused with 'Server Is Not Ready': the node logs that it leads once it can
             .WithWaitStrategy(Wait
                 .ForUnixContainer()
-                .UntilPortIsAvailable(PublicPort2))
+                .UntilPortIsAvailable(PublicPort2)
+                .UntilMessageIsLogged("IS LEADER"))
             .Build();
     }
 
