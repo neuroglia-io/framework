@@ -39,6 +39,15 @@ public abstract class EventStoreTestsBase(IServiceCollection services)
 
     public async Task DisposeAsync() => await ServiceProvider.DisposeAsync().ConfigureAwait(false);
 
+    /// <summary>
+    /// Waits, for up to 10 seconds, until the specified events have been observed: subscriptions deliver them asynchronously, after they have been appended
+    /// </summary>
+    protected static async Task WaitForCountAsync(ICollection<IEventRecord> handledEvents, int count)
+    {
+        var timeout = DateTime.UtcNow.AddSeconds(10);
+        while (handledEvents.Count < count && DateTime.UtcNow < timeout) await Task.Delay(25).ConfigureAwait(false);
+    }
+
     [Fact, Priority(1)]
     public async Task Append_Should_Work()
     {
@@ -392,7 +401,7 @@ public abstract class EventStoreTestsBase(IServiceCollection services)
         //act
         var observable = (await EventStore.ObserveAsync(streamId, StreamPosition.StartOfStream)).Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(streamId, eventsToAppend);
-        await Task.Delay(100);
+        await WaitForCountAsync(handledEvents, events.Count + eventsToAppend.Count);
 
         //assert
         handledEvents.Should().HaveCount(events.Count + eventsToAppend.Count);
@@ -413,7 +422,7 @@ public abstract class EventStoreTestsBase(IServiceCollection services)
         var observable = (await EventStore.ObserveAsync(streamId, offset))
             .Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(streamId, eventsToAppend);
-        await Task.Delay(100);
+        await WaitForCountAsync(handledEvents, eventsToAppend.Count);
 
         //assert
         handledEvents.Should().HaveSameCount(eventsToAppend);
@@ -433,7 +442,7 @@ public abstract class EventStoreTestsBase(IServiceCollection services)
         var observable = (await EventStore.ObserveAsync(streamId))
             .Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(streamId, eventsToAppend);
-        await Task.Delay(100);
+        await WaitForCountAsync(handledEvents, eventsToAppend.Count);
 
         //assert
         handledEvents.Should().HaveSameCount(eventsToAppend);
@@ -466,7 +475,7 @@ public abstract class EventStoreTestsBase(IServiceCollection services)
         //act
         var observable = (await EventStore.ObserveAsync(offset: StreamPosition.StartOfStream)).Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
-        await Task.Delay(100);
+        await WaitForCountAsync(handledEvents, allEvents.Count + eventsToAppend.Count);
 
         //assert
         handledEvents.Should().HaveCount(allEvents.Count + eventsToAppend.Count);
@@ -493,7 +502,7 @@ public abstract class EventStoreTestsBase(IServiceCollection services)
         //act
         var observable = (await EventStore.ObserveAsync(offset: offset)).Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
-        await Task.Delay(100);
+        await WaitForCountAsync(handledEvents, eventsToAppend.Count);
 
         //assert
         handledEvents.Should().HaveSameCount(eventsToAppend);
@@ -519,7 +528,7 @@ public abstract class EventStoreTestsBase(IServiceCollection services)
         //act
         var observable = (await EventStore.ObserveAsync()).Subscribe(handledEvents.Add);
         await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
-        await Task.Delay(100);
+        await WaitForCountAsync(handledEvents, eventsToAppend.Count);
 
         //assert
         handledEvents.Should().HaveSameCount(eventsToAppend);
@@ -551,7 +560,7 @@ public abstract class EventStoreTestsBase(IServiceCollection services)
                 if (ack != null) await ack.AckAsync();
             });
         await EventStore.AppendAsync(Guid.NewGuid().ToString("N")[..15], eventsToAppend);
-        await Task.Delay(100);
+        await WaitForCountAsync(handledEvents, allEvents.Count + eventsToAppend.Count);
 
         //assert
         handledEvents.Should().HaveCount(allEvents.Count + eventsToAppend.Count);
