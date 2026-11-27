@@ -22,6 +22,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing;
 /// <summary>
 /// Defines custom <see cref="JavascriptConversionExtension"/>s used to translate projections to EventStore
 /// </summary>
+[Obsolete("EventStoreDB was renamed KurrentDB: use KurrentDBJavaScriptConversion, from the Neuroglia.Data.Infrastructure.EventSourcing.KurrentDB package, instead")]
 public static class EsdbJavaScriptConversion
 {
 

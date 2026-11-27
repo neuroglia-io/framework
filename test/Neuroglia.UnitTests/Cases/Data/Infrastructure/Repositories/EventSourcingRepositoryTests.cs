@@ -12,7 +12,7 @@
 // limitations under the License.
 
 using DotNet.Testcontainers.Containers;
-using EventStore.Client;
+using KurrentDB.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Data.Infrastructure.EventSourcing;
 using Neuroglia.Mediation;
@@ -33,12 +33,12 @@ public class EventSourcingRepositoryTests
         services.AddLogging();
         services.AddSerialization();
         services.AddMediator();
-        services.AddSingleton(EventStoreContainerBuilder.Build());
+        services.AddSingleton(_ => KurrentDBContainerBuilder.Build()); // created by the provider, which disposes it, and with it the container, after each test
         services.AddHostedService(provider => new ContainerBootstrapper(provider.GetRequiredService<IContainer>()));
-        services.AddSingleton(provider => EventStoreClientSettings.Create($"esdb://{provider.GetRequiredService<IContainer>().Hostname}:{provider.GetRequiredService<IContainer>().GetMappedPublicPort(EventStoreContainerBuilder.PublicPort2)}?tls=false"));
-        services.AddSingleton(provider => new EventStoreClient(provider.GetRequiredService<EventStoreClientSettings>()));
-        services.AddSingleton(provider => new EventStorePersistentSubscriptionsClient(provider.GetRequiredService<EventStoreClientSettings>()));
-        services.AddEsdbEventStore();
+        services.AddSingleton(provider => KurrentDBClientSettings.Create($"kurrentdb://{provider.GetRequiredService<IContainer>().Hostname}:{provider.GetRequiredService<IContainer>().GetMappedPublicPort(KurrentDBContainerBuilder.PublicPort)}?tls=false"));
+        services.AddSingleton(provider => new KurrentDBClient(provider.GetRequiredService<KurrentDBClientSettings>()));
+        services.AddSingleton(provider => new KurrentDBPersistentSubscriptionsClient(provider.GetRequiredService<KurrentDBClientSettings>()));
+        services.AddKurrentDBEventStore();
         services.AddEventSourcingRepository<User, string>();
         return services;
     }

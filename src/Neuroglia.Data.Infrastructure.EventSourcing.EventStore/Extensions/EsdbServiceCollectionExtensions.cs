@@ -20,6 +20,7 @@ namespace Neuroglia.Data.Infrastructure.EventSourcing;
 /// <summary>
 /// Defines extensions for <see cref="IServiceCollection"/>s
 /// </summary>
+[Obsolete("EventStoreDB was renamed KurrentDB: use KurrentDBServiceCollectionExtensions, from the Neuroglia.Data.Infrastructure.EventSourcing.KurrentDB package, instead")]
 public static class EsdbServiceCollectionExtensions
 {
 
